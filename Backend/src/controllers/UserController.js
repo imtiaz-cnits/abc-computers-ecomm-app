@@ -1,9 +1,15 @@
 const {
+  SignUpService,
   UserOTPService,
   VerifyOTPService,
   SaveProfileService,
   ReadProfileService,
 } = require("../services/UserServices");
+
+exports.SignUP = async (req, res) => {
+  let result = await SignUpService(req);
+  return res.status(200).json(result);
+};
 
 exports.UserOTP = async (req, res) => {
   let result = await UserOTPService(req);
@@ -29,10 +35,13 @@ exports.VerifyOTP = async (req, res) => {
 };
 
 exports.UserLogout = async (req, res) => {
-  let cookieOption = {expires: new Date(Date.now() + 24 * 60 * 60 * 1000), httpOnly: false}
+  let cookieOption = {
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    httpOnly: false,
+  };
   res.cookie("token", "", cookieOption);
   return res.status(200).json({ status: "success" });
-}
+};
 
 exports.CreateProfile = async (req, res) => {
   let result = await SaveProfileService(req);

@@ -4,6 +4,36 @@ const ProfileModel = require("../models/ProfileModel");
 
 const { EncodeToken } = require("../utility/TokenHelper");
 
+const SignUpService = async (req) => {
+  try {
+    let user_id = req.headers.user_id; // Getting user ID from headers
+    let reqBody = req.body;
+
+    if (!reqBody.email) {
+      return { status: "fail", message: "Email is required" };
+    }
+
+    reqBody.user_id = user_id; // Assigning user_id to request body
+
+    // Find user by email
+    let existingUser = await UserModel.findOne({ email: reqBody.email });
+
+    if (existingUser) {
+      // Update existing user
+      await UserModel.updateOne({ email: reqBody.email }, { $set: reqBody });
+      return { status: "Success", message: "User Updated Successfully" };
+    } else {
+      // Create new user
+      let newUser = new UserModel(reqBody);
+      await newUser.save();
+      return { status: "Success", message: "Sign Up Successful" };
+    }
+  } catch (e) {
+    console.error("Error in SignUpService:", e);
+    return { status: "fail", message: "Something went wrong.." };
+  }
+};
+
 const UserOTPService = async (req) => {
   try {
     let email = req.params.email;
@@ -88,6 +118,7 @@ const ReadProfileService = async (req) => {
 };
 
 module.exports = {
+  SignUpService,
   UserOTPService,
   VerifyOTPService,
   SaveProfileService,

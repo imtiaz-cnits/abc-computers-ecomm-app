@@ -2,10 +2,10 @@
 
 import DashboardNavbar from "@/Components/Dashboard/DashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "@/Components/Dashboard/DashboardSidebar/DashboardSidebar";
+import Preloader from "@/Components/Shared/Preloader/Preloader";
 import React, { useEffect } from "react";
 
 const DashboardLayout = ({ children }) => {
-
   return (
     <>
       <DashboardNavbar />

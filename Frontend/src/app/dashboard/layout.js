@@ -4,6 +4,7 @@ import "@/assets/css/all-modal.css";
 import "@/assets/css/table-function.css";
 import "@/assets/css/style.css";
 import DashboardLayout from "@/Layouts/DashboardLayout/DashboardLayout";
+import Preloader from "@/Components/Shared/Preloader/Preloader";
 
 export const metadata = {
   title: "Dashboard | ABC Computers",

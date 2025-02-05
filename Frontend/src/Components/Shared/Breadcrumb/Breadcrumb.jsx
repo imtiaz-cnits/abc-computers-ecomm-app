@@ -1,12 +1,13 @@
+import Link from 'next/link';
 import React from 'react';
 
-const Breadcrumb = () => {
+const Breadcrumb = ({ pageTitle }) => {
     return (
         <div>
             <div className="bredcrumb_wrapper">
                 <div className="container">
                     <div className="breadcrumd">
-                        <a href="./index.html">Home </a>
+                        <Link href="/">Home </Link>
                         <div className="icon">
                             <svg
                                 width="39"
@@ -64,7 +65,7 @@ const Breadcrumb = () => {
                                 </defs>
                             </svg>
                         </div>
-                        <span className="breadcrumb_last">Products</span>
+                        <span className="breadcrumb_last">{pageTitle}</span>
                     </div>
                 </div>
             </div>

@@ -156,7 +156,7 @@ body {
 .product_des .table_wrapper table tbody tr {
   display: flex;
   width: 100%;
-  align-items: start;
+  align-items: flex-start;
   border-bottom: 1px solid var(--accent-2);
 }
 .product_des .table_wrapper table tbody tr:nth-last-of-type(1) {

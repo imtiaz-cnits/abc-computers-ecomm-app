@@ -995,7 +995,7 @@ body {
   }
 
   #hero .product_sidebar .product_card1 {
-    align-items: start;
+    align-items: flex-start;
     border-radius: 16px !important;
   }
 

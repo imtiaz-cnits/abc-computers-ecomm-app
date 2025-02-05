@@ -49,6 +49,10 @@ const JavascriptClient = () => {
         strategy="afterInteractive"
       />
       <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js"
+        strategy="afterInteractive"
+      />
+      <Script
         src="/js/website/product-page-funtionality.js"
         strategy="afterInteractive"
       />

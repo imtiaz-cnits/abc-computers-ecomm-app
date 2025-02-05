@@ -862,7 +862,7 @@ body {
 .cart_sidebar .cart_items li {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   padding: 10px 0;
   margin-right: 10px;
 }
@@ -1073,7 +1073,7 @@ body {
 
   .cart_sidebar .cart_items .price_container {
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     gap: 5px;
   }
 
@@ -1163,7 +1163,7 @@ body {
 .footer_content_address .brand {
   max-width: 330px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   border-top: 1px solid var(--border-color);
   gap: 10px;

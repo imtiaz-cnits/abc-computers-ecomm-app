@@ -442,7 +442,7 @@ Reset Default CSS End
 }
 
 .single-column .special_product_card .product_details .price {
-  justify-content: start;
+  justify-content: flex-start;
   margin-left: 0px;
 }
 

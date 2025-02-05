@@ -291,7 +291,7 @@ Reset Default CSS End
 
   .shipping_method_container .credit_card_method_label {
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     gap: 5px;
   }
 

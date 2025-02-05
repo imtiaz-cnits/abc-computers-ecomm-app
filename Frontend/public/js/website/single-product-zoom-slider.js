@@ -35,8 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
       var xPercent = (x / container.offsetWidth) * 100;
       var yPercent = (y / container.offsetHeight) * 100;
 
-      zoomImg.style.left = -((xPercent / 100) * zoomImg.width - zoomBox.offsetWidth / 2) + "px";
-      zoomImg.style.top = -((yPercent / 100) * zoomImg.height - zoomBox.offsetHeight / 2) + "px";
+      zoomImg.style.left =
+        -((xPercent / 100) * zoomImg.width - zoomBox.offsetWidth / 2) + "px";
+      zoomImg.style.top =
+        -((yPercent / 100) * zoomImg.height - zoomBox.offsetHeight / 2) + "px";
 
       zoomBox.style.top = y - zoomBox.offsetHeight / 2 + "px";
       zoomBox.style.left = x - zoomBox.offsetWidth / 2 + "px";
@@ -59,8 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
       var xPercent = (x / container.offsetWidth) * 100;
       var yPercent = (y / container.offsetHeight) * 100;
 
-      zoomImg.style.left = -((xPercent / 100) * zoomImg.width - zoomBox.offsetWidth / 2) + "px";
-      zoomImg.style.top = -((yPercent / 100) * zoomImg.height - zoomBox.offsetHeight / 2) + "px";
+      zoomImg.style.left =
+        -((xPercent / 100) * zoomImg.width - zoomBox.offsetWidth / 2) + "px";
+      zoomImg.style.top =
+        -((yPercent / 100) * zoomImg.height - zoomBox.offsetHeight / 2) + "px";
 
       zoomBox.style.top = y - zoomBox.offsetHeight / 2 + "px";
       zoomBox.style.left = x - zoomBox.offsetWidth / 2 + "px";

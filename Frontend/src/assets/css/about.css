@@ -136,7 +136,7 @@ body {
 
 #about .about_details .heading {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   text-align: center;
   align-items: center;
 }

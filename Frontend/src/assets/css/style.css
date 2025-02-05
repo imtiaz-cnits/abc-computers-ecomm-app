@@ -1734,7 +1734,7 @@ input::-webkit-inner-spin-button {
   padding: 16px;
   border-radius: 8px;
   border: 1px solid var(--stroke);
-  align-items: start;
+  align-items: flex-start;
   background: var(--white);
 }
 

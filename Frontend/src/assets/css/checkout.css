@@ -281,7 +281,7 @@ body {
 .billing_details .shipping_option {
   width: 100%;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   margin-bottom: 16px;
   padding: 0 20px;
   border: 1px solid #eeeff3;
@@ -584,7 +584,7 @@ body {
 .billing_details .cart_items li {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   padding: 10px 0;
   gap: 5px;
   margin-right: 10px;

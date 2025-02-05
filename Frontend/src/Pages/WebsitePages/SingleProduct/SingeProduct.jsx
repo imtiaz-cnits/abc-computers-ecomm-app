@@ -18,23 +18,21 @@ import viewProductImg5 from "@/assets/img/product/view-product-img5.webp";
 
 import productVideo1 from "@/assets/img/product/product-video-img1.webp";
 
-import moreProduct1 from "@/assets/img/product/more-product-img1.webp"
-import moreProduct2 from "@/assets/img/product/more-product-img2.webp"
-import moreProduct3 from "@/assets/img/product/more-product-img3.webp"
-import moreProduct4 from "@/assets/img/product/more-product-img4.webp"
+import moreProduct1 from "@/assets/img/product/more-product-img1.webp";
+import moreProduct2 from "@/assets/img/product/more-product-img2.webp";
+import moreProduct3 from "@/assets/img/product/more-product-img3.webp";
+import moreProduct4 from "@/assets/img/product/more-product-img4.webp";
 
-import recentImg1 from "@/assets/img/product/recent-shopping-img1.webp"
-import recentImg2 from "@/assets/img/product/recent-shopping-img2.webp"
-import recentImg3 from "@/assets/img/product/recent-shopping-img3.webp"
-import recentImg4 from "@/assets/img/product/recent-shopping-img4.webp"
+import recentImg1 from "@/assets/img/product/recent-shopping-img1.webp";
+import recentImg2 from "@/assets/img/product/recent-shopping-img2.webp";
+import recentImg3 from "@/assets/img/product/recent-shopping-img3.webp";
+import recentImg4 from "@/assets/img/product/recent-shopping-img4.webp";
 
 import sliderProfile1 from "@/assets/img/product/video-slider.profile1.webp";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const SingleProduct = () => {
-
   useEffect(() => {
-
     // Video Modal JS Start.........................................
     const modalBtn = document.querySelectorAll(".openModalBtn");
     const modals = document.querySelectorAll(".video_modal");
@@ -82,10 +80,7 @@ const SingleProduct = () => {
       });
     };
     // Video Modal JS End.........................................
-
-
-  }, [])
-
+  }, []);
 
   // Slider Product Quantity Start..................
   const decreaseQuantity = () => {
@@ -113,204 +108,123 @@ const SingleProduct = () => {
           <div className="single_product_wrapper">
             <div className="row no-gutters">
               <div className="col-lg-6">
-
                 {/* // TODO: Fix light slider */}
                 {/* <div className="card_custom">
-                                    <div className="demo_custom">
-                                        <ul id="lightSlider">
-                                            <li
-                                                data-thumb={productImg1.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg1.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                  <div className="demo_custom">
+                    <ul id="lightSlider">
+                      <li data-thumb={productImg1.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg1.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg1.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg2.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg2.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg1.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg2.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg2.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg2.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg3.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg3.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg2.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg3.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg3.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg3.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg4.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg4.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg3.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg4.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg4.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg4.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg5.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg5.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg4.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg5.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg5.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg5.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg1.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg1.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg5.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg1.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg1.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg1.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg2.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg2.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg1.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg2.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg2.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg2.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg3.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg3.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg2.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg3.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg3.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg3.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg4.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg4.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg3.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg4.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg4.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg4.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li
-                                                data-thumb={productImg5.src}
-                                            >
-                                                <div className="zoom_container">
-                                                    <div className="zoom_container_img">
-                                                        <img
-                                                            src={productImg5.src}
-                                                            alt="Product Image 1"
-                                                        />
-                                                    </div>
+                          <div className="zoom_box">
+                            <img src={productImg4.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                      <li data-thumb={productImg5.src}>
+                        <div className="zoom_container">
+                          <div className="zoom_container_img">
+                            <img src={productImg5.src} alt="Product Image 1" />
+                          </div>
 
-                                                    <div className="zoom_box">
-                                                        <img
-                                                            src={productImg5.src}
-                                                            alt="Zoom Image 1"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div> */}
+                          <div className="zoom_box">
+                            <img src={productImg5.src} alt="Zoom Image 1" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div> */}
               </div>
               <div className="col-lg-6">
                 {/* <!-- Product Details Section --> */}
@@ -799,11 +713,12 @@ const SingleProduct = () => {
       </div>
       {/* <!-- Video modal Start --> */}
 
-
       {/* <!-- Modal 1 --> */}
       <div id="myModal1" className="modal video_modal">
         <div className="modal-content">
-          <span className="close" data-close="1">&times;</span>
+          <span className="close" data-close="1">
+            &times;
+          </span>
           <iframe
             src="https://www.youtube.com/embed/2dEaJSw81jU?si=kpC8mPGS-4yFA-Hc"
             allow="fullscreen"
@@ -813,7 +728,9 @@ const SingleProduct = () => {
       {/* <!-- Modal 2 --> */}
       <div id="myModal2" className="modal video_modal">
         <div className="modal-content">
-          <span className="close" data-close="2">&times;</span>
+          <span className="close" data-close="2">
+            &times;
+          </span>
           <iframe
             src="https://www.youtube.com/embed/2dEaJSw81jU?si=kpC8mPGS-4yFA-Hc"
             allow="fullscreen"
@@ -823,7 +740,9 @@ const SingleProduct = () => {
       {/* <!-- Modal 3 --> */}
       <div id="myModal3" className="modal video_modal">
         <div className="modal-content">
-          <span className="close" data-close="3">&times;</span>
+          <span className="close" data-close="3">
+            &times;
+          </span>
           <iframe
             src="https://www.youtube.com/embed/2dEaJSw81jU?si=kpC8mPGS-4yFA-Hc"
             allow="fullscreen"
@@ -833,7 +752,9 @@ const SingleProduct = () => {
       {/* <!-- Modal 4 --> */}
       <div id="myModal4" className="modal video_modal">
         <div className="modal-content">
-          <span className="close" data-close="4">&times;</span>
+          <span className="close" data-close="4">
+            &times;
+          </span>
           <iframe
             src="https://www.youtube.com/embed/2dEaJSw81jU?si=kpC8mPGS-4yFA-Hc"
             allow="fullscreen"
@@ -843,14 +764,15 @@ const SingleProduct = () => {
       {/* <!-- Modal 4 --> */}
       <div id="myModal5" className="modal video_modal">
         <div className="modal-content">
-          <span className="close" data-close="4">&times;</span>
+          <span className="close" data-close="4">
+            &times;
+          </span>
           <iframe
             src="https://www.youtube.com/embed/2dEaJSw81jU?si=kpC8mPGS-4yFA-Hc"
             allow="fullscreen"
           ></iframe>
         </div>
       </div>
-
 
       {/* <!-- Product Video Slider End --> */}
 
@@ -864,10 +786,7 @@ const SingleProduct = () => {
               <div className="col-lg-3 col-sm-6 d-flex align-item-stretch">
                 <div className="more_product_card">
                   <div className="product">
-                    <img
-                      src={moreProduct1.src}
-                      alt=""
-                    />
+                    <img src={moreProduct1.src} alt="" />
 
                     <div className="product_icon">
                       <a
@@ -887,18 +806,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -910,7 +829,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -967,10 +886,7 @@ const SingleProduct = () => {
               <div className="col-lg-3 col-sm-6 d-flex align-item-stretch">
                 <div className="more_product_card">
                   <div className="product">
-                    <img
-                      src={moreProduct2.src}
-                      alt=""
-                    />
+                    <img src={moreProduct2.src} alt="" />
 
                     <div className="product_icon">
                       <a
@@ -990,18 +906,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1013,7 +929,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1072,10 +988,7 @@ const SingleProduct = () => {
               <div className="col-lg-3 col-sm-6 d-flex align-item-stretch">
                 <div className="more_product_card">
                   <div className="product">
-                    <img
-                      src={moreProduct3.src}
-                      alt=""
-                    />
+                    <img src={moreProduct3.src} alt="" />
 
                     <div className="product_icon">
                       <a
@@ -1095,18 +1008,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1118,7 +1031,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1175,10 +1088,7 @@ const SingleProduct = () => {
               <div className="col-lg-3 col-sm-6 d-flex align-item-stretch">
                 <div className="more_product_card">
                   <div className="product">
-                    <img
-                      src={moreProduct4.src}
-                      alt=""
-                    />
+                    <img src={moreProduct4.src} alt="" />
 
                     <div className="product_icon">
                       <a
@@ -1198,18 +1108,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1221,7 +1131,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1343,10 +1253,7 @@ const SingleProduct = () => {
               <div className="item">
                 <div className="recent_shopping_card">
                   <div className="product">
-                    <img
-                      src={recentImg1.src}
-                      alt=""
-                    />
+                    <img src={recentImg1.src} alt="" />
                     <span className="product_status">New</span>
 
                     <div className="product_icon">
@@ -1367,18 +1274,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1390,7 +1297,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1447,10 +1354,7 @@ const SingleProduct = () => {
               <div className="item">
                 <div className="recent_shopping_card">
                   <div className="product">
-                    <img
-                      src={recentImg2.src}
-                      alt=""
-                    />
+                    <img src={recentImg2.src} alt="" />
                     <span className="product_status_parcent">6%</span>
 
                     <div className="product_icon">
@@ -1471,18 +1375,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1494,7 +1398,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1551,10 +1455,7 @@ const SingleProduct = () => {
               <div className="item">
                 <div className="recent_shopping_card">
                   <div className="product">
-                    <img
-                      src={recentImg3.src}
-                      alt=""
-                    />
+                    <img src={recentImg3.src} alt="" />
                     <span className="product_status">New</span>
 
                     <div className="product_icon">
@@ -1575,18 +1476,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1598,7 +1499,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1655,10 +1556,7 @@ const SingleProduct = () => {
               <div className="item">
                 <div className="recent_shopping_card">
                   <div className="product">
-                    <img
-                      src={recentImg4.src}
-                      alt=""
-                    />
+                    <img src={recentImg4.src} alt="" />
                     <span className="sold_out">Sold out</span>
 
                     <div className="product_icon">
@@ -1679,18 +1577,18 @@ const SingleProduct = () => {
                           <path
                             d="M19.5 1C10.8676 1 3.55869 6.24444 1 13.5C3.55869 20.7556 10.8676 26 19.5 26C28.1324 26 35.4413 20.7556 38 13.5C35.4413 6.24444 28.1324 1 19.5 1Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M19 21C22.866 21 26 17.6421 26 13.5C26 9.35786 22.866 6 19 6C15.134 6 12 9.35786 12 13.5C12 17.6421 15.134 21 19 21Z"
                             stroke="white"
-                            stroke-width="2"
-                            stroke-miterlimit="10"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </a>
@@ -1702,7 +1600,7 @@ const SingleProduct = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <g clip-path="url(#clip0_1_35)">
+                          <g clipPath="url(#clip0_1_35)">
                             <path
                               d="M24.3301 22.9997H13.5301C12.8711 23.001 12.23 22.7853 11.7058 22.3858C11.1817 21.9864 10.8036 21.4255 10.6301 20.7897L8.00007 11.2597C7.95962 11.1114 7.95392 10.9557 7.9834 10.8048C8.01289 10.654 8.07677 10.5119 8.17007 10.3897C8.26728 10.2632 8.39334 10.1618 8.53773 10.094C8.68212 10.0261 8.84065 9.9938 9.00007 9.99971H28.0001C28.147 9.99947 28.2921 10.0316 28.4252 10.0938C28.5583 10.156 28.6761 10.2468 28.7701 10.3597C28.8629 10.4727 28.9298 10.6047 28.9661 10.7464C29.0024 10.8881 29.0072 11.036 28.9801 11.1797L27.2801 20.5397C27.1537 21.2301 26.7894 21.8543 26.2504 22.3037C25.7114 22.7532 25.0319 22.9995 24.3301 22.9997ZM10.3301 11.9997L12.5801 20.2597C12.6387 20.4779 12.7694 20.6698 12.951 20.8041C13.1326 20.9385 13.3543 21.0074 13.5801 20.9997H24.3801C24.6169 21.0036 24.8473 20.9233 25.0305 20.7731C25.2136 20.6229 25.3375 20.4127 25.3801 20.1797L26.8001 11.9997H10.3301Z"
                               fill="#ffff"
@@ -1748,7 +1646,9 @@ const SingleProduct = () => {
                     </div>
                   </div>
                   <div className="product_details">
-                    <h3 className="product_name">Xiaomi Mi Notebook Air 12.5″</h3>
+                    <h3 className="product_name">
+                      Xiaomi Mi Notebook Air 12.5″
+                    </h3>
                     <div className="price">
                       <span>$500.00</span>
                       <span className="discount">$550.00</span>

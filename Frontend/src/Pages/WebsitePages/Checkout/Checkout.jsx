@@ -6,13 +6,13 @@ import cartImg3 from "@/assets/img/cart-product-img3.webp";
 import { FaAngleDown } from "react-icons/fa6";
 import countries from "../../../../public/js/website/countries";
 import states from "../../../../public/js/website/states";
+import Link from "next/link";
 
 const Checkout = () => {
   const [stateOptions, setStateOptions] = useState([]);
 
   const handleCountryChange = (e) => {
     const selectedCountryIndex = e.target.value;
-
 
     if (selectedCountryIndex == 0) {
       return setStateOptions([]);
@@ -28,7 +28,7 @@ const Checkout = () => {
       <div className="billing_details">
         <div className="container">
           <div className="breadcrumb">
-            <a href="./shopping-cart.html">Shopping Cart </a>
+            <Link href="/cart">Shopping Cart </Link>
             <div className="icon">
               <svg
                 width="32"
@@ -131,10 +131,10 @@ const Checkout = () => {
                       <select name="state" id="state" className="form-control">
                         <option defaultValue="">Select your state</option>
                         {stateOptions?.map((option, idx) => (
-                            <option value={option} key={idx}>
-                              {option}
-                            </option>
-                          ))}
+                          <option value={option} key={idx}>
+                            {option}
+                          </option>
+                        ))}
                       </select>
                       <div className="icon">
                         <FaAngleDown />
@@ -281,7 +281,7 @@ const Checkout = () => {
                 <div className="sign_up">
                   <p>New Customer?</p>
                   <p>
-                    <a href="#">Sign Up</a> to get better offer.
+                    <Link href="/login">Sign Up</Link> to get better offer.
                   </p>
                 </div>
 
@@ -304,9 +304,9 @@ const Checkout = () => {
                     <span className="grand">Grand Total</span>
                     <span className="grand_price">$374.48</span>
                   </p>
-                  <a href="./payment.html" className="continue_btn">
+                  <Link href="/payment" className="continue_btn">
                     Continue
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

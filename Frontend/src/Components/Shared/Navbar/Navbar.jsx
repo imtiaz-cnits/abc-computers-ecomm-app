@@ -9,9 +9,11 @@ import cartImg3 from "@/assets/img/cart-product-img3.webp";
 import Link from "next/link";
 
 const Navbar = () => {
+  const [search, setSearch] = useState(false);
+
   const path = usePathname();
 
-  if (path.startsWith("/dashboard")) {
+  if (path.startsWith("/dashboard") || path.startsWith("/login")) {
     return;
   }
 
@@ -22,6 +24,15 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".tooltip-a, .toggle-tooltip")) {
+        document.querySelectorAll(".tooltip-a").forEach(function (tooltip) {
+          tooltip.classList.remove("active");
+          setSearch(false);
+        });
+      }
+    });
+
     document.querySelectorAll("ul.submenu").forEach((submenu) => {
       let parentLi = submenu.closest("li");
       if (parentLi) {
@@ -172,7 +183,12 @@ const Navbar = () => {
         resetDropdowns(); // Reset dropdowns to default state
       }
     });
-  }, []);
+
+    const cartSidebar = document.getElementById("cartSidebar");
+    const overlay = document.getElementById("overlay_cart");
+    cartSidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  }, [path]);
 
   // Navbar header Add to Cart Sidebar Js Start...................
   const toggleCart = () => {
@@ -208,6 +224,10 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = () => {
+    setSearch(!search);
+  };
+
   return (
     <>
       <header id="navbar_header">
@@ -232,7 +252,10 @@ const Navbar = () => {
             </div>
             <div className="header_item_wrapper">
               <div className="others">
-                <a className="icon mobile_view_icon search-toggle toggle-tooltip">
+                <a
+                  className="icon mobile_view_icon search-toggle toggle-tooltip"
+                  onClick={() => handleSearch()}
+                >
                   <svg
                     width="32"
                     height="32"
@@ -315,11 +338,11 @@ const Navbar = () => {
       </header>
 
       {/* // <!-- Search Tooltip --> */}
-      <div className="tooltip-a">
+      <div className={`tooltip-a ${search ? "active" : ""}`}>
         <form>
           <input type="text" placeholder="Search here..." />
           <button type="submit" className="src_btn">
-            <i className="fa fa-search"></i>
+            <FaSearch className="icon" />
           </button>
         </form>
       </div>

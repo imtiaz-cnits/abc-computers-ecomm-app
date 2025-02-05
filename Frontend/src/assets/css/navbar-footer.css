@@ -292,10 +292,6 @@ body {
 
 .tooltip-a .src_btn {
   display: inline-block;
-  background: none;
-}
-
-.tooltip-a i {
   background: var(--primary-color);
   color: var(--white);
   border: none;

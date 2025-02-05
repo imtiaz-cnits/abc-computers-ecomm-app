@@ -354,7 +354,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -400,7 +400,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -446,7 +446,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -492,7 +492,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -539,7 +539,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -585,7 +585,7 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" />
+                        <input type="text" className="quantity-input" defaultValue={1} />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>

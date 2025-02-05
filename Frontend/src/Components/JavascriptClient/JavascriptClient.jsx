@@ -57,6 +57,10 @@ const JavascriptClient = () => {
         src="/js/website/product-video-slider.js"
         strategy="afterInteractive"
       />
+      <Script
+        src="/js/website/recent-shopping-slider.js"
+        strategy="afterInteractive"
+      />
     </>
   );
 };

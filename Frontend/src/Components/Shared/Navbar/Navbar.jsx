@@ -6,6 +6,7 @@ import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import cartImg2 from "@/assets/img/cart-product-img2.webp";
 import cartImg3 from "@/assets/img/cart-product-img3.webp";
+import Link from "next/link";
 
 const Navbar = () => {
   const path = usePathname();
@@ -354,7 +355,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -400,7 +405,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -446,7 +455,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -492,7 +505,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -539,7 +556,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -585,7 +606,11 @@ const Navbar = () => {
                     <div className="quantity_wrapper">
                       <div className="wrap">
                         <button className="btn-decrease">-</button>
-                        <input type="text" className="quantity-input" defaultValue={1} />
+                        <input
+                          type="text"
+                          className="quantity-input"
+                          defaultValue={1}
+                        />
                         <button className="btn-increase">+</button>
                       </div>
                     </div>
@@ -628,8 +653,12 @@ const Navbar = () => {
               <span id="grandtotal">৳343.98</span>
             </p>
             <div className="cart_buttons">
-              <button className="view_cart">View Cart</button>
-              <button className="checkout">Checkout Now</button>
+              <Link href={"/cart"}>
+                <button className="view_cart">View Cart</button>
+              </Link>
+              <Link href={"/checkout"}>
+                <button className="checkout">Checkout Now</button>
+              </Link>
             </div>
           </div>
         </div>

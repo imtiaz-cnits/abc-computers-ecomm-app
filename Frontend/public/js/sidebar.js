@@ -25,3 +25,19 @@ allSubmenu.forEach(item => {
 
     button.addEventListener("click", () => handleSubmenuToggle(item))
 })
+
+// Responsive Sidebar Toggle
+function toggleSidebar() {
+    const currentSize = document.body.getAttribute("data-sidebar-size");
+
+    document.body.classList.toggle("sidebar-enable");
+    if (window.innerWidth >= 992) {
+        document.body.setAttribute(
+            "data-sidebar-size",
+            currentSize === "sm" ? "lg" : "sm"
+        );
+    }
+}
+document.querySelectorAll(".vertical-menu-btn").forEach((button) => {
+    button.addEventListener("click", toggleSidebar);
+});

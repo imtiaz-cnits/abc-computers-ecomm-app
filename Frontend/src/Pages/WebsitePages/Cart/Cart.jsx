@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import cartImg2 from "@/assets/img/cart-product-img2.webp";
 import cartImg3 from "@/assets/img/cart-product-img3.webp";
+import Link from "next/link";
 
 const Cart = () => {
   useEffect(() => {
@@ -254,9 +255,9 @@ const Cart = () => {
                   <span>Grand Total:</span>{" "}
                   <span className="grand_price">$374.48</span>
                 </p>
-                <a href="./checkout.html" className="checkout_btn">
+                <Link href="/checkout" className="checkout_btn">
                   Checkout Now
-                </a>
+                </Link>
               </div>
             </div>
           </div>

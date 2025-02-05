@@ -10,6 +10,7 @@ import Navbar from "@/Components/Shared/Navbar/Navbar";
 import "@/assets/css/navbar-footer.css";
 import Footer from "@/Components/Shared/Footer/Footer";
 import Preloader from "@/Components/Shared/Preloader/Preloader";
+import BackToTop from "@/Components/Shared/BackToTop/BackToTop";
 
 export const metadata = {
   title: "Home | ABC Computers",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
         <Footer />
+        <BackToTop />
         <JavascriptClient />
       </body>
     </html>

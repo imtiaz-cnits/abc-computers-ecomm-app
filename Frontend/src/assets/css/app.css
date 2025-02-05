@@ -350,9 +350,12 @@ Reset Default CSS End
   transition: opacity 0.3s ease;
   text-align: center;
   line-height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.scroll_to_top i {
+.scroll_to_top .icon {
   font-size: 22px;
   color: var(--white);
 }

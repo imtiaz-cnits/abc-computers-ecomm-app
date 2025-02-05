@@ -88,7 +88,7 @@ function updateProgressCircle() {
 
   // Show or hide the "Back to Top" button
   if (window.pageYOffset > 100) {
-    scrollToTopElement.style.display = "block";
+    scrollToTopElement.style.display = "flex";
   } else {
     scrollToTopElement.style.display = "none";
   }

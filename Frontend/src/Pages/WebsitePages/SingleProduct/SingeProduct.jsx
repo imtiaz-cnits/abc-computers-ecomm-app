@@ -5,10 +5,10 @@ import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
 
 import productImg1 from "@/assets/img/product/populer-product-img1.webp";
-import productImg2 from "@/assets/img/product/populer-product-img2.webp";
-import productImg3 from "@/assets/img/product/populer-product-img3.webp";
-import productImg4 from "@/assets/img/product/populer-product-img4.webp";
-import productImg5 from "@/assets/img/product/populer-product-img5.webp";
+import productImg2 from "@/assets/img/product/single-product-slider-2.webp";
+import productImg3 from "@/assets/img/product/single-product-slider-3.webp";
+import productImg4 from "@/assets/img/product/single-product-slider-4.webp";
+import productImg5 from "@/assets/img/product/single-product-slider-5.webp";
 
 import viewProductImg1 from "@/assets/img/product/view-product-img1.webp";
 import viewProductImg2 from "@/assets/img/product/view-product-img2.webp";
@@ -30,8 +30,14 @@ import recentImg4 from "@/assets/img/product/recent-shopping-img4.webp";
 
 import sliderProfile1 from "@/assets/img/product/video-slider.profile1.webp";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
 
 const SingleProduct = () => {
+
+  const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5]
+
   useEffect(() => {
     // Video Modal JS Start.........................................
     const modalBtn = document.querySelectorAll(".openModalBtn");
@@ -109,122 +115,17 @@ const SingleProduct = () => {
             <div className="row no-gutters">
               <div className="col-lg-6">
                 {/* // TODO: Fix light slider */}
-                {/* <div className="card_custom">
-                  <div className="demo_custom">
-                    <ul id="lightSlider">
-                      <li data-thumb={productImg1.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg1.src} alt="Product Image 1" />
-                          </div>
 
-                          <div className="zoom_box">
-                            <img src={productImg1.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg2.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg2.src} alt="Product Image 1" />
-                          </div>
 
-                          <div className="zoom_box">
-                            <img src={productImg2.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg3.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg3.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg3.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg4.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg4.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg4.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg5.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg5.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg5.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg1.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg1.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg1.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg2.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg2.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg2.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg3.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg3.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg3.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg4.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg4.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg4.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                      <li data-thumb={productImg5.src}>
-                        <div className="zoom_container">
-                          <div className="zoom_container_img">
-                            <img src={productImg5.src} alt="Product Image 1" />
-                          </div>
-
-                          <div className="zoom_box">
-                            <img src={productImg5.src} alt="Zoom Image 1" />
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div> */}
+                <Swiper className="mySwiper" loop={true}>
+                  {
+                    productImages?.map((img, idx) => <SwiperSlide key={idx}>
+                      <div className="product-img">
+                        <img src={img.src} alt="" />
+                      </div>
+                    </SwiperSlide>)
+                  }
+                </Swiper>
               </div>
               <div className="col-lg-6">
                 {/* <!-- Product Details Section --> */}
@@ -312,7 +213,7 @@ const SingleProduct = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
       {/* <!-- Product Single End --> */}
 
       {/* <!-- Product DEs --> */}

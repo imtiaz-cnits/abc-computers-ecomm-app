@@ -33,15 +33,23 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
-import { Controller, FreeMode } from "swiper/modules";
+import { FreeMode, Thumbs } from "swiper/modules";
 
 const SingleProduct = () => {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const mainSwiperRef = useRef(null);
-  const paginationSwiperRef = useRef(null);
-  const [controlledSwiper, setControlledSwiper] = useState(null);
-
-  const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5, productImg1, productImg2, productImg3, productImg4, productImg5]
+  const productImages = [
+    productImg1,
+    productImg2,
+    productImg3,
+    productImg4,
+    productImg5,
+    productImg1,
+    productImg2,
+    productImg3,
+    productImg4,
+    productImg5,
+  ];
 
   useEffect(() => {
     // Video Modal JS Start.........................................
@@ -91,10 +99,6 @@ const SingleProduct = () => {
       });
     };
     // Video Modal JS End.........................................
-
-    if (paginationSwiperRef.current) {
-      setControlledSwiper(paginationSwiperRef.current);
-    }
   }, []);
 
   // Slider Product Quantity Start..................
@@ -125,40 +129,41 @@ const SingleProduct = () => {
               <div className="col-lg-6">
                 {/* // TODO: Fix light slider */}
 
-
                 <Swiper
-                  className="mySwiper product-img-container"
-                  onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
-                  controller={{ control: controlledSwiper }}
+                  style={{
+                    "--swiper-navigation-color": "#fff",
+                    "--swiper-pagination-color": "#fff",
+                  }}
                   loop={true}
-                  modules={[Controller]}
+                  spaceBetween={10}
+                  thumbs={{ swiper: thumbsSwiper }}
+                  modules={[FreeMode, Thumbs]}
+                  className="mySwiper2"
                 >
-                  {
-                    productImages?.map((img, idx) => <SwiperSlide key={idx}>
-                      <div className="product-img">
+                  {productImages?.map((img, idx) => (
+                    <SwiperSlide key={idx}>
                         <img src={img.src} alt="" />
-                      </div>
-                    </SwiperSlide>)
-                  }
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
                 <Swiper
-                  slidesPerView={5}
+                  onSwiper={setThumbsSwiper}
+                  loop={true}
                   spaceBetween={5}
-                  className="mySwiper pagination-container"
-                  onSwiper={(swiper) => (paginationSwiperRef.current = swiper)}
-                  loop
-                  slidesPerGroup={5}
+                  slidesPerView={5}
+                  freeMode={true}
+                  watchSlidesProgress={true}
+                  modules={[FreeMode, Thumbs]}
+                  className="mySwiper"
                 >
-                  {
-                    productImages?.map((img, idx) => <SwiperSlide
+                  {productImages?.map((img, idx) => (
+                    <SwiperSlide
                       key={idx}
                       onClick={() => mainSwiperRef.current?.slideTo(idx)}
                     >
-                      <div className="pagination-item">
                         <img src={img.src} alt="" />
-                      </div>
-                    </SwiperSlide>)
-                  }
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
               <div className="col-lg-6">
@@ -247,7 +252,7 @@ const SingleProduct = () => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
       {/* <!-- Product Single End --> */}
 
       {/* <!-- Product DEs --> */}

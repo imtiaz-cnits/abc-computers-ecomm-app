@@ -3,8 +3,15 @@ import React, { useEffect, useState } from "react";
 import userImg from "@/assets/img/navbar-profile-logo.png";
 import Link from "next/link";
 import { FaBarsStaggered } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 const DashboardNavbar = () => {
+  const path = usePathname();
+
+  if (path.startsWith("/dashboard/login")) {
+    return;
+  }
+
   useEffect(() => {
     // Sidebar Close on Outside Click
     document.addEventListener("click", function (event) {

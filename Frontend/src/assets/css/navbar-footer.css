@@ -474,6 +474,8 @@ body {
   #navbar .menu li.megamenu > a {
     position: relative;
     padding: 10px 0;
+    font-weight: 500;
+    font-size: 14px;
   }
 
   /* Dropdown icon */
@@ -510,7 +512,7 @@ body {
 
   #navbar .menu li .submenu li {
     margin-right: 0;
-    font-size: 16px;
+    font-size: 14px;
     /* position: relative; */
   }
 

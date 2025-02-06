@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const EmailSend = require("../utility/EmailHelper");
 const UserModel = require("../models/UserModel");
 const ProfileModel = require("../models/ProfileModel");
@@ -6,31 +7,57 @@ const { EncodeToken } = require("../utility/TokenHelper");
 
 const SignUpService = async (req) => {
   try {
-    let user_id = req.headers.user_id; // Getting user ID from headers
-    let reqBody = req.body;
+    let { name, email, mobile, password } = req.body;
 
-    if (!reqBody.email) {
-      return { status: "fail", message: "Email is required" };
+    // Validate required fields
+    if (!name || !email || !mobile || !password) {
+      return { status: "fail", message: "All fields are required" };
     }
 
-    reqBody.user_id = user_id; // Assigning user_id to request body
-
-    // Find user by email
-    let existingUser = await UserModel.findOne({ email: reqBody.email });
-
+    // Check if email already exists
+    let existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      // Update existing user
-      await UserModel.updateOne({ email: reqBody.email }, { $set: reqBody });
-      return { status: "Success", message: "User Updated Successfully" };
-    } else {
-      // Create new user
-      let newUser = new UserModel(reqBody);
-      await newUser.save();
-      return { status: "Success", message: "Sign Up Successful" };
+      return { status: "fail", message: "Email already exists" };
     }
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    let newUser = new UserModel({
+      name,
+      email,
+      mobile,
+      password: hashedPassword, // Store hashed password
+    });
+
+    await newUser.save();
+    return { status: "success", message: "User registered successfully" };
   } catch (e) {
     console.error("Error in SignUpService:", e);
-    return { status: "fail", message: "Something went wrong.." };
+    return { status: "fail", message: "Something went wrong" };
+  }
+};
+
+const LoginService = async (req) => {
+  try {
+    let email = req.params.email;
+    let password = req.params.password;
+    // let code = Math.floor(100000 + Math.random() * 900000);
+
+    // let EmailText = `Your Verification Code is ${code}`;
+    // let EmailSubject = "Email Verification";
+
+    // await EmailSend(email, EmailText, EmailSubject);
+
+    const result = await UserModel.findOne({
+      email: email,
+      password: password,
+    });
+
+    return { status: "Success", message: "Login Successfully." };
+  } catch (e) {
+    return { status: "fail", message: e };
   }
 };
 
@@ -119,6 +146,7 @@ const ReadProfileService = async (req) => {
 
 module.exports = {
   SignUpService,
+  LoginService,
   UserOTPService,
   VerifyOTPService,
   SaveProfileService,

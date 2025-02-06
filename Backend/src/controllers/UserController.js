@@ -1,5 +1,6 @@
 const {
   SignUpService,
+  LoginService,
   UserOTPService,
   VerifyOTPService,
   SaveProfileService,
@@ -7,8 +8,15 @@ const {
 } = require("../services/UserServices");
 
 exports.SignUP = async (req, res) => {
+  console.log(req.body);
   let result = await SignUpService(req);
-  return res.status(200).json(result);
+  res.status(200).json(result);
+};
+
+exports.Login = async (req, res) => {
+  console.log(req.body);
+  let result = await LoginService(req);
+  res.status(200).json(result);
 };
 
 exports.UserOTP = async (req, res) => {

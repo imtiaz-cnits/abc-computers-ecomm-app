@@ -9,64 +9,71 @@
   font-weight: 100;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-UltraLight.ttf") format("truetype");
   font-weight: 200;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-ExtraBold.ttf") format("truetype");
   font-weight: 800;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../font/gilroy/Gilroy-Black.ttf") format("truetype");
   font-weight: 900;
 }
+
 /* Gilroy Font */
 
 :root {
   --primary-font: "Gilroy, sans-serif";
   --primary-color: #09090b;
   --secondary-color: #e31736;
-  --gardiant: linear-gradient(
-    180deg,
-    rgba(170, 170, 170, 0.1) 0%,
-    #cfcfcf 100%
-  );
+  --gardiant: linear-gradient(180deg,
+      rgba(170, 170, 170, 0.1) 0%,
+      #cfcfcf 100%);
   --accent: #929292;
   --accent-2: #e2e2e2;
   --white: #ffffff;
@@ -207,7 +214,8 @@ body {
 
 .counter_box .counter::after {
   content: "+";
-  margin-left: 2px; /* Adjust spacing as needed */
+  margin-left: 2px;
+  /* Adjust spacing as needed */
   font-weight: bold;
 }
 
@@ -292,6 +300,7 @@ body {
     font-size: 14px;
   }
 }
+
 /* About End */
 
 /* About Card Start */
@@ -495,6 +504,7 @@ body {
   .team .col-lg-4 {
     margin-bottom: 20px;
   }
+
   .team .col-lg-4:nth-last-child(1) {
     margin-bottom: 0px;
   }
@@ -508,3 +518,56 @@ body {
 
 /* Team End */
 
+
+
+
+
+
+
+
+
+
+
+/* Main Card Styling */
+.services_card {
+  background-color: #FFFFFF;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Card hover effect */
+.services_card:hover {
+  background-color: #1C244B !important;
+}
+
+/* Text color change on card hover */
+.card_content_head {
+  color: #fff !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.card_content {
+  color: #fff !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Fix for text color on hover */
+.services_card:hover .card_content {
+  color: #fff !important;
+}
+
+.services_card:hover .card_content_head {
+  color: #fff !important;
+}
+
+/* Mobile-specific adjustments */
+@media only screen and (max-width: 767px) {
+  .services_card:hover {
+    background-color: #FFFFFF !important;
+    transition: none;
+  }
+
+  .services_card:hover .card_content {
+    color: #7C7C7C !important;
+    /* Adjusted back to original for mobile */
+  }
+}

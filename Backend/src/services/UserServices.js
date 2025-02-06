@@ -1,66 +1,139 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const EmailSend = require("../utility/EmailHelper");
 const UserModel = require("../models/UserModel");
 const ProfileModel = require("../models/ProfileModel");
-
 const { EncodeToken } = require("../utility/TokenHelper");
 
-const SignUpService = async (req) => {
+// Signup Service
+const SignUpService = async (req, res = null) => {
   try {
-    let { name, email, mobile, password } = req.body;
+    let { name, email, mobile, password, img_url, status, role } = req.body;
 
     // Validate required fields
     if (!name || !email || !mobile || !password) {
-      return { status: "fail", message: "All fields are required" };
+      const message = "All fields are required";
+      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
     }
 
-    // Check if email already exists
+    // Email format validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      const message = "Invalid email format";
+      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
+    }
+
+    // Password strength validation
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      const message = "Password must be at least 8 characters long, contain at least one number and one uppercase letter";
+      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
+    }
+
+    // Check for existing email
     let existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      return { status: "fail", message: "Email already exists" };
+      const message = "Email already exists";
+      return res ? res.status(409).json({ status: "fail", message }) : { status: "fail", message };
     }
 
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Check for existing mobile number
+    let existingMobile = await UserModel.findOne({ mobile });
+    if (existingMobile) {
+      const message = "Mobile number already exists";
+      return res ? res.status(409).json({ status: "fail", message }) : { status: "fail", message };
+    }
+
+    // Default values for optional fields
+    img_url = img_url || "default_image_url";
+    status = status || "active";
+    role = role || "user";
+
+    // Hash the password
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(password, 10);
+    } catch (hashError) {
+      console.error("Error hashing password:", hashError.message);
+      const message = "Error processing password.";
+      return res ? res.status(500).json({ status: "fail", message }) : { status: "fail", message };
+    }
 
     // Create new user
     let newUser = new UserModel({
       name,
       email,
       mobile,
-      password: hashedPassword, // Store hashed password
+      password: hashedPassword,
+      img_url,
+      status,
+      role,
     });
 
+    // Save user
     await newUser.save();
-    return { status: "success", message: "User registered successfully" };
+
+    const message = "User registered successfully";
+    return res ? res.status(201).json({ status: "success", message }) : { status: "success", message };
   } catch (e) {
-    console.error("Error in SignUpService:", e);
-    return { status: "fail", message: "Something went wrong" };
+    console.error("Error in SignUpService:", e.message);
+    const message = "Something went wrong during signup.";
+    return res ? res.status(500).json({ status: "fail", message }) : { status: "fail", message };
   }
 };
 
-const LoginService = async (req) => {
+
+// Login Service
+const LoginService = async (req, res) => {
   try {
-    let email = req.params.email;
-    let password = req.params.password;
-    // let code = Math.floor(100000 + Math.random() * 900000);
+    let { email, password } = req.body;
 
-    // let EmailText = `Your Verification Code is ${code}`;
-    // let EmailSubject = "Email Verification";
+    // Validate required fields
+    if (!email || !password) {
+      return res.status(400).json({ status: "fail", message: "Email and password are required." });
+    }
 
-    // await EmailSend(email, EmailText, EmailSubject);
+    email = email.toLowerCase();
 
-    const result = await UserModel.findOne({
-      email: email,
-      password: password,
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ status: "fail", message: "Invalid email or password." });
+    }
+
+    // Log entered password and stored hashed password
+    console.log("Entered Password:", password);
+    console.log("Stored Hashed Password:", user.password);
+
+    // Ensure the stored password is properly hashed (check for bcrypt hash format)
+    if (!user.password.startsWith("$2b$")) {
+      console.error("Stored password is not hashed properly!");
+      return res.status(500).json({ status: "fail", message: "Server error: password hash issue." });
+    }
+
+    // Compare entered password with stored hash
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log("Password Match:", isMatch);
+
+    if (!isMatch) {
+      return res.status(401).json({ status: "fail", message: "Invalid email or password." });
+    }
+
+    // If password matches, return success
+    return res.status(200).json({
+      status: "success",
+      message: "Login successful.",
+      user: { name: user.name, email: user.email, mobile: user.mobile },
     });
-
-    return { status: "Success", message: "Login Successfully." };
-  } catch (e) {
-    return { status: "fail", message: e };
+  } catch (error) {
+    console.error("Login Error:", error);
+    return res.status(500).json({ status: "fail", message: "Something went wrong during login." });
   }
 };
 
+
+
+
+// OTP Service
 const UserOTPService = async (req) => {
   try {
     let email = req.params.email;
@@ -69,19 +142,22 @@ const UserOTPService = async (req) => {
     let EmailText = `Your Verification Code is ${code}`;
     let EmailSubject = "Email Verification";
 
+    // Send OTP via email
     await EmailSend(email, EmailText, EmailSubject);
     await UserModel.updateOne(
-      { email: email },
-      { $set: { otp: code } },
-      { upsert: true }
+        { email: email },
+        { $set: { otp: code } },
+        { upsert: true }
     );
 
     return { status: "Success", message: "Your OTP code has been sent." };
   } catch (e) {
-    return { status: "fail", message: e };
+    console.error("Error sending OTP:", e);
+    return { status: "fail", message: "Something went wrong" };
   }
 };
 
+// OTP Verification Service
 const VerifyOTPService = async (req) => {
   try {
     const email = req.params.email.toLowerCase(); // Consistent casing
@@ -90,7 +166,6 @@ const VerifyOTPService = async (req) => {
     // Find user by email and OTP
     const user = await UserModel.findOne({ email: email, otp: otp });
 
-    // Check if a matching user was found
     if (user) {
       // Encode token with user id
       const token = EncodeToken(email, user._id.toString());
@@ -118,18 +193,22 @@ const VerifyOTPService = async (req) => {
   }
 };
 
+// Profile Services
 const SaveProfileService = async (req) => {
   try {
     let user_id = req.headers.user_id;
     let reqBody = req.body;
     reqBody.user_id = user_id;
+
+    // Upsert Profile Information
     await ProfileModel.updateOne(
-      { userID: user_id },
-      { $set: reqBody },
-      { upsert: true }
+        { userID: user_id },
+        { $set: reqBody },
+        { upsert: true }
     );
     return { status: "Success", message: "Profile Save Successfully" };
   } catch (e) {
+    console.error("Error in SaveProfileService:", e);
     return { status: "fail", message: "Something went wrong.." };
   }
 };
@@ -140,6 +219,7 @@ const ReadProfileService = async (req) => {
     let result = await ProfileModel.find({ userID: user_id });
     return { status: "Success", data: result };
   } catch (e) {
+    console.error("Error in ReadProfileService:", e);
     return { status: "fail", message: "Something went wrong.." };
   }
 };

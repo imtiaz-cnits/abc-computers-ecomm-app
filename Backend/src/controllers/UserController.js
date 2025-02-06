@@ -9,15 +9,15 @@ const {
 
 exports.SignUP = async (req, res) => {
   console.log(req.body);
-  let result = await SignUpService(req);
-  res.status(200).json(result);
+  return await SignUpService(req, res);
+  // res.status(200).json(result);
 };
 
 exports.Login = async (req, res) => {
   console.log(req.body);
-  let result = await LoginService(req);
-  res.status(200).json(result);
+  await LoginService(req, res); // ✅ Just call the service, don't send another response
 };
+
 
 exports.UserOTP = async (req, res) => {
   let result = await UserOTPService(req);

@@ -215,12 +215,29 @@ body {
 .swiper-slide .product-img img {
   width: 100%;
   height: 100%;
+  border-radius: 10px;
 }
 
+.pagination-container {
+  margin-top: 10px;
+}
 
+.pagination-container .pagination-item {
 
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+}
 
+.pagination-container .pagination-item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  border: 1px solid #9292923b;
+}
 
+.pagination-container .swiper-slide-active .pagination-item img {
+  border: 1px solid #929292 !important;
+}
 
 
 

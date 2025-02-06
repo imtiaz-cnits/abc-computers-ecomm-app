@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
 
@@ -33,10 +33,15 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
+import { Controller, FreeMode } from "swiper/modules";
 
 const SingleProduct = () => {
 
-  const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5]
+  const mainSwiperRef = useRef(null);
+  const paginationSwiperRef = useRef(null);
+  const [controlledSwiper, setControlledSwiper] = useState(null);
+
+  const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5, productImg1, productImg2, productImg3, productImg4, productImg5]
 
   useEffect(() => {
     // Video Modal JS Start.........................................
@@ -86,6 +91,10 @@ const SingleProduct = () => {
       });
     };
     // Video Modal JS End.........................................
+
+    if (paginationSwiperRef.current) {
+      setControlledSwiper(paginationSwiperRef.current);
+    }
   }, []);
 
   // Slider Product Quantity Start..................
@@ -117,10 +126,35 @@ const SingleProduct = () => {
                 {/* // TODO: Fix light slider */}
 
 
-                <Swiper className="mySwiper" loop={true}>
+                <Swiper
+                  className="mySwiper product-img-container"
+                  onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
+                  controller={{ control: controlledSwiper }}
+                  loop={true}
+                  modules={[Controller]}
+                >
                   {
                     productImages?.map((img, idx) => <SwiperSlide key={idx}>
                       <div className="product-img">
+                        <img src={img.src} alt="" />
+                      </div>
+                    </SwiperSlide>)
+                  }
+                </Swiper>
+                <Swiper
+                  slidesPerView={5}
+                  spaceBetween={5}
+                  className="mySwiper pagination-container"
+                  onSwiper={(swiper) => (paginationSwiperRef.current = swiper)}
+                  loop
+                  slidesPerGroup={5}
+                >
+                  {
+                    productImages?.map((img, idx) => <SwiperSlide
+                      key={idx}
+                      onClick={() => mainSwiperRef.current?.slideTo(idx)}
+                    >
+                      <div className="pagination-item">
                         <img src={img.src} alt="" />
                       </div>
                     </SwiperSlide>)

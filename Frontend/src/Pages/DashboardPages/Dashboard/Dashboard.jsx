@@ -1,12 +1,13 @@
 "use client"
 
-import React from "react";
+import React, {useState} from "react";
 import cardImg1 from "@/assets/icons/card-projects.svg"
 import cardImg2 from "@/assets/icons/card-employe.svg"
 import cardImg3 from "@/assets/icons/card-client.svg"
 import cardImg4 from "@/assets/icons/card-reports.svg"
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false); // Loading state
   return (
     <div className="main-content">
       <div className="page-content">
@@ -22,7 +23,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <h4>Projects</h4>
-                      <h5>525</h5>
+                      <h5>20</h5>
                     </div>
                   </div>
                 </div>

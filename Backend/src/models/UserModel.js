@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
-const DataSchema = mongoose.Schema(
+const DataSchema = new mongoose.Schema(
     {
         img_url: { type: String, default: "default_image_url" },
         name: { type: String, required: true },
@@ -15,35 +15,40 @@ const DataSchema = mongoose.Schema(
     { timestamps: true, versionKey: false }
 );
 
-// Ensure password is always hashed before saving
+// 🔹 Ensure password is hashed before saving
 DataSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
 
-    console.log("Hashing Password: ", this.password); // Debugging line
+    // Check if the password is already hashed
+    if (this.password.startsWith("$2b$") || this.password.startsWith("$2a$")) {
+        console.log("✅ Password is already hashed. Skipping hash.");
+        return next();
+    }
 
-    // Hash the password before saving it
+    console.log("🔹 Hashing Password: ", this.password); // Debugging
+
     try {
         this.password = await bcrypt.hash(this.password, 10);
+        console.log("✅ Hashed Password: ", this.password);
         next();
     } catch (err) {
-        console.error("Error hashing password: ", err.message);
-        next(err); // Pass the error to the next middleware
+        console.error("❌ Error hashing password:", err.message);
+        next(err);
     }
 });
 
-// Add custom validation for unique fields to handle duplicate key errors better
-DataSchema.post('save', function (error, doc, next) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-        if (error.message.includes('email')) {
-            next(new Error('Email already exists'));
-        } else if (error.message.includes('mobile')) {
-            next(new Error('Mobile number already exists'));
+// 🔹 Handle duplicate field errors properly
+DataSchema.post("save", function (error, doc, next) {
+    if (error.name === "MongoServerError" && error.code === 11000) {
+        if (error.keyPattern.email) {
+            return next(new Error("Email already exists"));
+        } else if (error.keyPattern.mobile) {
+            return next(new Error("Mobile number already exists"));
         } else {
-            next(new Error('Duplicate field error'));
+            return next(new Error("Duplicate field error"));
         }
-    } else {
-        next(error);
     }
+    next(error);
 });
 
 const UserModel = mongoose.model("users", DataSchema);

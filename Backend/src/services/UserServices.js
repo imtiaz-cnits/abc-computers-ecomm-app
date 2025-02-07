@@ -1,83 +1,82 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const EmailSend = require("../utility/EmailHelper");
 const UserModel = require("../models/UserModel");
 const ProfileModel = require("../models/ProfileModel");
 const { EncodeToken } = require("../utility/TokenHelper");
 
 // Signup Service
-const SignUpService = async (req, res = null) => {
+const SignUpService = async (req, res) => {
   try {
     let { name, email, mobile, password, img_url, status, role } = req.body;
 
-    // Validate required fields
+    // ✅ Validate required fields
     if (!name || !email || !mobile || !password) {
-      const message = "All fields are required";
-      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
+      return res.status(400).json({ status: "fail", message: "All fields are required." });
     }
 
-    // Email format validation
+    email = email.toLowerCase(); // Ensure email is stored in lowercase
+
+    // ✅ Email format validation
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(email)) {
-      const message = "Invalid email format";
-      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
+      return res.status(400).json({ status: "fail", message: "Invalid email format." });
     }
 
-    // Password strength validation
+    // ✅ Password strength validation
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
-      const message = "Password must be at least 8 characters long, contain at least one number and one uppercase letter";
-      return res ? res.status(400).json({ status: "fail", message }) : { status: "fail", message };
+      return res.status(400).json({
+        status: "fail",
+        message: "Password must be at least 8 characters long, contain at least one number and one uppercase letter.",
+      });
     }
 
-    // Check for existing email
-    let existingUser = await UserModel.findOne({ email });
+    // ✅ Check for existing email
+    const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      const message = "Email already exists";
-      return res ? res.status(409).json({ status: "fail", message }) : { status: "fail", message };
+      return res.status(409).json({ status: "fail", message: "Email already exists." });
     }
 
-    // Check for existing mobile number
-    let existingMobile = await UserModel.findOne({ mobile });
+    // ✅ Check for existing mobile number
+    const existingMobile = await UserModel.findOne({ mobile });
     if (existingMobile) {
-      const message = "Mobile number already exists";
-      return res ? res.status(409).json({ status: "fail", message }) : { status: "fail", message };
+      return res.status(409).json({ status: "fail", message: "Mobile number already exists." });
     }
 
-    // Default values for optional fields
+    // ✅ Set default values for optional fields
     img_url = img_url || "default_image_url";
     status = status || "active";
     role = role || "user";
 
-    // Hash the password
-    let hashedPassword;
+    // ✅ Hash the password securely
     try {
-      hashedPassword = await bcrypt.hash(password, 10);
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      console.log("✅ New Hashed Password:", hashedPassword);
+
+      // ✅ Create new user
+      const newUser = new UserModel({
+        name,
+        email,
+        mobile,
+        password: hashedPassword,
+        img_url,
+        status,
+        role,
+      });
+
+      // ✅ Save user to the database
+      await newUser.save();
+
+      return res.status(201).json({ status: "success", message: "User registered successfully." });
     } catch (hashError) {
-      console.error("Error hashing password:", hashError.message);
-      const message = "Error processing password.";
-      return res ? res.status(500).json({ status: "fail", message }) : { status: "fail", message };
+      console.error("❌ Error hashing password:", hashError.message);
+      return res.status(500).json({ status: "fail", message: "Error processing password." });
     }
-
-    // Create new user
-    let newUser = new UserModel({
-      name,
-      email,
-      mobile,
-      password: hashedPassword,
-      img_url,
-      status,
-      role,
-    });
-
-    // Save user
-    await newUser.save();
-
-    const message = "User registered successfully";
-    return res ? res.status(201).json({ status: "success", message }) : { status: "success", message };
   } catch (e) {
-    console.error("Error in SignUpService:", e.message);
-    const message = "Something went wrong during signup.";
-    return res ? res.status(500).json({ status: "fail", message }) : { status: "fail", message };
+    console.error("❌ Error in SignUpService:", e.message);
+    return res.status(500).json({ status: "fail", message: "Something went wrong during signup." });
   }
 };
 
@@ -87,48 +86,57 @@ const LoginService = async (req, res) => {
   try {
     let { email, password } = req.body;
 
-    // Validate required fields
+    // Validate input
     if (!email || !password) {
+      console.log("❌ Missing email or password");
       return res.status(400).json({ status: "fail", message: "Email and password are required." });
     }
 
     email = email.toLowerCase();
-
     const user = await UserModel.findOne({ email });
+
     if (!user) {
+      console.log("❌ User not found:", email);
       return res.status(401).json({ status: "fail", message: "Invalid email or password." });
     }
 
-    // Log entered password and stored hashed password
-    console.log("Entered Password:", password);
-    console.log("Stored Hashed Password:", user.password);
-
-    // Ensure the stored password is properly hashed (check for bcrypt hash format)
-    if (!user.password.startsWith("$2b$")) {
-      console.error("Stored password is not hashed properly!");
-      return res.status(500).json({ status: "fail", message: "Server error: password hash issue." });
-    }
+    console.log("🔹 Entered Password:", password);
+    console.log("🔹 Stored Hashed Password:", user.password);
 
     // Compare entered password with stored hash
     const isMatch = await bcrypt.compare(password, user.password);
-
-    console.log("Password Match:", isMatch);
+    console.log("✅ Password Match Result:", isMatch);
 
     if (!isMatch) {
+      console.log("❌ Password does not match for:", email);
       return res.status(401).json({ status: "fail", message: "Invalid email or password." });
     }
 
-    // If password matches, return success
+    // Generate a JWT token (if required)
+    const token = jwt.sign(
+        { userId: user._id, email: user.email, role: user.role },
+        process.env.JWT_SECRET || "your_secret_key",
+        { expiresIn: "1h" } // Token expires in 1 hour
+    );
+
+    console.log("✅ Login Successful. Redirecting to Dashboard...");
+
+    // Send response with user details and token
     return res.status(200).json({
       status: "success",
       message: "Login successful.",
-      user: { name: user.name, email: user.email, mobile: user.mobile },
+      user: { name: user.name, email: user.email, mobile: user.mobile, role: user.role },
+      token, // Send the JWT token
+      redirect: "/dashboard" // Redirect user to dashboard
     });
+
   } catch (error) {
-    console.error("Login Error:", error);
+    console.error("❌ Login Error:", error);
     return res.status(500).json({ status: "fail", message: "Something went wrong during login." });
   }
 };
+
+
 
 
 

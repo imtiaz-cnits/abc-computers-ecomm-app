@@ -71,23 +71,27 @@ const AuthLogin = () => {
         body: JSON.stringify(loginFormData),
       });
 
+      // Parse the response
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error("Invalid email or password.");
+        throw new Error(result.message || "Invalid email or password.");
       }
 
-      const result = await response.json();
       alert(result.message);
 
-      if (result.status === "Success") {
-        router.push("/dashboard"); // Redirect to dashboard
+      if (result.status === "success") {
+        localStorage.setItem("token", result.token); // Save token for authentication
+        window.location.href = result.redirect; // Redirect to dashboard
       }
     } catch (error) {
-      console.error("Login Error:", error);
+      console.error("❌ Login Error:", error);
       alert(error.message || "Login failed! Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
       <div className="sign-in-signup">

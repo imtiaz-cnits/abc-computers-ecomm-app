@@ -15,7 +15,7 @@ exports.SignUP = async (req, res) => {
 
 exports.Login = async (req, res) => {
   console.log(req.body);
-  await LoginService(req, res); // ✅ Just call the service, don't send another response
+  return await LoginService(req, res); // ✅ Just call the service, don't send another response
 };
 
 

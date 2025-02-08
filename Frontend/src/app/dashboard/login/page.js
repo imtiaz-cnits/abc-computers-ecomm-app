@@ -1,7 +1,7 @@
 import AuthLogin from "@/Pages/DashboardPages/AuthLogin/AuthLogin";
 import React from "react";
 
-const page = () => {
+const DashboardLogin = () => {
   return (
     <>
       <AuthLogin />
@@ -9,4 +9,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DashboardLogin;

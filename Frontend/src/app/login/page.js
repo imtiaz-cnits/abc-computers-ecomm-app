@@ -1,10 +1,9 @@
-import Login from '@/Pages/WebsitePages/Login/Login';
-import React from 'react';
+import Login from "@/Pages/WebsitePages/Login/Login";
+import React from "react";
+import "@/assets/css/sign-in-signup.css";
 
-const page = () => {
-    return (
-        <Login />
-    );
+const LoginPage = () => {
+  return <Login />;
 };
 
-export default page;
+export default LoginPage;

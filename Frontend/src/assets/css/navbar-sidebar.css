@@ -192,6 +192,8 @@ body[data-sidebar-size="sm"] .main-content {
 
 .logo {
   line-height: 69px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .logo .logo-sm {
@@ -374,7 +376,6 @@ body[data-sidebar-size="sm"] #page-topbar {
 .navbar-brand-box svg {
   width: 40px !important;
   height: 40px !important;
-  margin-top: -6px;
 }
 
 .brand-name {
@@ -383,7 +384,7 @@ body[data-sidebar-size="sm"] #page-topbar {
 
 .navbar-brand-box .brand-name svg {
   width: 140px !important;
-  height: 100px !important;
+  /* height: 100px !important; */
 }
 
 .search-icon {
@@ -866,6 +867,10 @@ body[data-sidebar-size="sm"] .menu ul li.active ul .text {
 body[data-sidebar-size="sm"] .menu ul li.active ul li a {
   display: block !important;
   margin: 8px 10px 8px 10px !important;
+}
+
+.logo-lg {
+  vertical-align: center;
 }
 
 @media (max-width: 992px) {

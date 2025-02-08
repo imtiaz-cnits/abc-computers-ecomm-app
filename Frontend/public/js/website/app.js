@@ -1,11 +1,3 @@
-// Preloader Start.........
-setTimeout(() => {
-  document.body.style.visibility = "visible";
-  document.body.classList.add("fade-in");
-  document.querySelector(".preloader_wrapper").style.display = "none";
-}, 3200);
-// Preloader End.........
-
 // About Page Counter Start....
 const counters = document.querySelectorAll(".counter");
 const animationDuration = 4000;

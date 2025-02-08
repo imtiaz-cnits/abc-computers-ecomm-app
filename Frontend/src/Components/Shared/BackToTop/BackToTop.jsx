@@ -1,7 +1,15 @@
+"use client"
+import { usePathname } from "next/navigation";
 import React from "react";
 import { FaArrowUp } from "react-icons/fa6";
 
 const BackToTop = () => {
+  const path = usePathname();
+
+  if (path.startsWith("/dashboard")) {
+    return;
+  }
+
   return (
     <>
       {/* <!-- Back to Top Button --> */}

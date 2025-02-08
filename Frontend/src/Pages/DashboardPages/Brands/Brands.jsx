@@ -66,7 +66,7 @@ const Brands = () => {
               </div>
             </div>
 
-            <div className="button-item">
+            {/* <div className="button-item">
               <div className="icon-buttons">
                 <button
                   id="copyBtn"
@@ -220,7 +220,7 @@ const Brands = () => {
                   </svg>
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="card">
             <div className="card-body">

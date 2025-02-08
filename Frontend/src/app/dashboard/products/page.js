@@ -1,4 +1,5 @@
-import AddProduct from "@/Pages/DashboardPages/AddProduct/AddProduct";
+
+import Products from "@/Pages/DashboardPages/Products/Products";
 import React from "react";
 
 export const metadata = {
@@ -6,7 +7,7 @@ export const metadata = {
 };
 
 const page = () => {
-  return <AddProduct />;
+  return <Products />
 };
 
 export default page;

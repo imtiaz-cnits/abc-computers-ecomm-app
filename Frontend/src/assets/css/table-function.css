@@ -548,6 +548,7 @@ html ::-webkit-scrollbar-thumb:hover {
   height: 38px;
   text-align: center;
   line-height: 30px;
+  color: var(--text-color);
   -webkit-border-radius: 6px !important;
   -moz-border-radius: 6px !important;
   -ms-border-radius: 6px !important;
@@ -584,6 +585,7 @@ html ::-webkit-scrollbar-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-color);
 }
 
 .data-table .page-link:hover,

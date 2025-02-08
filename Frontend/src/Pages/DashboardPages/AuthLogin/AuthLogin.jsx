@@ -71,39 +71,35 @@ const AuthLogin = () => {
   // Handle Login Form Submission
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
-
+    setLoading(true);
+  
     try {
-      // Send the login request
       const response = await fetch("http://localhost:5070/api/v1/Login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginFormData),
       });
-
-      // Parse the response
+  
       const result = await response.json();
-
+  
       if (!response.ok) {
-        // Handle errors from the API
         throw new Error(result.message || "Invalid email or password.");
       }
-
-      // If login is successful
+  
+      // ✅ If login is successful
       if (result.status === "success" && result.token) {
-        // Save the token to localStorage for future authentication
         localStorage.setItem("token", result.token);
-
-        // Redirect the user to the dashboard
-        router.push("/dashboard");  // Redirect to dashboard page
+        toast.success("Login successful!");
+        router.push("/dashboard"); // Redirect to dashboard
       }
     } catch (error) {
       console.error("❌ Login Error:", error);
       toast.error(error.message || "Login failed! Please check your credentials.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
+  
 
 
   // Function to handle protected API requests

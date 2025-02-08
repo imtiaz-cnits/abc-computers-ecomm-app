@@ -42,7 +42,7 @@ const router = express.Router();
 
 // User API
 router.post("/SignUP", UserController.SignUP);
-router.post("/Login", AuthVerification, UserController.Login);
+router.post("/Login", UserController.Login);
 // router.get("/UserOTP/:email", UserController.UserOTP);
 // router.get("/VerifyOTP/:email/:otp", UserController.VerifyOTP);
 // router.get("/UserLogout", AuthVerification, UserController.UserLogout);

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
+import Link from "next/link";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -18,36 +19,44 @@ const Login = () => {
           style={{ display: `${login ? "block" : "none"}` }}
         >
           <div>
-            <h2>
-              Welcome to
-              <br /> ABC Computers
-            </h2>
+            <h2>Account Login</h2>
+            <form className="login-form">
+              <div className="input-row">
+                <div className="input-field">
+                  <label htmlFor="loginEmail">Email</label>
+                  <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter a email"
+                  />
+                </div>
+              </div>
 
-            <form>
-              <input type="text" id="username" placeholder="Enter a mail" />
+              <div className="input-row">
+                <div className="input-field">
+                  <label htmlFor="loginPassword">Password</label>
+                  <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter password"
+                  />
+                </div>
+              </div>
 
-              <label htmlFor="password">
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Enter password"
-                />
-                <a href="#">
-                  <img className="hide-icon" src={passwordEye.src} alt="" />
-                </a>
-              </label>
-              <a href="#" className="forgot-password">
-                Forgot Password?
-              </a>
-
-              <button className="sign-in-btn" type="submit">
-                SIGN IN
-              </button>
+              <div className="input-row">
+                <button className="sign-in-btn" type="submit">
+                  SIGN IN
+                </button>
+              </div>
             </form>
-
             <div className="switch">
-              Dont have an account?
-              <span onClick={() => setLogin(false)}>SIGN UP</span>
+              <div>
+                <span>Don't have an account?</span>
+                <span className="switch-btn" onClick={() => setLogin(false)}>
+                  Register Now
+                </span>
+              </div>
+              <span className="forgot">Forgot Password?</span>
             </div>
           </div>
         </div>
@@ -68,7 +77,7 @@ const Login = () => {
                 </div>
 
                 <div className="input-field">
-                  <label htmlFor="lastName">last Name</label>
+                  <label htmlFor="lastName">Last Name</label>
                   <input type="text" id="lastName" placeholder="Last Name" />
                 </div>
               </div>
@@ -99,9 +108,12 @@ const Login = () => {
               </div>
 
               <div className="input-row">
-                <input type="checkbox" />
+                <input type="checkbox" id="checkbox" />
                 <label htmlFor="checkbox" className="checkbox">
-                  I accept the <a>Privacy Policy.</a>
+                  I accept the{" "}
+                  <Link href={"#"} className="policy">
+                    Privacy Policy.
+                  </Link>
                 </label>
               </div>
 
@@ -112,8 +124,10 @@ const Login = () => {
               </div>
             </form>
             <div className="switch">
-              Already have an account?
-              <span onClick={() => setLogin(true)}>SIGN IN</span>
+              <span>Already have an account?</span>
+              <span className="switch-btn" onClick={() => setLogin(true)}>
+                Login Now
+              </span>
             </div>
           </div>
         </div>

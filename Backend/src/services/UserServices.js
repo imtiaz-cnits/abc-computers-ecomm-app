@@ -86,51 +86,52 @@ const SignUpService = async (data) => {
   }
 };
 
-const LoginService = async (req, res) => {
+const LoginService = async (req) => {
   try {
     let { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
-      console.log("❌ Missing email or password");
-      return res.status(400).json({ status: "fail", message: "Email and password are required." });
+      return { status: "fail", message: "Email and password are required." };
     }
 
-    email = email.toLowerCase(); // Normalize the email to lowercase for comparison
+    // Convert email to lowercase for consistency
+    email = email.toLowerCase();
 
-    // ✅ Check if user exists
+    // 🔹 Step 1: Check if user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
-      console.log("❌ User not found:", email);
-      return res.status(401).json({ status: "fail", message: "Invalid email or password." });
+      return { status: "fail", message: "Invalid email or password." };
     }
 
-    // ✅ Compare entered password with stored hash
+    // 🔹 Step 2: Compare the provided password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("❌ Password does not match for:", email);
-      return res.status(401).json({ status: "fail", message: "Invalid email or password." });
+      return { status: "fail", message: "Invalid email or password." };
     }
 
-    // ✅ Generate JWT token
+    // 🔹 Step 3: Generate a JWT token
     const token = jwt.sign(
-        { userId: user._id, email: user.email, role: user.role },
-        process.env.JWT_SECRET || "your_secret_key", // Secret key should be environment variable
-        { expiresIn: "1h" } // Token expires in 1 hour
+        { userId: user._id.toString(), email: user.email, role: user.role },
+        process.env.JWT_SECRET || "your_secret_key",
+        { expiresIn: "1h" }
     );
 
-    // ✅ Send response with user details and token
-    return res.status(200).json({
+    // 🔹 Step 4: Return success response
+    return {
       status: "success",
       message: "Login successful.",
-      user: { name: user.name, email: user.email, mobile: user.mobile, role: user.role },
-      token, // Send the JWT token
-      redirect: "/dashboard" // Redirect user to dashboard (this is client-side logic)
-    });
+      user: {
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        role: user.role
+      },
+      token
+    };
 
   } catch (error) {
     console.error("❌ Login Error:", error);
-    return res.status(500).json({ status: "fail", message: "Something went wrong during login." });
+    return { status: "fail", message: "Something went wrong during login." };
   }
 };
 

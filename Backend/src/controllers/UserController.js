@@ -23,29 +23,28 @@ exports.SignUP = async (req, res) => {
   }
 };
 
-
 exports.Login = async (req, res) => {
   try {
-    // Call the Login service with request data
-    const result = await LoginService(req.body);
+    const result = await LoginService(req);
 
-    if (result.status === "success") {
-      // Send success response with the token or any necessary data
-      return res.status(200).json(result);
-    } else {
-      // Send error response if login failed
-      return res.status(400).json(result);
+    if (result.status !== "success") {
+      return res.status(401).json(result); // Return 401 Unauthorized if login fails
     }
+
+    // ✅ Return the token and user data
+    return res.status(200).json({
+      status: "success",
+      message: "Login successful.",
+      user: result.user,
+      token: result.token
+    });
+
   } catch (error) {
     console.error("❌ Login error:", error);
-
-    // Handle unexpected errors
-    return res.status(500).json({
-      status: "fail",
-      message: error.message || "Login failed. Please try again later.",
-    });
+    return res.status(500).json({ status: "fail", message: "Login failed. Please try again later." });
   }
 };
+
 
 exports.UserLogout = async (req, res) => {
   // Set cookie options

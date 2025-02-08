@@ -224,7 +224,7 @@ const DashboardSidebar = () => {
                 <DashboardSubmenu
                   submenuItems={[
                     { title: "BRANDS", href: "/dashboard/brands" },
-                    { title: "ADD PRODUCT", href: "/dashboard/add-product" },
+                    { title: "ADD PRODUCT", href: "/dashboard/products" },
                     { title: "CATEGORY", href: "/dashboard/category" },
                     { title: "SUB CATEGORY", href: "/dashboard/sub-category" },
                   ]}

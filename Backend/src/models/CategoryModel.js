@@ -3,6 +3,7 @@ const DataSchema = mongoose.Schema(
   {
     categoryName: { type: String, unique: true },
     categoryImg: { type: String, unique: true },
+    status: { type: String, unique: true }
   },
   { timestamps: true, versionKey: false }
 );

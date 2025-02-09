@@ -7,11 +7,13 @@ const DataSchema = mongoose.Schema(
     discount: { type: Boolean },
     discountPrice: { type: String },
     image: { type: String },
-    star: { type: String },
     stock: { type: Boolean },
-    remark: { type: String },
-    categoryID: { type: mongoose.Schema.Types.ObjectId, required: true },
+    badge: { type: Boolean },
+    status: { type: Boolean },
+
     brandID: { type: mongoose.Schema.Types.ObjectId, required: true },
+    categoryID: { type: mongoose.Schema.Types.ObjectId, required: true },
+    subCategoryID: { type: mongoose.Schema.Types.ObjectId, required: true },
   },
   { timestamps: true, versionKey: false }
 );

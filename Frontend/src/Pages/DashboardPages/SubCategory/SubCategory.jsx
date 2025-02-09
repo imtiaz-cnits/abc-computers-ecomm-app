@@ -639,7 +639,7 @@ const SubCategory = () => {
         {/* <!-- Confirmation Modal End --> */}
         {/* <!-- Table Action Button Modal End --> */}
 
-        {/* <!-- ADD Category Modal Start --> */}
+        {/* <!-- ADD Sub Category Modal Start --> */}
         <div
           className="modal fade"
           id="addSubCategory"

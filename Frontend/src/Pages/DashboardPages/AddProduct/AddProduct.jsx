@@ -3,6 +3,7 @@ import React, { useCallback, useRef, useState } from "react";
 import "./AddProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
 import ReactTags from "react-tag-autocomplete";
+import Select from "react-select";
 
 const AddProduct = () => {
   const [colors, setColors] = useState([]);
@@ -21,6 +22,22 @@ const AddProduct = () => {
     [colors]
   );
 
+  const brands = [
+    { value: "asus", label: "asus" },
+    { value: "dell", label: "dell" },
+    { value: "logitech", label: "logitech" },
+  ];
+  const categories = [
+    { value: "Monitor", label: "Monitor" },
+    { value: "Mouse", label: "Mouse" },
+    { value: "Keyboard", label: "Keyboard" },
+  ];
+  const subCategories = [
+    { value: "Led", label: "Led" },
+    { value: "Mechanical", label: "Mechanical" },
+    { value: "Logitech", label: "Logitech" },
+  ];
+
   return (
     <>
       <div className="main-content">
@@ -34,25 +51,22 @@ const AddProduct = () => {
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Brand *</label>
                   <div className="input-field">
-                    <div className="select-box-dropdown">
-                      <div className="select-dropdown-selected">
-                        <span>Select Brand</span>
-                        <span className="icon">
-                          <i className="fas fa-angle-down"></i>
-                        </span>
-                      </div>
-                      <div className="select-dropdown-items">
-                        <input
-                          type="text"
-                          className="select-search-box"
-                          placeholder="Search..."
-                        />
-                        <option className="option">Select-1</option>
-                        <option className="option">Select-2</option>
-                        <option className="option">Select-2</option>
-                      </div>
-                    </div>
-                    <button type="button" className="add-btn">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      defaultValue={brands[0]}
+                      isClearable={true}
+                      isSearchable={true}
+                      name="brands"
+                      options={brands}
+                      placeholder="Select Brand"
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addBrand"
+                    >
                       <svg
                         width="32"
                         height="32"
@@ -75,25 +89,22 @@ const AddProduct = () => {
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Category *</label>
                   <div className="input-field">
-                    <div className="select-box-dropdown">
-                      <div className="select-dropdown-selected">
-                        <span>Select Category</span>
-                        <span className="icon">
-                          <i className="fas fa-angle-down"></i>
-                        </span>
-                      </div>
-                      <div className="select-dropdown-items">
-                        <input
-                          type="text"
-                          className="select-search-box"
-                          placeholder="Search..."
-                        />
-                        <option className="option">Select-1</option>
-                        <option className="option">Select-2</option>
-                        <option className="option">Select-2</option>
-                      </div>
-                    </div>
-                    <button type="button" className="add-btn">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      defaultValue={categories[0]}
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={categories}
+                      placeholder="Select Category"
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addCategory"
+                    >
                       <svg
                         width="32"
                         height="32"
@@ -119,25 +130,22 @@ const AddProduct = () => {
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Sub Category *</label>
                   <div className="input-field">
-                    <div className="select-box-dropdown">
-                      <div className="select-dropdown-selected">
-                        <span>Select Sub Category</span>
-                        <span className="icon">
-                          <i className="fas fa-angle-down"></i>
-                        </span>
-                      </div>
-                      <div className="select-dropdown-items">
-                        <input
-                          type="text"
-                          className="select-search-box"
-                          placeholder="Search..."
-                        />
-                        <option className="option">Select-1</option>
-                        <option className="option">Select-2</option>
-                        <option className="option">Select-2</option>
-                      </div>
-                    </div>
-                    <button type="button" className="add-btn">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      defaultValue={subCategories[0]}
+                      isClearable={true}
+                      isSearchable={true}
+                      name="subCategories"
+                      options={subCategories}
+                      placeholder="Select Sub Category"
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addSubCategory"
+                    >
                       <svg
                         width="32"
                         height="32"
@@ -257,6 +265,254 @@ const AddProduct = () => {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+
+      {/* Brand Modal */}
+      <section
+        className="modal fade"
+        id="addBrand"
+        tabIndex="-1"
+        aria-labelledby="addBrandLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              <h2 className="heading">ADD NEW BRAND</h2>
+            </div>
+            <form>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">BRAND NAME</label>
+                    <input type="text" placeholder="Type here.." required />
+                  </div>
+
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">BRAND STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      required
+                    >
+                      <option value="">Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+
+                  <div className="form-row">
+                    <label htmlFor="photo">BRAND PHOTO</label>
+                    <div className="upload-profile">
+                      <div className="item">
+                        <div className="img-box">
+                          <img
+                            src={uploadImg.src}
+                            width={30}
+                            height={30}
+                            alt=""
+                          />
+                        </div>
+
+                        <div className="profile-wrapper">
+                          <label className="custom-file-input-wrapper m-0">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                            />
+                          </label>
+                          <p>PNG,JPEG or GIF (Upto 1 MB)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Modal */}
+
+      <div
+        className="modal fade"
+        id="addCategory"
+        tabIndex="-1"
+        aria-labelledby="addCategoryLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              <h2 className="heading">ADD NEW CATEGORY</h2>
+            </div>
+
+            <form>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">CATEGORY NAME</label>
+                    <input type="text" placeholder="Type here.." required />
+                  </div>
+
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      required
+                    >
+                      <option value="">Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+
+                  <div className="form-row">
+                    <label htmlFor="photo">CATEGORY PHOTO</label>
+                    <div className="upload-profile">
+                      <div className="item">
+                        <div className="img-box">
+                          <img
+                            src={uploadImg.src}
+                            width={30}
+                            height={30}
+                            alt=""
+                          />
+                        </div>
+
+                        <div className="profile-wrapper">
+                          <label className="custom-file-input-wrapper m-0">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                            />
+                          </label>
+                          <p>PNG,JPEG or GIF (Upto 1 MB)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub  Category Modal */}
+
+      <div
+        className="modal fade"
+        id="addSubCategory"
+        tabIndex="-1"
+        aria-labelledby="addSubCategoryLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              <h2 className="heading">ADD SUB CATEGORY</h2>
+            </div>
+
+            <form>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">CATEGORY NAME</label>
+                    <input type="text" placeholder="Type here.." required />
+                  </div>
+
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      required
+                    >
+                      <option value="">Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+
+                  <div className="form-row">
+                    <label htmlFor="photo">CATEGORY PHOTO</label>
+                    <div className="upload-profile">
+                      <div className="item">
+                        <div className="img-box">
+                          <img
+                            src={uploadImg.src}
+                            width={30}
+                            height={30}
+                            alt=""
+                          />
+                        </div>
+
+                        <div className="profile-wrapper">
+                          <label className="custom-file-input-wrapper m-0">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                            />
+                          </label>
+                          <p>PNG,JPEG or GIF (Upto 1 MB)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Modals */}
     </>
   );
 };

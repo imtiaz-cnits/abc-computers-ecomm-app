@@ -608,7 +608,7 @@ const Brands = () => {
         {/* <!-- Confirmation Modal End --> */}
         {/* <!-- Table Action Button Modal End --> */}
 
-        {/* <!-- ADD Product Modal Start --> */}
+        {/* <!-- ADD Brans Modal Start --> */}
         <section
           className="modal fade"
           id="addBrand"
@@ -680,9 +680,9 @@ const Brands = () => {
             </div>
           </div>
         </section>
-        {/* <!--  ADD Product Modal End --> */}
+        {/* <!--  ADD Brans Modal End --> */}
 
-        {/* Update Category */}
+        {/* Update Brand */}
 
         <section
           className="modal fade"
@@ -756,7 +756,7 @@ const Brands = () => {
           </div>
         </section>
 
-        {/* Update Category */}
+        {/* Update Brand */}
       </div>
     </div>
   );

@@ -1,7 +1,4 @@
-const {
-  SignUpService,
-  LoginService,
-} = require("../services/UserServices");
+const { SignUpService, LoginService } = require("../services/UserServices");
 
 exports.SignUP = async (req, res) => {
   try {
@@ -31,39 +28,51 @@ exports.Login = async (req, res) => {
       return res.status(401).json(result); // Return 401 Unauthorized if login fails
     }
 
-    // ✅ Return the token and user data
+    // ✅ Issue JWT Token for successful login
+    const token = result.token; // Assuming token is being generated in the LoginService
+
+    // Set the token in cookies with proper secure settings
+    const cookieOptions = {
+      expires: new Date(Date.now() + 3600000), // 1 hour expiration
+      httpOnly: true, // Ensures the cookie is only accessible via HTTP requests
+      secure: process.env.NODE_ENV === "production", // Secure cookies in production (https)
+      sameSite: "Strict", // Restrict cookie to same-origin requests
+    };
+
+    res.cookie("token", token, cookieOptions); // Set the token as a cookie
+
     return res.status(200).json({
       status: "success",
       message: "Login successful.",
       user: result.user,
-      token: result.token
+      token: token, // Also send the token in response body (optional)
     });
-
   } catch (error) {
     console.error("❌ Login error:", error);
     return res.status(500).json({ status: "fail", message: "Login failed. Please try again later." });
   }
 };
 
-
 exports.UserLogout = async (req, res) => {
-  // Set cookie options
-  const cookieOption = {
-    expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // Cookie expires in 24 hours
-    httpOnly: true, // Ensures cookie is only accessible via HTTP requests
-    secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production (HTTPS)
-    sameSite: "Strict", // Prevents sending cookies in cross-origin requests
-  };
+  try {
+    // Set cookie options to expire immediately
+    const cookieOption = {
+      expires: new Date(0),  // Set the expiration date to the past to remove the cookie immediately
+      httpOnly: true,         // Ensures cookie is only accessible via HTTP requests
+      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production (HTTPS)
+      sameSite: "Strict",     // Prevents sending cookies in cross-origin requests
+    };
 
-  // Clear the token cookie
-  res.cookie("token", "", cookieOption);
+    // Clear the token cookie by setting it to an empty value with an expired date
+    res.cookie("token", "", cookieOption);
 
-  // Send success response
-  return res.status(200).json({
-    status: "success",
-    message: "Successfully logged out",
-  });
+    // Send success response
+    return res.status(200).json({
+      status: "success",
+      message: "Successfully logged out",
+    });
+  } catch (error) {
+    console.error("❌ Logout error:", error);
+    return res.status(500).json({ status: "fail", message: "Logout failed. Please try again later." });
+  }
 };
-
-
-

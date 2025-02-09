@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const ProductController = require("../controllers/ProductController");
 const UserController = require("../controllers/UserController");
 const WishListController = require("../controllers/WishListController");
@@ -8,7 +9,47 @@ const FeaturesController = require("../controllers/FeaturesController");
 
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
-const router = express.Router();
+
+// Protected Routes
+router.get("/dashboard", AuthVerification, (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "Welcome to the dashboard",
+    });
+});
+
+// User API
+router.post("/SignUP", UserController.SignUP);
+router.post("/Login", UserController.Login);
+router.post("/Logout", UserController.UserLogout);
+
+// Brand CRUD APIs
+router.post("/brands", ProductController.AddBrands);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// router.get("/UserOTP/:email", UserController.UserOTP);
+// router.get("/VerifyOTP/:email/:otp", UserController.VerifyOTP);
+// router.get("/UserLogout", AuthVerification, UserController.UserLogout);
+//
+// router.post("/CreateProfile", AuthVerification, UserController.CreateProfile);
+// router.post("/UpdateProfile", AuthVerification, UserController.UpdateProfile);
+// router.get("/ReadProfile", AuthVerification, UserController.ReadProfile);
 
 // Products API
 // router.get("/ProductBrandList", ProductController.ProductBrandList);
@@ -39,17 +80,6 @@ const router = express.Router();
 //   "/ProductReviewList/:ProductID",
 //   ProductController.ProductReviewList
 // );
-
-// User API
-router.post("/SignUP", UserController.SignUP);
-router.post("/Login", UserController.Login);
-// router.get("/UserOTP/:email", UserController.UserOTP);
-// router.get("/VerifyOTP/:email/:otp", UserController.VerifyOTP);
-// router.get("/UserLogout", AuthVerification, UserController.UserLogout);
-//
-// router.post("/CreateProfile", AuthVerification, UserController.CreateProfile);
-// router.post("/UpdateProfile", AuthVerification, UserController.UpdateProfile);
-// router.get("/ReadProfile", AuthVerification, UserController.ReadProfile);
 
 // Wish List API
 // router.get("/WishList", AuthVerification, WishListController.WishList);

@@ -30,7 +30,7 @@ mongoose
 
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:3000", // Replace with your frontend URL
+  origin: "http://localhost:3001", // Replace with your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization header
   credentials: true, // Allow cookies (if needed)
@@ -46,6 +46,9 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
 app.use(limiter);
 
 app.use("/api/v1", router);
+
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(express.static("/client/dist"));
 

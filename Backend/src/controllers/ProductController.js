@@ -1,4 +1,5 @@
 const {
+  BrandAddService,
   BrandListService,
   CategoryListService,
   SliderListService,
@@ -11,6 +12,30 @@ const {
   ReviewListService,
   CreateReviewService,
 } = require("../services/ProductServices");
+
+// Brands Add Controller
+exports.AddBrands = async (req, res) => {
+  try {
+    const result = await BrandAddService(req);  // Call the service to handle the logic
+    return res.status(200).json(result);  // Send the response to the client
+  } catch (error) {
+    console.error("Error in AddBrands controller:", error);
+    return res.status(500).json({ status: "fail", message: "Error adding brand." });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.ProductBrandList = async (req, res) => {
   let result = await BrandListService();

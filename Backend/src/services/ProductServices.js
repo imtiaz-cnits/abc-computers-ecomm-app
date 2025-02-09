@@ -7,6 +7,79 @@ const ReviewModel = require("../models/ReviewModel");
 const mongoose = require("mongoose");
 const ObjectID = mongoose.Types.ObjectId;
 
+const multer = require("multer");
+const path = require("path");
+
+// Configure multer for file uploads
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, "uploads/");  // Directory to upload the file
+        },
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + path.extname(file.originalname));  // Unique file name
+        },
+    }),
+    limits: { fileSize: 1024 * 1024 },  // 1MB limit for file size
+});
+
+const BrandAddService = async (req) => {
+    try {
+        console.log("Received brand data:", req.body);  // Log received brand data
+
+        const { brandName, status } = req.body;
+        const brandImg = req.file ? `/uploads/${req.file.filename}` : null;  // Get the uploaded file path
+
+        // Log file details
+        console.log("File uploaded:", req.file);
+        console.log("Brand Name:", brandName);
+        console.log("Status:", status);
+        console.log("Brand Image Path:", brandImg);
+
+        // Check if the brand already exists
+        const existingBrand = await BrandModel.findOne({ brandName });
+        if (existingBrand) {
+            console.log("Brand already exists");
+            return { status: "fail", message: "Brand already exists" };
+        }
+
+        // Create a new brand
+        const newBrand = new BrandModel({
+            brandName,
+            brandImg,
+            status,
+        });
+
+        // Save the new brand to the database
+        await newBrand.save();
+
+        console.log("New brand added:", newBrand);
+        return { status: "success", message: "Brand added successfully", brand: newBrand };
+    } catch (error) {
+        console.error("Error in BrandAddService:", error);
+        return { status: "fail", message: "Error adding brand. Please try again." };
+    }
+};
+
+module.exports = BrandAddService;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const BrandListService = async () => {
     try {
         let data = await BrandModel.find();
@@ -396,6 +469,7 @@ const CreateReviewService = async (req) => {
 }
 
 module.exports = {
+    BrandAddService,
     BrandListService,
     CategoryListService,
     SliderListService,

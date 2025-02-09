@@ -707,7 +707,7 @@ body[data-sidebar-size="sm"] .menu ul li .arrow-icon {
   list-style: none;
 }
 
-.vertical-menu .log-out a {
+.vertical-menu .log-out button {
   display: flex;
   align-items: center;
   gap: 10px;

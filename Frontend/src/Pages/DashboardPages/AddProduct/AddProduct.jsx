@@ -203,6 +203,12 @@ const AddProduct = () => {
               </div>
 
               <div className="row">
+                <div className="form-row">
+
+                </div>
+              </div>
+
+              <div className="row">
                 <div className="form-row col-lg-6">
                   <label htmlFor="photo">Product Photo</label>
                   <div className="upload-profile">

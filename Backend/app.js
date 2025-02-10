@@ -29,12 +29,14 @@ mongoose
   });
 
 app.use(cookieParser());
-app.use(cors({
-  origin: "http://localhost:3001", // Replace with your frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization header
-  credentials: true, // Allow cookies (if needed)
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization header
+    credentials: true, // Allow cookies (if needed)
+  })
+);
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(hpp());

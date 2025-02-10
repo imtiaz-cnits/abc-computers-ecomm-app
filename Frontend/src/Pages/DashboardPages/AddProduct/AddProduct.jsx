@@ -54,6 +54,9 @@ const AddProduct = () => {
     { value: "Logitech", label: "Logitech" },
   ];
 
+
+  useEffect(()=>>, [])
+
   return (
     <>
       <div className="main-content">

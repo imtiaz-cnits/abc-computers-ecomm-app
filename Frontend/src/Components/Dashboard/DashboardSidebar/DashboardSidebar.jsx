@@ -10,7 +10,6 @@ import DashboardSubmenu from "../DashboardSubmenu/DashboardSubmenu";
 const DashboardSidebar = () => {
   const path = usePathname();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
 
 
   // Function to handle logout

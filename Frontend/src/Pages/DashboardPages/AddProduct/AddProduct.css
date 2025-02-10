@@ -256,3 +256,11 @@
 .add-product-form .select__menu {
   text-transform: capitalize;
 }
+
+.fr-second-toolbar {
+  display: none !important;
+}
+
+.fr-box.fr-basic.fr-top .fr-wrapper {
+  border-radius: 0 0 10px 10px;
+}

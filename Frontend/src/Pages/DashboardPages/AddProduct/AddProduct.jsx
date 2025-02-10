@@ -1,12 +1,27 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./AddProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
 import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
-import TextEditor from "@/Components/Shared/TextEditor/TextEditor";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import FroalaEditorComponent from "react-froala-wysiwyg";
+
+import "froala-editor/js/plugins.pkgd.min.js";
+
+import "froala-editor/js/plugins/align.min.js";
+
+import "froala-editor/js/languages/de.js";
+
+import "froala-editor/js/third_party/image_tui.min.js";
+import "froala-editor/js/third_party/embedly.min.js";
+import "froala-editor/js/third_party/spell_checker.min.js";
 
 const AddProduct = () => {
+  const [keyFeatures, setKeyFeatures] = useState("");
+  const [specifications, setSpecifications] = useState("");
+  const [description, setDescription] = useState("");
   const [colors, setColors] = useState([]);
   const reactColors = useRef();
   const onDeleteColors = useCallback(
@@ -205,7 +220,29 @@ const AddProduct = () => {
 
               <div className="row">
                 <div className="form-row">
-                  <TextEditor />
+                  <label htmlFor="">Key Features*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setKeyFeatures(content)}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="form-row">
+                  <label htmlFor="">Specifications*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setSpecifications(content)}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="form-row">
+                  <label htmlFor="">Description*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setDescription(content)}
+                  />
                 </div>
               </div>
 

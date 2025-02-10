@@ -21,7 +21,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="shortcut icon" href={favicon.src} type="image/x-icon" />
-        <link href="summernote-bs5.css" rel="stylesheet"></link>
       </head>
       <body>
         <Preloader />

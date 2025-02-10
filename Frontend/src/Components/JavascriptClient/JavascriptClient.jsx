@@ -40,19 +40,6 @@ const JavascriptClient = () => {
       <Script src="/js/website/brand-slider.js" strategy="afterInteractive" />
       <Script src="/js/website/app.js" strategy="afterInteractive" />
       <Script
-        src="/js/website/single-product-zoom-slider.js"
-        strategy="beforeInteractive"
-      />
-      <Script
-        src="/js/website/vendor/lightslider.js"
-        strategy="afterInteractive"
-      />
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js"
-        strategy="afterInteractive"
-      />
-
-      <Script
         src="/js/website/product-video-slider.js"
         strategy="afterInteractive"
       />

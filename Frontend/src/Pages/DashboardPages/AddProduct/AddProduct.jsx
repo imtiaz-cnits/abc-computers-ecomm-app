@@ -4,6 +4,7 @@ import "./AddProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
 import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
+import TextEditor from "@/Components/Shared/TextEditor/TextEditor";
 
 const AddProduct = () => {
   const [colors, setColors] = useState([]);
@@ -204,7 +205,7 @@ const AddProduct = () => {
 
               <div className="row">
                 <div className="form-row">
-
+                  <TextEditor />
                 </div>
               </div>
 

@@ -13,7 +13,7 @@ const DashboardLayout = ({ children }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (token) {
+    if (!token) {
       router.push("/dashboard/login");
       setAuthorized(true);
     }
@@ -243,10 +243,6 @@ const DashboardLayout = ({ children }) => {
     });
     // ................ Entries and Pagination End.....................//
   }, [path, token]);
-
-  if (!authorized) {
-    return;
-  }
 
   return (
     <>

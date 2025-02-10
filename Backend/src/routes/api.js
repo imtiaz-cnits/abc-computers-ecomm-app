@@ -9,6 +9,7 @@ const FeaturesController = require("../controllers/FeaturesController");
 
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
+const { upload } = require("../services/ProductServices");
 
 // Protected Routes
 router.get("/dashboard", AuthVerification, (req, res) => {
@@ -24,7 +25,7 @@ router.post("/Login", UserController.Login);
 router.post("/Logout", UserController.UserLogout);
 
 // Brand CRUD APIs
-router.post("/brands", ProductController.AddBrands);
+router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 
 
 

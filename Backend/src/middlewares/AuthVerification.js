@@ -35,7 +35,7 @@ module.exports = (req, res, next) => {
       userId: decoded.userId,
     };
 
-    // Check if it's the /dashboard route and ensure the user is authenticated
+    // Check if it'uploads the /dashboard route and ensure the user is authenticated
     if (req.originalUrl === '/dashboard' && !req.user) {
       return res.status(401).json({
         status: "fail",

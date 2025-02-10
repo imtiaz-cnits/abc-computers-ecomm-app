@@ -1,63 +1,12 @@
 "use client"
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import cardImg1 from "@/assets/icons/card-projects.svg"
 import cardImg2 from "@/assets/icons/card-employe.svg"
 import cardImg3 from "@/assets/icons/card-client.svg"
 import cardImg4 from "@/assets/icons/card-reports.svg"
 
 const Dashboard = () => {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          router.replace("/dashboard/login");
-          return;
-        }
-
-        const response = await fetch("http://localhost:5070/api/v1/dashboard", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,  // ✅ Make sure token is sent correctly
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-        console.log("Dashboard API Response:", data);
-
-        if (!response.ok) {
-          router.replace("/dashboard/login");
-        } else {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error("Authentication error:", error);
-        router.replace("/dashboard/login");
-      }
-    };
-
-    checkAuthentication();
-  }, [router]);
-
-
-  if (loading) {
-    return null; // Do not render anything until authentication is verified
-  }
-
-  if (!isAuthenticated) {
-    return null; // Prevent rendering before redirect
-  }
-
-
+  
   return (
       <div className="main-content">
         <div className="page-content">

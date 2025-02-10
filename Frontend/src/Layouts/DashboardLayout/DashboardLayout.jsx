@@ -2,14 +2,22 @@
 
 import DashboardNavbar from "@/Components/Dashboard/DashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "@/Components/Dashboard/DashboardSidebar/DashboardSidebar";
-import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const DashboardLayout = ({ children }) => {
+  const path = usePathname();
+  const [authorized, setAuthorized] = useState(false);
 
-  const path = usePathname()
+  const router = useRouter();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
+    if (token) {
+      router.push("/dashboard/login");
+      setAuthorized(true);
+    }
+
     // ..............Table searchbar filter Start.......................//
     const searchInput = document.querySelector("#searchInput");
     searchInput?.addEventListener("input", function () {
@@ -149,7 +157,7 @@ const DashboardLayout = ({ children }) => {
         rows.forEach((row, index) => {
           row.style.display =
             index >= (currentPage - 1) * entriesPerPage &&
-              index < currentPage * entriesPerPage
+            index < currentPage * entriesPerPage
               ? ""
               : "none";
         });
@@ -234,10 +242,11 @@ const DashboardLayout = ({ children }) => {
       updatePagination();
     });
     // ................ Entries and Pagination End.....................//
+  }, [path, token]);
 
-  }, [path])
-
-
+  if (!authorized) {
+    return;
+  }
 
   return (
     <>

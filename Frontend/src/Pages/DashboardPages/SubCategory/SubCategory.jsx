@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import SubCategoryRow from "./SubCategoryRow/SubCategoryRow";
+import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
 
 const SubCategory = () => {
   const tableRef = useRef(null);
@@ -276,53 +277,13 @@ const SubCategory = () => {
                 </table>
               </div>
               {/* <!-- Pagination and Display Info --> */}
-              <div className="my-3">
-                <span id="display-info"></span>
-              </div>
-
-              <footer className="footer">
-                <div className="entries-page">
-                  <label htmlFor="entries" className="mr-2">
-                    Products per page:
-                  </label>
-                  <div className="select-container">
-                    <select
-                      id="entries"
-                      className="form-control"
-                      style={{ width: "auto" }}
-                      onChange={(e) => setLimit(e.target.value)}
-                      value={limit}
-                    >
-                      <option value={10}>10</option>
-                      <option value={15}>15</option>
-                      <option value={25}>25</option>
-                      <option value={50}>50</option>
-                      <option value={100}>100</option>
-                    </select>
-                    <span className="dropdown-icon">&#9662;</span>
-                    {/* <!-- Dropdown icon --> */}
-                  </div>
-                </div>
-
-                <div id="pagination" className="pagination">
-                  <button id="prevBtn" className="btn">
-                    Prev
-                  </button>
-                  {pages?.map((page, idx) => (
-                    <a
-                      onClick={() => setPage(page)}
-                      key={idx}
-                      className={`page-link page-link--${page}`}
-                    >
-                      {page}
-                    </a>
-                  ))}
-
-                  <button id="nextBtn" className="btn">
-                    Next
-                  </button>
-                </div>
-              </footer>
+              <DashboardPagination
+                limit={limit}
+                page={page}
+                setLimit={setLimit}
+                setPage={setPage}
+                pages={pages}
+              />
             </div>
           </div>
         </div>

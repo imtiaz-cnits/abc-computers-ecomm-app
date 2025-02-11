@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const AdminRoute = ({ children }) => {
   const router = useRouter();

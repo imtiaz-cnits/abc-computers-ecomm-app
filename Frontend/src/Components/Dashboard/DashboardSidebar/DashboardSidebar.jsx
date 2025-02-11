@@ -50,6 +50,26 @@ const DashboardSidebar = () => {
     return null;
   }
 
+  const handleSubmenuToggle = (item) => {
+    console.log(item);
+    const currentActive = item?.classList?.contains("active");
+
+    if (currentActive) {
+      item?.classList?.remove("active");
+      return;
+    }
+
+    const activeSubmenu = document.querySelector(
+      ".vertical-menu .submenu-active.active"
+    );
+
+    if (activeSubmenu) {
+      activeSubmenu?.classList?.remove("active");
+    }
+
+    item?.classList?.add("active");
+  };
+
   return (
     <div className="vertical-menu">
       <button
@@ -258,6 +278,7 @@ const DashboardSidebar = () => {
                 </DashboardActiveLink>
 
                 <DashboardSubmenu
+                  handleSubmenuToggle={handleSubmenuToggle}
                   submenuItems={[
                     { title: "PRODUCTS", href: "/dashboard/products" },
                     { title: "BRANDS", href: "/dashboard/brands" },
@@ -286,6 +307,7 @@ const DashboardSidebar = () => {
                 />
 
                 <DashboardSubmenu
+                  handleSubmenuToggle={handleSubmenuToggle}
                   submenuTitle={"REPORTS"}
                   submenuItems={[
                     { title: "ADD REPORT", href: "/dashboard/add-report" },

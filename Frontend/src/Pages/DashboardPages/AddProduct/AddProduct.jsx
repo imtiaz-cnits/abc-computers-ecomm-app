@@ -8,15 +8,15 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
-import "froala-editor/js/plugins.pkgd.min.js";
+import("froala-editor/js/plugins.pkgd.min.js");
 
-import "froala-editor/js/plugins/align.min.js";
+// import "froala-editor/js/plugins/align.min.js";
 
-import "froala-editor/js/languages/de.js";
+// import "froala-editor/js/languages/de.js";
 
-import "froala-editor/js/third_party/image_tui.min.js";
-import "froala-editor/js/third_party/embedly.min.js";
-import "froala-editor/js/third_party/spell_checker.min.js";
+// import "froala-editor/js/third_party/image_tui.min.js";
+// import "froala-editor/js/third_party/embedly.min.js";
+// import "froala-editor/js/third_party/spell_checker.min.js";
 
 const AddProduct = () => {
   const [keyFeatures, setKeyFeatures] = useState("");
@@ -54,8 +54,10 @@ const AddProduct = () => {
     { value: "Logitech", label: "Logitech" },
   ];
 
-
-  useEffect(()=>>, [])
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+    console.log(e);
+  };
 
   return (
     <>
@@ -65,7 +67,7 @@ const AddProduct = () => {
             <div className="heading-wrap">
               <h2 className="heading">Add New Product</h2>
             </div>
-            <form className="add-product-form">
+            <form className="add-product-form" onSubmit={handleAddProduct}>
               <div className="row">
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Brand *</label>

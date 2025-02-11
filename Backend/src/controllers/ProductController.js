@@ -24,23 +24,27 @@ exports.AddBrands = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 exports.ProductBrandList = async (req, res) => {
-  let result = await BrandListService();
-  return res.status(200).json(result);
+  try {
+    let result = await BrandListService();
+    return res.status(200).json(result); // Ensure JSON response
+  } catch (e) {
+    return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response
+  }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.ProductCategoryList = async (req, res) => {
   let result = await CategoryListService();

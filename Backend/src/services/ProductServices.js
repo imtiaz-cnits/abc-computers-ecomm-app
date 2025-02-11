@@ -11,26 +11,29 @@ const multer = require("multer");
 const path = require("path");
 
 const fs = require("fs");
-const uploadDir = "uploads/";
 
+// Ensure the upload directory exists
+const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Configure multer for file uploads
+// Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/"); // Save files to uploads directory
+        cb(null, "uploads/"); // Directory to store uploaded files
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+        cb(null, Date.now() + path.extname(file.originalname)); // Generate a unique file name
     },
 });
 
+// Create upload instance with limits and storage configuration
 const upload = multer({
-    storage,
-    limits: { fileSize: 1024 * 1024 }, // 1MB file size limit
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 }, // Max file size of 1MB
 });
+
 
 // Export upload middleware
 const BrandAddService = async (req) => {
@@ -62,21 +65,27 @@ const BrandAddService = async (req) => {
         await newBrand.save();
 
         console.log("New brand added:", newBrand);
-        return { status: "success", message: "Brand added successfully", brand: newBrand };
+        return { status: "success", message: "Brand added successfully", data: newBrand };
     } catch (error) {
         console.error("Error in BrandAddService:", error.message);
         return { status: "fail", message: "Error adding brand. Please try again." };
     }
 };
 
-// const BrandListService = async () => {
-//     try {
-//         let data = await BrandModel.find();
-//         return {status: "success", data: data};
-//     } catch (e) {
-//         return {status: "Fail", data: e}.toString();
-//     }
-// };
+
+
+const BrandListService = async () => {
+    try {
+        let data = await BrandModel.find();
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+};
+
+
+
+
 //
 // const CategoryListService = async () => {
 //     try {
@@ -460,6 +469,7 @@ const BrandAddService = async (req) => {
 module.exports = {
     upload,
     BrandAddService,
+    BrandListService
 };
 
 

@@ -1,6 +1,8 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import axios from "axios";
+import { Modal } from "bootstrap";
 // import generatePDF from "../../../../public/js/generate-pdf";
 // import generateXLSX from "../../../../public/js/generate-xlsx";
 // import copyTableToClipboard from "../../../../public/js/copyToClipboard";
@@ -15,28 +17,27 @@ const Brands = () => {
   const [status, setStatus] = useState("");
   const [brandImg, setBrandImg] = useState(null);
   const [brands, setBrands] = useState([]);
+  const [brandIdToDelete, setBrandIdToDelete] = useState(null);
 
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await fetch("http://localhost:5070/api/v1/brands");
+        const response = await axios.get("http://localhost:5070/api/v1/brands");
 
-        // Log the response status code for debugging
-        console.log("Response Status:", response.status);
+        console.log("API Response:", response.data);
 
-        if (!response.ok) {
-          // Log response details for further debugging
-          const errorDetails = await response.text();  // Get the raw response text for further debugging
-          throw new Error(`Failed to fetch brands. Status: ${response.status}, Error: ${errorDetails}`);
-        }
-
-        const result = await response.json();
-        console.log("API Response:", result);
-
-        setBrands(result.data || []);
+        setBrands(response.data.data || []);
       } catch (error) {
-        // Log the full error message for better debugging
-        console.error("Error fetching brands:", error.message);
+        // Improved error handling
+        if (error.response) {
+          console.error(
+              `Error fetching brands: ${error.response.status} - ${error.response.data}`
+          );
+        } else if (error.request) {
+          console.error("No response received from server:", error.request);
+        } else {
+          console.error("Error setting up request:", error.message);
+        }
       }
     };
 
@@ -46,6 +47,16 @@ const Brands = () => {
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => setBrandImg(e.target.files[0]);
+  const handleDeleteClick = (brandId) => {
+    if (!brandId) {
+      console.error("Error: Brand ID is undefined");
+      return;
+    }
+    console.log("Setting brandIdToDelete:", brandId);
+    setBrandIdToDelete(brandId);
+  };
+
+
 
 // Handle form submission
   const handleSubmit = async (e) => {
@@ -94,6 +105,53 @@ const Brands = () => {
     }
   };
 
+  const deleteBrand = async () => {
+    if (!brandIdToDelete) {
+      alert("No brand selected!");
+      return;
+    }
+
+    console.log("Deleting brand with ID:", brandIdToDelete);
+
+    try {
+      const response = await axios.delete(
+          `http://localhost:5070/api/v1/brands/${brandIdToDelete}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+      );
+
+      if (response.data.status === "success") {
+        alert("Brand deleted successfully!");
+        setBrandIdToDelete(null);
+
+        // Close the modal
+        const modalElement = document.getElementById("confirmationModal");
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        modalInstance?.hide();
+
+        // Manually remove the modal backdrop and modal-open class from the body to fix the blur background issue
+        document.body.classList.remove("modal-open"); // Remove background blur
+        const modalBackdrop = document.querySelector(".modal-backdrop");
+        if (modalBackdrop) {
+          modalBackdrop.remove(); // Remove the backdrop if it exists
+        }
+
+        // Update UI by removing the deleted brand
+        setBrands((prevBrands) =>
+            prevBrands.filter((brand) => brand._id !== brandIdToDelete)
+        );
+      } else {
+        alert(response.data.message || "Failed to delete brand.");
+      }
+    } catch (error) {
+      console.error("Error deleting brand:", error);
+      alert(error.response?.data?.message || "An error occurred.");
+    }
+  };
+
 
   return (
     <div className="main-content">
@@ -104,24 +162,24 @@ const Brands = () => {
             <h1>PRODUCT BRANDS</h1>
             <div className="table-btn-item">
               <button
-                type="submit"
-                className="view-more-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#addBrand"
+                  type="submit"
+                  className="view-more-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addBrand"
               >
                 <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                      d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                   />
                 </svg>
                 ADD PRODUCT BRAND
@@ -135,19 +193,19 @@ const Brands = () => {
             <div className="btn-group">
               <div className="input-group">
                 <input
-                  type="text"
-                  id="searchInput"
-                  className="form-control"
-                  placeholder="Search Brands..."
+                    type="text"
+                    id="searchInput"
+                    className="form-control"
+                    placeholder="Search Brands..."
                 />
                 {/* <!-- Entries per page --> */}
                 <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    justifyContent: "center",
-                  }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      justifyContent: "center",
+                    }}
                 ></div>
               </div>
             </div>
@@ -373,7 +431,13 @@ const Brands = () => {
                                 </a>
 
                                 {/* Delete Brand Button */}
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                                <a href="#" data-bs-toggle="modal"
+                                   data-bs-target="#confirmationModal"
+                                   onClick={(e) => {
+                                     e.preventDefault(); // Prevent unwanted default behavior
+                                     console.log("Clicked brand:", brand); // Debugging
+                                     handleDeleteClick(brand?._id);
+                                   }}>
                                   <svg
                                       width="44"
                                       height="44"
@@ -403,7 +467,7 @@ const Brands = () => {
                   </tbody>
                 </table>
                 {/* Toast container */}
-                <Toaster />
+                <Toaster/>
               </div>
               {/* <!-- Pagination and Display Info --> */}
               <div className="my-3">
@@ -471,7 +535,6 @@ const Brands = () => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="heading-wrap">
-                {/* <!-- Close button with close icon --> */}
                 <button
                     type="button"
                     className="close-btn close"
@@ -485,11 +548,7 @@ const Brands = () => {
               <form action="">
                 <p>Are you sure you want to delete this item?</p>
                 <div className="modal-buttons">
-                  {/* <!-- Yes button --> */}
-                  <button className="confirmYes" type="button">
-                    Yes
-                  </button>
-                  {/* <!-- No button that also closes the modal --> */}
+                  <button className="confirmYes" type="button" onClick={deleteBrand}>Yes</button>
                   <button
                       className="confirmNo close"
                       type="button"
@@ -502,7 +561,6 @@ const Brands = () => {
             </div>
           </div>
         </section>
-
         {/* <!-- Confirmation Modal End --> */}
         {/* <!-- Table Action Button Modal End --> */}
 
@@ -517,11 +575,11 @@ const Brands = () => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="heading-wrap">
-              <button
-                  type="button"
-                  className="close-btn close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
+                <button
+                    type="button"
+                    className="close-btn close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
                 >
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -533,22 +591,22 @@ const Brands = () => {
                     <div className="form-row">
                       <label htmlFor="">BRAND NAME</label>
                       <input
-                        type="text"
-                        placeholder="Type here.."
-                        required
-                        value={brandName}
-                        onChange={handleBrandNameChange}
+                          type="text"
+                          placeholder="Type here.."
+                          required
+                          value={brandName}
+                          onChange={handleBrandNameChange}
                       />
                     </div>
 
                     <div className="form-row select-input-box">
                       <label htmlFor="select-status">BRAND STATUS</label>
                       <select
-                        id="select-status"
-                        className="select-status"
-                        required
-                        value={status}
-                        onChange={handleStatusChange}
+                          id="select-status"
+                          className="select-status"
+                          required
+                          value={status}
+                          onChange={handleStatusChange}
                       >
                         <option value="">Select Status</option>
                         <option value="active">Active</option>
@@ -565,11 +623,11 @@ const Brands = () => {
                           <div className="profile-wrapper">
                             <label className="custom-file-input-wrapper m-0">
                               <input
-                                type="file"
-                                className="custom-file-input"
-                                aria-label="Upload Photo"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
+                                  type="file"
+                                  className="custom-file-input"
+                                  aria-label="Upload Photo"
+                                  ref={fileInputRef}
+                                  onChange={handleFileChange}
                               />
                             </label>
                             <p>PNG, JPEG or GIF (Upto 1 MB)</p>
@@ -593,20 +651,20 @@ const Brands = () => {
         {/* Update Brand */}
 
         <section
-          className="modal fade"
-          id="updateBrand"
-          tabIndex="-1"
-          aria-labelledby="updateBrandLabel"
-          aria-hidden="true"
+            className="modal fade"
+            id="updateBrand"
+            tabIndex="-1"
+            aria-labelledby="updateBrandLabel"
+            aria-hidden="true"
         >
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="heading-wrap">
                 <button
-                  type="button"
-                  className="close-btn close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
+                    type="button"
+                    className="close-btn close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
                 >
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -617,15 +675,15 @@ const Brands = () => {
                   <div className="col-lg-12">
                     <div className="form-row">
                       <label htmlFor="">BRAND NAME</label>
-                      <input type="text" placeholder="Type here.." required />
+                      <input type="text" placeholder="Type here.." required/>
                     </div>
 
                     <div className="form-row select-input-box">
                       <label htmlFor="select-status">BRAND STATUS</label>
                       <select
-                        id="select-status"
-                        className="select-status"
-                        required
+                          id="select-status"
+                          className="select-status"
+                          required
                       >
                         <option value="">Select Status</option>
                         <option value="active">Active</option>
@@ -642,9 +700,9 @@ const Brands = () => {
                           <div className="profile-wrapper">
                             <label className="custom-file-input-wrapper m-0">
                               <input
-                                type="file"
-                                className="custom-file-input"
-                                aria-label="Upload Photo"
+                                  type="file"
+                                  className="custom-file-input"
+                                  aria-label="Upload Photo"
                               />
                             </label>
                             <p>PNG,JPEG or GIF (Upto 1 MB)</p>

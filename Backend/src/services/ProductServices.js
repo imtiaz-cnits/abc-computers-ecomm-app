@@ -72,6 +72,23 @@ const BrandAddService = async (req) => {
     }
 };
 
+const BrandDeleteService = async (brandId) => {
+    try {
+        // Check if the brand exists
+        const brand = await BrandModel.findById(brandId);
+        if (!brand) {
+            return { status: "fail", message: "Brand not found" };
+        }
+
+        // Delete the brand
+        await BrandModel.findByIdAndDelete(brandId);
+        return { status: "success", message: "Brand deleted successfully" };
+    } catch (error) {
+        console.error("Error in BrandDeleteService:", error.message);
+        return { status: "fail", message: "Error deleting brand. Please try again." };
+    }
+};
+
 
 
 const BrandListService = async () => {
@@ -469,7 +486,8 @@ const BrandListService = async () => {
 module.exports = {
     upload,
     BrandAddService,
-    BrandListService
+    BrandListService,
+    BrandDeleteService
 };
 
 

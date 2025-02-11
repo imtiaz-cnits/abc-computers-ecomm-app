@@ -11,6 +11,7 @@ const AdminRoute = ({ children }) => {
     token = localStorage.getItem("token");
   }
 
+  // TODO: fix it
   if (!token && !path.startsWith("/dashboard/login")) {
     return router.push("/dashboard/login");
   }

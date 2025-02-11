@@ -10,6 +10,7 @@ import DashboardSubmenu from "../DashboardSubmenu/DashboardSubmenu";
 const DashboardSidebar = () => {
   const path = usePathname();
   const router = useRouter();
+  const [isSidebarEnabled, setIsSidebarEnabled] = useState(false);
 
   // TODO: Fix sidebar toggle
 
@@ -50,31 +51,50 @@ const DashboardSidebar = () => {
     return null;
   }
 
+  // Function to toggle the sidebar
+  const toggleSidebar = () => {
+    const currentSize = document.body.getAttribute("data-sidebar-size");
+
+    document.body.classList.toggle("sidebar-enable");
+
+    if (window.innerWidth >= 992) {
+      document.body.setAttribute(
+        "data-sidebar-size",
+        currentSize === "sm" ? "lg" : "sm"
+      );
+    }
+
+    // Toggle the state to track whether the sidebar is open or not
+    setIsSidebarEnabled((prevState) => !prevState);
+  };
+
+
+
   const handleSubmenuToggle = (item) => {
-    console.log(item);
-    const currentActive = item?.classList?.contains("active");
+
+    const currentActive = item?.classList?.contains("active")
 
     if (currentActive) {
-      item?.classList?.remove("active");
-      return;
+      item?.classList?.remove("active")
+      console.log(currentActive);
+      return
     }
 
-    const activeSubmenu = document.querySelector(
-      ".vertical-menu .submenu-active.active"
-    );
+    const activeSubmenu = document.querySelector('.vertical-menu .submenu-active.active')
 
     if (activeSubmenu) {
-      activeSubmenu?.classList?.remove("active");
+      activeSubmenu?.classList?.remove("active")
     }
 
-    item?.classList?.add("active");
-  };
+    item?.classList?.add("active")
+  }
 
   return (
     <div className="vertical-menu">
       <button
         type="button"
         className="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn"
+        onClick={() => toggleSidebar(!isSidebarEnabled)}
       >
         <svg
           width="40"

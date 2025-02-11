@@ -7,8 +7,7 @@
     <list default="true" id="fe11d3ef-4f53-48b9-8033-3ee287fbe002" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/AuthVerification.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/AuthVerification.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/BrandModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/BrandModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/ProductController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/ProductController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/ProductServices.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ProductServices.js" afterDir="false" />
     </list>
@@ -39,6 +38,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
     "ts.external.directory.path": "C:\\Users\\Imtiaz Ahmed\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -67,6 +67,7 @@
       <workItem from="1739016863307" duration="1306000" />
       <workItem from="1739089557724" duration="6781000" />
       <workItem from="1739125697245" duration="2772000" />
+      <workItem from="1739214492108" duration="3876000" />
     </task>
     <servers />
   </component>

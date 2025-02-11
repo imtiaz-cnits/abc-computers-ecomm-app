@@ -130,8 +130,10 @@ Reset Default CSS End
 #confirmationModal .modal-dialog .modal-content {
   width: 100%;
   border: none;
-  height: 100%;
+  height: auto;
+  max-height: 90vh;
   background: transparent;
+  overflow: auto; /* Ensure the modal content is scrollable if needed */
 }
 
 #confirmationModal .modal-content .close-btn {
@@ -208,6 +210,12 @@ Reset Default CSS End
   color: var(--white);
 }
 
+/* Modal Backdrop Styling */
+.modal-backdrop {
+  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 @media screen and (max-width: 576px) {
   #confirmationModal .modal-dialog {
     width: 90%;
@@ -219,6 +227,7 @@ Reset Default CSS End
 }
 
 /* Confirmation Modal End */
+
 
 /* Action Button Edit Modal Start */
 #exampleModal {

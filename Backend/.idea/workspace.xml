@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe11d3ef-4f53-48b9-8033-3ee287fbe002" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/ProductController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/ProductController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/ProductServices.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ProductServices.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/src/Pages/DashboardPages/Brands/Brands.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/src/Pages/DashboardPages/Brands/Brands.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,22 +23,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/02. Power House Bckp/Running Works/04. Clients Back-end Projects - 2025/MERN/ABC Computers/abc-computers-ecomm-app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "ts.external.directory.path": "C:\\Users\\Imtiaz Ahmed\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/02. Power House Bckp/Running Works/04. Clients Back-end Projects - 2025/MERN/ABC Computers/abc-computers-ecomm-app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Imtiaz Ahmed\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\02. Power House Bckp\Running Works\04. Clients Back-end Projects - 2025\MERN\ABC Computers\abc-computers-ecomm-app\Backend\src\models" />
@@ -51,7 +47,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
       </set>
     </attachedChunks>
   </component>
@@ -68,6 +64,7 @@
       <workItem from="1739089557724" duration="6781000" />
       <workItem from="1739125697245" duration="2772000" />
       <workItem from="1739214492108" duration="3876000" />
+      <workItem from="1739273874108" duration="148000" />
     </task>
     <servers />
   </component>

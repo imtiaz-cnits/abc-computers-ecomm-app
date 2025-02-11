@@ -1,6 +1,7 @@
 const {
   BrandAddService,
   BrandListService,
+  BrandDeleteService,
   CategoryListService,
   SliderListService,
   ListByBrandService,
@@ -30,6 +31,16 @@ exports.ProductBrandList = async (req, res) => {
     return res.status(200).json(result); // Ensure JSON response
   } catch (e) {
     return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response
+  }
+};
+
+exports.ProductBrandDelete = async (req, res) => {
+  try {
+    const brandId = req.params.id; // Get the brand ID from URL params
+    const result = await BrandDeleteService(brandId);
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(500).json({ status: "fail", message: e.toString() });
   }
 };
 

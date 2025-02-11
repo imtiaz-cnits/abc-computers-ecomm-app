@@ -27,6 +27,8 @@ router.post("/Logout", UserController.UserLogout);
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
+router.delete("/brands/:id", ProductController.ProductBrandDelete);
+
 
 
 

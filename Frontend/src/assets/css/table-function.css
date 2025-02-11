@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 /* ====================
   Reset Default CSS Start
@@ -69,7 +69,6 @@ input {
 
 label {
   font-family: var(--primary-font);
-
 }
 
 th {
@@ -201,10 +200,14 @@ html ::-webkit-scrollbar-thumb:hover {
   margin-right: 6px;
 }
 
+.data-table #searchInput:focus {
+  box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.25);
+}
+
 .data-table input[type="text"] {
   font-size: 16px;
   color: var(--text-color);
-  border: 1px solid var(--gray);
+  border: 1px solid var(--primary-color);
   border-radius: 8px !important;
 }
 
@@ -310,7 +313,6 @@ html ::-webkit-scrollbar-thumb:hover {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-
 }
 
 .data-table .button-item #copyBtn {
@@ -418,22 +420,21 @@ html ::-webkit-scrollbar-thumb:hover {
 }
 
 .data-table table tbody td .active {
-  background: #CFF5E4;
-  color: #21B26F;
+  background: #cff5e4;
+  color: #21b26f;
   padding: 8px 12px;
   border-radius: 6px;
 }
 
 .data-table table tbody td .inactive {
-  background: #FFD9D7;
-  color: #CA0B00;
+  background: #ffd9d7;
+  color: #ca0b00;
   padding: 8px 12px;
   border-radius: 6px;
 }
 
 .data-table .table thead {
   border-bottom: 1px solid var(--gray);
-
 }
 
 .data-table .table thead th {
@@ -492,7 +493,7 @@ html ::-webkit-scrollbar-thumb:hover {
   color: var(--text-color);
 }
 
-.table-hover>tbody>tr:hover>* {
+.table-hover > tbody > tr:hover > * {
   background: var(--hover-color);
 }
 
@@ -536,7 +537,7 @@ html ::-webkit-scrollbar-thumb:hover {
   gap: 12px;
 }
 
-.page-link{
+.page-link {
   cursor: pointer;
 }
 
@@ -636,7 +637,6 @@ html ::-webkit-scrollbar-thumb:hover {
 
 /* print.css */
 @media print {
-
   .navbar-header,
   .isvertical-topbar,
   .data-table .button-wrapper,
@@ -705,7 +705,6 @@ html ::-webkit-scrollbar-thumb:hover {
 
   .footer {
     flex-direction: column;
-
   }
 }
 

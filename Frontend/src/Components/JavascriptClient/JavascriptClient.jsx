@@ -15,7 +15,7 @@ const JavascriptClient = () => {
       />
       <Script src="/js/bootstrap.bundle.min.js" strategy="afterInteractive" />
       <Script
-        src={`/js/sidebar.js?v=${Date.now()}`}
+        src={"/js/sidebar.js"}
         strategy="afterInteractive"
       />
       <Script src="/js/style.js" strategy="beforeInteractive" />

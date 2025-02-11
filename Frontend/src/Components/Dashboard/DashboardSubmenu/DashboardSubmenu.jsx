@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import DashboardSubmenuActiveLink from "../DashboardSubmenuActiveLink/DashboardSubmenuActiveLink";
 import { usePathname } from "next/navigation";
 
-const DashboardSubmenu = ({ submenuItems, icon, submenuTitle }) => {
+const DashboardSubmenu = ({ submenuItems, icon, submenuTitle, handleSubmenuToggle }) => {
   const [submenuActive, setSubmenuActive] = useState(false);
+  const submenuRef = useRef()
 
   const paths = submenuItems?.map((item) => item?.href);
 
@@ -18,8 +19,8 @@ const DashboardSubmenu = ({ submenuItems, icon, submenuTitle }) => {
   }, [currentPath]);
 
   return (
-    <li className={`submenu-active ${submenuActive ? "active" : ""}`}>
-      <a className="submenu-toggle">
+    <li ref={submenuRef} className={`submenu-active ${submenuActive ? "active" : ""}`}>
+      <a className="submenu-toggle" onClick={() => handleSubmenuToggle(submenuRef?.current)}>
         {icon}
         <span className="text">{submenuTitle}</span>
         <FaAngleDown className="arrow-icon" />

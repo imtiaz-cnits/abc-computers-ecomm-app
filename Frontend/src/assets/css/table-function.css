@@ -536,6 +536,10 @@ html ::-webkit-scrollbar-thumb:hover {
   gap: 12px;
 }
 
+.page-link{
+  cursor: pointer;
+}
+
 .page-link.active {
   font-weight: bold;
   color: var(--white);

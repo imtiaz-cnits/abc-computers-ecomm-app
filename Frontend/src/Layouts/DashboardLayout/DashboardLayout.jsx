@@ -3,13 +3,14 @@
 import DashboardNavbar from "@/Components/Dashboard/DashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "@/Components/Dashboard/DashboardSidebar/DashboardSidebar";
 import AdminRoute from "@/Components/Routes/AdminRoute/AdminRoute";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
 
 const DashboardLayout = ({ children }) => {
   const path = usePathname();
 
   useEffect(() => {
+
     // ..............Table searchbar filter Start.......................//
     const searchInput = document.querySelector("#searchInput");
     searchInput?.addEventListener("input", function () {
@@ -29,9 +30,6 @@ const DashboardLayout = ({ children }) => {
         row.style.display = isMatch ? "" : "none";
       });
 
-      // Update table and pagination after filtering
-      updateTable();
-      updatePagination();
     });
     // ..............Table searchbar filter End.......................//
   }, [path]);

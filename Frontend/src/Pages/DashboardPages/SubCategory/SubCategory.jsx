@@ -11,13 +11,11 @@ const SubCategory = () => {
 
   const skip = limit * (page - 1);
 
-  const filteredBrands = brands.slice(skip, limit * page);
-
-  console.log(skip, limit * page);
-
   const [totalPages, setTotalPages] = useState(1);
 
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const filteredBrands = brands.slice(skip, limit * page);
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -47,7 +45,7 @@ const SubCategory = () => {
     };
 
     fetchBrands();
-  }, []);
+  }, [limit]);
 
   return (
     <div className="main-content">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import userImg from "@/assets/img/navbar-profile-logo.png";
 import Link from "next/link";
 import { FaBarsStaggered } from "react-icons/fa6";

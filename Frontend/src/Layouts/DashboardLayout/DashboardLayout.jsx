@@ -4,13 +4,14 @@ import DashboardNavbar from "@/Components/Dashboard/DashboardNavbar/DashboardNav
 import DashboardSidebar from "@/Components/Dashboard/DashboardSidebar/DashboardSidebar";
 import AdminRoute from "@/Components/Routes/AdminRoute/AdminRoute";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import "@/assets/css/bootstrap.min.css";
 
 const DashboardLayout = ({ children }) => {
   const path = usePathname();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     // ..............Table searchbar filter Start.......................//
     const searchInput = document.querySelector("#searchInput");
     searchInput?.addEventListener("input", function () {
@@ -29,9 +30,10 @@ const DashboardLayout = ({ children }) => {
 
         row.style.display = isMatch ? "" : "none";
       });
-
     });
     // ..............Table searchbar filter End.......................//
+
+
   }, [path]);
 
   return (

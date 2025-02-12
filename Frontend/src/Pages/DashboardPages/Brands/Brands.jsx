@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { Modal } from "bootstrap";
+import Swal from "sweetalert2";
 // import generatePDF from "../../../../public/js/generate-pdf";
 // import generateXLSX from "../../../../public/js/generate-xlsx";
 // import copyTableToClipboard from "../../../../public/js/copyToClipboard";
@@ -17,12 +18,12 @@ const Brands = () => {
   const [status, setStatus] = useState("");
   const [brandImg, setBrandImg] = useState(null);
   const [brands, setBrands] = useState([]);
-  const [brandIdToDelete, setBrandIdToDelete] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState({
     brandName: "",
     status: "",
     brandImg: null, // Handle file uploads separately
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -52,18 +53,37 @@ const Brands = () => {
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => setBrandImg(e.target.files[0]);
-  const handleDeleteClick = (brandId) => {
-    if (!brandId) {
-      console.error("Error: Brand ID is undefined");
-      return;
-    }
-    console.log("Setting brandIdToDelete:", brandId);
-    setBrandIdToDelete(brandId);
+  const handleAddClick = () => {
+    setIsEditing(false); // Set to add mode
+    setSelectedBrand(null); // Clear selected brand
+
+    // Reset form fields
+    setBrandName("");
+    setStatus("");
+    setBrandImg(null);
   };
   const handleEditClick = (brand) => {
-    setSelectedBrand({
-      ...brand,
-      brandImg: null, // Reset image to prevent conflicts
+    setIsEditing(true); // Set editing mode
+    setSelectedBrand(brand); // Store selected brand data in state
+
+    // Set form fields with the brand's existing data
+    setBrandName(brand.brandName);
+    setStatus(brand.status);
+    setBrandImg(brand.brandImg || null);
+  };
+  const handleDeleteClick = (brandId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#5AA469",
+      cancelButtonColor: "#FF0000",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteBrand(brandId); // Call delete function if confirmed
+      }
     });
   };
 
@@ -119,17 +139,17 @@ const Brands = () => {
     }
   };
 
-  const deleteBrand = async () => {
-    if (!brandIdToDelete) {
+  const deleteBrand = async (brandId) => {
+    if (!brandId) {
       toast.error("No brand selected!");
       return;
     }
 
-    console.log("Deleting brand with ID:", brandIdToDelete);
+    console.log("Deleting brand with ID:", brandId);
 
     try {
       const response = await axios.delete(
-          `http://localhost:5070/api/v1/brands/${brandIdToDelete}`,
+          `http://localhost:5070/api/v1/brands/${brandId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -139,24 +159,9 @@ const Brands = () => {
 
       if (response.data.status === "success") {
         toast.success("Brand deleted successfully!");
-        setBrandIdToDelete(null);
 
-        // Close the modal
-        const modalElement = document.getElementById("confirmationModal");
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        modalInstance?.hide();
-
-        // Manually remove the modal backdrop and modal-open class from the body to fix the blur background issue
-        document.body.classList.remove("modal-open"); // Remove background blur
-        const modalBackdrop = document.querySelector(".modal-backdrop");
-        if (modalBackdrop) {
-          modalBackdrop.remove(); // Remove the backdrop if it exists
-        }
-
-        // Update UI by removing the deleted brand
-        setBrands((prevBrands) =>
-            prevBrands.filter((brand) => brand._id !== brandIdToDelete)
-        );
+        // Update state by removing the deleted brand
+        setBrands((prevBrands) => prevBrands.filter((brand) => brand._id !== brandId));
       } else {
         toast.error(response.data.message || "Failed to delete brand.");
       }
@@ -230,6 +235,7 @@ const Brands = () => {
                   className="view-more-btn"
                   data-bs-toggle="modal"
                   data-bs-target="#addBrand"
+                  onClick={handleAddClick}
               >
                 <svg
                     width="32"
@@ -498,8 +504,7 @@ const Brands = () => {
                                 </a>
 
                                 {/* Delete Brand Button */}
-                                <a href="#" data-bs-toggle="modal"
-                                   data-bs-target="#confirmationModal"
+                                <a href="#"
                                    onClick={(e) => {
                                      e.preventDefault(); // Prevent unwanted default behavior
                                      console.log("Clicked brand:", brand); // Debugging
@@ -588,48 +593,6 @@ const Brands = () => {
           <p>&copy; 2025. All Rights Reserved.</p>
         </div>
         {/* <!-- Table End --> */}
-
-        {/* <!-- Table Action Button Modal Start --> */}
-
-        {/* <!-- Confirmation Modal Start --> */}
-        <section
-            className="modal fade"
-            id="confirmationModal"
-            tabIndex="-1"
-            aria-labelledby="confirmationModalLabel"
-            aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="heading-wrap">
-                <button
-                    type="button"
-                    className="close-btn close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                >
-                  <i className="fa-solid fa-xmark"></i>
-                </button>
-                <h2 className="heading">Delete</h2>
-              </div>
-              <form action="">
-                <p>Are you sure you want to delete this item?</p>
-                <div className="modal-buttons">
-                  <button className="confirmYes" type="button" onClick={deleteBrand}>Yes</button>
-                  <button
-                      className="confirmNo close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                  >
-                    No
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </section>
-        {/* <!-- Confirmation Modal End --> */}
-        {/* <!-- Table Action Button Modal End --> */}
 
         {/* <!-- ADD Brands Modal Start --> */}
         <section
@@ -737,10 +700,9 @@ const Brands = () => {
                       <label htmlFor="brandName">BRAND NAME</label>
                       <input
                           type="text"
-                          id="brandName"
                           placeholder="Type here.."
                           required
-                          value={selectedBrand.brandName}
+                          value={selectedBrand?.brandName || ""}  // Use optional chaining and fallback value
                           onChange={(e) => setSelectedBrand({ ...selectedBrand, brandName: e.target.value })}
                       />
                     </div>
@@ -751,7 +713,7 @@ const Brands = () => {
                           id="select-status"
                           className="select-status"
                           required
-                          value={selectedBrand.status}
+                          value={selectedBrand?.status || ""}
                           onChange={(e) => setSelectedBrand({ ...selectedBrand, status: e.target.value })}
                       >
                         <option value="">Select Status</option>

@@ -18,6 +18,11 @@ const Brands = () => {
   const [brandImg, setBrandImg] = useState(null);
   const [brands, setBrands] = useState([]);
   const [brandIdToDelete, setBrandIdToDelete] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState({
+    brandName: "",
+    status: "",
+    brandImg: null, // Handle file uploads separately
+  });
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -55,6 +60,12 @@ const Brands = () => {
     console.log("Setting brandIdToDelete:", brandId);
     setBrandIdToDelete(brandId);
   };
+  const handleEditClick = (brand) => {
+    setSelectedBrand({
+      ...brand,
+      brandImg: null, // Reset image to prevent conflicts
+    });
+  };
 
 
 
@@ -86,6 +97,9 @@ const Brands = () => {
       if (response.ok) {
         toast.success("Brand added successfully!");
 
+        // Close the modal after the update
+        document.querySelector("#addBrand .close").click();
+
         // Update the brands state with the newly added brand immediately
         if (result?.data) {
           setBrands((prevBrands) => [result.data, ...prevBrands]); // Add new brand to the beginning of the array
@@ -107,7 +121,7 @@ const Brands = () => {
 
   const deleteBrand = async () => {
     if (!brandIdToDelete) {
-      alert("No brand selected!");
+      toast.error("No brand selected!");
       return;
     }
 
@@ -124,7 +138,7 @@ const Brands = () => {
       );
 
       if (response.data.status === "success") {
-        alert("Brand deleted successfully!");
+        toast.success("Brand deleted successfully!");
         setBrandIdToDelete(null);
 
         // Close the modal
@@ -144,13 +158,63 @@ const Brands = () => {
             prevBrands.filter((brand) => brand._id !== brandIdToDelete)
         );
       } else {
-        alert(response.data.message || "Failed to delete brand.");
+        toast.error(response.data.message || "Failed to delete brand.");
       }
     } catch (error) {
       console.error("Error deleting brand:", error);
-      alert(error.response?.data?.message || "An error occurred.");
+      toast.error(error.response?.data?.message || "An error occurred.");
     }
   };
+
+  const handleUpdateBrand = async (e) => {
+    e.preventDefault();
+
+    // Prepare form data for the update request
+    const formData = new FormData();
+    formData.append("brandName", selectedBrand.brandName);
+    formData.append("status", selectedBrand.status);
+
+    // Append brand image if a new one is selected
+    if (selectedBrand.brandImg && selectedBrand.brandImg !== selectedBrand.oldBrandImg) {
+      formData.append("brandImg", selectedBrand.brandImg);
+    }
+
+    try {
+      // Send PUT request to update the brand
+      const { data } = await axios.put(
+          `http://localhost:5070/api/v1/brands/${selectedBrand._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+      );
+
+      // If the update is successful, update the state with the new brand data
+      if (data && data._id) {
+        setBrands((prevBrands) => {
+          // Replace the updated brand in the state array
+          return prevBrands.map((brand) =>
+              brand._id === data._id ? { ...brand, ...data } : brand
+          );
+        });
+
+        // Provide feedback to the user
+        toast.success("Brand updated successfully!");
+
+        // Close the modal after the update
+        document.querySelector("#updateBrand .close").click();
+      } else {
+        toast.error("Brand update failed. Please try again.");
+      }
+    } catch (error) {
+      // Handle error if update fails
+      console.error("Update failed:", error.response?.data || error.message);
+      toast.error("An error occurred while updating the brand. Please try again.");
+    }
+  };
+
 
 
   return (
@@ -411,7 +475,10 @@ const Brands = () => {
                             <td>
                               <div id="action_btn">
                                 {/* Update Brand Button */}
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#updateBrand">
+                                <a href="#"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#updateBrand"
+                                   onClick={() => handleEditClick(brand)}>
                                   <svg
                                       width="44"
                                       height="44"
@@ -618,7 +685,11 @@ const Brands = () => {
                       <label htmlFor="photo">BRAND PHOTO</label>
                       <div className="upload-profile">
                         <div className="item">
-                          <div className="img-box"></div>
+                          <div className="img-box">
+                            {selectedBrand?.brandImg && (
+                                <img src={`http://localhost:5070/${selectedBrand.brandImg}`} alt="Brand" width="100"/>
+                            )}
+                          </div>
 
                           <div className="profile-wrapper">
                             <label className="custom-file-input-wrapper m-0">
@@ -649,33 +720,29 @@ const Brands = () => {
         {/* <!--  ADD Brands Modal End --> */}
 
         {/* Update Brand */}
-
-        <section
-            className="modal fade"
-            id="updateBrand"
-            tabIndex="-1"
-            aria-labelledby="updateBrandLabel"
-            aria-hidden="true"
-        >
+        <section className="modal fade" id="updateBrand" tabIndex="-1" aria-labelledby="updateBrandLabel"
+                 aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="heading-wrap">
-                <button
-                    type="button"
-                    className="close-btn close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                >
+                <button type="button" className="close-btn close" data-bs-dismiss="modal" aria-label="Close">
                   <i className="fa-solid fa-xmark"></i>
                 </button>
                 <h2 className="heading">UPDATE BRAND</h2>
               </div>
-              <form>
+              <form onSubmit={handleUpdateBrand}>
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-row">
-                      <label htmlFor="">BRAND NAME</label>
-                      <input type="text" placeholder="Type here.." required/>
+                      <label htmlFor="brandName">BRAND NAME</label>
+                      <input
+                          type="text"
+                          id="brandName"
+                          placeholder="Type here.."
+                          required
+                          value={selectedBrand.brandName}
+                          onChange={(e) => setSelectedBrand({ ...selectedBrand, brandName: e.target.value })}
+                      />
                     </div>
 
                     <div className="form-row select-input-box">
@@ -684,6 +751,8 @@ const Brands = () => {
                           id="select-status"
                           className="select-status"
                           required
+                          value={selectedBrand.status}
+                          onChange={(e) => setSelectedBrand({ ...selectedBrand, status: e.target.value })}
                       >
                         <option value="">Select Status</option>
                         <option value="active">Active</option>
@@ -695,7 +764,11 @@ const Brands = () => {
                       <label htmlFor="photo">BRAND PHOTO</label>
                       <div className="upload-profile">
                         <div className="item">
-                          <div className="img-box"></div>
+                          <div className="img-box">
+                            {selectedBrand?.brandImg && (
+                                <img src={`http://localhost:5070/${selectedBrand.brandImg}`} alt="Brand" width="100"/>
+                            )}
+                          </div>
 
                           <div className="profile-wrapper">
                             <label className="custom-file-input-wrapper m-0">
@@ -703,9 +776,10 @@ const Brands = () => {
                                   type="file"
                                   className="custom-file-input"
                                   aria-label="Upload Photo"
+                                  onChange={(e) => setSelectedBrand({ ...selectedBrand, brandImg: e.target.files[0] })}
                               />
                             </label>
-                            <p>PNG,JPEG or GIF (Upto 1 MB)</p>
+                            <p>PNG, JPEG, or GIF (Up to 1 MB)</p>
                           </div>
                         </div>
                       </div>
@@ -721,8 +795,8 @@ const Brands = () => {
             </div>
           </div>
         </section>
-
         {/* Update Brand */}
+
       </div>
     </div>
   );

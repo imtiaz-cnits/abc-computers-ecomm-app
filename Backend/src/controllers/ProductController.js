@@ -2,16 +2,7 @@ const {
   BrandAddService,
   BrandListService,
   BrandDeleteService,
-  CategoryListService,
-  SliderListService,
-  ListByBrandService,
-  ListByCategoryService,
-  ListBySimilarService,
-  ListByKeywordService,
-  ListByRemarkService,
-  DetailsService,
-  ReviewListService,
-  CreateReviewService,
+  BrandUpdateService
 } = require("../services/ProductServices");
 
 // Brands Add Controller
@@ -44,65 +35,18 @@ exports.ProductBrandDelete = async (req, res) => {
   }
 };
 
+exports.ProductBrandUpdate = async (req, res) => {
+  try {
+    const result = await BrandUpdateService(req);
 
-
-
-
-
-
-
-
-
-
-
-
-
-exports.ProductCategoryList = async (req, res) => {
-  let result = await CategoryListService();
-  return res.status(200).json(result);
-};
-
-exports.ProductSliderList = async (req, res) => {
-  let result = await SliderListService();
-  return res.status(200).json(result);
-};
-
-exports.ProductListByBrand = async (req, res) => {
-  let result = await ListByBrandService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductListByCategory = async (req, res) => {
-  let result = await ListByCategoryService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductListBySimilar = async (req, res) => {
-  let result = await ListBySimilarService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductListByKeyword = async (req, res) => {
-  let result = await ListByKeywordService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductListByRemark = async (req, res) => {
-  let result = await ListByRemarkService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductDetails = async (req, res) => {
-  let result = await DetailsService(req);
-  return res.status(200).json(result);
-};
-
-exports.ProductReviewList = async (req, res) => {
-  let result = await ReviewListService(req);
-  return res.status(200).json(result);
-};
-
-exports.CreateReview = async (req, res) => {
-  let result = await CreateReviewService(req);
-  return res.status(200).json(result);
+    // Check if the update was successful and return the updated brand data
+    if (result.status === "success") {
+      return res.status(200).json(result.data); // Ensure updated brand data is sent back
+    } else {
+      return res.status(400).json({ status: "fail", message: result.message });
+    }
+  } catch (e) {
+    console.error("Error:", e);
+    return res.status(500).json({ status: "Fail", message: e.toString() });
+  }
 };

@@ -6,7 +6,6 @@ const WishListController = require("../controllers/WishListController");
 const CartListController = require("../controllers/CartListController");
 const InvoiceController = require("../controllers/InvoiceController");
 const FeaturesController = require("../controllers/FeaturesController");
-
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
 const { upload } = require("../services/ProductServices");
@@ -28,6 +27,8 @@ router.post("/Logout", UserController.UserLogout);
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
+router.put("/brands/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
+
 
 
 

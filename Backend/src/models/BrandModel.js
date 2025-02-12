@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const DataSchema = mongoose.Schema(
   {
-    brandName: { type: String, required: true },
+    brandName: { type: String, unique: true, required: true },
     brandImg: { type: String },
     status: { type: String }
   },

@@ -460,7 +460,7 @@ const Brands = () => {
                                         objectFit: "cover",
                                         borderRadius: "5px",
                                       }}
-                                      onError={(e) => (e.target.src = "/default-brand.png")} // Fallback Image
+                                      // onError={(e) => (e.target.src = "/default-brand.png")} // Fallback Image
                                   />
                               ) : (
                                   "No Image"

@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
-import { Modal } from "bootstrap";
 import Swal from "sweetalert2";
+import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
 // import generatePDF from "../../../../public/js/generate-pdf";
 // import generateXLSX from "../../../../public/js/generate-xlsx";
 // import copyTableToClipboard from "../../../../public/js/copyToClipboard";
@@ -13,9 +13,8 @@ import Swal from "sweetalert2";
 const Brands = () => {
   const tableRef = useRef(null);
   const fileInputRef = useRef(null);
-
-
-  console.log("Brands");
+  const addModalCloseBtn = useRef(null)
+  const updateModalCloseBtn = useRef(null)
 
   const [brandName, setBrandName] = useState("");
   const [status, setStatus] = useState("");
@@ -28,6 +27,20 @@ const Brands = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
 
+  // Pagination Start
+
+  const [limit, setLimit] = useState(10);
+
+  const [page, setPage] = useState(1);
+
+  const skip = limit * (page - 1);
+
+  const [totalItems, setTotalItems] = useState(1);
+
+  const filteredBrands = brands.slice(skip, limit * page);
+
+  // Pagination End
+
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -36,6 +49,7 @@ const Brands = () => {
         console.log("API Response:", response.data);
 
         setBrands(response.data.data || []);
+        setTotalItems(response?.data?.data.length)
       } catch (error) {
         // Improved error handling
         if (error.response) {
@@ -51,7 +65,7 @@ const Brands = () => {
     };
 
     fetchBrands();
-  }, []);
+  }, [limit]);
 
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
@@ -121,7 +135,7 @@ const Brands = () => {
         toast.success("Brand added successfully!");
 
         // Close the modal after the update
-        document.querySelector("#addBrand .close").click();
+        addModalCloseBtn.current.click();
 
         // Update the brands state with the newly added brand immediately
         if (result?.data) {
@@ -212,7 +226,7 @@ const Brands = () => {
         toast.success("Brand updated successfully!");
 
         // Close the modal after the update
-        document.querySelector("#updateBrand .close").click();
+        updateModalCloseBtn.current.click();
       } else {
         toast.error("Brand update failed. Please try again.");
       }
@@ -454,8 +468,8 @@ const Brands = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {brands.length > 0 ? (
-                      brands.map((brand, index) => (
+                    {filteredBrands.length > 0 ? (
+                      filteredBrands.map((brand, index) => (
                         <tr key={brand._id || index}>
                           <td>{index + 1}</td>
                           <td>
@@ -545,50 +559,13 @@ const Brands = () => {
                 <Toaster />
               </div>
               {/* <!-- Pagination and Display Info --> */}
-              <div className="my-3">
-                <span id="display-info"></span>
-              </div>
-
-              <footer className="footer">
-                <div className="entries-page">
-                  <label htmlFor="entries" className="mr-2">
-                    Products per page:
-                  </label>
-                  <div className="select-container">
-                    <select
-                      id="entries"
-                      className="form-control"
-                      style={{ width: "auto" }}
-                    >
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                    <span className="dropdown-icon">&#9662;</span>
-                    {/* <!-- Dropdown icon --> */}
-                  </div>
-                </div>
-
-                <div id="pagination" className="pagination">
-                  <button id="prevBtn" className="btn">
-                    Prev
-                  </button>
-                  <a href="#" className="page-link page-link--1">
-                    1
-                  </a>
-                  <a href="#" className="page-link page-link--2">
-                    2
-                  </a>
-                  <a href="#" className="page-link page-link--3">
-                    3
-                  </a>
-                  <button id="nextBtn" className="btn">
-                    Next
-                  </button>
-                </div>
-              </footer>
+              <DashboardPagination
+                limit={limit}
+                page={page}
+                setLimit={setLimit}
+                setPage={setPage}
+                totalItems={totalItems}
+              />
             </div>
           </div>
         </div>
@@ -613,6 +590,7 @@ const Brands = () => {
                   className="close-btn close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  ref={addModalCloseBtn}
                 >
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -691,7 +669,7 @@ const Brands = () => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="heading-wrap">
-                <button type="button" className="close-btn close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" className="close-btn close" data-bs-dismiss="modal" aria-label="Close" ref={updateModalCloseBtn}>
                   <i className="fa-solid fa-xmark"></i>
                 </button>
                 <h2 className="heading">UPDATE BRAND</h2>

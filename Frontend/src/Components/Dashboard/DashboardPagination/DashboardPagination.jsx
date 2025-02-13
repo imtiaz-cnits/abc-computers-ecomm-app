@@ -7,6 +7,8 @@ const DashboardPagination = ({ limit, page, setLimit, setPage, totalItems }) => 
 
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
+  console.log("Pagination working");
+
 
   const handleNext = () => {
     if (pages.length == page) {

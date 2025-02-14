@@ -30,10 +30,10 @@ router.delete("/brands/:id", ProductController.ProductBrandDelete);
 router.put("/brands/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
 
 // Sub Category CRUD APIs
-router.post("/sub-categories", upload.single("subCategoryImg"), ProductController.AddBrands);
-router.get("/sub-categories", ProductController.ProductBrandList);
-router.delete("/sub-categories/:id", ProductController.ProductBrandDelete);
-router.put("/sub-categories/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
+router.post("/sub-category", upload.single("subCategoryImg"), ProductController.AddBrands);
+router.get("/sub-category", ProductController.ProductBrandList);
+router.delete("/sub-category/:id", ProductController.ProductBrandDelete);
+router.put("/sub-category/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
 
 
 

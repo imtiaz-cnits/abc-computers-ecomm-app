@@ -35,7 +35,7 @@ const upload = multer({
 });
 
 
-// Export upload middleware
+// Brand CRUD Services
 const BrandAddService = async (req) => {
     try {
         console.log("Received brand data:", req.body);
@@ -125,10 +125,49 @@ const BrandUpdateService = async (req) => {
 };
 
 
+// Sub Category CRUD Services
+const SubCategoryAddService = async (req) => {
+    try {
+        console.log("Received brand data:", req.body);
+
+        const { brandName, status } = req.body;
+        const brandImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+        console.log("File uploaded:", req.file);
+        console.log("Brand Name:", brandName);
+        console.log("Status:", status);
+        console.log("Brand Image Path:", brandImg);
+
+        // Validate required fields
+        if (!brandName) {
+            return { status: "fail", message: "Brand name is required." };
+        }
+
+        // Check if the brand already exists
+        const existingBrand = await BrandModel.findOne({ brandName });
+        if (existingBrand) {
+            console.log("Brand already exists");
+            return { status: "fail", message: "Brand already exists" };
+        }
+
+        // Create and save new brand
+        const newBrand = new BrandModel({ brandName, brandImg, status });
+        await newBrand.save();
+
+        console.log("New brand added:", newBrand);
+        return { status: "success", message: "Brand added successfully", data: newBrand };
+    } catch (error) {
+        console.error("Error in BrandAddService:", error.message);
+        return { status: "fail", message: "Error adding brand. Please try again." };
+    }
+};
+
+
 module.exports = {
     upload,
     BrandAddService,
     BrandListService,
     BrandDeleteService,
-    BrandUpdateService
+    BrandUpdateService,
+    SubCategoryAddService
 };

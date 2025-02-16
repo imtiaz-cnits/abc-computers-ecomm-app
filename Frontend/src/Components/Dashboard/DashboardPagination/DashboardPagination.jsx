@@ -1,15 +1,6 @@
 import React from "react";
 
-const DashboardPagination = ({ limit, page, setLimit, setPage, totalItems }) => {
-
-  const totalPages = Math.ceil(totalItems / limit)
-
-
-  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-
-  console.log("Pagination working");
-
-
+const DashboardPagination = ({ limit, page, setLimit, setPage, pages }) => {
   const handleNext = () => {
     if (pages.length == page) {
       return;
@@ -42,10 +33,7 @@ const DashboardPagination = ({ limit, page, setLimit, setPage, totalItems }) => 
               id="entries"
               className="form-control"
               style={{ width: "auto" }}
-              onChange={(e) => {
-                setLimit(e.target.value)
-                setPage(1)
-              }}
+              onChange={(e) => setLimit(e.target.value)}
               value={limit}
             >
               <option value={10}>10</option>

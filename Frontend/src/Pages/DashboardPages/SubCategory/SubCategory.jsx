@@ -5,8 +5,8 @@ import DashboardPagination from "@/Components/Dashboard/DashboardPagination/Dash
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSort } from "@fortawesome/free-solid-svg-icons";
 
 const SubCategory = () => {
   const tableRef = useRef(null);
@@ -311,10 +311,10 @@ const SubCategory = () => {
                       <th>SL NO</th>
                       <th onClick={() => handleSort("subCategoryName")}>
                         SUB CATEGORY NAME
-                        <FontAwesomeIcon
+                        {/* <FontAwesomeIcon
                           icon={faSort}
                           style={{ marginLeft: "8px" }}
-                        />
+                        /> */}
                       </th>
                       <th onClick={() => handleSort("status")}>STATUS</th>
                       <th>ACTION</th>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./AddProduct.css";
+import "./UpdateProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
 import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
@@ -10,7 +10,11 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import("froala-editor/js/plugins.pkgd.min.js");
 
-const AddProduct = () => {
+const UpdateProduct = ({ id }) => {
+
+
+  console.log(id);
+
   const [keyFeatures, setKeyFeatures] = useState("");
   const [specifications, setSpecifications] = useState("");
   const [description, setDescription] = useState("");
@@ -46,7 +50,7 @@ const AddProduct = () => {
     { value: "Logitech", label: "Logitech" },
   ];
 
-  const handleAddProduct = (e) => {
+  const handleUpdateProduct = (e) => {
     e.preventDefault();
     console.log(e);
   };
@@ -57,9 +61,9 @@ const AddProduct = () => {
         <div className="page-content">
           <div className="col-10 m-auto">
             <div className="heading-wrap">
-              <h2 className="heading">Add New Product</h2>
+              <h2 className="heading">Update Product</h2>
             </div>
-            <form className="add-product-form" onSubmit={handleAddProduct}>
+            <form className="add-product-form" onSubmit={handleUpdateProduct}>
               <div className="row">
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Brand *</label>
@@ -558,4 +562,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

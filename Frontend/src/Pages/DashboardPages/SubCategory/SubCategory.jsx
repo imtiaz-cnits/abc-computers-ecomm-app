@@ -5,6 +5,7 @@ import DashboardPagination from "@/Components/Dashboard/DashboardPagination/Dash
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Select from "react-select";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faSort } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,6 +28,7 @@ const SubCategory = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+  const [categories, setCategories] = useState([]);
 
   // For pagination
   const filteredSubCategories = subCategories.slice(skip, skip + limit);
@@ -51,6 +53,157 @@ const SubCategory = () => {
   useEffect(() => {
     setTotalPages(Math.ceil(subCategories.length / limit));
   }, [subCategories, limit]);
+
+  useEffect(() => {
+    setCategories(
+      [
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da14d",
+          },
+          categoryName: "Laptop",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da14e",
+          },
+          categoryName: "Mobile",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da14f",
+          },
+          categoryName: "Headphone",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da150",
+          },
+          categoryName: "Smartwatch",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da151",
+          },
+          categoryName: "Television",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da152",
+          },
+          categoryName: "Camera",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da153",
+          },
+          categoryName: "Printer",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da154",
+          },
+          categoryName: "Keyboard",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da155",
+          },
+          categoryName: "Mouse",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+        {
+          _id: {
+            $oid: "64f875ed502e1b80556da156",
+          },
+          categoryName: "Speaker",
+          categoryImg:
+            "https://photo.teamrabbil.com/images/2023/08/15/Phones--Tablets-01-3944.png",
+          createdAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+          updatedAt: {
+            $date: "2023-09-20T17:17:56.893Z",
+          },
+        },
+      ].map((category) => {
+        return { value: category?._id?.$oid, label: category?.categoryName };
+      })
+    );
+  }, []);
+
+  console.log(categories);
 
   const handleSort = (key) => {
     const direction =
@@ -242,10 +395,6 @@ const SubCategory = () => {
       console.error("Error deleting sub category:", error);
       toast.error(error.response?.data?.message || "An error occurred.");
     }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
   };
 
   return (
@@ -455,6 +604,18 @@ const SubCategory = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-row">
+                      <label htmlFor="">SELECT CATEGORY</label>
+                      <Select
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="categories"
+                        options={categories}
+                        placeholder="Select Categories"
+                      />
+                    </div>
+                    <div className="form-row">
                       <label htmlFor="">SUB CATEGORY NAME</label>
                       <input
                         type="text"
@@ -517,6 +678,19 @@ const SubCategory = () => {
               <form onSubmit={handleUpdateSubCategory}>
                 <div className="row">
                   <div className="col-lg-12">
+                    <div className="form-row">
+                      <label htmlFor="">SELECT CATEGORY</label>
+                      <Select
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="categories"
+                        options={categories}
+                        placeholder="Select Categories"
+                      />
+                    </div>
+
                     <div className="form-row">
                       <label htmlFor="">SUB CATEGORY NAME</label>
                       <input

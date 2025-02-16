@@ -30,6 +30,12 @@ router.get("/brands", ProductController.ProductBrandList);
 router.put("/brands/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
+// Category CRUD APIs
+router.post("/category", ProductController.AddCategory);
+router.get("/category", ProductController.CategoryList);
+router.put("/category/:id", ProductController.CategoryUpdate);
+router.delete("/category/:id", ProductController.CategoryDelete);
+
 // Sub Category CRUD APIs
 router.post("/sub-category", ProductController.AddSubCategory);
 router.get("/sub-category", ProductController.SubCategoryList);

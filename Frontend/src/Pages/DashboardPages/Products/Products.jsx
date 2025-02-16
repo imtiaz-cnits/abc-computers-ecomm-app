@@ -1,10 +1,5 @@
 "use client";
 import React, { useRef } from "react";
-import generatePDF from "../../../../public/js/generate-pdf";
-import generateXLSX from "../../../../public/js/generate-xlsx";
-import copyTableToClipboard from "../../../../public/js/copyToClipboard";
-import generatePrint from "../../../../public/js/generate-print";
-import generateCSV from "../../../../public/js/generate-csv";
 import Link from "next/link";
 
 const Products = () => {

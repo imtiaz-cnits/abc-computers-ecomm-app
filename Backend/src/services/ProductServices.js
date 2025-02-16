@@ -1,5 +1,6 @@
 const BrandModel = require("../models/BrandModel");
 const CategoryModel = require("../models/CategoryModel");
+const SubCategoryModel = require("../models/SubCategoryModel");
 const ProductModel = require("../models/ProductModel");
 const ProductDetailModel = require("../models/ProductDetailModel");
 const ProductSliderModel = require("../models/ProductSliderModel");
@@ -34,8 +35,8 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 }, // Max file size of 1MB
 });
 
-
-// Export upload middleware
+// ========================== Brand Page All Functionality ========================== //
+// Brand CRUD Services
 const BrandAddService = async (req) => {
     try {
         console.log("Received brand data:", req.body);
@@ -81,23 +82,6 @@ const BrandListService = async () => {
     }
 };
 
-const BrandDeleteService = async (brandId) => {
-    try {
-        // Check if the brand exists
-        const brand = await BrandModel.findById(brandId);
-        if (!brand) {
-            return { status: "fail", message: "Brand not found" };
-        }
-
-        // Delete the brand
-        await BrandModel.findByIdAndDelete(brandId);
-        return { status: "success", message: "Brand deleted successfully" };
-    } catch (error) {
-        console.error("Error in BrandDeleteService:", error.message);
-        return { status: "fail", message: "Error deleting brand. Please try again." };
-    }
-};
-
 const BrandUpdateService = async (req) => {
     try {
         const { brandName, status } = req.body;
@@ -124,11 +108,113 @@ const BrandUpdateService = async (req) => {
     }
 };
 
+const BrandDeleteService = async (brandId) => {
+    try {
+        // Check if the brand exists
+        const brand = await BrandModel.findById(brandId);
+        if (!brand) {
+            return { status: "fail", message: "Brand not found" };
+        }
+
+        // Delete the brand
+        await BrandModel.findByIdAndDelete(brandId);
+        return { status: "success", message: "Brand deleted successfully" };
+    } catch (error) {
+        console.error("Error in BrandDeleteService:", error.message);
+        return { status: "fail", message: "Error deleting brand. Please try again." };
+    }
+};
+
+
+// ========================== Sub Category Page All Functionality ========================== //
+// Sub Category CRUD Services
+const SubCategoryAddService = async (req) => {
+    try {
+        const { subCategoryName, status } = req.body;
+
+        if (!subCategoryName || !status) {
+            return { status: "fail", message: "Sub Category name and status are required." };
+        }
+
+        const existingSubCategory = await SubCategoryModel.findOne({ subCategoryName });
+        if (existingSubCategory) {
+            return { status: "fail", message: "Sub Category already exists" };
+        }
+
+        const newSubCategory = new SubCategoryModel({ subCategoryName, status });
+        await newSubCategory.save();
+
+        return {
+            status: "success",
+            message: "Sub Category added successfully",
+            data: newSubCategory,
+        };
+    } catch (error) {
+        console.error("Error in SubCategoryAddService:", error.message);
+        return { status: "fail", message: "Error adding sub-category. Please try again." };
+    }
+};
+
+const SubCategoryListService = async () => {
+    try {
+        let data = await SubCategoryModel.find();
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+};
+
+const SubCategoryUpdateService = async (req) => {
+    try {
+        const { subCategoryName, status } = req.body;
+
+        // Check if the sub category exists
+        const existingSubCategory = await SubCategoryModel.findById(req.params.id);
+
+        if (!existingSubCategory) {
+            return { status: "fail", message: "Sub Category not found" };
+        }
+
+        // Update the sub category fields
+        existingSubCategory.subCategoryName = subCategoryName || existingSubCategory.subCategoryName;
+        existingSubCategory.status = status || existingSubCategory.status;
+
+        // Save updated sub category
+        await existingSubCategory.save();
+
+        return { status: "success", message: "Sub Category updated successfully", data: existingSubCategory };
+    } catch (error) {
+        console.error("Error in SubCategoryUpdateService:", error.message);
+        return { status: "fail", message: "Error updating sub category. Please try again." };
+    }
+};
+
+const SubCategoryDeleteService = async (subCategoryId) => {
+    try {
+        // Check if the sub category exists
+        const subCategory = await SubCategoryModel.findById(subCategoryId);
+        if (!subCategory) {
+            return { status: "fail", message: "Sub Category not found" };
+        }
+
+        // Delete the sub category
+        await SubCategoryModel.findByIdAndDelete(subCategoryId);
+        return { status: "success", message: "Sub Category deleted successfully" };
+    } catch (error) {
+        console.error("Error in SubCategoryDeleteService:", error.message);
+        return { status: "fail", message: "Error deleting Sub Category. Please try again." };
+    }
+};
+
 
 module.exports = {
     upload,
     BrandAddService,
     BrandListService,
     BrandDeleteService,
-    BrandUpdateService
+    BrandUpdateService,
+    SubCategoryAddService,
+    SubCategoryListService,
+    SubCategoryDeleteService,
+    SubCategoryUpdateService
 };

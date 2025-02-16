@@ -3,18 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
-import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
-// import generatePDF from "../../../../public/js/generate-pdf";
-// import generateXLSX from "../../../../public/js/generate-xlsx";
-// import copyTableToClipboard from "../../../../public/js/copyToClipboard";
-// import generatePrint from "../../../../public/js/generate-print";
-// import generateCSV from "../../../../public/js/generate-csv";
 
 const Brands = () => {
   const tableRef = useRef(null);
   const fileInputRef = useRef(null);
-  const addModalCloseBtn = useRef(null)
-  const updateModalCloseBtn = useRef(null)
 
   const [brandName, setBrandName] = useState("");
   const [status, setStatus] = useState("");
@@ -45,8 +37,6 @@ const Brands = () => {
     const fetchBrands = async () => {
       try {
         const response = await axios.get("http://localhost:5070/api/v1/brands");
-
-        console.log("API Response:", response.data);
 
         setBrands(response.data.data || []);
         setTotalItems(response?.data?.data.length)
@@ -156,6 +146,55 @@ const Brands = () => {
     }
   };
 
+  const handleUpdateBrand = async (e) => {
+    e.preventDefault();
+
+    // Prepare form data for the update request
+    const formData = new FormData();
+    formData.append("brandName", selectedBrand.brandName);
+    formData.append("status", selectedBrand.status);
+
+    // Append brand image if a new one is selected
+    if (selectedBrand.brandImg && selectedBrand.brandImg !== selectedBrand.oldBrandImg) {
+      formData.append("brandImg", selectedBrand.brandImg);
+    }
+
+    try {
+      // Send PUT request to update the brand
+      const { data } = await axios.put(
+          `http://localhost:5070/api/v1/brands/${selectedBrand._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+      );
+
+      // If the update is successful, update the state with the new brand data
+      if (data && data._id) {
+        setBrands((prevBrands) => {
+          // Replace the updated brand in the state array
+          return prevBrands.map((brand) =>
+              brand._id === data._id ? { ...brand, ...data } : brand
+          );
+        });
+
+        // Provide feedback to the user
+        toast.success("Brand updated successfully!");
+
+        // Close the modal after the update
+        document.querySelector("#updateBrand .close").click();
+      } else {
+        toast.error("Brand update failed. Please try again.");
+      }
+    } catch (error) {
+      // Handle error if update fails
+      console.error("Update failed:", error.response?.data || error.message);
+      toast.error("An error occurred while updating the brand. Please try again.");
+    }
+  };
+
   const deleteBrand = async (brandId) => {
     if (!brandId) {
       toast.error("No brand selected!");
@@ -185,55 +224,6 @@ const Brands = () => {
     } catch (error) {
       console.error("Error deleting brand:", error);
       toast.error(error.response?.data?.message || "An error occurred.");
-    }
-  };
-
-  const handleUpdateBrand = async (e) => {
-    e.preventDefault();
-
-    // Prepare form data for the update request
-    const formData = new FormData();
-    formData.append("brandName", selectedBrand.brandName);
-    formData.append("status", selectedBrand.status);
-
-    // Append brand image if a new one is selected
-    if (selectedBrand.brandImg && selectedBrand.brandImg !== selectedBrand.oldBrandImg) {
-      formData.append("brandImg", selectedBrand.brandImg);
-    }
-
-    try {
-      // Send PUT request to update the brand
-      const { data } = await axios.put(
-        `http://localhost:5070/api/v1/brands/${selectedBrand._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      // If the update is successful, update the state with the new brand data
-      if (data && data._id) {
-        setBrands((prevBrands) => {
-          // Replace the updated brand in the state array
-          return prevBrands.map((brand) =>
-            brand._id === data._id ? { ...brand, ...data } : brand
-          );
-        });
-
-        // Provide feedback to the user
-        toast.success("Brand updated successfully!");
-
-        // Close the modal after the update
-        updateModalCloseBtn.current.click();
-      } else {
-        toast.error("Brand update failed. Please try again.");
-      }
-    } catch (error) {
-      // Handle error if update fails
-      console.error("Update failed:", error.response?.data || error.message);
-      toast.error("An error occurred while updating the brand. Please try again.");
     }
   };
 
@@ -523,7 +513,7 @@ const Brands = () => {
                               {/* Delete Brand Button */}
                               <a href="#"
                                 onClick={(e) => {
-                                  e.preventDefault(); // Prevent unwanted default behavior
+                                  e.preventDefault();
                                   console.log("Clicked brand:", brand); // Debugging
                                   handleDeleteClick(brand?._id);
                                 }}>

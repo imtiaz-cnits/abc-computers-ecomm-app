@@ -9,6 +9,7 @@ const FeaturesController = require("../controllers/FeaturesController");
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
 const { upload } = require("../services/ProductServices");
+const path = require('path');
 
 // Protected Routes
 router.get("/dashboard", AuthVerification, (req, res) => {
@@ -26,14 +27,14 @@ router.post("/Logout", UserController.UserLogout);
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
-router.delete("/brands/:id", ProductController.ProductBrandDelete);
 router.put("/brands/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
+router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
 // Sub Category CRUD APIs
-router.post("/sub-categories", upload.single("subCategoryImg"), ProductController.AddBrands);
-router.get("/sub-categories", ProductController.ProductBrandList);
-router.delete("/sub-categories/:id", ProductController.ProductBrandDelete);
-router.put("/sub-categories/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
+router.post("/sub-category", ProductController.AddSubCategory);
+router.get("/sub-category", ProductController.SubCategoryList);
+router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
+router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 
 

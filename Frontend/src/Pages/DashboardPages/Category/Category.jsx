@@ -13,6 +13,7 @@ const Category = () => {
   const skip = limit * (page - 1);
   const [totalPages, setTotalPages] = useState(1);
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+
   const filteredBrands = brands.slice(skip, limit * page);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const Category = () => {
         console.log("API Response:", result);
 
         setBrands(result.data || []);
-        setTotalPages(Math.ceil(result?.data?.length / limit));
+        setTotalItems(Math.ceil(result?.data?.length));
       } catch (error) {
         // Log the full error message for better debugging
         console.error("Error fetching brands:", error.message);
@@ -276,11 +277,11 @@ const Category = () => {
               </div>
               {/* <!-- Pagination and Display Info --> */}
               <DashboardPagination
+                totalItems={totalItems}
                 limit={limit}
                 page={page}
                 setLimit={setLimit}
                 setPage={setPage}
-                pages={pages}
               />
             </div>
           </div>

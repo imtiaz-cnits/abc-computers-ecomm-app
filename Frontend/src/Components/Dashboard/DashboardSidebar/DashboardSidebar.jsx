@@ -12,8 +12,6 @@ const DashboardSidebar = () => {
   const router = useRouter();
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false);
 
-  // TODO: Fix sidebar toggle
-
   // Function to handle logout
   const handleLogout = async () => {
     try {

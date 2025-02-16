@@ -14,10 +14,7 @@ const JavascriptClient = () => {
         strategy="afterInteractive"
       />
       <Script src="/js/bootstrap.bundle.min.js" strategy="afterInteractive" />
-      <Script
-        src={"/js/sidebar.js"}
-        strategy="afterInteractive"
-      />
+      <Script src={"/js/sidebar.js"} strategy="afterInteractive" />
       <Script src="/js/style.js" strategy="beforeInteractive" />
       <Script
         src="/js/website/vendor/swiper-bundle.min.js"
@@ -48,6 +45,10 @@ const JavascriptClient = () => {
       />
       <Script
         src="/js/website/recent-shopping-slider.js"
+        strategy="afterInteractive"
+      />
+      <Script
+        src="froala-editor/js/plugins/align.min.js"
         strategy="afterInteractive"
       />
     </>

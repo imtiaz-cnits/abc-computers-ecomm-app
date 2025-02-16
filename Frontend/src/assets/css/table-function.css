@@ -558,6 +558,10 @@ html ::-webkit-scrollbar-thumb:hover {
   -moz-border-radius: 6px !important;
   -ms-border-radius: 6px !important;
   -o-border-radius: 6px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
 }
 
 .data-table #prevBtn,

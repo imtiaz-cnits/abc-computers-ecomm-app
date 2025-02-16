@@ -18,11 +18,8 @@ const Products = () => {
           <div className="invoice-btn">
             <h1>PRODUCT/ SERVICES</h1>
             <div className="table-btn-item">
-              <Link href={"/dashboard/add-product"}>
-                <button
-                  type="submit"
-                  className="view-more-btn"
-                >
+              <Link href={"/dashboard/products/add-product"}>
+                <button type="submit" className="view-more-btn">
                   <svg
                     width="32"
                     height="32"
@@ -246,10 +243,8 @@ const Products = () => {
                       <td>BTC</td>
                       <td>
                         <div id="action_btn">
-                          <a
-                            href="#"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
+                          <Link
+                            href={"/dashboard/products/update-product/0001"}
                           >
                             <svg
                               width="44"
@@ -272,7 +267,7 @@ const Products = () => {
                                 strokeLinejoin="round"
                               />
                             </svg>
-                          </a>
+                          </Link>
 
                           <a
                             href="#"

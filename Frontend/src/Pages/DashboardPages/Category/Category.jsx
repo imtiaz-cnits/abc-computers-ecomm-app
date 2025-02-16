@@ -1,11 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import generatePDF from "../../../../public/js/generate-pdf";
-import generateXLSX from "../../../../public/js/generate-xlsx";
-import generatePrint from "../../../../public/js/generate-print";
-import generateCSV from "../../../../public/js/generate-csv";
-import copyTableToClipboard from "../../../../public/js/copyToClipboard";
 import CategoryRow from "./CategoryRow/CategoryRow";
 import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
 
@@ -15,13 +10,9 @@ const Category = () => {
   const [limit, setLimit] = useState(10);
 
   const [page, setPage] = useState(1);
-
   const skip = limit * (page - 1);
-
   const [totalPages, setTotalPages] = useState(1);
-
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-
   const filteredBrands = brands.slice(skip, limit * page);
 
   useEffect(() => {

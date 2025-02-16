@@ -3,9 +3,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import CategoryRow from "./CategoryRow/CategoryRow";
 import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
+import { toast, Toaster } from "react-hot-toast";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Category = () => {
   const tableRef = useRef(null);
+
   const [brands, setBrands] = useState([]);
   const [limit, setLimit] = useState(10);
 

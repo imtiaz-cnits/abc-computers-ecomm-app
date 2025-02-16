@@ -1592,7 +1592,10 @@ Reset Default CSS End
 .modal .select__menu {
   text-transform: capitalize;
   font-size: 14px;
-  z-index: 9999999 !important;
+}
+
+.modal .select__menu > * {
+  max-height: 200px;
 }
 
 @media screen and (max-width: 992px) {

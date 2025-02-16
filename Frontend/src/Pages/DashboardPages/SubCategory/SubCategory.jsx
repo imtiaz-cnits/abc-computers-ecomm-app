@@ -430,52 +430,6 @@ const SubCategory = () => {
         </div>
         {/* <!-- Table End --> */}
 
-        {/* <!-- Confirmation Modal Start --> */}
-        <section
-          className="modal fade"
-          id="confirmationModal"
-          tabIndex="-1"
-          aria-labelledby="confirmationModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="heading-wrap">
-                {/* <!-- Close button with close icon --> */}
-                <button
-                  type="button"
-                  className="close-btn close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <i className="fa-solid fa-xmark"></i>
-                </button>
-                <h2 className="heading">Delete</h2>
-              </div>
-              <form action="">
-                <p>Are you sure you want to delete this item?</p>
-                <div className="modal-buttons">
-                  {/* <!-- Yes button --> */}
-                  <button className="confirmYes" type="button">
-                    Yes
-                  </button>
-                  {/* <!-- No button that also closes the modal --> */}
-                  <button
-                    className="confirmNo close"
-                    type="button"
-                    data-bs-dismiss="modal"
-                  >
-                    No
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        {/* <!-- Confirmation Modal End --> */}
-        {/* <!-- Table Action Button Modal End --> */}
-
         {/* <!-- ADD Sub Category Modal Start --> */}
         <section
           className="modal fade"

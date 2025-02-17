@@ -244,7 +244,7 @@ const SubCategoryAddService = async (req) => {
 
 const SubCategoryListService = async () => {
     try {
-        let data = await SubCategoryModel.find();
+        let data = await SubCategoryModel.find().populate("categoryId"); // Ensure category is populated
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
         return { status: "Fail", data: e.toString() }; // Ensure JSON error response

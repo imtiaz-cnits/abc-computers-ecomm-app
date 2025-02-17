@@ -1,15 +1,19 @@
 const mongoose = require("mongoose");
 const DataSchema = mongoose.Schema(
   {
-    title: { type: String },
-    shortDes: { type: String },
+    productCode: { type: String },
+    productName: { type: String },
+    status: { type: String },
     price: { type: String },
     discount: { type: Boolean },
     discountPrice: { type: String },
+    keyFeature: { type: String },
+    specification: { type: String },
+    description: { type: String },
     image: { type: String },
-    stock: { type: Boolean },
-    badge: { type: Boolean },
-    status: { type: Boolean },
+    stock: { type: String },
+    color: { type: String },
+    badge: { type: String },
 
     brandID: { type: mongoose.Schema.Types.ObjectId, required: true },
     categoryID: { type: mongoose.Schema.Types.ObjectId, required: true },

@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const DataSchema = mongoose.Schema(
   {
-    categoryName: { type: String, unique: true },
-    categoryImg: { type: String, unique: true },
-    status: { type: String, unique: true }
+    categoryName: { type: String, unique: true, required: true },
+    categoryImg: { type: String },
+    status: { type: String }
   },
   { timestamps: true, versionKey: false }
 );

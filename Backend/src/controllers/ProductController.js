@@ -3,10 +3,14 @@ const {
   BrandListService,
   BrandDeleteService,
   BrandUpdateService,
+  CategoryAddService,
+  CategoryListService,
+  CategoryUpdateService,
+  CategoryDeleteService,
   SubCategoryAddService,
   SubCategoryListService,
   SubCategoryDeleteService,
-  SubCategoryUpdateService
+  SubCategoryUpdateService,
 } = require("../services/ProductServices");
 
 // ====================== Brands All Controller ====================== //
@@ -59,17 +63,17 @@ exports.ProductBrandDelete = async (req, res) => {
 // ====================== Category All Controller ====================== //
 exports.AddCategory = async (req, res) => {
   try {
-    const result = await BrandAddService(req);  // Call the service to handle the logic
+    const result = await CategoryAddService(req);  // Call the service to handle the logic
     return res.status(200).json(result);  // Send the response to the client
   } catch (error) {
-    console.error("Error in AddBrands controller:", error);
-    return res.status(500).json({ status: "fail", message: "Error adding brand." });
+    console.error("Error in AddCategory controller:", error);
+    return res.status(500).json({ status: "fail", message: "Error adding category." });
   }
 };
 
 exports.CategoryList = async (req, res) => {
   try {
-    let result = await BrandListService();
+    let result = await CategoryListService();
     return res.status(200).json(result); // Ensure JSON response
   } catch (e) {
     return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response
@@ -78,11 +82,11 @@ exports.CategoryList = async (req, res) => {
 
 exports.CategoryUpdate = async (req, res) => {
   try {
-    const result = await BrandUpdateService(req);
+    const result = await CategoryUpdateService(req);
 
-    // Check if the update was successful and return the updated brand data
+    // Check if the update was successful and return the updated category data
     if (result.status === "success") {
-      return res.status(200).json(result.data); // Ensure updated brand data is sent back
+      return res.status(200).json(result.data); // Ensure updated category data is sent back
     } else {
       return res.status(400).json({ status: "fail", message: result.message });
     }
@@ -94,8 +98,8 @@ exports.CategoryUpdate = async (req, res) => {
 
 exports.CategoryDelete = async (req, res) => {
   try {
-    const brandId = req.params.id; // Get the brand ID from URL params
-    const result = await BrandDeleteService(brandId);
+    const categoryId = req.params.id; // Ensure this matches the route parameter
+    const result = await CategoryDeleteService(categoryId);
     return res.status(200).json(result);
   } catch (e) {
     return res.status(500).json({ status: "fail", message: e.toString() });

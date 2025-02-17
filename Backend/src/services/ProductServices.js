@@ -1,10 +1,6 @@
 const BrandModel = require("../models/BrandModel");
 const CategoryModel = require("../models/CategoryModel");
 const SubCategoryModel = require("../models/SubCategoryModel");
-const ProductModel = require("../models/ProductModel");
-const ProductDetailModel = require("../models/ProductDetailModel");
-const ProductSliderModel = require("../models/HeroSliderModel");
-const ReviewModel = require("../models/ReviewModel");
 const mongoose = require("mongoose");
 const ObjectID = mongoose.Types.ObjectId;
 
@@ -126,14 +122,101 @@ const BrandDeleteService = async (brandId) => {
 };
 
 
+// ========================== Category Page All Functionality ========================== //
+// Category CRUD Services
+const CategoryAddService = async (req) => {
+    try {
+        const { categoryName, status } = req.body;
+        const categoryImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+        if (!categoryName || !status) {
+            return { status: "fail", message: "Category name and status are required." };
+        }
+
+        const existingCategory = await CategoryModel.findOne({ categoryName });
+        if (existingCategory) {
+            return { status: "fail", message: "Category already exists" };
+        }
+
+        // Include categoryImg in the model
+        const newCategory = new CategoryModel({ categoryName, categoryImg, status });
+        await newCategory.save();
+
+        return {
+            status: "success",
+            message: "Category added successfully",
+            data: newCategory,
+        };
+    } catch (error) {
+        console.error("Error in CategoryAddService:", error.message);
+        return { status: "fail", message: "Error adding category. Please try again." };
+    }
+};
+
+const CategoryListService = async () => {
+    try {
+        let data = await CategoryModel.find().populate("subCategories"); // Ensure subcategories are populated
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+};
+
+const CategoryUpdateService = async (req) => {
+    try {
+        const { categoryName, status } = req.body;
+        const categoryImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+        // Check if the category exists
+        const existingCategory = await CategoryModel.findById(req.params.id);
+        if (!existingCategory) {
+            return { status: "fail", message: "Category not found" };
+        }
+
+        // Update the category fields
+        existingCategory.categoryName = categoryName || existingCategory.categoryName;
+        existingCategory.status = status || existingCategory.status;
+        if (categoryImg) existingCategory.categoryImg = categoryImg; // Update image if new one is uploaded
+
+        // Save updated category
+        await existingCategory.save();
+
+        return { status: "success", message: "Category updated successfully", data: existingCategory };
+    } catch (error) {
+        console.error("Error in CategoryUpdateService:", error.message);
+        return { status: "fail", message: "Error updating category. Please try again." };
+    }
+};
+
+const CategoryDeleteService = async (categoryId) => {
+    try {
+        const category = await CategoryModel.findById(categoryId);
+        if (!category) {
+            return { status: "fail", message: "Category not found" };
+        }
+
+        await CategoryModel.findByIdAndDelete(categoryId);
+        return { status: "success", message: "Category deleted successfully" };
+    } catch (error) {
+        console.error("Error in CategoryDeleteService:", error.message);
+        return { status: "fail", message: "Error deleting Category. Please try again." };
+    }
+};
+
+
 // ========================== Sub Category Page All Functionality ========================== //
 // Sub Category CRUD Services
 const SubCategoryAddService = async (req) => {
     try {
-        const { subCategoryName, status } = req.body;
+        const { subCategoryName, status, categoryId } = req.body;
 
-        if (!subCategoryName || !status) {
-            return { status: "fail", message: "Sub Category name and status are required." };
+        if (!subCategoryName || !status || !categoryId) {
+            return { status: "fail", message: "Sub Category name, status, and category are required." };
+        }
+
+        const categoryExists = await CategoryModel.findById(categoryId);
+        if (!categoryExists) {
+            return { status: "fail", message: "Category not found" };
         }
 
         const existingSubCategory = await SubCategoryModel.findOne({ subCategoryName });
@@ -141,7 +224,11 @@ const SubCategoryAddService = async (req) => {
             return { status: "fail", message: "Sub Category already exists" };
         }
 
-        const newSubCategory = new SubCategoryModel({ subCategoryName, status });
+        const newSubCategory = new SubCategoryModel({
+            subCategoryName,
+            status,
+            categoryId,
+        });
         await newSubCategory.save();
 
         return {
@@ -166,26 +253,31 @@ const SubCategoryListService = async () => {
 
 const SubCategoryUpdateService = async (req) => {
     try {
-        const { subCategoryName, status } = req.body;
+        const { subCategoryName, status, categoryId } = req.body;
 
-        // Check if the sub category exists
         const existingSubCategory = await SubCategoryModel.findById(req.params.id);
-
         if (!existingSubCategory) {
             return { status: "fail", message: "Sub Category not found" };
         }
 
-        // Update the sub category fields
+        // Ensure category exists
+        if (categoryId) {
+            const categoryExists = await CategoryModel.findById(categoryId);
+            if (!categoryExists) {
+                return { status: "fail", message: "Category not found" };
+            }
+        }
+
         existingSubCategory.subCategoryName = subCategoryName || existingSubCategory.subCategoryName;
         existingSubCategory.status = status || existingSubCategory.status;
+        if (categoryId) existingSubCategory.categoryId = categoryId;
 
-        // Save updated sub category
         await existingSubCategory.save();
 
         return { status: "success", message: "Sub Category updated successfully", data: existingSubCategory };
     } catch (error) {
         console.error("Error in SubCategoryUpdateService:", error.message);
-        return { status: "fail", message: "Error updating sub category. Please try again." };
+        return { status: "fail", message: "Error updating sub-category. Please try again." };
     }
 };
 
@@ -213,6 +305,10 @@ module.exports = {
     BrandListService,
     BrandDeleteService,
     BrandUpdateService,
+    CategoryAddService,
+    CategoryListService,
+    CategoryUpdateService,
+    CategoryDeleteService,
     SubCategoryAddService,
     SubCategoryListService,
     SubCategoryDeleteService,

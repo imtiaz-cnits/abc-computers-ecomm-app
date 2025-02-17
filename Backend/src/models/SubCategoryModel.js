@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const DataSchema = mongoose.Schema(
     {
         subCategoryName: { type: String, unique: true, required: true },
-        status: { type: String }
+        status: { type: String },
+        categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'categories' }
     },
     { timestamps: true, versionKey: false }
 );

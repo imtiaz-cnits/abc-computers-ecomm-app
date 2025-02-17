@@ -3,7 +3,8 @@ const DataSchema = mongoose.Schema(
   {
     categoryName: { type: String, unique: true, required: true },
     categoryImg: { type: String },
-    status: { type: String }
+    status: { type: String },
+    subCategories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'subcategories' }]
   },
   { timestamps: true, versionKey: false }
 );

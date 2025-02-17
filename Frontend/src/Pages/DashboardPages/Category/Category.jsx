@@ -30,7 +30,7 @@ const Category = () => {
   const skip = limit * (page - 1);
   const [totalPages, setTotalPages] = useState(1);
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-  const filteredCategories = categories.slice(skip, limit * page);
+  const filteredCategories = Array.isArray(categories) ? categories.slice(skip, skip + limit) : [];
   // Pagination End
 
   useEffect(() => {
@@ -41,6 +41,8 @@ const Category = () => {
         );
 
         setCategories(response.data.data || []);
+
+        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching Categories:", error);
         toast.error("Failed to fetch categories");

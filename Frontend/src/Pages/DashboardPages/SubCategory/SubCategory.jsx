@@ -520,7 +520,7 @@ const SubCategory = () => {
                           isClearable={true}
                           isSearchable={true}
                           name="categories"
-                          options={categories.map(category => ({
+                          options={categories?.map(category => ({
                             label: category.categoryName,
                             value: category._id,
                             ...category

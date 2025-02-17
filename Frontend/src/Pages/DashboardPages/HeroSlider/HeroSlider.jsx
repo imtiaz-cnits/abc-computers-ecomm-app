@@ -53,7 +53,7 @@ const HeroSlider = () => {
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSliderImgFile(file);
+    setSlideImgFile(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -71,7 +71,7 @@ const HeroSlider = () => {
     setSlideTitle("");
     setSlideDescription("");
     setSlideImg("");
-    setSliderImgFile(null);
+    setSlideImgFile(null);
   };
 
   const handleEditClick = (slide) => {

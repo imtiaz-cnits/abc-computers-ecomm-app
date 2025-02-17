@@ -20,6 +20,7 @@ const HeroSlider = () => {
   const [selectedSlide, setSelectedSlide] = useState({
     title: "",
     des: "",
+    status: "",
     img: null, // Handle file uploads separately
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -53,14 +54,33 @@ const HeroSlider = () => {
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSlideImgFile(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSlideImg(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+
+    if (!file) return;
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const requiredWidth = 1920;
+      const requiredHeight = 500;
+
+      console.log(img.width, img.height);
+
+      if (img.width === requiredWidth && img.height === requiredHeight) {
+        setSlideImgFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSlideImg(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert(
+          `Image must be exactly ${requiredWidth}x${requiredHeight} pixels.`
+        );
+      }
+
+      URL.revokeObjectURL(img.src);
+    };
   };
 
   const handleAddClick = () => {
@@ -79,13 +99,10 @@ const HeroSlider = () => {
     setSelectedSlide(slide); // Store selected brand data in state
 
     // Set form fields with the brand's existing data
-    setBrandName(brand.brandName);
-    setStatus(brand.status);
-    setBrandImg(brand.brandImg || null);
     setSlideTitle(slide.title);
     setSlideDescription(slide.des);
-    setSlideImg(slide.img);
-    setSlideImgFile(slide.img);
+    setSlideImg("");
+    setSlideImgFile(null);
   };
   const handleDeleteClick = (brandId) => {
     Swal.fire({
@@ -107,16 +124,16 @@ const HeroSlider = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!brandName || !status) {
-      toast.error("Brand name and status are required!");
+    if (!slideTitle || !slideDescription || !slideImg) {
+      toast.error("Slide title, description and image are required!");
       return;
     }
 
     const formData = new FormData();
-    formData.append("brandName", brandName);
-    formData.append("status", status);
-    if (brandImg) {
-      formData.append("brandImg", brandImg);
+    formData.append("title", slideTitle);
+    formData.append("des", slideDescription);
+    if (slideImgFile) {
+      formData.append("img", slideImgFile);
     }
 
     try {
@@ -126,30 +143,30 @@ const HeroSlider = () => {
       });
 
       const result = await response.json();
-      console.log("Add Brand Response:", result);
+      console.log("Add Slide Response:", result);
 
       if (response.ok) {
-        toast.success("Brand added successfully!");
+        toast.success("Slide added successfully!");
 
         // Close the modal after the update
         addModalCloseBtn.current.click();
 
         // Update the brands state with the newly added brand immediately
         if (result?.data) {
-          setBrands((prevBrands) => [result.data, ...prevBrands]); // Add new brand to the beginning of the array
+          setSlides((prevSlides) => [result.data, ...prevSlides]); // Add new brand to the beginning of the array
         }
 
         // Reset form fields
-        setBrandName("");
-        setStatus("");
-        setBrandImg(null);
+        setSlideTitle("");
+        setSlideDescription("");
+        setSlideImgFile(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         toast.error(result?.message || "Something went wrong.");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to add brand. Please try again.");
+      toast.error("Failed to add slide. Please try again.");
     }
   };
 
@@ -314,7 +331,8 @@ const HeroSlider = () => {
                         <th>SL NO</th>
                         <th>SLIDE IMAGE</th>
                         <th>TITLE</th>
-                        <th>DESCRIPTION</th>
+                        <th className="description">DESCRIPTION</th>
+                        <th>STATUS</th>
                         <th>ACTION</th>
                       </tr>
                     </thead>
@@ -341,6 +359,10 @@ const HeroSlider = () => {
                               )}
                             </td>
                             <td>{slide?.title || "Slide Title Not Found!"}</td>
+                            <td className="description">
+                              {slide?.des ||
+                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta facilis blanditiis quaerat necessitatibus impedit nihil excepturi sit alias omnis quidem! Eligendi porro aut pariatur facere quos quod voluptas ducimus, qui quaerat odio iusto consequatur doloremque."}
+                            </td>
                             <td>
                               <span
                                 className={
@@ -482,6 +504,21 @@ const HeroSlider = () => {
                         />
                       </div>
 
+                      <div className="form-row select-input-box">
+                        <label htmlFor="select-status">SLIDE STATUS</label>
+                        <select
+                          id="select-status"
+                          className="select-status"
+                          required
+                          value={status}
+                          onChange={handleStatusChange}
+                        >
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      </div>
+
                       <div className="form-row">
                         <label htmlFor="photo">SLIDE IMAGE</label>
                         <div className="upload-profile">
@@ -551,8 +588,13 @@ const HeroSlider = () => {
                           type="text"
                           placeholder="Type here.."
                           required
-                          value={slideTitle}
-                          onChange={handleSlideTitleChange}
+                          value={selectedSlide?.title || ""}
+                          onChange={(e) => {
+                            setSelectedSlide({
+                              ...selectedSlide,
+                              title: e.target.value,
+                            });
+                          }}
                         />
                       </div>
 
@@ -562,16 +604,53 @@ const HeroSlider = () => {
                           type="text"
                           placeholder="Type here.."
                           required
-                          value={slideDescription}
-                          onChange={handleSlideDescriptionChange}
+                          value={selectedSlide?.des || ""}
+                          onChange={(e) => {
+                            setSelectedSlide({
+                              ...selectedSlide,
+                              des: e.target.value,
+                            });
+                          }}
                         />
+                      </div>
+
+                      <div className="form-row select-input-box">
+                        <label htmlFor="select-status">SLIDE STATUS</label>
+                        <select
+                          id="select-status"
+                          className="select-status"
+                          required
+                          value={selectedSlide?.status || ""}
+                          onChange={(e) => {
+                            setSelectedSlide({
+                              ...selectedSlide,
+                              status: e.target.value,
+                            });
+                          }}
+                        >
+                          <option value="">Select Status</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
                       </div>
 
                       <div className="form-row">
                         <label htmlFor="photo">SLIDE IMAGE</label>
                         <div className="upload-profile">
                           <div className="item">
-                            <div className="img-box"></div>
+                            <div className="img-box">
+                              {selectedSlide?.img ? (
+                                <img
+                                  src={`http://localhost:5070/${selectedSlide?.img}`}
+                                  alt="Slide"
+                                  width="60"
+                                />
+                              ) : slideImg !== "" ? (
+                                <img src={slideImg} alt="Slide" width="60" />
+                              ) : (
+                                ""
+                              )}
+                            </div>
 
                             <div className="profile-wrapper">
                               <label className="custom-file-input-wrapper m-0">

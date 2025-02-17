@@ -325,10 +325,10 @@ const DashboardSidebar = () => {
 
                 <DashboardSubmenu
                   handleSubmenuToggle={handleSubmenuToggle}
-                  submenuTitle={"REPORTS"}
                   submenuItems={[
-                    { title: "ADD REPORT", href: "/dashboard/add-report" },
+                    { title: "HERO SLIDER", href: "/dashboard/hero-slider" },
                   ]}
+                  submenuTitle={"SLIDERS"}
                   icon={
                     <svg
                       width="44"
@@ -351,10 +351,10 @@ const DashboardSidebar = () => {
 
                 <DashboardSubmenu
                   handleSubmenuToggle={handleSubmenuToggle}
+                  submenuTitle={"REPORTS"}
                   submenuItems={[
-                    { title: "Hero Slider", href: "/dashboard/hero-slider" },
+                    { title: "ADD REPORT", href: "/dashboard/add-report" },
                   ]}
-                  submenuTitle={"Sliders"}
                   icon={
                     <svg
                       width="44"

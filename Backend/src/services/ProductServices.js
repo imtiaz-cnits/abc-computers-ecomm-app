@@ -1,6 +1,7 @@
 const BrandModel = require("../models/BrandModel");
 const CategoryModel = require("../models/CategoryModel");
 const SubCategoryModel = require("../models/SubCategoryModel");
+const ProductModel = require("../models/ProductModel");
 const mongoose = require("mongoose");
 const ObjectID = mongoose.Types.ObjectId;
 
@@ -299,6 +300,128 @@ const SubCategoryDeleteService = async (subCategoryId) => {
 };
 
 
+// ========================== Add Product Page All Functionality ========================== //
+// Product CRUD Services
+const ProductAddService = async (req) => {
+    try {
+        const {
+            brandID,
+            categoryID,
+            subCategoryID,
+            productCode,
+            productName,
+            status,
+            price,
+            discountPrice,
+            keyFeature,
+            specification,
+            description,
+            stock,
+            color
+        } = req.body;
+        const productImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+        if (!productName || !status || !brandID || !categoryID || !subCategoryID) {
+            return { status: "fail", message: "Product Name, Status, Brand ID, Category ID and Sub Category ID is required!" };
+        }
+
+        const brandExists = await BrandModel.findById(brandId);
+        if (!brandExists) {
+            return { status: "fail", message: "Brand not found" };
+        }
+
+        const categoryExists = await CategoryModel.findById(categoryId);
+        if (!categoryExists) {
+            return { status: "fail", message: "Category not found" };
+        }
+
+        const subCategoryExists = await SubCategoryModel.findById(subCategoryID);
+        if (!subCategoryExists) {
+            return { status: "fail", message: "Sub Category not found" };
+        }
+
+        const existingProduct = await ProductModel.findOne({ productName });
+        if (existingProduct) {
+            return { status: "fail", message: "Product already exists" };
+        }
+
+        // Include productImg in the model
+        const newProduct = new ProductModel({
+            productCode,
+            productName,
+            status,
+            price,
+            discountPrice,
+            keyFeature,
+            specification,
+            description,
+            stock,
+            color
+        });
+        await newProduct.save();
+
+        return {
+            status: "success",
+            message: "Product added successfully",
+            data: newProduct,
+        };
+    } catch (error) {
+        console.error("Error in ProductAddService:", error.message);
+        return { status: "fail", message: "Error adding product. Please try again." };
+    }
+};
+
+const ProductListService = async () => {
+    try {
+        let data = await CategoryModel.find().populate("subCategories"); // Ensure subcategories are populated
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+};
+
+const ProductUpdateService = async (req) => {
+    try {
+        const { categoryName, status } = req.body;
+        const categoryImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+        // Check if the category exists
+        const existingCategory = await CategoryModel.findById(req.params.id);
+        if (!existingCategory) {
+            return { status: "fail", message: "Category not found" };
+        }
+
+        // Update the category fields
+        existingCategory.categoryName = categoryName || existingCategory.categoryName;
+        existingCategory.status = status || existingCategory.status;
+        if (categoryImg) existingCategory.categoryImg = categoryImg; // Update image if new one is uploaded
+
+        // Save updated category
+        await existingCategory.save();
+
+        return { status: "success", message: "Category updated successfully", data: existingCategory };
+    } catch (error) {
+        console.error("Error in CategoryUpdateService:", error.message);
+        return { status: "fail", message: "Error updating category. Please try again." };
+    }
+};
+
+const ProductDeleteService = async (categoryId) => {
+    try {
+        const category = await CategoryModel.findById(categoryId);
+        if (!category) {
+            return { status: "fail", message: "Category not found" };
+        }
+
+        await CategoryModel.findByIdAndDelete(categoryId);
+        return { status: "success", message: "Category deleted successfully" };
+    } catch (error) {
+        console.error("Error in CategoryDeleteService:", error.message);
+        return { status: "fail", message: "Error deleting Category. Please try again." };
+    }
+};
+
+
 module.exports = {
     upload,
     BrandAddService,
@@ -312,5 +435,9 @@ module.exports = {
     SubCategoryAddService,
     SubCategoryListService,
     SubCategoryDeleteService,
-    SubCategoryUpdateService
+    SubCategoryUpdateService,
+    ProductAddService,
+    ProductListService,
+    ProductUpdateService,
+    ProductDeleteService,
 };

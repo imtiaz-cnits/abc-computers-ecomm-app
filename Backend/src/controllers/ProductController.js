@@ -11,6 +11,10 @@ const {
   SubCategoryListService,
   SubCategoryDeleteService,
   SubCategoryUpdateService,
+  ProductAddService,
+  ProductListService,
+  ProductUpdateService,
+  ProductDeleteService
 } = require("../services/ProductServices");
 
 // ====================== Brands All Controller ====================== //
@@ -157,6 +161,59 @@ exports.SubCategoryDelete = async (req, res) => {
   try {
     const subCategoryId = req.params.id; // Get the Sub Category ID from URL params
     const result = await SubCategoryDeleteService(subCategoryId);
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(500).json({ status: "fail", message: e.toString() });
+  }
+};
+
+// ====================== Add Product All Controller ====================== //
+exports.AddProduct = async (req, res) => {
+  try {
+    console.log("Request Body:", req.body);
+    const result = await ProductAddService(req);
+    if (result.status === "success") {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result); // Respond with error if add fails
+    }
+  } catch (error) {
+    console.error("Error in AddProduct controller:", error);
+    return res
+        .status(500)
+        .json({ status: "fail", message: "Error adding product." });
+  }
+};
+
+exports.ProductList = async (req, res) => {
+  try {
+    let result = await ProductListService();
+    return res.status(200).json(result); // Ensure JSON response
+  } catch (e) {
+    return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response
+  }
+};
+
+exports.ProductUpdate = async (req, res) => {
+  try {
+    console.log("Request Body:", req.body); // Log request body to verify data
+    const result = await ProductUpdateService(req);
+
+    if (result.status === "success") {
+      return res.status(200).json(result.data); // Ensure updated product data is sent back
+    } else {
+      return res.status(400).json({ status: "fail", message: result.message });
+    }
+  } catch (e) {
+    console.error("Error:", e);
+    return res.status(500).json({ status: "Fail", message: e.toString() });
+  }
+};
+
+exports.ProductDelete = async (req, res) => {
+  try {
+    const productId = req.params.id; // Get the Product ID from URL params
+    const result = await ProductDeleteService(productId);
     return res.status(200).json(result);
   } catch (e) {
     return res.status(500).json({ status: "fail", message: e.toString() });

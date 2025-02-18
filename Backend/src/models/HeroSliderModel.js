@@ -3,9 +3,8 @@ const DataSchema = mongoose.Schema(
   {
     title: { type: String },
     des: { type: String },
-    img: { type: String },
-
-    productID: { type: mongoose.Schema.Types.ObjectId, required: true },
+    status: { type: String },
+    slideImg: { type: String },
   },
   { timestamps: true, versionKey: false }
 );

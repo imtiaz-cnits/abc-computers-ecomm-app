@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 const ProductController = require("../controllers/ProductController");
 const UserController = require("../controllers/UserController");
-const WishListController = require("../controllers/WishListController");
-const CartListController = require("../controllers/CartListController");
-const InvoiceController = require("../controllers/InvoiceController");
-const FeaturesController = require("../controllers/FeaturesController");
+const SliderController = require("../controllers/SliderController");
+
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
 const { upload } = require("../services/ProductServices");
@@ -41,6 +39,12 @@ router.post("/sub-category", ProductController.AddSubCategory);
 router.get("/sub-category", ProductController.SubCategoryList);
 router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
+
+// Hero Slider CRUD APIs
+// router.post("/hero-slider", SliderController.AddHeroSlider);
+// router.get("/hero-slider", SliderController.HeroSliderList);
+// router.put("/hero-slider/:id", SliderController.HeroSliderUpdate);
+// router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
 
 
 

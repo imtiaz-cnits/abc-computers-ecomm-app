@@ -52,6 +52,12 @@ router.get("/sub-category", ProductController.SubCategoryList);
 router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
+// Sub Category CRUD APIs
+router.post("/sub-category", ProductController.AddSubCategory);
+router.get("/sub-category", ProductController.SubCategoryList);
+router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
+router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
+
 // Hero Slider CRUD APIs
 router.post(
   "/hero-slider",

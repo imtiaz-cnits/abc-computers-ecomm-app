@@ -40,11 +40,17 @@ router.get("/sub-category", ProductController.SubCategoryList);
 router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
+// Sub Category CRUD APIs
+router.post("/sub-category", ProductController.AddSubCategory);
+router.get("/sub-category", ProductController.SubCategoryList);
+router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
+router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
+
 // Hero Slider CRUD APIs
-// router.post("/hero-slider", SliderController.AddHeroSlider);
-// router.get("/hero-slider", SliderController.HeroSliderList);
-// router.put("/hero-slider/:id", SliderController.HeroSliderUpdate);
-// router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
+router.post("/hero-slider", SliderController.AddHeroSlider);
+router.get("/hero-slider", SliderController.HeroSliderList);
+router.put("/hero-slider/:id", SliderController.HeroSliderUpdate);
+router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
 
 
 

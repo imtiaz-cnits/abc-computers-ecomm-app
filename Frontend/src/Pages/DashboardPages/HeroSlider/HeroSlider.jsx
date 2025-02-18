@@ -28,9 +28,12 @@ const HeroSlider = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/brands");
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/hero-slider"
+        );
+        setSlides(response?.data?.data || []);
 
-        setSlides(response.data.data || []);
+        console.log(response.data.data);
       } catch (error) {
         // Improved error handling
         if (error.response) {
@@ -64,8 +67,6 @@ const HeroSlider = () => {
       const requiredWidth = 1920;
       const requiredHeight = 500;
 
-      console.log(img.width, img.height);
-
       if (img.width === requiredWidth && img.height === requiredHeight) {
         setSlideImgFile(file);
         const reader = new FileReader();
@@ -74,12 +75,14 @@ const HeroSlider = () => {
         };
         reader.readAsDataURL(file);
       } else {
-        alert(
+        setSlideImgFile(null);
+        toast.error(
           `Image must be exactly ${requiredWidth}x${requiredHeight} pixels.`
         );
       }
 
       URL.revokeObjectURL(img.src);
+      e.target.value = "";
     };
   };
 
@@ -91,20 +94,22 @@ const HeroSlider = () => {
     setSlideTitle("");
     setSlideDescription("");
     setSlideImg("");
+    setStatus("");
     setSlideImgFile(null);
   };
 
   const handleEditClick = (slide) => {
     setIsEditing(true); // Set editing mode
-    setSelectedSlide(slide); // Store selected brand data in state
+    setSelectedSlide(slide); // Store selected slide data in state
 
-    // Set form fields with the brand's existing data
-    setSlideTitle(slide.title);
-    setSlideDescription(slide.des);
+    // Set form fields with the slide's existing data
+    setSlideTitle(slide?.title);
+    setSlideDescription(slide?.des);
     setSlideImg("");
+    setStatus(slide?.status);
     setSlideImgFile(null);
   };
-  const handleDeleteClick = (brandId) => {
+  const handleDeleteClick = (slideId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -115,7 +120,7 @@ const HeroSlider = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteBrand(brandId); // Call delete function if confirmed
+        deleteSlide(slideId); // Call delete function if confirmed
       }
     });
   };
@@ -124,72 +129,23 @@ const HeroSlider = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!slideTitle || !slideDescription || !slideImg) {
-      toast.error("Slide title, description and image are required!");
+    if (!slideTitle || !status || !slideImgFile) {
+      toast.error("Slide title, status and description are required!");
       return;
     }
 
     const formData = new FormData();
     formData.append("title", slideTitle);
     formData.append("des", slideDescription);
+    formData.append("status", status);
     if (slideImgFile) {
-      formData.append("img", slideImgFile);
+      formData.append("slideImg", slideImgFile); // Append image if available
     }
 
     try {
-      const response = await fetch("http://localhost:5070/api/v1/brands", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-      console.log("Add Slide Response:", result);
-
-      if (response.ok) {
-        toast.success("Slide added successfully!");
-
-        // Close the modal after the update
-        addModalCloseBtn.current.click();
-
-        // Update the brands state with the newly added brand immediately
-        if (result?.data) {
-          setSlides((prevSlides) => [result.data, ...prevSlides]); // Add new brand to the beginning of the array
-        }
-
-        // Reset form fields
-        setSlideTitle("");
-        setSlideDescription("");
-        setSlideImgFile(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      } else {
-        toast.error(result?.message || "Something went wrong.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to add slide. Please try again.");
-    }
-  };
-
-  const handleUpdateSlide = async (e) => {
-    e.preventDefault();
-
-    // Prepare form data for the update request
-    const formData = new FormData();
-    formData.append("brandName", selectedBrand.brandName);
-    formData.append("status", selectedBrand.status);
-
-    // Append brand image if a new one is selected
-    if (
-      selectedBrand.brandImg &&
-      selectedBrand.brandImg !== selectedBrand.oldBrandImg
-    ) {
-      formData.append("brandImg", selectedBrand.brandImg);
-    }
-
-    try {
-      // Send PUT request to update the brand
-      const { data } = await axios.put(
-        `http://localhost:5070/api/v1/brands/${selectedBrand._id}`,
+      // Add new category
+      const response = await axios.post(
+        "http://localhost:5070/api/v1/hero-slider",
         formData,
         {
           headers: {
@@ -198,43 +154,95 @@ const HeroSlider = () => {
         }
       );
 
-      // If the update is successful, update the state with the new brand data
+      toast.success("Slide added successfully!");
+
+      // Update categories state with new data
+      const updatedSlides = [response?.data?.data, ...slides];
+
+      setSlides(updatedSlides);
+      localStorage.setItem("slides", JSON.stringify(updatedSlides));
+
+      // Reset form and state
+
+      setIsEditing(false);
+      setSelectedSlide(null);
+
+      setSlideTitle("");
+      setSlideDescription("");
+      setStatus("");
+      setSlideImg("");
+      setSlideImgFile(null);
+
+      // Close the modal programmatically
+      addModalCloseBtn.current.click();
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || "Failed to process slide");
+    }
+  };
+
+  const handleUpdateSlide = async (e) => {
+    e.preventDefault();
+
+    // Prepare form data for the update request
+    const formData = new FormData();
+    formData.append("title", selectedSlide.title);
+    formData.append("des", selectedSlide.des);
+    formData.append("status", selectedSlide.status);
+    // Append slide image if a new one is selected
+    if (slideImgFile) {
+      formData.append("slideImg", slideImgFile);
+    }
+
+    try {
+      // Send PUT request to update the brand
+      const { data } = await axios.put(
+        `http://localhost:5070/api/v1/hero-slider/${selectedSlide._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // If the update is successful, update the state with the new slide data
       if (data && data._id) {
-        setBrands((prevBrands) => {
-          // Replace the updated brand in the state array
-          return prevBrands.map((brand) =>
-            brand._id === data._id ? { ...brand, ...data } : brand
+        setSlides((prevSlides) => {
+          // Replace the updated slide in the state array
+          return prevSlides.map((slide) =>
+            slide._id === data._id ? { ...slide, ...data } : slide
           );
         });
 
         // Provide feedback to the user
-        toast.success("Brand updated successfully!");
+        toast.success("Hero Slide updated successfully!");
 
         // Close the modal after the update
-        document.querySelector("#updateBrand .close").click();
+        updateModalCloseBtn.current.click();
       } else {
-        toast.error("Brand update failed. Please try again.");
+        toast.error("Hero Slide update failed. Please try again.");
       }
     } catch (error) {
       // Handle error if update fails
       console.error("Update failed:", error.response?.data || error.message);
       toast.error(
-        "An error occurred while updating the brand. Please try again."
+        "An error occurred while updating the hero slide. Please try again."
       );
     }
   };
 
-  const deleteBrand = async (brandId) => {
-    if (!brandId) {
-      toast.error("No brand selected!");
+  const deleteSlide = async (slideId) => {
+    if (!slideId) {
+      toast.error("No slide selected!");
       return;
     }
 
-    console.log("Deleting brand with ID:", brandId);
+    console.log("Deleting slide with ID:", slideId);
 
     try {
       const response = await axios.delete(
-        `http://localhost:5070/api/v1/brands/${brandId}`,
+        `http://localhost:5070/api/v1/hero-slider/${slideId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -242,19 +250,19 @@ const HeroSlider = () => {
         }
       );
 
-      if (response.data.status === "success") {
-        toast.success("Brand deleted successfully!");
+      if (response?.data?.status === "success") {
+        toast.success("Slide deleted successfully!");
 
-        // Update state by removing the deleted brand
-        setBrands((prevBrands) =>
-          prevBrands.filter((brand) => brand._id !== brandId)
+        // Update state by removing the deleted slide
+        setSlides((prevSlides) =>
+          prevSlides.filter((slide) => slide._id !== slideId)
         );
       } else {
-        toast.error(response.data.message || "Failed to delete brand.");
+        toast.error(response?.data?.message || "Failed to delete slide.");
       }
     } catch (error) {
-      console.error("Error deleting brand:", error);
-      toast.error(error.response?.data?.message || "An error occurred.");
+      console.error("Error deleting slide:", error);
+      toast.error(error?.response?.data?.message || "An error occurred.");
     }
   };
 
@@ -337,20 +345,20 @@ const HeroSlider = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {slides.length > 0 ? (
-                        slides.map((slide, index) => (
+                      {slides?.length > 0 ? (
+                        slides?.map((slide, index) => (
                           <tr key={slide._id || index}>
                             <td>{index + 1}</td>
                             <td>
-                              {slide?.brandImg ? (
+                              {slide?.slideImg ? (
                                 <img
-                                  src={`http://localhost:5070${slide.brandImg}`}
-                                  alt={slide?.brandName || "Slide"}
+                                  src={`http://localhost:5070${slide?.slideImg}`}
+                                  alt={slide?.slideImg || "Slide"}
                                   style={{
-                                    width: "50px",
-                                    height: "50px",
+                                    aspectRatio: "1920 / 500",
                                     objectFit: "cover",
                                     borderRadius: "5px",
+                                    width: "100px",
                                   }}
                                   // onError={(e) => (e.target.src = "/default-brand.png")} // Fallback Image
                                 />
@@ -639,16 +647,14 @@ const HeroSlider = () => {
                         <div className="upload-profile">
                           <div className="item">
                             <div className="img-box">
-                              {selectedSlide?.img ? (
+                              {slideImg === "" ? (
                                 <img
-                                  src={`http://localhost:5070/${selectedSlide?.img}`}
+                                  src={`http://localhost:5070${selectedSlide?.slideImg}`}
                                   alt="Slide"
                                   width="60"
                                 />
-                              ) : slideImg !== "" ? (
-                                <img src={slideImg} alt="Slide" width="60" />
                               ) : (
-                                ""
+                                <img src={slideImg} alt="Slide 2" width="60" />
                               )}
                             </div>
 

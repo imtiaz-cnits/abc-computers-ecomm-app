@@ -16,11 +16,13 @@ const {
 // ====================== Brands All Controller ====================== //
 exports.AddBrands = async (req, res) => {
   try {
-    const result = await BrandAddService(req);  // Call the service to handle the logic
-    return res.status(200).json(result);  // Send the response to the client
+    const result = await BrandAddService(req); // Call the service to handle the logic
+    return res.status(200).json(result); // Send the response to the client
   } catch (error) {
     console.error("Error in AddBrands controller:", error);
-    return res.status(500).json({ status: "fail", message: "Error adding brand." });
+    return res
+      .status(500)
+      .json({ status: "fail", message: "Error adding brand." });
   }
 };
 
@@ -59,15 +61,17 @@ exports.ProductBrandDelete = async (req, res) => {
   }
 };
 
-
 // ====================== Category All Controller ====================== //
 exports.AddCategory = async (req, res) => {
   try {
-    const result = await CategoryAddService(req);  // Call the service to handle the logic
-    return res.status(200).json(result);  // Send the response to the client
+    console.log(req.body);
+    const result = await CategoryAddService(req); // Call the service to handle the logic
+    return res.status(200).json(result); // Send the response to the client
   } catch (error) {
     console.error("Error in AddCategory controller:", error);
-    return res.status(500).json({ status: "fail", message: "Error adding category." });
+    return res
+      .status(500)
+      .json({ status: "fail", message: "Error adding category." });
   }
 };
 
@@ -106,7 +110,6 @@ exports.CategoryDelete = async (req, res) => {
   }
 };
 
-
 // ====================== Sub Category All Controller ====================== //
 exports.AddSubCategory = async (req, res) => {
   try {
@@ -119,7 +122,9 @@ exports.AddSubCategory = async (req, res) => {
     }
   } catch (error) {
     console.error("Error in AddSubCategory controller:", error);
-    return res.status(500).json({ status: "fail", message: "Error adding sub-category." });
+    return res
+      .status(500)
+      .json({ status: "fail", message: "Error adding sub-category." });
   }
 };
 
@@ -134,7 +139,7 @@ exports.SubCategoryList = async (req, res) => {
 
 exports.SubCategoryUpdate = async (req, res) => {
   try {
-    console.log('Request Body:', req.body); // Log request body to verify data
+    console.log("Request Body:", req.body); // Log request body to verify data
     const result = await SubCategoryUpdateService(req);
 
     if (result.status === "success") {

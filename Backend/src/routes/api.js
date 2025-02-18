@@ -7,14 +7,14 @@ const SliderController = require("../controllers/SliderController");
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
 const { upload } = require("../services/ProductServices");
-const path = require('path');
+const path = require("path");
 
 // Protected Routes
 router.get("/dashboard", AuthVerification, (req, res) => {
-    res.status(200).json({
-        status: "success",
-        message: "Welcome to the dashboard",
-    });
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the dashboard",
+  });
 });
 
 // User API
@@ -25,13 +25,25 @@ router.post("/Logout", UserController.UserLogout);
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
-router.put("/brands/:id", upload.single('brandImg'), ProductController.ProductBrandUpdate);
+router.put(
+  "/brands/:id",
+  upload.single("brandImg"),
+  ProductController.ProductBrandUpdate
+);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
 // Category CRUD APIs
-router.post("/category", upload.single("categoryImg"), ProductController.AddCategory);
+router.post(
+  "/category",
+  upload.single("categoryImg"),
+  ProductController.AddCategory
+);
 router.get("/category", ProductController.CategoryList);
-router.put("/category/:id", upload.single("categoryImg"), ProductController.CategoryUpdate);
+router.put(
+  "/category/:id",
+  upload.single("categoryImg"),
+  ProductController.CategoryUpdate
+);
 router.delete("/category/:id", ProductController.CategoryDelete);
 
 // Sub Category CRUD APIs
@@ -47,13 +59,18 @@ router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 // Hero Slider CRUD APIs
-router.post("/hero-slider", SliderController.AddHeroSlider);
+router.post(
+  "/hero-slider",
+  upload.single("slideImg"),
+  SliderController.AddHeroSlider
+);
 router.get("/hero-slider", SliderController.HeroSliderList);
-router.put("/hero-slider/:id", SliderController.HeroSliderUpdate);
+router.put(
+  "/hero-slider/:id",
+  upload.single("slideImg"),
+  SliderController.HeroSliderUpdate
+);
 router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
-
-
-
 
 
 

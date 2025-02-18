@@ -25,25 +25,13 @@ router.post("/Logout", UserController.UserLogout);
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
-router.put(
-  "/brands/:id",
-  upload.single("brandImg"),
-  ProductController.ProductBrandUpdate
-);
+router.put("/brands/:id", upload.single("brandImg"), ProductController.ProductBrandUpdate);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
 // Category CRUD APIs
-router.post(
-  "/category",
-  upload.single("categoryImg"),
-  ProductController.AddCategory
-);
+router.post("/category", upload.single("categoryImg"), ProductController.AddCategory);
 router.get("/category", ProductController.CategoryList);
-router.put(
-  "/category/:id",
-  upload.single("categoryImg"),
-  ProductController.CategoryUpdate
-);
+router.put("/category/:id", upload.single("categoryImg"), ProductController.CategoryUpdate);
 router.delete("/category/:id", ProductController.CategoryDelete);
 
 // Sub Category CRUD APIs
@@ -52,11 +40,11 @@ router.get("/sub-category", ProductController.SubCategoryList);
 router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
-// Sub Category CRUD APIs
-router.post("/sub-category", ProductController.AddSubCategory);
-router.get("/sub-category", ProductController.SubCategoryList);
-router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
-router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
+// Product Add CRUD APIs
+router.post("/add-product", ProductController.AddProduct);
+router.get("/product-list", ProductController.ProductList);
+router.put("/update-product/:id", ProductController.ProductUpdate);
+router.delete("/remove-product/:id", ProductController.ProductDelete);
 
 // Hero Slider CRUD APIs
 router.post("/hero-slider", upload.single("slideImg"), SliderController.AddHeroSlider);

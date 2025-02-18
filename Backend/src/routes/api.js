@@ -59,17 +59,9 @@ router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 // Hero Slider CRUD APIs
-router.post(
-  "/hero-slider",
-  upload.single("slideImg"),
-  SliderController.AddHeroSlider
-);
+router.post("/hero-slider", upload.single("slideImg"), SliderController.AddHeroSlider);
 router.get("/hero-slider", SliderController.HeroSliderList);
-router.put(
-  "/hero-slider/:id",
-  upload.single("slideImg"),
-  SliderController.HeroSliderUpdate
-);
+router.put("/hero-slider/:id", upload.single("slideImg"), SliderController.HeroSliderUpdate);
 router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
 
 

@@ -52,8 +52,7 @@ const HeroSlider = () => {
   }, []);
 
   const handleSlideTitleChange = (e) => setSlideTitle(e.target.value);
-  const handleSlideDescriptionChange = (e) =>
-    setSlideDescription(e.target.value);
+  const handleSlideDescriptionChange = (e) => setSlideDescription(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -97,7 +96,6 @@ const HeroSlider = () => {
     setStatus("");
     setSlideImgFile(null);
   };
-
   const handleEditClick = (slide) => {
     setIsEditing(true); // Set editing mode
     setSelectedSlide(slide); // Store selected slide data in state

@@ -32,8 +32,6 @@ const HeroSlider = () => {
           "http://localhost:5070/api/v1/hero-slider"
         );
         setSlides(response?.data?.data || []);
-
-        console.log(response.data.data);
       } catch (error) {
         // Improved error handling
         if (error.response) {
@@ -52,7 +50,8 @@ const HeroSlider = () => {
   }, []);
 
   const handleSlideTitleChange = (e) => setSlideTitle(e.target.value);
-  const handleSlideDescriptionChange = (e) => setSlideDescription(e.target.value);
+  const handleSlideDescriptionChange = (e) =>
+    setSlideDescription(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -366,8 +365,10 @@ const HeroSlider = () => {
                             </td>
                             <td>{slide?.title || "Slide Title Not Found!"}</td>
                             <td className="description">
-                              {slide?.des ||
-                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta facilis blanditiis quaerat necessitatibus impedit nihil excepturi sit alias omnis quidem! Eligendi porro aut pariatur facere quos quod voluptas ducimus, qui quaerat odio iusto consequatur doloremque."}
+                              {slide?.des
+                                ?.split(" ")
+                                ?.slice(0, 20)
+                                ?.join(" ") || "No Description"}...
                             </td>
                             <td>
                               <span

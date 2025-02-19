@@ -218,8 +218,6 @@ html ::-webkit-scrollbar-thumb {
   border: none;
 }
 
-
-
 /* .......................................................... */
 /* ......................Dashboard Css End................. */
 /* .......................................................... */
@@ -352,7 +350,6 @@ html ::-webkit-scrollbar-thumb {
 .sign-in-signup .card .sign-in-btn:hover {
   background-color: var(--primary-color);
 }
-
 .sign-in-signup .card .switch {
   margin-top: 30px;
   font-size: 16px;
@@ -1224,7 +1221,7 @@ input::-webkit-inner-spin-button {
   z-index: 99;
 }
 
-.select-dropdown-items.show+.select-dropdown-selected .icon {
+.select-dropdown-items.show + .select-dropdown-selected .icon {
   transform: rotate(180deg);
 }
 

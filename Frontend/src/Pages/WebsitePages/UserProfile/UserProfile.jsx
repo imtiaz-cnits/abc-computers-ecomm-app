@@ -14,13 +14,6 @@ const UserProfile = () => {
                         <div className="hero-shape hero-shape-2">
                             <img src="./assets/icon/hero1.svg" alt="" />
                         </div>
-                        <div className="hero-content">
-                            <div className="row d-flex justify-content-center">
-                                <div className="hero-title">
-                                    <h1>User Profile</h1>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -65,7 +58,7 @@ const UserProfile = () => {
                                                             height="18"
                                                             rx="1"
                                                             stroke="#26A0DA"
-                                                            stroke-width="2"
+                                                            strokeWidth="2"
                                                         />
                                                         <rect
                                                             x="15"
@@ -74,7 +67,7 @@ const UserProfile = () => {
                                                             height="28"
                                                             rx="1"
                                                             stroke="#26A0DA"
-                                                            stroke-width="2"
+                                                            strokeWidth="2"
                                                         />
                                                         <rect
                                                             x="29"
@@ -83,7 +76,7 @@ const UserProfile = () => {
                                                             height="38"
                                                             rx="1"
                                                             stroke="#26A0DA"
-                                                            stroke-width="2"
+                                                            strokeWidth="2"
                                                         />
                                                     </svg>
                                                     <span className="sidelist_text">Dashboard</span>
@@ -130,30 +123,30 @@ const UserProfile = () => {
                                                         <path
                                                             d="M18.4325 25.0992L21.8333 28.5H23.5V30.1667L25.1667 31.8333H26.8333V33.5L29.3333 36H31.8333V38.5L34.3333 41H39.3333L41 39.3333V34.3333L25.2 18.5333"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
                                                         />
                                                         <path
                                                             d="M1 13.5C1 20.4008 6.59917 26 13.5 26C20.4008 26 26 20.4008 26 13.5C26 6.59833 20.4008 1 13.5 1C6.59917 1 1 6.59833 1 13.5Z"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
                                                         />
                                                         <path
                                                             d="M7.60563 19.3925L19.3906 7.60748C16.1373 4.35415 10.859 4.35415 7.60479 7.60748C4.35063 10.8608 4.35146 16.1391 7.60563 19.3925Z"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
                                                         />
                                                         <path
                                                             d="M40.4902 38.825L26.5969 24.9316"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
                                                         />
                                                     </svg>
                                                     <span className="sidelist_text">Change Password</span>
@@ -201,32 +194,32 @@ const UserProfile = () => {
                                                         <path
                                                             d="M41 1V25H33V30.3333L27.6667 25H9V1H41Z"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M9 17H1V35.6667H9V41L14.3333 35.6667H23.6667V25"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M14.334 7.66669H35.6673"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M14.334 13H35.6673"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M14.334 18.3333H35.6673"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeLinejoin="round"
                                                         />
                                                     </svg>
                                                     <span className="sidelist_text">Chat List</span>
@@ -245,50 +238,50 @@ const UserProfile = () => {
                                                         <path
                                                             d="M21 12.4286V15.2857"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M21 26.7143V29.5714"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M18.1434 26.7143H22.4291C24.0006 26.7143 25.2863 25.4286 25.2863 23.8571C25.2863 22.2857 24.0006 21 22.4291 21H19.572C18.0006 21 16.7148 19.7143 16.7148 18.1428C16.7148 16.5714 18.0006 15.2857 19.572 15.2857H23.8577"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M21.0006 6.71429C28.8577 6.71429 35.2863 13.1429 35.2863 21C35.2863 28.8572 28.8577 35.2857 21.0006 35.2857C13.1434 35.2857 6.71484 28.8572 6.71484 21V16.7143"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M12.4286 22.4286L6.71429 16.7143L1 22.4286"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                         <path
                                                             d="M21 1C32 1 41 10 41 21C41 32 32 41 21 41"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
                                                         />
                                                     </svg>
                                                     <span className="sidelist_text">Refund Request</span>
@@ -332,44 +325,44 @@ const UserProfile = () => {
                                                         <path
                                                             d="M32.3043 1H9.69565C4.89318 1 1 4.89318 1 9.69565V32.3043C1 37.1068 4.89318 41 9.69565 41H32.3043C37.1068 41 41 37.1068 41 32.3043V9.69565C41 4.89318 37.1068 1 32.3043 1Z"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M28 12.9231C28 16.7446 21 24 21 24C21 24 14 16.7446 14 12.9231C14 11.087 14.7375 9.32605 16.0503 8.02772C17.363 6.72939 19.1435 6 21 6C22.8565 6 24.637 6.72939 25.9497 8.02772C27.2625 9.32605 28 11.087 28 12.9231Z"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M23.7392 25.2174H30.287C31.0246 25.1915 31.7423 25.4588 32.2833 25.9607C32.8243 26.4626 33.1446 27.1583 33.174 27.8957V33.8435C33.1446 34.5809 32.8243 35.2766 32.2833 35.7785C31.7423 36.2804 31.0246 36.5476 30.287 36.5218H11.7131C10.9756 36.5476 10.2579 36.2804 9.71685 35.7785C9.17584 35.2766 8.8556 34.5809 8.82617 33.8435V27.8957C8.8556 27.1583 9.17584 26.4626 9.71685 25.9607C10.2579 25.4588 10.9756 25.1915 11.7131 25.2174H18.261"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M9.69531 31.3043H20.9997"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M21 31.3043V35.6521"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M26.2168 26.087V31.3044"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                         <path
                                                             d="M21 31.3043H32.3043"
                                                             stroke="#7C8992"
-                                                            stroke-width="2"
-                                                            stroke-miterlimit="10"
+                                                            strokeWidth="2"
+                                                            strokeMiterlimit="10"
                                                         />
                                                     </svg>
                                                     <span className="sidelist_text">Shipping Address</span>
@@ -509,10 +502,10 @@ const UserProfile = () => {
                                         <span className="edit_profile_input_text">Full Name</span>
                                         <div className="profile_img_box">
                                             <div className="img_box">
-                                                <img id="profileImage" src="" alt="Profile Image" />
+                                                {/* <img id="profileImage" src="" alt="Profile Image" /> */}
                                             </div>
                                             <div className="profile-wrapper">
-                                                <label className="custom-file-input-wrapper" for="fileInput">
+                                                <label className="custom-file-input-wrapper" htmlFor="fileInput">
                                                     <input
                                                         type="file"
                                                         id="fileInput"

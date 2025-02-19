@@ -94,6 +94,7 @@ const HeroSliderUpdateService = async (req) => {
 
     // Update the Hero Slider fields
     existingHeroSlider.title = title || existingHeroSlider.title;
+    existingHeroSlider.des = des || existingHeroSlider.des;
     existingHeroSlider.status = status || existingHeroSlider.status;
     if (slideImg) existingHeroSlider.slideImg = slideImg; // Update image if new one is uploaded
 

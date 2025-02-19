@@ -3,24 +3,45 @@ const router = express.Router();
 const ProductController = require("../controllers/ProductController");
 const UserController = require("../controllers/UserController");
 const SliderController = require("../controllers/SliderController");
+const ProfileController = require("../controllers/ProfileController");
+const UserModel = require("../models/UserModel")
 
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
 const { upload } = require("../services/ProductServices");
 const path = require("path");
+const mongoose = require("mongoose");
+const ObjectID = mongoose.Types.ObjectId;
 
 // Protected Routes
-router.get("/dashboard", AuthVerification, (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "Welcome to the dashboard",
-  });
+router.get("/dashboard", AuthVerification, async (req, res) => {
+
+  const email = req?.user?.email
+
+  const userInfo = await UserModel.findOne({email})
+
+  const role = userInfo?.role
+
+  if (role === "admin"){
+    return res.status(200).json({
+      status: "success",
+      message: "Welcome to the dashboard",
+    });
+  } else {
+    return res.status(200).json({
+      status: "failed",
+      message: "Failed to access dashboard",
+    });
+  }
 });
 
 // User API
 router.post("/SignUP", UserController.SignUP);
 router.post("/Login", UserController.Login);
 router.post("/Logout", UserController.UserLogout);
+
+// Profile API
+router.post("/Profile", ProfileController.AddProfile)
 
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);

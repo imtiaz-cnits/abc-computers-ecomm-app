@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const AdminRoute = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -50,7 +51,7 @@ const AdminRoute = ({ children }) => {
     return <></>;
   }
 
-  if (!isAdmin && !isLoading && !path.startsWith("/dashboard/login")) {
+  if (!isAdmin && !isLoading && !pathname.startsWith("/dashboard/login")) {
     return router.push("/dashboard/login");
   }
 

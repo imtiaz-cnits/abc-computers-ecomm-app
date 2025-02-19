@@ -264,3 +264,7 @@
 .fr-box.fr-basic.fr-top .fr-wrapper {
   border-radius: 0 0 10px 10px;
 }
+
+.select__menu > * {
+  max-height: 200px !important;
+}

@@ -11,20 +11,28 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
+import { Brands } from "@/Pages/DashboardPages/Brands/Brands";
+
 import("froala-editor/js/plugins.pkgd.min.js");
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
 
   // Set Brand Infos for Brand Selection
+  const [brandName, setBrandName] = useState("");
+  const [status, setStatus] = useState("");
+  const [brandImg, setBrandImg] = useState(null);
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState(null);
 
   // Set Category Infos for Category Selection
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryImg, setCategoryImg] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Set Sub Category Infos for Sub Category Selection
+  const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState({
     subCategoryName: "",
@@ -85,6 +93,105 @@ const AddProduct = () => {
   }, []);
 
 
+  // ======== Handle Submit for Brand, Category & Sub Category ======== //
+  const handleSubmit = async (e, type) => {
+    e.preventDefault();
+
+    let formData = new FormData();
+    let requestData = {}; // For SubCategory (non-FormData requests)
+    let url = "";
+    let isFormData = true;
+    let successMessage = "";
+    let updateState;
+
+    if (type === "brand") {
+      if (!brandName || !status) {
+        toast.error("Brand name and status are required!");
+        return;
+      }
+      formData.append("brandName", brandName);
+      formData.append("status", status);
+      if (brandImg) formData.append("brandImg", brandImg);
+
+      url = "http://localhost:5070/api/v1/brands";
+      successMessage = "Brand added successfully!";
+      updateState = setBrands;
+    }
+
+    else if (type === "category") {
+      if (!categoryName || !status) {
+        toast.error("Category name and status are required!");
+        return;
+      }
+      formData.append("categoryName", categoryName);
+      formData.append("status", status);
+      if (categoryImg) formData.append("categoryImg", categoryImg);
+
+      url = "http://localhost:5070/api/v1/category";
+      successMessage = "Category added successfully!";
+      updateState = setCategories;
+    }
+
+    else if (type === "subCategory") {
+      const categoryId = selectedCategory?._id;
+      if (!subCategoryName || !status || !categoryId) {
+        toast.error("Sub Category name, status, and category are required!");
+        return;
+      }
+
+      requestData = { subCategoryName, status, categoryId };
+      isFormData = false; // Use JSON, not FormData
+
+      url = "http://localhost:5070/api/v1/sub-category";
+      successMessage = "Sub Category added successfully!";
+      updateState = setSubCategories;
+    }
+
+    try {
+      const response = isFormData
+          ? await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
+          : await axios.post(url, requestData);
+
+      toast.success(successMessage);
+
+      // Update state by adding the new item at the top
+      updateState((prevData) => [response.data.data, ...prevData]);
+
+      // Reset Form Fields
+      setBrandName("");
+      setCategoryName("");
+      setSubCategoryName("");
+      setStatus("");
+      setBrandImg(null);
+      setCategoryImg(null);
+      setSelectedCategory(null);
+
+      // Close the modal
+      document.querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`).click();
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || `Failed to add ${type}`);
+    }
+  };
+
+
+
+
+  // ======= Add Brand Handles ======= //
+  const handleAddClick = () => {
+    setSelectedBrand(null); // Clear selected brand
+
+    // Reset form fields
+    setBrandName("");
+    setStatus("");
+    setBrandImg(null);
+  };
+  const handleBrandNameChange = (e) => setBrandName(e.target.value);
+  const handleStatusChange = (e) => setStatus(e.target.value);
+  const handleFileChange = (e) => setBrandImg(e.target.files[0]);
+  // ======= Add Brand Handles ======= //
+
+
   const handleAddProduct = (e) => {
     e.preventDefault();
     console.log(e);
@@ -126,6 +233,7 @@ const AddProduct = () => {
                       className="add-btn"
                       data-bs-toggle="modal"
                       data-bs-target="#addBrand"
+                      onClick={handleAddClick}
                     >
                       <svg
                         width="32"
@@ -393,12 +501,18 @@ const AddProduct = () => {
               </button>
               <h2 className="heading">ADD NEW BRAND</h2>
             </div>
-            <form>
+            <form onSubmit={(e) => handleSubmit(e, "brand")}>
               <div className="row">
                 <div className="col-lg-12">
                   <div className="form-row">
                     <label htmlFor="">BRAND NAME</label>
-                    <input type="text" placeholder="Type here.." required />
+                    <input
+                        type="text"
+                        placeholder="Type here.."
+                        required
+                        value={brandName}
+                        onChange={handleBrandNameChange}
+                    />
                   </div>
 
                   <div className="form-row select-input-box">
@@ -407,6 +521,8 @@ const AddProduct = () => {
                       id="select-status"
                       className="select-status"
                       required
+                      value={status}
+                      onChange={handleStatusChange}
                     >
                       <option value="">Select Status</option>
                       <option value="active">Active</option>
@@ -419,12 +535,13 @@ const AddProduct = () => {
                     <div className="upload-profile">
                       <div className="item">
                         <div className="img-box">
-                          <img
-                            src={uploadImg.src}
-                            width={30}
-                            height={30}
-                            alt=""
-                          />
+                          {selectedBrand?.brandImg && (
+                              <img
+                                  src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                                  alt="Brand"
+                                  width="100"
+                              />
+                          )}
                         </div>
 
                         <div className="profile-wrapper">
@@ -433,6 +550,8 @@ const AddProduct = () => {
                               type="file"
                               className="custom-file-input"
                               aria-label="Upload Photo"
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -475,7 +594,7 @@ const AddProduct = () => {
               <h2 className="heading">ADD NEW CATEGORY</h2>
             </div>
 
-            <form>
+            <form onSubmit={(e) => handleSubmit(e, "category")}>
               <div className="row">
                 <div className="col-lg-12">
                   <div className="form-row">
@@ -557,7 +676,7 @@ const AddProduct = () => {
               <h2 className="heading">ADD SUB CATEGORY</h2>
             </div>
 
-            <form>
+            <form onSubmit={(e) => handleSubmit(e, "subCategory")}>
               <div className="row">
                 <div className="col-lg-12">
                   <div className="form-row">

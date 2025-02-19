@@ -11,6 +11,7 @@ import "@/assets/css/navbar-footer.css";
 import Footer from "@/Components/Shared/Footer/Footer";
 import Preloader from "@/Components/Shared/Preloader/Preloader";
 import BackToTop from "@/Components/Shared/BackToTop/BackToTop";
+import { Toaster } from "react-hot-toast"; // Import Toaster
 
 export const metadata = {
   title: "Home | ABC Computers",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         <Footer />
         <BackToTop />
         <JavascriptClient />
+        <Toaster />
       </body>
     </html>
   );

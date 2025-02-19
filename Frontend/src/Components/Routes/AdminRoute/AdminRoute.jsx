@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 const AdminRoute = ({ children }) => {
   const router = useRouter();
-  const path = usePathname();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,7 +44,7 @@ const AdminRoute = ({ children }) => {
     };
 
     fetchAdmin();
-  }, [path]);
+  }, []);
 
   if (isLoading) {
     return <></>;

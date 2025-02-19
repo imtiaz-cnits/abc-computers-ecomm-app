@@ -1,5 +1,6 @@
 "use client";
-import React, { useRef } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const Products = () => {

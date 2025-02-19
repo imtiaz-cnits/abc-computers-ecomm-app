@@ -1,5 +1,8 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import Swal from "sweetalert2";
 import "./AddProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
 import ReactTags from "react-tag-autocomplete";
@@ -11,40 +14,76 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import("froala-editor/js/plugins.pkgd.min.js");
 
 const AddProduct = () => {
+  const fileInputRef = useRef(null);
+
+  // Set Brand Infos for Brand Selection
+  const [brands, setBrands] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+
+  // Set Category Infos for Category Selection
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Set Sub Category Infos for Sub Category Selection
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState({
+    subCategoryName: "",
+    status: "",
+    subCategoryImg: null, // Handle file uploads separately
+  });
+
   const [keyFeatures, setKeyFeatures] = useState("");
   const [specifications, setSpecifications] = useState("");
   const [description, setDescription] = useState("");
   const [colors, setColors] = useState([]);
   const reactColors = useRef();
-  const onDeleteColors = useCallback(
-    (colorIndex) => {
-      setColors(colors.filter((_, i) => i !== colorIndex));
-    },
-    [colors]
-  );
+  const onDeleteColors = useCallback((colorIndex) => {
+      setColors(colors.filter((_, i) => i !== colorIndex));}, [colors]);
+  const onAdditionColors = useCallback((newColor) => { setColors([...colors, newColor]); }, [colors]);
 
-  const onAdditionColors = useCallback(
-    (newColor) => {
-      setColors([...colors, newColor]);
-    },
-    [colors]
-  );
 
-  const brands = [
-    { value: "asus", label: "asus" },
-    { value: "dell", label: "dell" },
-    { value: "logitech", label: "logitech" },
-  ];
-  const categories = [
-    { value: "Monitor", label: "Monitor" },
-    { value: "Mouse", label: "Mouse" },
-    { value: "Keyboard", label: "Keyboard" },
-  ];
-  const subCategories = [
-    { value: "Led", label: "Led" },
-    { value: "Mechanical", label: "Mechanical" },
-    { value: "Logitech", label: "Logitech" },
-  ];
+  // Fetch brands when the component mounts
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axios.get("http://localhost:5070/api/v1/brands");
+        setBrands(response.data.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+        toast.error("Failed to load brands.");
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  // Fetch categories when the component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:5070/api/v1/category");
+        setCategories(response.data.data); // Assuming categories are returned in `data.data`
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to load categories.");
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch sub categories when the component mounts
+  useEffect(() => {
+    const fetchSubCategory = async () => {
+      try {
+        const response = await axios.get("http://localhost:5070/api/v1/sub-category");
+        setSubCategories(response.data.data);
+      } catch (error) {
+        console.error("Error fetching sub categories:", error);
+        toast.error("Failed to load sub categories.");
+      }
+    };
+    fetchSubCategory();
+  }, []);
+
 
   const handleAddProduct = (e) => {
     e.preventDefault();
@@ -65,14 +104,22 @@ const AddProduct = () => {
                   <label htmlFor="select-to">Brand *</label>
                   <div className="input-field">
                     <Select
-                      className="select-search"
-                      classNamePrefix="select"
-                      defaultValue={brands[0]}
-                      isClearable={true}
-                      isSearchable={true}
-                      name="brands"
-                      options={brands}
-                      placeholder="Select Brand"
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="brands"
+                        options={brands?.map(brand => ({
+                          label: brand.brandName,
+                          value: brand._id,
+                          ...brand
+                        }))}
+                        placeholder="Select Brands..."
+                        // onChange={handleCategoryChange}
+                        // value={selectedCategory ? {
+                        //   label: selectedCategory.categoryName,
+                        //   value: selectedCategory._id
+                        // } : null} // Ensure this is correctly bound
                     />
                     <button
                       type="button"
@@ -103,14 +150,22 @@ const AddProduct = () => {
                   <label htmlFor="select-to">Category *</label>
                   <div className="input-field">
                     <Select
-                      className="select-search"
-                      classNamePrefix="select"
-                      defaultValue={categories[0]}
-                      isClearable={true}
-                      isSearchable={true}
-                      name="categories"
-                      options={categories}
-                      placeholder="Select Category"
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="categories"
+                        options={categories?.map(category => ({
+                          label: category.categoryName,
+                          value: category._id,
+                          ...category
+                        }))}
+                        placeholder="Select Category..."
+                        // onChange={handleCategoryChange}
+                        // value={selectedCategory ? {
+                        //   label: selectedCategory.categoryName,
+                        //   value: selectedCategory._id
+                        // } : null} // Ensure this is correctly bound
                     />
                     <button
                       type="button"
@@ -144,14 +199,22 @@ const AddProduct = () => {
                   <label htmlFor="select-to">Sub Category *</label>
                   <div className="input-field">
                     <Select
-                      className="select-search"
-                      classNamePrefix="select"
-                      defaultValue={subCategories[0]}
-                      isClearable={true}
-                      isSearchable={true}
-                      name="subCategories"
-                      options={subCategories}
-                      placeholder="Select Sub Category"
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="subCategories"
+                        options={subCategories?.map(subCategory => ({
+                          label: subCategory.subCategoryName,
+                          value: subCategory._id,
+                          ...subCategory
+                        }))}
+                        placeholder="Select Sub Category..."
+                        // onChange={handleCategoryChange}
+                        // value={selectedCategory ? {
+                        //   label: selectedCategory.categoryName,
+                        //   value: selectedCategory._id
+                        // } : null} // Ensure this is correctly bound
                     />
                     <button
                       type="button"

@@ -25,25 +25,29 @@ import axios from "axios";
 const Hero = () => {
   const [banners, setBanners] = useState([]);
 
-  useEffect(async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5070/api/v1/hero-slider"
-      );
-
-      setBanners(response?.data?.data || []);
-    } catch (error) {
-      // Improved error handling
-      if (error.response) {
-        console.error(
-          `Error fetching banners: ${error.response.status} - ${error.response.data}`
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/hero-slider"
         );
-      } else if (error.request) {
-        console.error("No response received from server:", error.request);
-      } else {
-        console.error("Error setting up request:", error.message);
+
+        setBanners(response?.data?.data || []);
+      } catch (error) {
+        // Improved error handling
+        if (error.response) {
+          console.error(
+            `Error fetching banners: ${error.response.status} - ${error.response.data}`
+          );
+        } else if (error.request) {
+          console.error("No response received from server:", error.request);
+        } else {
+          console.error("Error setting up request:", error.message);
+        }
       }
-    }
+    };
+
+    fetchData();
   }, []);
 
   return (

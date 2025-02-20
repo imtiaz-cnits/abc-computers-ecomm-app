@@ -3,6 +3,7 @@ import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
+import "./UserProfile.css";
 
 const UserProfile = () => {
   const router = useRouter();
@@ -543,11 +544,11 @@ const UserProfile = () => {
                       />
                     </div>
                   </div>
-                  <div className="profile_img_box_items">
+                  {/* <div className="profile_img_box_items">
                     <span className="edit_profile_input_text">Full Name</span>
                     <div className="profile_img_box">
                       <div className="img_box">
-                        {/* <img id="profileImage" src="" alt="Profile Image" /> */}
+                        <img id="profileImage" src="" alt="Profile Image" />
                       </div>
                       <div className="profile-wrapper">
                         <label
@@ -563,10 +564,39 @@ const UserProfile = () => {
                         </label>
                       </div>
                     </div>
+                  </div> */}
+                  <div className="edit_profile_input_box">
+                    <span className="edit_profile_input_text">
+                      Update Image
+                    </span>
+                    <div className="upload-profile">
+                      <div className="item">
+                        <div className="img-box">
+                          {/* {selectedBrand?.brandImg && (
+                            <img
+                              src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                              alt="Brand"
+                              width="100"
+                            />
+                          )} */}
+                        </div>
+
+                        <div className="profile-wrapper">
+                          <label className="custom-file-input-wrapper m-0">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                            />
+                          </label>
+                          <p>PNG, JPEG, or GIF (Up to 1 MB)</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-2 mx-auto row">
-                    <button className="submit-btn" type="submit">
-                      Edit Profile
+                  <div className="mt-4 row">
+                    <button className="submit-btn mx-auto" type="submit">
+                      Save
                     </button>
                   </div>
                 </form>

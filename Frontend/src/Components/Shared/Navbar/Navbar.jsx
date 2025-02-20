@@ -310,7 +310,7 @@ const Navbar = () => {
                   </svg>
                   <span>3</span>
                 </a>
-                <Link href={"/user-login"} className="icon">
+                <Link href={"/user-profile"} className="icon">
                   <svg
                     width="32"
                     height="32"

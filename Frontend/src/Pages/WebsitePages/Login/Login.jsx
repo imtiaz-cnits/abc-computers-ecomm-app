@@ -84,8 +84,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    console.log(loginFormData);
-
     try {
       const response = await axios.post(
         "http://localhost:5070/api/v1/Login",
@@ -105,12 +103,17 @@ const Login = () => {
         localStorage.setItem("token", result?.token);
         toast.success("Login successful!");
         // router.push("/"); // Redirect to dashboard
+        e.target.reset()
+        setLoginFormData({
+          email: "",
+          password: "",
+        })
       }
     } catch (error) {
       console.error("❌ Login Error:", error);
       toast.error(
         error?.response?.data?.message ||
-          "Login failed! Please check your credentials."
+        "Login failed! Please check your credentials."
       );
     } finally {
       setLoading(false);

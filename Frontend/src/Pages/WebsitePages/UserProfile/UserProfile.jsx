@@ -29,19 +29,8 @@ const UserProfile = () => {
                             <div className="col-md-4 mt-3">
                                 <div className="sidenav_link">
                                     <div className="sidenav_item">
-                                        <div className="sidenav_heading">
-                                            <div className="sidenav_profile">
-                                                <img src="./assets/icon/profile-img.png" alt="" />
-                                            </div>
-                                            <div className="sidenav_text_item">
-                                                <div className="sidenav_text">
-                                                    <h4>Abraham</h4>
-                                                    <p>ID: 415248</p>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <ul>
-                                            <li className="sidelist_item">
+                                            {/* <li className="sidelist_item">
                                                 <a href="./user-dashboard.html" className="sidelist_logo">
                                                     <svg
                                                         className="svg_rect_icon"
@@ -81,7 +70,7 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Dashboard</span>
                                                 </a>
-                                            </li>
+                                            </li> */}
                                             <li className="sidelist_item">
                                                 <a
                                                     href="./user-dashboard-edit-profile.html"
@@ -181,7 +170,7 @@ const UserProfile = () => {
                                                     <span className="sidelist_text">My Orders</span>
                                                 </a>
                                             </li>
-                                            <li className="sidelist_item">
+                                            {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_5"
@@ -224,8 +213,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Chat List</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                                            {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_6"
@@ -286,8 +275,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Refund Request</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                                            {/* <li className="sidelist_item">
                                                 <a
                                                     href="./user-dashboard-wallet-history.html"
                                                     className="sidelist_logo"
@@ -311,8 +300,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Wallet history</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                                            {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_8"
@@ -367,8 +356,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Shipping Address</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                                            {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_9"
@@ -417,7 +406,7 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Support Ticket</span>
                                                 </a>
-                                            </li>
+                                            </li> */}
                                             <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
@@ -445,6 +434,17 @@ const UserProfile = () => {
                                 </div>
                             </div>
                             <div className="col-md-8 mt-3">
+                                <div className="sidenav_heading">
+                                    <div className="sidenav_profile">
+                                        <img src="./assets/icon/profile-img.png" alt="" />
+                                    </div>
+                                    <div className="sidenav_text_item">
+                                        <div className="sidenav_text">
+                                            <h4>Abraham</h4>
+                                            <p>+880 1xxx-xxxxxx</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="edit_profile_heading">Edit Profile</div>
                                 <form action="#" id="edit_profile_all_item">
                                     <div className="edit_profile_input_box">

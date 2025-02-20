@@ -152,7 +152,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0 20px;
+  padding: 25px 0 10px;
   gap: 30px;
 }
 
@@ -475,7 +475,7 @@ body {
     position: relative;
     padding: 10px 0;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   /* Dropdown icon */
@@ -512,7 +512,7 @@ body {
 
   #navbar .menu li .submenu li {
     margin-right: 0;
-    font-size: 14px;
+    font-size: 16px;
     /* position: relative; */
   }
 

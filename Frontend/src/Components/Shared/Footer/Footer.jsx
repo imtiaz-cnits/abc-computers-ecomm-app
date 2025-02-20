@@ -4,6 +4,7 @@ import footerLogo from "@/assets/img/footer-logo.png";
 import { FaFacebookF, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
+import paymentImg from "@/assets/img/payment.png"
 
 const Footer = () => {
   const path = usePathname();
@@ -27,30 +28,26 @@ const Footer = () => {
                   by the readable content of a page when looking at its layout.
                 </p>
               </div>
+              <img src={paymentImg?.src} />
             </div>
             <div className="footer_wrapper_item col-lg-2 col-md-4">
               <div className="footer_content">
                 <div className="footer_content_heading">
-                  <h2>Extras</h2>
+                  <h2>Company</h2>
                 </div>
                 <div className="footer_content_menu mt-2">
                   <ul>
                     <li>
-                      <a href="#">Brands</a>
+                      <a href="#">About Us</a>
                     </li>
                     <li>
-                      <a href="#">Gift Certificates</a>
+                      <a href="#">Contact Us</a>
                     </li>
                     <li>
-                      <a href="#">Affiliate</a>
+                      <a href="#">Terms and Conditions</a>
                     </li>
                     <li>
-                      <a href="#">Specials</a>
-                    </li>
-                    <li>
-                      <a href="https://maps.app.goo.gl/gCYXAsismttavW4t9">
-                        Site Map
-                      </a>
+                      <a href="#">Refund Policy</a>
                     </li>
                   </ul>
                 </div>
@@ -85,7 +82,7 @@ const Footer = () => {
             <div className="footer_wrapper_item col-lg-4 col-md-4">
               <div className="footer_content">
                 <div className="footer_content_heading">
-                  <h2>Store Information</h2>
+                  <h2>Contact Information</h2>
                 </div>
                 <div className="footer_content_address mt-3">
                   <ul>

@@ -90,7 +90,11 @@ const AuthLogin = () => {
       if (result.status === "success" && result.token) {
         localStorage.setItem("token", result.token);
         toast.success("Login successful!");
-        router.push("/dashboard"); // Redirect to dashboard
+        if (localStorage.getItem("token")) {
+          router.push("/dashboard"); // Redirect to dashboard
+        } else {
+          toast.error("Login failed! Please check your credentials.");
+        }
       }
     } catch (error) {
       console.error("❌ Login Error:", error);

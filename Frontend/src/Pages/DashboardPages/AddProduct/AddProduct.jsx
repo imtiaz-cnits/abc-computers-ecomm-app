@@ -12,6 +12,7 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { Brands } from "@/Pages/DashboardPages/Brands/Brands";
+import { FaXmark } from "react-icons/fa6";
 
 import("froala-editor/js/plugins.pkgd.min.js");
 
@@ -497,7 +498,7 @@ const AddProduct = () => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD NEW BRAND</h2>
             </div>
@@ -589,7 +590,7 @@ const AddProduct = () => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD NEW CATEGORY</h2>
             </div>
@@ -671,7 +672,7 @@ const AddProduct = () => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD SUB CATEGORY</h2>
             </div>

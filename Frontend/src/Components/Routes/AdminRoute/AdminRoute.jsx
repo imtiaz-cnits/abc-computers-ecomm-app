@@ -12,6 +12,7 @@ const AdminRoute = ({ children }) => {
 
   useEffect(() => {
     setIsLoading(true);
+    setIsAdmin(false);
 
     const fetchAdmin = async () => {
       try {
@@ -29,12 +30,17 @@ const AdminRoute = ({ children }) => {
         if (result?.status === "success") {
           setIsAdmin(true);
           setIsLoading(false);
-          toast.success(result?.message);
+          if (pathname === "/dashboard") {
+            toast.success(result?.message);
+          }
           return;
         } else {
+          console.log("hehe");
           setIsAdmin(false);
           setIsLoading(false);
-          toast.error(result?.message);
+          if (pathname !== "/dashboard") {
+            toast.error(result?.message);
+          }
           return;
         }
       } catch (error) {
@@ -45,7 +51,7 @@ const AdminRoute = ({ children }) => {
     };
 
     fetchAdmin();
-  }, []);
+  }, [pathname]);
 
   if (isLoading) {
     return <></>;

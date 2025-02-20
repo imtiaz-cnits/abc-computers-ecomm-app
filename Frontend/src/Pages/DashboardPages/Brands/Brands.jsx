@@ -5,12 +5,13 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
 import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
+import { FaXmark } from "react-icons/fa6";
 
 const Brands = () => {
   const tableRef = useRef(null);
   const fileInputRef = useRef(null);
   const addModalCloseBtn = useRef(null);
-  const updateModalCloseBtn = useRef(null)
+  const updateModalCloseBtn = useRef(null);
 
   const [brandName, setBrandName] = useState("");
   const [status, setStatus] = useState("");
@@ -449,7 +450,7 @@ const Brands = () => {
                   aria-label="Close"
                   ref={addModalCloseBtn}
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">ADD NEW BRAND</h2>
               </div>
@@ -542,7 +543,7 @@ const Brands = () => {
                   aria-label="Close"
                   ref={updateModalCloseBtn}
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">UPDATE BRAND</h2>
               </div>

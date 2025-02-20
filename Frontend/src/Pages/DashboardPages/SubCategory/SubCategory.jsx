@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Select from "react-select";
+import { FaXmark } from "react-icons/fa6";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faSort } from "@fortawesome/free-solid-svg-icons";
 
@@ -519,7 +520,7 @@ const SubCategory = () => {
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">ADD NEW SUB CATEGORY</h2>
               </div>
@@ -606,7 +607,7 @@ const SubCategory = () => {
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">UPDATE SUB CATEGORY</h2>
               </div>

@@ -51,6 +51,15 @@
   display: block;
   text-decoration: capitalize;
   color: var(--primary-color);
+  width: 100%;
+  position: relative;
+}
+
+.sign-in-signup-container form label .hide-icon {
+  width: 25px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .sign-in-signup-container form button {

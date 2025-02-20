@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import passwordEye from "@/assets/icons/password-eye-icon.svg";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -84,8 +85,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    console.log(loginFormData);
-
     try {
       const response = await axios.post(
         "http://localhost:5070/api/v1/Login",
@@ -105,6 +104,11 @@ const Login = () => {
         localStorage.setItem("token", result?.token);
         toast.success("Login successful!");
         // router.push("/"); // Redirect to dashboard
+        e.target.reset();
+        setLoginFormData({
+          email: "",
+          password: "",
+        });
       }
     } catch (error) {
       console.error("❌ Login Error:", error);
@@ -146,15 +150,25 @@ const Login = () => {
 
               <div className="input-row">
                 <div className="input-field">
-                  <label htmlFor="loginPassword">Password</label>
-                  <input
-                    type="password"
-                    id="loginPassword"
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={handleLoginChange}
-                    required
-                  />
+                  <label htmlFor="loginPassword">
+                    Password
+                    <input
+                      type={showPassword ? "text" : "password"} // Toggle password visibility
+                      id="loginPassword"
+                      name="password"
+                      placeholder="Enter password"
+                      onChange={handleLoginChange}
+                      required
+                      className="mt-1"
+                    />
+                    <a onClick={() => setShowPassword(!showPassword)}>
+                      <img
+                        className="hide-icon"
+                        src={passwordEye.src}
+                        alt="Toggle Password"
+                      />
+                    </a>
+                  </label>
                 </div>
               </div>
 
@@ -229,15 +243,25 @@ const Login = () => {
 
               <div className="input-row">
                 <div className="input-field">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    required
-                  />
+                  <label htmlFor="password">
+                    Password
+                    <input
+                      type={showPassword ? "text" : "password"} // Toggle password visibility
+                      id="password"
+                      name="password"
+                      placeholder="Enter password"
+                      onChange={handleChange}
+                      required
+                      className="mt-1"
+                    />
+                    <a onClick={() => setShowPassword(!showPassword)}>
+                      <img
+                        className="hide-icon"
+                        src={passwordEye.src}
+                        alt="Toggle Password"
+                      />
+                    </a>
+                  </label>
                 </div>
               </div>
 

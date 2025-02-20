@@ -6,6 +6,7 @@ import DashboardPagination from "@/Components/Dashboard/DashboardPagination/Dash
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { FaXmark } from "react-icons/fa6";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faSort } from "@fortawesome/free-solid-svg-icons";
 
@@ -390,7 +391,7 @@ const Category = () => {
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">ADD NEW CATEGORY</h2>
               </div>
@@ -482,7 +483,7 @@ const Category = () => {
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
-                  <i className="fa-solid fa-xmark"></i>
+                  <FaXmark />
                 </button>
                 <h2 className="heading">UPDATE CATEGORY</h2>
               </div>

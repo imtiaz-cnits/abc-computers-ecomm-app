@@ -36,7 +36,7 @@ const HeroSlider = () => {
         // Improved error handling
         if (error.response) {
           console.error(
-            `Error fetching brands: ${error.response.status} - ${error.response.data}`
+            `Error fetching slides: ${error.response.status} - ${error.response.data}`
           );
         } else if (error.request) {
           console.error("No response received from server:", error.request);
@@ -63,7 +63,7 @@ const HeroSlider = () => {
 
     img.onload = () => {
       const requiredWidth = 1920;
-      const requiredHeight = 500;
+      const requiredHeight = 600;
 
       if (img.width === requiredWidth && img.height === requiredHeight) {
         setSlideImgFile(file);

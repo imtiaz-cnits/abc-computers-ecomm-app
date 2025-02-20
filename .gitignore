@@ -11,6 +11,7 @@ node_modules
 dist
 .next
 out
+.idea
 
 # Ignore logs
 npm-debug.log

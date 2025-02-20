@@ -134,7 +134,7 @@ body {
 
 /* Hero Start */
 #hero {
-  background:  #f11f3f1e;
+  background: #f11f3f1e;
 }
 
 .hero-wrapper {
@@ -248,9 +248,8 @@ body {
   border: 1px solid var(--border-color2);
   border: none;
   border-radius: 6px;
-  width: 100%;
   height: 80px;
-  background:#f11f3f1e;
+  background: #f11f3f1e;
 }
 .sidenav_profile {
   padding: 10px 20px;
@@ -352,6 +351,7 @@ body {
 .sidelist_logo {
   padding: 10px 0px 10px 0px;
   width: 100%;
+  cursor: pointer;
 }
 
 .sidelist_logo svg {
@@ -500,7 +500,7 @@ body {
 
 /* edit profile start */
 .edit_profile_heading {
-  padding: 18px 0px;
+  padding: 40px 0px 18px;
   font-size: 30px;
   font-weight: 500;
   position: relative;
@@ -718,5 +718,20 @@ body {
   margin-top: 20px;
 }
 /* edit profile end */
+
+button.submit-btn {
+  padding: 5px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--white);
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  text-transform: capitalize;
+  transition: 0.3s all ease;
+}
+
+button.submit-btn:hover {
+  background-color: var(--primary-color);
+}
 
 /* user Dashboard end */

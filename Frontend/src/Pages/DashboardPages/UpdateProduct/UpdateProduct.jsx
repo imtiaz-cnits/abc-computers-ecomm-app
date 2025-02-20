@@ -7,6 +7,7 @@ import Select from "react-select";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+import { FaXmark } from "react-icons/fa6";
 
 import("froala-editor/js/plugins.pkgd.min.js");
 
@@ -330,7 +331,7 @@ const UpdateProduct = ({ id }) => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD NEW BRAND</h2>
             </div>
@@ -411,7 +412,7 @@ const UpdateProduct = ({ id }) => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD NEW CATEGORY</h2>
             </div>
@@ -493,7 +494,7 @@ const UpdateProduct = ({ id }) => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
-                <i className="fa-solid fa-xmark"></i>
+                <FaXmark />
               </button>
               <h2 className="heading">ADD SUB CATEGORY</h2>
             </div>

@@ -139,7 +139,6 @@ body {
 
 .hero-slider-container {
   width: 100%;
-  height: 100vh;
   overflow: hidden;
 }
 
@@ -148,6 +147,10 @@ body {
   background-size: cover !important;
   object-fit: cover !important;
   background-position: center;
+}
+
+#hero .hero_slide img {
+  width: 100%;
 }
 
 /* Slide hero_content1 Start */
@@ -818,7 +821,7 @@ body {
 .swiper-button-next,
 .swiper-button-prev {
   position: absolute;
-  top: 93% !important;
+  top: 90% !important;
 }
 
 #hero .swiper-button-next:after,
@@ -960,7 +963,6 @@ body {
 
 @media screen and (max-width: 992px) {
   .hero-slider-container {
-    height: 80vh;
   }
 
   /* Slide hero_content1 */
@@ -1233,7 +1235,6 @@ body {
 }
 
 /* Hero End */
-
 
 /* Categories Start */
 

@@ -1,47 +1,77 @@
-import Breadcrumb from '@/Components/Shared/Breadcrumb/Breadcrumb';
-import React from 'react';
+"use client";
+import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const UserProfile = () => {
-    return (
-        <>
-            {/* <!-- Hero Start --> */}
-            <section id="hero">
-                <div className="container">
-                    <div className="hero-wrapper">
-                        <div className="hero-shape hero-shape-1">
-                            <img src="./assets/icon/hero2.svg" alt="" />
-                        </div>
-                        <div className="hero-shape hero-shape-2">
-                            <img src="./assets/icon/hero1.svg" alt="" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <Breadcrumb pageTitle={"User Profile"} />
+  const router = useRouter();
 
-            {/* <!-- Hero End --> */}
+  const handleLogout = async () => {
+    try {
+      // Make a POST request to the logout endpoint
+      const response = await axios.post(
+        "http://localhost:5070/api/v1/Logout",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Equivalent to fetch's credentials: "include"
+        }
+      );
 
-            {/* <!-- user Dashboard start --> */}
-            <section id="user_dashbord">
-                <div className="user_dashbord_items">
-                    <div className="container">
-                        <div className="row mt-5">
-                            <div className="col-md-4 mt-3">
-                                <div className="sidenav_link">
-                                    <div className="sidenav_item">
-                                        <div className="sidenav_heading">
-                                            <div className="sidenav_profile">
-                                                <img src="./assets/icon/profile-img.png" alt="" />
-                                            </div>
-                                            <div className="sidenav_text_item">
-                                                <div className="sidenav_text">
-                                                    <h4>Abraham</h4>
-                                                    <p>ID: 415248</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <ul>
-                                            <li className="sidelist_item">
+      console.log(response);
+
+      // Check if the request was successful
+      if (response?.data?.status === "success") {
+        // Clear the client-side authentication token (if it's stored in localStorage)
+        localStorage.removeItem("token"); // Clear any stored token from localStorage
+
+        // Optionally, also clear sessionStorage if used
+        sessionStorage.removeItem("token"); // Clear session storage if token is stored there
+
+        // Redirect the user to the login page after successful logout
+        router.push("/"); // Redirect to login
+      } else {
+        // Handle errors if the response is not OK (e.g., display a message to the user)
+        console.error("Logout failed:", response?.data?.message);
+      }
+    } catch (error) {
+      // Handle any errors that occur during the fetch request
+      console.error("Error during logout:", error);
+    }
+  };
+
+  return (
+    <>
+      {/* <!-- Hero Start --> */}
+      <section id="hero">
+        <div className="container">
+          <div className="hero-wrapper">
+            <div className="hero-shape hero-shape-1">
+              <img src="./assets/icon/hero2.svg" alt="" />
+            </div>
+            <div className="hero-shape hero-shape-2">
+              <img src="./assets/icon/hero1.svg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <Breadcrumb pageTitle={"User Profile"} />
+
+      {/* <!-- Hero End --> */}
+
+      {/* <!-- user Dashboard start --> */}
+      <section id="user_dashbord">
+        <div className="user_dashbord_items">
+          <div className="container">
+            <div className="row mt-5">
+              <div className="col-md-4 mt-3">
+                <div className="sidenav_link">
+                  <div className="sidenav_item">
+                    <ul>
+                      {/* <li className="sidelist_item">
                                                 <a href="./user-dashboard.html" className="sidelist_logo">
                                                     <svg
                                                         className="svg_rect_icon"
@@ -81,107 +111,107 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Dashboard</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
-                                                <a
-                                                    href="./user-dashboard-edit-profile.html"
-                                                    className="sidelist_logo"
-                                                >
-                                                    <svg
-                                                        className="svg_path_icon"
-                                                        width="40"
-                                                        height="40"
-                                                        viewBox="0 0 40 40"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M39 38H1C0.447715 38 0 38.4477 0 39C0 39.5523 0.447714 40 0.999999 40H39C39.5523 40 40 39.5523 40 39C40 38.4477 39.5523 38 39 38Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                        <path
-                                                            d="M35.9992 10.7692C37.23 9.53846 37.23 7.69231 35.9992 6.46154L30.4608 0.923077C29.23 -0.307692 27.3839 -0.307692 26.1531 0.923077L3.07617 24V33.8462H12.9223L35.9992 10.7692ZM28.5391 2.1552L34.8839 8.5L29.6916 13.6923L23.3468 7.34751L28.5391 2.1552ZM5.1531 31.7692L5.80829 24.886L22.0391 8.6552L28.3839 15L12.1531 31.2308L5.1531 31.7692Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                    </svg>
-                                                    <span className="sidelist_text">Edit Profile</span>
-                                                </a>
-                                            </li>
-                                            <li className="sidelist_item">
-                                                <a
-                                                    href="./user-dashboard-change-password.html"
-                                                    className="sidelist_logo"
-                                                >
-                                                    <svg
-                                                        className="svg_path_icon_3"
-                                                        width="42"
-                                                        height="42"
-                                                        viewBox="0 0 42 42"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M18.4325 25.0992L21.8333 28.5H23.5V30.1667L25.1667 31.8333H26.8333V33.5L29.3333 36H31.8333V38.5L34.3333 41H39.3333L41 39.3333V34.3333L25.2 18.5333"
-                                                            stroke="#7C8992"
-                                                            strokeWidth="2"
-                                                            strokeMiterlimit="10"
-                                                            strokeLinecap="round"
-                                                        />
-                                                        <path
-                                                            d="M1 13.5C1 20.4008 6.59917 26 13.5 26C20.4008 26 26 20.4008 26 13.5C26 6.59833 20.4008 1 13.5 1C6.59917 1 1 6.59833 1 13.5Z"
-                                                            stroke="#7C8992"
-                                                            strokeWidth="2"
-                                                            strokeMiterlimit="10"
-                                                            strokeLinecap="round"
-                                                        />
-                                                        <path
-                                                            d="M7.60563 19.3925L19.3906 7.60748C16.1373 4.35415 10.859 4.35415 7.60479 7.60748C4.35063 10.8608 4.35146 16.1391 7.60563 19.3925Z"
-                                                            stroke="#7C8992"
-                                                            strokeWidth="2"
-                                                            strokeMiterlimit="10"
-                                                            strokeLinecap="round"
-                                                        />
-                                                        <path
-                                                            d="M40.4902 38.825L26.5969 24.9316"
-                                                            stroke="#7C8992"
-                                                            strokeWidth="2"
-                                                            strokeMiterlimit="10"
-                                                            strokeLinecap="round"
-                                                        />
-                                                    </svg>
-                                                    <span className="sidelist_text">Change Password</span>
-                                                </a>
-                                            </li>
-                                            <li className="sidelist_item">
-                                                <a
-                                                    href="./user-dashboard-my-orders.html"
-                                                    className="sidelist_logo"
-                                                >
-                                                    <svg
-                                                        className="svg_path_icon_4"
-                                                        width="40"
-                                                        height="40"
-                                                        viewBox="0 0 40 40"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M39.9742 11.8783C39.9742 11.8666 39.9742 11.8549 39.9613 11.8549C39.9613 11.8315 39.9484 11.8198 39.9484 11.7964C39.9484 11.7847 39.9355 11.7613 39.9355 11.7496C39.9355 11.7379 39.9226 11.7262 39.9226 11.7145C39.8968 11.6559 39.871 11.6091 39.8323 11.5623L31.4479 0.386191C31.2673 0.140433 30.9707 0 30.6482 0H22.4444H17.5556H9.35182C9.02935 0 8.73267 0.140433 8.55208 0.386191L0.167688 11.5623C0.128991 11.6091 0.103192 11.6676 0.0773942 11.7145C0.0773942 11.7262 0.0644953 11.7379 0.0644953 11.7496C0.0515963 11.7613 0.0515965 11.7847 0.0515965 11.7964C0.0515965 11.8198 0.0386976 11.8315 0.0386976 11.8549C0.0386976 11.8666 0.0386968 11.8783 0.0257977 11.8783C0.0128987 11.9368 0 11.9953 0 12.0538V39.1223C0 39.6021 0.438568 40 0.96743 40H39.0326C39.5614 40 40 39.6021 40 39.1223V12.0538C39.9871 11.9953 39.9871 11.9368 39.9742 11.8783ZM37.188 11.1761H24.6888L23.515 1.75541H30.1193L37.188 11.1761ZM17.1171 12.9315H22.8571V19.3681L20.5482 17.8935C20.3805 17.7882 20.187 17.7297 19.9936 17.7297C19.8001 17.7297 19.6066 17.7882 19.4389 17.8935L17.13 19.3681V12.9315H17.1171ZM21.5672 1.75541L22.7411 11.1761H17.2332L18.407 1.75541H21.5672ZM9.86778 1.75541H16.4721L15.2983 11.1761H2.7991L9.86778 1.75541ZM38.0522 38.2446H1.93486V12.9315H15.1951V21.0532C15.1951 21.3809 15.4015 21.6852 15.7111 21.8373C16.0335 21.9895 16.4205 21.9661 16.7172 21.7788L19.9936 19.684L23.2699 21.7788C23.4376 21.8841 23.6311 21.9427 23.8246 21.9427C23.9794 21.9427 24.1342 21.9075 24.276 21.849C24.5985 21.6969 24.792 21.3926 24.792 21.065V12.9432H38.0522V38.2446Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                        <path
-                                                            d="M12.8981 28.7068H6.03579C5.50693 28.7068 5.06836 29.1047 5.06836 29.5846C5.06836 30.0644 5.50693 30.4623 6.03579 30.4623H12.8981C13.427 30.4623 13.8655 30.0644 13.8655 29.5846C13.8655 29.1047 13.427 28.7068 12.8981 28.7068Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                        <path
-                                                            d="M9.46694 32.3932H6.03579C5.50693 32.3932 5.06836 32.7911 5.06836 33.2709C5.06836 33.7507 5.50693 34.1486 6.03579 34.1486H9.46694C9.9958 34.1486 10.4344 33.7507 10.4344 33.2709C10.4344 32.7911 9.9958 32.3932 9.46694 32.3932Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                    </svg>
-                                                    <span className="sidelist_text">My Orders</span>
-                                                </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                      <li className="sidelist_item">
+                        <a
+                          href="./user-dashboard-edit-profile.html"
+                          className="sidelist_logo"
+                        >
+                          <svg
+                            className="svg_path_icon"
+                            width="40"
+                            height="40"
+                            viewBox="0 0 40 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M39 38H1C0.447715 38 0 38.4477 0 39C0 39.5523 0.447714 40 0.999999 40H39C39.5523 40 40 39.5523 40 39C40 38.4477 39.5523 38 39 38Z"
+                              fill="#7C8992"
+                            />
+                            <path
+                              d="M35.9992 10.7692C37.23 9.53846 37.23 7.69231 35.9992 6.46154L30.4608 0.923077C29.23 -0.307692 27.3839 -0.307692 26.1531 0.923077L3.07617 24V33.8462H12.9223L35.9992 10.7692ZM28.5391 2.1552L34.8839 8.5L29.6916 13.6923L23.3468 7.34751L28.5391 2.1552ZM5.1531 31.7692L5.80829 24.886L22.0391 8.6552L28.3839 15L12.1531 31.2308L5.1531 31.7692Z"
+                              fill="#7C8992"
+                            />
+                          </svg>
+                          <span className="sidelist_text">Edit Profile</span>
+                        </a>
+                      </li>
+                      <li className="sidelist_item">
+                        <a
+                          href="./user-dashboard-change-password.html"
+                          className="sidelist_logo"
+                        >
+                          <svg
+                            className="svg_path_icon_3"
+                            width="42"
+                            height="42"
+                            viewBox="0 0 42 42"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M18.4325 25.0992L21.8333 28.5H23.5V30.1667L25.1667 31.8333H26.8333V33.5L29.3333 36H31.8333V38.5L34.3333 41H39.3333L41 39.3333V34.3333L25.2 18.5333"
+                              stroke="#7C8992"
+                              strokeWidth="2"
+                              strokeMiterlimit="10"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M1 13.5C1 20.4008 6.59917 26 13.5 26C20.4008 26 26 20.4008 26 13.5C26 6.59833 20.4008 1 13.5 1C6.59917 1 1 6.59833 1 13.5Z"
+                              stroke="#7C8992"
+                              strokeWidth="2"
+                              strokeMiterlimit="10"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M7.60563 19.3925L19.3906 7.60748C16.1373 4.35415 10.859 4.35415 7.60479 7.60748C4.35063 10.8608 4.35146 16.1391 7.60563 19.3925Z"
+                              stroke="#7C8992"
+                              strokeWidth="2"
+                              strokeMiterlimit="10"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M40.4902 38.825L26.5969 24.9316"
+                              stroke="#7C8992"
+                              strokeWidth="2"
+                              strokeMiterlimit="10"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <span className="sidelist_text">Change Password</span>
+                        </a>
+                      </li>
+                      <li className="sidelist_item">
+                        <a
+                          href="./user-dashboard-my-orders.html"
+                          className="sidelist_logo"
+                        >
+                          <svg
+                            className="svg_path_icon_4"
+                            width="40"
+                            height="40"
+                            viewBox="0 0 40 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M39.9742 11.8783C39.9742 11.8666 39.9742 11.8549 39.9613 11.8549C39.9613 11.8315 39.9484 11.8198 39.9484 11.7964C39.9484 11.7847 39.9355 11.7613 39.9355 11.7496C39.9355 11.7379 39.9226 11.7262 39.9226 11.7145C39.8968 11.6559 39.871 11.6091 39.8323 11.5623L31.4479 0.386191C31.2673 0.140433 30.9707 0 30.6482 0H22.4444H17.5556H9.35182C9.02935 0 8.73267 0.140433 8.55208 0.386191L0.167688 11.5623C0.128991 11.6091 0.103192 11.6676 0.0773942 11.7145C0.0773942 11.7262 0.0644953 11.7379 0.0644953 11.7496C0.0515963 11.7613 0.0515965 11.7847 0.0515965 11.7964C0.0515965 11.8198 0.0386976 11.8315 0.0386976 11.8549C0.0386976 11.8666 0.0386968 11.8783 0.0257977 11.8783C0.0128987 11.9368 0 11.9953 0 12.0538V39.1223C0 39.6021 0.438568 40 0.96743 40H39.0326C39.5614 40 40 39.6021 40 39.1223V12.0538C39.9871 11.9953 39.9871 11.9368 39.9742 11.8783ZM37.188 11.1761H24.6888L23.515 1.75541H30.1193L37.188 11.1761ZM17.1171 12.9315H22.8571V19.3681L20.5482 17.8935C20.3805 17.7882 20.187 17.7297 19.9936 17.7297C19.8001 17.7297 19.6066 17.7882 19.4389 17.8935L17.13 19.3681V12.9315H17.1171ZM21.5672 1.75541L22.7411 11.1761H17.2332L18.407 1.75541H21.5672ZM9.86778 1.75541H16.4721L15.2983 11.1761H2.7991L9.86778 1.75541ZM38.0522 38.2446H1.93486V12.9315H15.1951V21.0532C15.1951 21.3809 15.4015 21.6852 15.7111 21.8373C16.0335 21.9895 16.4205 21.9661 16.7172 21.7788L19.9936 19.684L23.2699 21.7788C23.4376 21.8841 23.6311 21.9427 23.8246 21.9427C23.9794 21.9427 24.1342 21.9075 24.276 21.849C24.5985 21.6969 24.792 21.3926 24.792 21.065V12.9432H38.0522V38.2446Z"
+                              fill="#7C8992"
+                            />
+                            <path
+                              d="M12.8981 28.7068H6.03579C5.50693 28.7068 5.06836 29.1047 5.06836 29.5846C5.06836 30.0644 5.50693 30.4623 6.03579 30.4623H12.8981C13.427 30.4623 13.8655 30.0644 13.8655 29.5846C13.8655 29.1047 13.427 28.7068 12.8981 28.7068Z"
+                              fill="#7C8992"
+                            />
+                            <path
+                              d="M9.46694 32.3932H6.03579C5.50693 32.3932 5.06836 32.7911 5.06836 33.2709C5.06836 33.7507 5.50693 34.1486 6.03579 34.1486H9.46694C9.9958 34.1486 10.4344 33.7507 10.4344 33.2709C10.4344 32.7911 9.9958 32.3932 9.46694 32.3932Z"
+                              fill="#7C8992"
+                            />
+                          </svg>
+                          <span className="sidelist_text">My Orders</span>
+                        </a>
+                      </li>
+                      {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_5"
@@ -224,8 +254,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Chat List</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                      {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_6"
@@ -286,8 +316,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Refund Request</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                      {/* <li className="sidelist_item">
                                                 <a
                                                     href="./user-dashboard-wallet-history.html"
                                                     className="sidelist_logo"
@@ -311,8 +341,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Wallet history</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                      {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_8"
@@ -367,8 +397,8 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Shipping Address</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
+                                            </li> */}
+                      {/* <li className="sidelist_item">
                                                 <a href="#" className="sidelist_logo">
                                                     <svg
                                                         className="svg_path_icon_9"
@@ -417,114 +447,137 @@ const UserProfile = () => {
                                                     </svg>
                                                     <span className="sidelist_text">Support Ticket</span>
                                                 </a>
-                                            </li>
-                                            <li className="sidelist_item">
-                                                <a href="#" className="sidelist_logo">
-                                                    <svg
-                                                        className="svg_path_icon_10"
-                                                        width="40"
-                                                        height="40"
-                                                        viewBox="0 0 40 40"
-                                                        fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            d="M36.0038 31.995C33.4836 35.3574 29.9683 37.8407 25.9569 39.0923C21.9456 40.3438 17.6419 40.3002 13.6568 38.9674C9.67162 37.6347 6.2075 35.0806 3.75607 31.6677C1.30464 28.2548 -0.00954286 24.1564 5.21388e-05 19.9543C0.00964714 15.7523 1.34253 11.66 3.80952 8.25826C6.27651 4.85657 9.75226 2.31833 13.7434 1.0038C17.7346 -0.310727 22.0385 -0.334753 26.0441 0.935132C30.0497 2.20502 33.5536 4.7043 36.0584 8.07823L33.9617 9.63483C31.7839 6.70142 28.7375 4.52847 25.2549 3.42439C21.7723 2.32031 18.0304 2.3412 14.5604 3.48409C11.0903 4.62699 8.06836 6.83382 5.92348 9.79136C3.7786 12.7489 2.61974 16.3069 2.6114 19.9603C2.60306 23.6137 3.74565 27.177 5.877 30.1443C8.00835 33.1116 11.0202 35.3322 14.485 36.4909C17.9498 37.6496 21.6915 37.6876 25.1792 36.5994C28.6668 35.5113 31.723 33.3523 33.9142 30.4288L36.0038 31.995Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                        <path
-                                                            d="M39.2224 19.0643L31.2489 11.1569C31.125 11.034 30.9779 10.9365 30.816 10.87C30.6541 10.8035 30.4806 10.7693 30.3054 10.7693C30.1301 10.7693 29.9566 10.8035 29.7947 10.87C29.6328 10.9365 29.4857 11.034 29.3618 11.1569C29.2379 11.2798 29.1396 11.4256 29.0726 11.5862C29.0055 11.7467 28.971 11.9188 28.971 12.0926C28.971 12.2664 29.0055 12.4384 29.0726 12.599C29.1396 12.7595 29.2379 12.9054 29.3618 13.0283L35.0762 18.669H16.7137C16.3612 18.669 16.0232 18.8078 15.774 19.055C15.5248 19.3021 15.3848 19.6373 15.3848 19.9869C15.3848 20.3364 15.5248 20.6716 15.774 20.9188C16.0232 21.1659 16.3612 21.3048 16.7137 21.3048H35.0762L29.3618 26.9718C29.2379 27.0947 29.1396 27.2406 29.0726 27.4011C29.0055 27.5617 28.971 27.7337 28.971 27.9075C28.971 28.0813 29.0055 28.2534 29.0726 28.4139C29.1396 28.5745 29.2379 28.7204 29.3618 28.8432C29.4857 28.9661 29.6328 29.0636 29.7947 29.1301C29.9566 29.1966 30.1301 29.2308 30.3054 29.2308C30.4806 29.2308 30.6541 29.1966 30.816 29.1301C30.9779 29.0636 31.125 28.9661 31.2489 28.8432L39.2224 20.9358C39.347 20.8133 39.4459 20.6675 39.5133 20.5069C39.5808 20.3463 39.6155 20.174 39.6155 20.0001C39.6155 19.8261 39.5808 19.6538 39.5133 19.4932C39.4459 19.3326 39.347 19.1869 39.2224 19.0643Z"
-                                                            fill="#7C8992"
-                                                        />
-                                                    </svg>
-                                                    <span className="sidelist_text">Log Out</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-8 mt-3">
-                                <div className="edit_profile_heading">Edit Profile</div>
-                                <form action="#" id="edit_profile_all_item">
-                                    <div className="edit_profile_input_box">
-                                        <span className="edit_profile_input_text">Name</span>
-                                        <input type="text" placeholder="enter your name" required />
-                                    </div>
-                                    <div className="edit_profile_input_box">
-                                        <span className="edit_profile_input_text">Email Address</span>
-                                        <input
-                                            type="text"
-                                            placeholder="enter email address"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="edit_profile_details">
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">Mobile Number</span>
-                                            <input type="text" placeholder="enter number" required />
-                                        </div>
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">Country</span>
-                                            <input type="text" placeholder="enter country" required />
-                                        </div>
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">State</span>
-                                            <input type="email" placeholder="enter state" required />
-                                        </div>
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">City</span>
-                                            <input
-                                                type="tel"
-                                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                                placeholder="enter country"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">Zip Code</span>
-                                            <input
-                                                type="password"
-                                                placeholder="enter zip code"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="edit_profile_input_box">
-                                            <span className="edit_profile_input_text">Address</span>
-                                            <input
-                                                type="password"
-                                                placeholder="enter your address"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="profile_img_box_items">
-                                        <span className="edit_profile_input_text">Full Name</span>
-                                        <div className="profile_img_box">
-                                            <div className="img_box">
-                                                {/* <img id="profileImage" src="" alt="Profile Image" /> */}
-                                            </div>
-                                            <div className="profile-wrapper">
-                                                <label className="custom-file-input-wrapper" htmlFor="fileInput">
-                                                    <input
-                                                        type="file"
-                                                        id="fileInput"
-                                                        className="custom-file-input"
-                                                        aria-label="Upload Photo"
-                                                    />
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                            </li> */}
+                      <li className="sidelist_item" onClick={handleLogout}>
+                        <a className="sidelist_logo">
+                          <svg
+                            className="svg_path_icon_10"
+                            width="40"
+                            height="40"
+                            viewBox="0 0 40 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M36.0038 31.995C33.4836 35.3574 29.9683 37.8407 25.9569 39.0923C21.9456 40.3438 17.6419 40.3002 13.6568 38.9674C9.67162 37.6347 6.2075 35.0806 3.75607 31.6677C1.30464 28.2548 -0.00954286 24.1564 5.21388e-05 19.9543C0.00964714 15.7523 1.34253 11.66 3.80952 8.25826C6.27651 4.85657 9.75226 2.31833 13.7434 1.0038C17.7346 -0.310727 22.0385 -0.334753 26.0441 0.935132C30.0497 2.20502 33.5536 4.7043 36.0584 8.07823L33.9617 9.63483C31.7839 6.70142 28.7375 4.52847 25.2549 3.42439C21.7723 2.32031 18.0304 2.3412 14.5604 3.48409C11.0903 4.62699 8.06836 6.83382 5.92348 9.79136C3.7786 12.7489 2.61974 16.3069 2.6114 19.9603C2.60306 23.6137 3.74565 27.177 5.877 30.1443C8.00835 33.1116 11.0202 35.3322 14.485 36.4909C17.9498 37.6496 21.6915 37.6876 25.1792 36.5994C28.6668 35.5113 31.723 33.3523 33.9142 30.4288L36.0038 31.995Z"
+                              fill="#7C8992"
+                            />
+                            <path
+                              d="M39.2224 19.0643L31.2489 11.1569C31.125 11.034 30.9779 10.9365 30.816 10.87C30.6541 10.8035 30.4806 10.7693 30.3054 10.7693C30.1301 10.7693 29.9566 10.8035 29.7947 10.87C29.6328 10.9365 29.4857 11.034 29.3618 11.1569C29.2379 11.2798 29.1396 11.4256 29.0726 11.5862C29.0055 11.7467 28.971 11.9188 28.971 12.0926C28.971 12.2664 29.0055 12.4384 29.0726 12.599C29.1396 12.7595 29.2379 12.9054 29.3618 13.0283L35.0762 18.669H16.7137C16.3612 18.669 16.0232 18.8078 15.774 19.055C15.5248 19.3021 15.3848 19.6373 15.3848 19.9869C15.3848 20.3364 15.5248 20.6716 15.774 20.9188C16.0232 21.1659 16.3612 21.3048 16.7137 21.3048H35.0762L29.3618 26.9718C29.2379 27.0947 29.1396 27.2406 29.0726 27.4011C29.0055 27.5617 28.971 27.7337 28.971 27.9075C28.971 28.0813 29.0055 28.2534 29.0726 28.4139C29.1396 28.5745 29.2379 28.7204 29.3618 28.8432C29.4857 28.9661 29.6328 29.0636 29.7947 29.1301C29.9566 29.1966 30.1301 29.2308 30.3054 29.2308C30.4806 29.2308 30.6541 29.1966 30.816 29.1301C30.9779 29.0636 31.125 28.9661 31.2489 28.8432L39.2224 20.9358C39.347 20.8133 39.4459 20.6675 39.5133 20.5069C39.5808 20.3463 39.6155 20.174 39.6155 20.0001C39.6155 19.8261 39.5808 19.6538 39.5133 19.4932C39.4459 19.3326 39.347 19.1869 39.2224 19.0643Z"
+                              fill="#7C8992"
+                            />
+                          </svg>
+                          <span className="sidelist_text">Log Out</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-            </section>
-            {/* <!-- user Dashboard end --> */}
-        </>
-    );
+              </div>
+              <div className="col-md-8 mt-3">
+                <div className="sidenav_heading">
+                  <div className="sidenav_profile">
+                    <img src="./assets/icon/profile-img.png" alt="" />
+                  </div>
+                  <div className="sidenav_text_item">
+                    <div className="sidenav_text">
+                      <h4>Abraham</h4>
+                      <p>+880 1xxx-xxxxxx</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="edit_profile_heading">Edit Profile</div>
+                <form action="#" id="edit_profile_all_item">
+                  <div className="edit_profile_input_box">
+                    <span className="edit_profile_input_text">Name</span>
+                    <input type="text" placeholder="enter your name" required />
+                  </div>
+                  <div className="edit_profile_input_box">
+                    <span className="edit_profile_input_text">
+                      Email Address
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="enter email address"
+                      required
+                    />
+                  </div>
+                  <div className="edit_profile_details">
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">
+                        Mobile Number
+                      </span>
+                      <input type="text" placeholder="enter number" required />
+                    </div>
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">Country</span>
+                      <input type="text" placeholder="enter country" required />
+                    </div>
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">State</span>
+                      <input type="email" placeholder="enter state" required />
+                    </div>
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">City</span>
+                      <input
+                        type="tel"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="enter country"
+                        required
+                      />
+                    </div>
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">Zip Code</span>
+                      <input
+                        type="password"
+                        placeholder="enter zip code"
+                        required
+                      />
+                    </div>
+                    <div className="edit_profile_input_box">
+                      <span className="edit_profile_input_text">Address</span>
+                      <input
+                        type="password"
+                        placeholder="enter your address"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="profile_img_box_items">
+                    <span className="edit_profile_input_text">Full Name</span>
+                    <div className="profile_img_box">
+                      <div className="img_box">
+                        {/* <img id="profileImage" src="" alt="Profile Image" /> */}
+                      </div>
+                      <div className="profile-wrapper">
+                        <label
+                          className="custom-file-input-wrapper"
+                          htmlFor="fileInput"
+                        >
+                          <input
+                            type="file"
+                            id="fileInput"
+                            className="custom-file-input"
+                            aria-label="Upload Photo"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2 mx-auto row">
+                    <button className="submit-btn" type="submit">
+                      Edit Profile
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* <!-- user Dashboard end --> */}
+    </>
+  );
 };
 
 export default UserProfile;

@@ -175,7 +175,41 @@ const AddProduct = () => {
     }
   };
 
+  // ======== Handle Image Upload for Brand & Category ======== //
+  const handleFileChange = (e, type) => {
+    const file = e.target.files[0];
 
+    if (type === "brand") {
+      setBrandImg(file);
+    } else if (type === "category") {
+      setCategoryImg(file);
+    }
+  };
+
+  const handleCategoryChange = (selectedOption) => {
+    if (selectedOption) {
+      // Update selectedCategory state to the selected category object
+      const selectedCat = categories.find(
+          (category) => category._id === selectedOption.value
+      );
+      setSelectedCategory(selectedCat); // Update selected category
+
+      // Update selectedSubCategory with categoryId (for form submission)
+      setSelectedSubCategory((prevState) => ({
+        ...prevState,
+        categoryId: selectedOption.value, // Update the categoryId in selectedSubCategory
+        category: selectedCat, // Update the entire category object in selectedSubCategory
+      }));
+    } else {
+      // If nothing is selected, reset the selected category and categoryId
+      setSelectedCategory(null);
+      setSelectedSubCategory((prevState) => ({
+        ...prevState,
+        categoryId: null, // Reset categoryId when no category is selected
+        category: null, // Reset category object
+      }));
+    }
+  };
 
 
   // ======= Add Brand Handles ======= //
@@ -189,8 +223,15 @@ const AddProduct = () => {
   };
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
   const handleStatusChange = (e) => setStatus(e.target.value);
-  const handleFileChange = (e) => setBrandImg(e.target.files[0]);
   // ======= Add Brand Handles ======= //
+
+  // ======= Add Category Handles ======= //
+  const handleCategoryNameChange = (e) => setCategoryName(e.target.value);
+  // ======= Add Category Handles ======= //
+
+  // ======= Add Sub Category Handles ======= //
+  const handleSubCategoryNameChange = (e) => setSubCategoryName(e.target.value);
+  // ======= Add Sub Category Handles ======= //
 
 
   const handleAddProduct = (e) => {
@@ -281,6 +322,7 @@ const AddProduct = () => {
                       className="add-btn"
                       data-bs-toggle="modal"
                       data-bs-target="#addCategory"
+                      onClick={handleAddClick}
                     >
                       <svg
                         width="32"
@@ -330,6 +372,7 @@ const AddProduct = () => {
                       className="add-btn"
                       data-bs-toggle="modal"
                       data-bs-target="#addSubCategory"
+                      onClick={handleAddClick}
                     >
                       <svg
                         width="32"
@@ -573,7 +616,6 @@ const AddProduct = () => {
       </section>
 
       {/* Category Modal */}
-
       <div
         className="modal fade"
         id="addCategory"
@@ -600,7 +642,13 @@ const AddProduct = () => {
                 <div className="col-lg-12">
                   <div className="form-row">
                     <label htmlFor="">CATEGORY NAME</label>
-                    <input type="text" placeholder="Type here.." required />
+                    <input
+                        type="text"
+                        placeholder="Type here.."
+                        required
+                        value={categoryName}
+                        onChange={handleCategoryNameChange}
+                    />
                   </div>
 
                   <div className="form-row select-input-box">
@@ -609,6 +657,8 @@ const AddProduct = () => {
                       id="select-status"
                       className="select-status"
                       required
+                      value={status}
+                      onChange={handleStatusChange}
                     >
                       <option value="">Select Status</option>
                       <option value="active">Active</option>
@@ -621,12 +671,13 @@ const AddProduct = () => {
                     <div className="upload-profile">
                       <div className="item">
                         <div className="img-box">
-                          <img
-                            src={uploadImg.src}
-                            width={30}
-                            height={30}
-                            alt=""
-                          />
+                          {selectedCategory?.categoryImg && (
+                              <img
+                                  src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                                  alt="Category"
+                                  width="100"
+                              />
+                          )}
                         </div>
 
                         <div className="profile-wrapper">
@@ -635,6 +686,8 @@ const AddProduct = () => {
                               type="file"
                               className="custom-file-input"
                               aria-label="Upload Photo"
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -681,48 +734,54 @@ const AddProduct = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="form-row">
-                    <label htmlFor="">CATEGORY NAME</label>
-                    <input type="text" placeholder="Type here.." required />
+                    <label htmlFor="">SELECT CATEGORY</label>
+                    <Select
+                        className="select-search"
+                        classNamePrefix="select"
+                        isClearable={true}
+                        isSearchable={true}
+                        name="categories"
+                        options={categories?.map((category) => ({
+                          label: category.categoryName,
+                          value: category._id,
+                          ...category,
+                        }))}
+                        placeholder="Select Categories"
+                        onChange={handleCategoryChange}
+                        value={
+                          selectedCategory
+                              ? {
+                                label: selectedCategory.categoryName,
+                                value: selectedCategory._id,
+                              }
+                              : null
+                        } // Ensure this is correctly bound
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label htmlFor="">SUB CATEGORY NAME</label>
+                    <input
+                        type="text"
+                        placeholder="Type here.."
+                        required
+                        value={subCategoryName}
+                        onChange={handleSubCategoryNameChange}
+                    />
                   </div>
 
                   <div className="form-row select-input-box">
                     <label htmlFor="select-status">STATUS</label>
                     <select
-                      id="select-status"
-                      className="select-status"
-                      required
+                        id="select-status"
+                        className="select-status"
+                        required
+                        value={status}
+                        onChange={handleStatusChange}
                     >
                       <option value="">Select Status</option>
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                     </select>
-                  </div>
-
-                  <div className="form-row">
-                    <label htmlFor="photo">CATEGORY PHOTO</label>
-                    <div className="upload-profile">
-                      <div className="item">
-                        <div className="img-box">
-                          <img
-                            src={uploadImg.src}
-                            width={30}
-                            height={30}
-                            alt=""
-                          />
-                        </div>
-
-                        <div className="profile-wrapper">
-                          <label className="custom-file-input-wrapper m-0">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              aria-label="Upload Photo"
-                            />
-                          </label>
-                          <p>PNG,JPEG or GIF (Upto 1 MB)</p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div className="actions">

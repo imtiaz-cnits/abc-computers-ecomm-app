@@ -42,14 +42,23 @@ const AddProduct = () => {
   });
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
 
-  const [keyFeatures, setKeyFeatures] = useState("");
-  const [specifications, setSpecifications] = useState("");
+  // Set Product Infos in Add Product Form
+  const [product, setProduct] = useState([]);
+  const [productCode, setProductCode] = useState("");
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState(false);
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [keyFeature, setKeyFeature] = useState("");
+  const [specification, setSpecification] = useState("");
   const [description, setDescription] = useState("");
-  const [colors, setColors] = useState([]);
+  const [productImg, setProductImg] = useState(null);
+  const [stock, setStock] = useState("");
+  const [color, setColor] = useState([]);
   const reactColors = useRef();
   const onDeleteColors = useCallback((colorIndex) => {
-      setColors(colors.filter((_, i) => i !== colorIndex));}, [colors]);
-  const onAdditionColors = useCallback((newColor) => { setColors([...colors, newColor]); }, [colors]);
+      setColor(color.filter((_, i) => i !== colorIndex));}, [color]);
+  const onAdditionColors = useCallback((newColor) => { setColor([...color, newColor]); }, [color]);
 
 
   // Fetch brands when the component mounts
@@ -94,6 +103,20 @@ const AddProduct = () => {
     fetchSubCategory();
   }, []);
 
+  // Product Edit
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5070/api/v1/add-product");
+  //       setProduct(response.data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching product:", error);
+  //       toast.error("Failed to load product.");
+  //     }
+  //   };
+  //   fetchProduct();
+  // }, []);
+
 
 
   // ======== Handle Submit for Brand, Category & Sub Category ======== //
@@ -101,11 +124,11 @@ const AddProduct = () => {
     e.preventDefault();
 
     let formData = new FormData();
-    let requestData = {}; // For SubCategory (non-FormData requests)
+    let requestData = {}; // For JSON requests
     let url = "";
     let isFormData = true;
     let successMessage = "";
-    let updateState;
+    let updateState = null; // Ensure it's initially null
 
     if (type === "brand") {
       if (!brandName || !status) {
@@ -150,6 +173,41 @@ const AddProduct = () => {
       updateState = setSubCategories;
     }
 
+    else if (type === "product") {
+      const categoryID = selectedCategory?._id;
+      const subCategoryID = selectedSubCategory?._id;
+      const brandID = selectedBrand?._id;
+
+      if (!productName || !status || !price || !categoryID || !subCategoryID || !brandID) {
+        toast.error("Product name, status, price, brand, category, and subcategory are required!");
+        return;
+      }
+
+      formData.append("productCode", productCode);
+      formData.append("productName", productName);
+      formData.append("status", status);
+      formData.append("price", price);
+      formData.append("discount", discount ? "true" : "false"); // Convert boolean to string
+      formData.append("discountPrice", discountPrice);
+      formData.append("keyFeature", keyFeature);
+      formData.append("specification", specification);
+      formData.append("description", description);
+      formData.append("stock", stock);
+      formData.append("color", color);
+      formData.append("badge", badge);
+      formData.append("brandID", brandID);
+      formData.append("categoryID", categoryID);
+      formData.append("subCategoryID", subCategoryID);
+
+      if (productImg) {
+        formData.append("productImg", productImg);
+      }
+
+      url = "http://localhost:5070/api/v1/products";
+      successMessage = "Product added successfully!";
+      updateState = setProducts;
+    }
+
     try {
       const response = isFormData
           ? await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
@@ -157,20 +215,30 @@ const AddProduct = () => {
 
       toast.success(successMessage);
 
-      // Update state by adding the new item at the top
-      updateState((prevData) => [response.data.data, ...prevData]);
+      // ✅ Check if updateState exists before updating state
+      if (updateState) {
+        updateState((prevData) => [...prevData, response.data.data]);
+      }
 
-      // Reset Form Fields
-      setBrandName("");
-      setCategoryName("");
-      setSubCategoryName("");
+      // ✅ Reset Form Fields
+      setProductCode("");
+      setProductName("");
       setStatus("");
-      setBrandImg(null);
-      setCategoryImg(null);
+      setPrice("");
+      setDiscount(false);
+      setDiscountPrice("");
+      setKeyFeature("");
+      setSpecification("");
+      setDescription("");
+      setStock("");
+      setColor("");
+      setProductImg(null);
       setSelectedCategory(null);
+      setSelectedSubCategory(null);
+      setSelectedBrand(null);
 
-      // Close the modal
-      document.querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`).click();
+      // ✅ Close modal after successful submission
+      document.querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`)?.click();
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || `Failed to add ${type}`);
@@ -237,9 +305,13 @@ const AddProduct = () => {
   // ======= Add Sub Category Handles ======= //
 
 
-  const handleAddProduct = (e) => {
+  const handleProductSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
+
+    if (!productCode || !productName || !status) {
+      toast.error("Sub Category name, status, and category are required!");
+      return;
+    }
   };
 
   return (
@@ -250,7 +322,7 @@ const AddProduct = () => {
             <div className="heading-wrap">
               <h2 className="heading">Add New Product</h2>
             </div>
-            <form className="add-product-form" onSubmit={handleAddProduct}>
+            <form className="add-product-form" onSubmit={handleSubmit}>
               <div className="row">
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Brand *</label>
@@ -504,7 +576,7 @@ const AddProduct = () => {
                   <label htmlFor="">Colors*</label>
                   <ReactTags
                     ref={reactColors}
-                    tags={colors}
+                    tags={color}
                     onDelete={onDeleteColors}
                     onAddition={onAdditionColors}
                     suggestions={[

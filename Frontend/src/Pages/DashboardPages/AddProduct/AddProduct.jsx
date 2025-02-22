@@ -40,6 +40,7 @@ const AddProduct = () => {
     status: "",
     subCategoryImg: null, // Handle file uploads separately
   });
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
 
   const [keyFeatures, setKeyFeatures] = useState("");
   const [specifications, setSpecifications] = useState("");
@@ -92,6 +93,7 @@ const AddProduct = () => {
     };
     fetchSubCategory();
   }, []);
+
 
 
   // ======== Handle Submit for Brand, Category & Sub Category ======== //
@@ -188,26 +190,27 @@ const AddProduct = () => {
 
   const handleCategoryChange = (selectedOption) => {
     if (selectedOption) {
-      // Update selectedCategory state to the selected category object
-      const selectedCat = categories.find(
-          (category) => category._id === selectedOption.value
-      );
-      setSelectedCategory(selectedCat); // Update selected category
+      // Find the selected category
+      const selectedCat = categories.find(cat => cat._id === selectedOption.value);
 
-      // Update selectedSubCategory with categoryId (for form submission)
-      setSelectedSubCategory((prevState) => ({
-        ...prevState,
-        categoryId: selectedOption.value, // Update the categoryId in selectedSubCategory
-        category: selectedCat, // Update the entire category object in selectedSubCategory
-      }));
+      console.log("Selected Category:", selectedCat); // Debugging
+
+      // Filter subcategories that belong to the selected category
+      const filteredSubCategories = subCategories.filter(sub =>
+          sub.categoryId === selectedOption.value || sub.categoryId?._id === selectedOption.value
+      );
+
+      console.log("Filtered Subcategories:", filteredSubCategories); // Debugging
+
+      // Update state
+      setSelectedCategory(selectedCat);
+      setFilteredSubCategories(filteredSubCategories); // Update dropdown options
+      setSelectedSubCategory(null); // Reset subcategory selection
     } else {
-      // If nothing is selected, reset the selected category and categoryId
+      // Reset states if no category is selected
       setSelectedCategory(null);
-      setSelectedSubCategory((prevState) => ({
-        ...prevState,
-        categoryId: null, // Reset categoryId when no category is selected
-        category: null, // Reset category object
-      }));
+      setFilteredSubCategories([]); // Ensure no subcategories are shown
+      setSelectedSubCategory(null); // Reset subcategory selection
     }
   };
 
@@ -308,14 +311,13 @@ const AddProduct = () => {
                         options={categories?.map(category => ({
                           label: category.categoryName,
                           value: category._id,
-                          ...category
                         }))}
                         placeholder="Select Category..."
-                        // onChange={handleCategoryChange}
-                        // value={selectedCategory ? {
-                        //   label: selectedCategory.categoryName,
-                        //   value: selectedCategory._id
-                        // } : null} // Ensure this is correctly bound
+                        onChange={handleCategoryChange}  // ✅ Ensure category selection updates state
+                        value={selectedCategory ? {
+                          label: selectedCategory.categoryName,
+                          value: selectedCategory._id
+                        } : null}  // ✅ Ensure selected category stays selected
                     />
                     <button
                       type="button"
@@ -355,17 +357,23 @@ const AddProduct = () => {
                         isClearable={true}
                         isSearchable={true}
                         name="subCategories"
-                        options={subCategories?.map(subCategory => ({
-                          label: subCategory.subCategoryName,
-                          value: subCategory._id,
-                          ...subCategory
-                        }))}
+                        options={selectedCategory ? filteredSubCategories.map((subCat) => ({
+                          label: subCat.subCategoryName,
+                          value: subCat._id,
+                        })) : []}  // Empty array when no category is selected
                         placeholder="Select Sub Category..."
-                        // onChange={handleCategoryChange}
-                        // value={selectedCategory ? {
-                        //   label: selectedCategory.categoryName,
-                        //   value: selectedCategory._id
-                        // } : null} // Ensure this is correctly bound
+                        value={selectedSubCategory ? {
+                          label: selectedSubCategory.subCategoryName,
+                          value: selectedSubCategory._id
+                        } : null}  // `null` ensures the placeholder is displayed when no subcategory is selected
+                        onChange={(selectedOption) => {
+                          if (selectedOption) {
+                            const subCat = filteredSubCategories.find(sub => sub._id === selectedOption.value);
+                            setSelectedSubCategory(subCat);
+                          } else {
+                            setSelectedSubCategory(null); // Reset subcategory when nothing is selected
+                          }
+                        }}
                     />
                     <button
                       type="button"

@@ -12,6 +12,7 @@ import Footer from "@/Components/Shared/Footer/Footer";
 import Preloader from "@/Components/Shared/Preloader/Preloader";
 import BackToTop from "@/Components/Shared/BackToTop/BackToTop";
 import { Toaster } from "react-hot-toast"; // Import Toaster
+import UserContextProvider from "@/Utilities/Contexts/UserContextProvider";
 
 export const metadata = {
   title: "Home | ABC Computers",
@@ -24,13 +25,15 @@ export default function RootLayout({ children }) {
         <link rel="shortcut icon" href={favicon.src} type="image/x-icon" />
       </head>
       <body>
-        <Preloader />
-        <Navbar />
-        {children}
-        <Footer />
-        <BackToTop />
-        <JavascriptClient />
-        <Toaster />
+        <UserContextProvider>
+          <Preloader />
+          <Navbar />
+          {children}
+          <Footer />
+          <BackToTop />
+          <JavascriptClient />
+          <Toaster />
+        </UserContextProvider>
       </body>
     </html>
   );

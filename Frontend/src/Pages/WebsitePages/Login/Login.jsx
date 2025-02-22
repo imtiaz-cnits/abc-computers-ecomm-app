@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
+import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 
 const Login = () => {
+  const { setUserID } = useContext(UserContext);
   const [login, setLogin] = useState(true);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [formData, setFormData] = useState({
@@ -37,8 +39,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    console.log(formData);
-
     try {
       const response = await axios.post(
         "http://localhost:5070/api/v1/SignUP",
@@ -56,6 +56,10 @@ const Login = () => {
         // ✅ Store token securely in localStorage
         localStorage.setItem("token", result?.token);
         // router.push("/login");  // Redirect to login page after successful signup
+
+        const _id = result?.result?._id;
+
+        setUserID(_id);
 
         e.target.reset();
         setFormData({
@@ -93,8 +97,6 @@ const Login = () => {
 
       const result = await response?.data;
 
-      console.log(result?.status);
-
       if (result?.status !== "success") {
         throw new Error(result.message || "Invalid email or password.");
       }
@@ -104,6 +106,11 @@ const Login = () => {
         localStorage.setItem("token", result?.token);
         toast.success("Login successful!");
         // router.push("/"); // Redirect to dashboard
+
+        const _id = result?.user?._id;
+
+        setUserID(_id);
+
         e.target.reset();
         setLoginFormData({
           email: "",

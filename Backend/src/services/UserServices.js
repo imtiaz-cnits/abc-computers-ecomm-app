@@ -27,7 +27,8 @@ const SignUpService = async (data) => {
     if (!passwordRegex.test(password)) {
       return {
         status: "fail",
-        message: "Password must be at least 8 characters long, contain at least one number and one uppercase letter.",
+        message:
+          "Password must be at least 8 characters long, contain at least one number and one uppercase letter.",
       };
     }
 
@@ -64,13 +65,13 @@ const SignUpService = async (data) => {
     });
 
     // ✅ Save user to the database
-    await newUser.save();
+    const result = await newUser.save();
 
     // ✅ Generate a token
     const token = jwt.sign(
-        { userId: newUser._id, email: newUser.email, role: newUser.role },
-        process.env.JWT_SECRET || "your_secret_key", // Replace with environment variable
-        { expiresIn: "1h" } // Token expires in 1 hour
+      { userId: newUser._id, email: newUser.email, role: newUser.role },
+      process.env.JWT_SECRET || "your_secret_key", // Replace with environment variable
+      { expiresIn: "1h" } // Token expires in 1 hour
     );
 
     // Return success response
@@ -78,7 +79,7 @@ const SignUpService = async (data) => {
       status: "success",
       message: "User registered successfully.",
       token,
-      redirect: "/login",  // Redirect user to login after successful signup
+      result,
     };
   } catch (error) {
     console.error("❌ Error in SignUpService:", error.message);
@@ -111,9 +112,9 @@ const LoginService = async (req) => {
 
     // 🔹 Step 3: Generate a JWT token
     const token = jwt.sign(
-        { userId: user._id.toString(), email: user.email, role: user.role },
-        process.env.JWT_SECRET || "your_secret_key",
-        { expiresIn: "1h" }
+      { userId: user._id.toString(), email: user.email, role: user.role },
+      process.env.JWT_SECRET || "your_secret_key",
+      { expiresIn: "1h" }
     );
 
     // 🔹 Step 4: Return success response
@@ -121,23 +122,21 @@ const LoginService = async (req) => {
       status: "success",
       message: "Login successful.",
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         mobile: user.mobile,
-        role: user.role
+        role: user.role,
       },
-      token
+      token,
     };
-
   } catch (error) {
     console.error("❌ Login Error:", error);
     return { status: "fail", message: "Something went wrong during login." };
   }
 };
 
-
-
 module.exports = {
   SignUpService,
-  LoginService
+  LoginService,
 };

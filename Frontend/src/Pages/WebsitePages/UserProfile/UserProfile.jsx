@@ -2,11 +2,63 @@
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./UserProfile.css";
+import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 
 const UserProfile = () => {
   const router = useRouter();
+
+  const { userID, setUserID, existingUserID } = useContext(UserContext);
+
+  const [profile, setProfile] = useState({});
+  const [formData, setFormData] = useState({
+    cus_name: "",
+    email: "",
+    mobile: "",
+    cus_country: "",
+    cus_state: "",
+    cus_city: "",
+    cus_postcode: "",
+    cus_address: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    console.log(
+      `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`
+    );
+    const fetchProfile = async () => {
+      const result = await axios.get(
+        `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`
+      );
+
+      if (result?.data?.status === "success") {
+        const {
+          cus_name,
+          cus_country,
+          cus_state,
+          cus_city,
+          cus_postcode,
+          cus_address,
+        } = result?.data?.data;
+        setProfile(result?.data?.data);
+        setFormData({
+          cus_name,
+          cus_country,
+          cus_state,
+          cus_city,
+          cus_postcode,
+          cus_address,
+        });
+      }
+    };
+
+    fetchProfile();
+  }, [userID]);
 
   const handleLogout = async () => {
     try {
@@ -22,8 +74,6 @@ const UserProfile = () => {
         }
       );
 
-      console.log(response);
-
       // Check if the request was successful
       if (response?.data?.status === "success") {
         // Clear the client-side authentication token (if it's stored in localStorage)
@@ -31,6 +81,8 @@ const UserProfile = () => {
 
         // Optionally, also clear sessionStorage if used
         sessionStorage.removeItem("token"); // Clear session storage if token is stored there
+
+        setUserID(null);
 
         // Redirect the user to the login page after successful logout
         router.push("/"); // Redirect to login
@@ -42,6 +94,12 @@ const UserProfile = () => {
       // Handle any errors that occur during the fetch request
       console.error("Error during logout:", error);
     }
+  };
+
+  const handleEditProfile = (e) => {
+    e.preventDefault();
+
+    console.log(formData);
   };
 
   return (
@@ -482,16 +540,23 @@ const UserProfile = () => {
                   </div>
                   <div className="sidenav_text_item">
                     <div className="sidenav_text">
-                      <h4>Abraham</h4>
+                      <h4>{profile?.cus_name}</h4>
                       <p>+880 1xxx-xxxxxx</p>
                     </div>
                   </div>
                 </div>
                 <div className="edit_profile_heading">Edit Profile</div>
-                <form action="#" id="edit_profile_all_item">
+                <form id="edit_profile_all_item" onSubmit={handleEditProfile}>
                   <div className="edit_profile_input_box">
                     <span className="edit_profile_input_text">Name</span>
-                    <input type="text" placeholder="enter your name" required />
+                    <input
+                      type="text"
+                      name="cus_name"
+                      placeholder="enter your name"
+                      defaultValue={profile?.cus_name}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
                   <div className="edit_profile_input_box">
                     <span className="edit_profile_input_text">
@@ -508,38 +573,60 @@ const UserProfile = () => {
                       <span className="edit_profile_input_text">
                         Mobile Number
                       </span>
-                      <input type="text" placeholder="enter number" required />
+                      <input type="number" placeholder="enter number" required />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Country</span>
-                      <input type="text" placeholder="enter country" required />
+                      <input
+                        type="text"
+                        placeholder="enter country"
+                        name="cus_country"
+                        defaultValue={profile?.cus_country}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">State</span>
-                      <input type="email" placeholder="enter state" required />
+                      <input
+                        type="text"
+                        placeholder="enter state"
+                        name="cus_state"
+                        defaultValue={profile?.cus_state}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">City</span>
                       <input
-                        type="tel"
-                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="enter country"
+                        type="text"
+                        placeholder="enter city"
+                        name="cus_city"
+                        defaultValue={profile?.cus_city}
+                        onChange={handleChange}
                         required
                       />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Zip Code</span>
                       <input
-                        type="password"
+                        type="number"
                         placeholder="enter zip code"
+                        name="cus_postcode"
+                        defaultValue={profile?.cus_postcode}
+                        onChange={handleChange}
                         required
                       />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Address</span>
                       <input
-                        type="password"
+                        type="text"
                         placeholder="enter your address"
+                        name="cus_address"
+                        defaultValue={profile?.cus_address}
+                        onChange={handleChange}
                         required
                       />
                     </div>
@@ -594,7 +681,7 @@ const UserProfile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-4 row">
+                  <div className="mt-4 row mx-0">
                     <button className="submit-btn mx-auto" type="submit">
                       Save
                     </button>

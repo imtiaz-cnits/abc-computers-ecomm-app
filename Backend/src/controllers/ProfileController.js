@@ -1,5 +1,7 @@
-const {ProfileAddService} = require("../services/ProfileServices");
-
+const {
+  ProfileAddService,
+  ProfileDetailsService,
+} = require("../services/ProfileServices");
 
 // ====================== Profile All Controller ====================== //
 
@@ -12,5 +14,19 @@ exports.AddProfile = async (req, res) => {
     return res
       .status(500)
       .json({ status: "fail", message: "Error adding profile." });
+  }
+};
+
+exports.ProfileDetails = async (req, res) => {
+  console.log(req?.params?.userID);
+
+  try {
+    const result = await ProfileDetailsService(req?.params?.userID);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in Profile Details controller:", error);
+    return res
+      .status(500)
+      .json({ status: "fail", message: "Error getting profile details." });
   }
 };

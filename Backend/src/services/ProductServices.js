@@ -209,9 +209,9 @@ const CategoryDeleteService = async (categoryId) => {
 // Sub Category CRUD Services
 const SubCategoryAddService = async (req) => {
     try {
-        const { subCategoryName, status, categoryId } = req.body;
+        const { subCategoryName, subCategoryStatus, categoryId } = req.body;
 
-        if (!subCategoryName || !status || !categoryId) {
+        if (!subCategoryName || !subCategoryStatus || !categoryId) {
             return { status: "fail", message: "Sub Category name, status, and category are required." };
         }
 
@@ -227,7 +227,7 @@ const SubCategoryAddService = async (req) => {
 
         const newSubCategory = new SubCategoryModel({
             subCategoryName,
-            status,
+            subCategoryStatus,
             categoryId,
         });
         await newSubCategory.save();
@@ -310,27 +310,33 @@ const ProductAddService = async (req) => {
             subCategoryID,
             productCode,
             productName,
-            status,
+            productStatus,
             price,
+            discount,
             discountPrice,
             keyFeature,
             specification,
             description,
             stock,
-            color
+            color,
+            badge
         } = req.body;
+
         const productImg = req.file ? `/uploads/${req.file.filename}` : null;
 
         if (!productName || !status || !brandID || !categoryID || !subCategoryID) {
-            return { status: "fail", message: "Product Name, Status, Brand ID, Category ID and Sub Category ID is required!" };
+            return {
+                status: "fail",
+                message: "Product Name, Status, Brand ID, Category ID, and Sub Category ID are required!"
+            };
         }
 
-        const brandExists = await BrandModel.findById(brandId);
+        const brandExists = await BrandModel.findById(brandID);
         if (!brandExists) {
             return { status: "fail", message: "Brand not found" };
         }
 
-        const categoryExists = await CategoryModel.findById(categoryId);
+        const categoryExists = await CategoryModel.findById(categoryID);
         if (!categoryExists) {
             return { status: "fail", message: "Category not found" };
         }
@@ -345,19 +351,26 @@ const ProductAddService = async (req) => {
             return { status: "fail", message: "Product already exists" };
         }
 
-        // Include productImg in the model
+        // Include brandID, categoryID, subCategoryID, and productImg
         const newProduct = new ProductModel({
             productCode,
             productName,
-            status,
+            productStatus,
             price,
+            discount,
             discountPrice,
             keyFeature,
             specification,
             description,
             stock,
-            color
+            color,
+            badge,
+            brandID, // Fixed
+            categoryID, // Fixed
+            subCategoryID, // Fixed
+            productImg // Fixed
         });
+
         await newProduct.save();
 
         return {

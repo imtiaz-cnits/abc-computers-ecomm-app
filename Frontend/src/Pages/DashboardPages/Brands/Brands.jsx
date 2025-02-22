@@ -14,7 +14,7 @@ const Brands = () => {
   const updateModalCloseBtn = useRef(null);
 
   const [brandName, setBrandName] = useState("");
-  const [status, setStatus] = useState("");
+  const [brandStatus, setBrandStatus] = useState("");
   const [brandImg, setBrandImg] = useState(null);
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState({
@@ -57,7 +57,7 @@ const Brands = () => {
   }, [limit]);
 
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
-  const handleStatusChange = (e) => setStatus(e.target.value);
+  const handleStatusChange = (e) => setBrandStatus(e.target.value);
   const handleFileChange = (e) => setBrandImg(e.target.files[0]);
   const handleAddClick = () => {
     setIsEditing(false); // Set to add mode
@@ -65,7 +65,7 @@ const Brands = () => {
 
     // Reset form fields
     setBrandName("");
-    setStatus("");
+    setBrandStatus("");
     setBrandImg(null);
   };
   const handleEditClick = (brand) => {
@@ -74,7 +74,7 @@ const Brands = () => {
 
     // Set form fields with the brand's existing data
     setBrandName(brand.brandName);
-    setStatus(brand.status);
+    setBrandStatus(brand.status);
     setBrandImg(brand.brandImg || null);
   };
   const handleDeleteClick = (brandId) => {
@@ -131,7 +131,7 @@ const Brands = () => {
 
         // Reset form fields
         setBrandName("");
-        setStatus("");
+        setBrandStatus("");
         setBrandImg(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
@@ -474,7 +474,7 @@ const Brands = () => {
                         id="select-status"
                         className="select-status"
                         required
-                        value={status}
+                        value={brandStatus}
                         onChange={handleStatusChange}
                       >
                         <option value="">Select Status</option>

@@ -1,6 +1,6 @@
 const ProfileModel = require("../models/ProfileModel");
 const mongoose = require("mongoose");
-const ObjectID = mongoose.Types.ObjectId;
+const ObjectID = new mongoose.Types.ObjectId();
 
 const multer = require("multer");
 const path = require("path");
@@ -31,35 +31,43 @@ const upload = multer({
 
 // ========================== Profile All Functionality ========================== //
 // Profile CRUD Services
-const ProfileAddService = async (req) => {
-    try {
-        const { cus_name, cus_address, cus_city, cus_state, cus_postcode, cus_country, userID } = req.body;
+const ProfileAddService = async (data) => {
+  try {
+    const { name: cus_name, _id: userID } = data;
 
-        const existingProfile = await ProfileModel.findOne({ userID });
-        if (existingProfile) {
-            return { status: "fail", message: "Profile already exists" };
-        }
-
-        // Include heroSliderImg in the model
-        const newProfile = new ProfileModel({
-            cus_name, cus_address, cus_city, cus_state, cus_postcode, cus_country, userID
-        });
-      await newProfile.save();
-
-      return {
-        status: "success",
-        message: "Profile added successfully",
-        data: newProfile,
-      };
-    } catch (error) {
-        console.error("Error in ProfileAddService:", error.message);
-        return {
-            status: "fail",
-            message: "Error adding profile. Please try again.",
-        };
+    const existingProfile = await ProfileModel.findOne({ userID });
+    if (existingProfile) {
+      return { status: "fail", message: "Profile already exists" };
     }
+
+    // Include heroSliderImg in the model
+    const newProfile = new ProfileModel({ cus_name, userID });
+    await newProfile.save();
+
+    return {
+      status: "success",
+      message: "Profile added successfully",
+      data: newProfile,
+    };
+  } catch (error) {
+    console.error("Error in ProfileAddService:", error.message);
+    return {
+      status: "fail",
+      message: "Error adding profile. Please try again.",
+    };
+  }
+};
+
+const ProfileDetailsService = async (userID) => {
+  const result = await ProfileModel.findOne({ userID });
+
+  return {
+    status: "success",
+    data: result,
+  };
 };
 
 module.exports = {
   ProfileAddService,
+  ProfileDetailsService,
 };

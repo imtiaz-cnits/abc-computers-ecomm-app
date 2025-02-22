@@ -1,3 +1,4 @@
+const { ProfileAddService } = require("../services/ProfileServices");
 const { SignUpService, LoginService } = require("../services/UserServices");
 
 exports.SignUP = async (req, res) => {
@@ -7,7 +8,18 @@ exports.SignUP = async (req, res) => {
     const result = await SignUpService(req.body);
 
     if (result.status === "success") {
-      return res.status(201).json(result);
+      const { name, _id } = result?.result;
+
+      const createdProfileResult = await ProfileAddService({
+        name,
+        _id,
+      });
+
+      if (createdProfileResult.status === "success") {
+        return res.status(201).json(result);
+      } else {
+        return res.status(400).json(createdProfileResult);
+      }
     } else {
       return res.status(400).json(result);
     }
@@ -49,7 +61,10 @@ exports.Login = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Login error:", error);
-    return res.status(500).json({ status: "fail", message: "Login failed. Please try again later." });
+    return res.status(500).json({
+      status: "fail",
+      message: "Login failed. Please try again later.",
+    });
   }
 };
 
@@ -57,10 +72,10 @@ exports.UserLogout = async (req, res) => {
   try {
     // Set cookie options to expire immediately
     const cookieOption = {
-      expires: new Date(0),  // Set the expiration date to the past to remove the cookie immediately
-      httpOnly: true,         // Ensures cookie is only accessible via HTTP requests
+      expires: new Date(0), // Set the expiration date to the past to remove the cookie immediately
+      httpOnly: true, // Ensures cookie is only accessible via HTTP requests
       secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production (HTTPS)
-      sameSite: "Strict",     // Prevents sending cookies in cross-origin requests
+      sameSite: "Strict", // Prevents sending cookies in cross-origin requests
     };
 
     // Clear the token cookie by setting it to an empty value with an expired date
@@ -73,6 +88,9 @@ exports.UserLogout = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Logout error:", error);
-    return res.status(500).json({ status: "fail", message: "Logout failed. Please try again later." });
+    return res.status(500).json({
+      status: "fail",
+      message: "Logout failed. Please try again later.",
+    });
   }
 };

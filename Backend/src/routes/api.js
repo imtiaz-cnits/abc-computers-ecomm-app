@@ -4,7 +4,7 @@ const ProductController = require("../controllers/ProductController");
 const UserController = require("../controllers/UserController");
 const SliderController = require("../controllers/SliderController");
 const ProfileController = require("../controllers/ProfileController");
-const UserModel = require("../models/UserModel")
+const UserModel = require("../models/UserModel");
 
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
@@ -15,14 +15,13 @@ const ObjectID = mongoose.Types.ObjectId;
 
 // Protected Routes
 router.get("/dashboard", AuthVerification, async (req, res) => {
+  const email = req?.user?.email;
 
-  const email = req?.user?.email
+  const userInfo = await UserModel.findOne({ email });
 
-  const userInfo = await UserModel.findOne({email})
+  const role = userInfo?.role;
 
-  const role = userInfo?.role
-
-  if (role === "admin"){
+  if (role === "admin") {
     return res.status(200).json({
       status: "success",
       message: "Welcome to the dashboard",
@@ -41,18 +40,31 @@ router.post("/Login", UserController.Login);
 router.post("/Logout", UserController.UserLogout);
 
 // Profile API
-router.post("/Profile", ProfileController.AddProfile)
+router.post("/Profile", ProfileController.AddProfile);
+router.get("/Profile-details/:userID", ProfileController.ProfileDetails);
 
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
-router.put("/brands/:id", upload.single("brandImg"), ProductController.ProductBrandUpdate);
+router.put(
+  "/brands/:id",
+  upload.single("brandImg"),
+  ProductController.ProductBrandUpdate
+);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
 // Category CRUD APIs
-router.post("/category", upload.single("categoryImg"), ProductController.AddCategory);
+router.post(
+  "/category",
+  upload.single("categoryImg"),
+  ProductController.AddCategory
+);
 router.get("/category", ProductController.CategoryList);
-router.put("/category/:id", upload.single("categoryImg"), ProductController.CategoryUpdate);
+router.put(
+  "/category/:id",
+  upload.single("categoryImg"),
+  ProductController.CategoryUpdate
+);
 router.delete("/category/:id", ProductController.CategoryDelete);
 
 // Sub Category CRUD APIs
@@ -68,26 +80,18 @@ router.put("/update-product/:id", ProductController.ProductUpdate);
 router.delete("/remove-product/:id", ProductController.ProductDelete);
 
 // Hero Slider CRUD APIs
-router.post("/hero-slider", upload.single("slideImg"), SliderController.AddHeroSlider);
+router.post(
+  "/hero-slider",
+  upload.single("slideImg"),
+  SliderController.AddHeroSlider
+);
 router.get("/hero-slider", SliderController.HeroSliderList);
-router.put("/hero-slider/:id", upload.single("slideImg"), SliderController.HeroSliderUpdate);
+router.put(
+  "/hero-slider/:id",
+  upload.single("slideImg"),
+  SliderController.HeroSliderUpdate
+);
 router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // router.get("/UserOTP/:email", UserController.UserOTP);
 // router.get("/VerifyOTP/:email/:otp", UserController.VerifyOTP);

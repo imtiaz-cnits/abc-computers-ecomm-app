@@ -4,12 +4,15 @@ import DashboardNavbar from "@/Components/Dashboard/DashboardNavbar/DashboardNav
 import DashboardSidebar from "@/Components/Dashboard/DashboardSidebar/DashboardSidebar";
 import AdminRoute from "@/Components/Routes/AdminRoute/AdminRoute";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "@/assets/css/bootstrap.min.css";
+
+export const AdminRouteContext = createContext(null)
 
 const DashboardLayout = ({ children }) => {
   const path = usePathname();
-  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // ..............Table searchbar filter Start.......................//
@@ -36,12 +39,18 @@ const DashboardLayout = ({ children }) => {
 
   }, [path]);
 
+  const value = {
+    isAdmin, isLoading, setIsAdmin, setIsLoading
+  }
+
   return (
-    <AdminRoute>
-      <DashboardNavbar />
-      <DashboardSidebar />
-      {children}
-    </AdminRoute>
+    <AdminRouteContext.Provider value={value}>
+      <AdminRoute>
+        <DashboardNavbar />
+        <DashboardSidebar />
+        {children}
+      </AdminRoute>
+    </AdminRouteContext.Provider>
   );
 };
 

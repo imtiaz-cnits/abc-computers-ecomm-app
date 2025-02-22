@@ -3,11 +3,15 @@
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
 import signInBg from "@/assets/img/Sign-In-bg.png";
 import signInCardImg from "@/assets/img/sign-in-card-img.png";
+import { AdminRouteContext } from "@/Layouts/DashboardLayout/DashboardLayout";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const AuthLogin = () => {
+
+  const { setIsLoading } = useContext(AdminRouteContext)
+
   const [login, setLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -91,6 +95,7 @@ const AuthLogin = () => {
         localStorage.setItem("token", result.token);
         toast.success("Login successful!");
         if (localStorage.getItem("token")) {
+          setIsLoading(true)
           router.push("/dashboard"); // Redirect to dashboard
         } else {
           toast.error("Login failed! Please check your credentials.");

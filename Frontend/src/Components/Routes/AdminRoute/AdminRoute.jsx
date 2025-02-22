@@ -1,14 +1,14 @@
 "use client";
+import { AdminRouteContext } from "@/Layouts/DashboardLayout/DashboardLayout";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AdminRoute = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAdmin, isLoading, setIsAdmin, setIsLoading } = useContext(AdminRouteContext)
 
   useEffect(() => {
     setIsLoading(true);

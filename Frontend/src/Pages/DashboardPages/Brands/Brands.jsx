@@ -97,14 +97,14 @@ const Brands = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!brandName || !status) {
+    if (!brandName || !brandStatus) {
       toast.error("Brand name and status are required!");
       return;
     }
 
     const formData = new FormData();
     formData.append("brandName", brandName);
-    formData.append("status", status);
+    formData.append("brandStatus", brandStatus);
     if (brandImg) {
       formData.append("brandImg", brandImg);
     }
@@ -149,7 +149,7 @@ const Brands = () => {
     // Prepare form data for the update request
     const formData = new FormData();
     formData.append("brandName", selectedBrand.brandName);
-    formData.append("status", selectedBrand.status);
+    formData.append("status", selectedBrand.brandStatus);
 
     // Append brand image if a new one is selected
     if (
@@ -323,7 +323,6 @@ const Brands = () => {
                                   objectFit: "cover",
                                   borderRadius: "5px",
                                 }}
-                                // onError={(e) => (e.target.src = "/default-brand.png")} // Fallback Image
                               />
                             ) : (
                               "No Image"
@@ -333,12 +332,12 @@ const Brands = () => {
                           <td>
                             <span
                               className={
-                                brand?.status === "active"
+                                brand?.brandStatus === "active"
                                   ? "active"
                                   : "inactive"
                               }
                             >
-                              {brand?.status || "Unknown"}
+                              {brand?.brandStatus || "Unknown"}
                             </span>
                           </td>
                           <td>
@@ -490,7 +489,7 @@ const Brands = () => {
                           <div className="img-box">
                             {selectedBrand?.brandImg && (
                               <img
-                                src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                                src={`http://localhost:5070${selectedBrand.brandImg}`}
                                 alt="Brand"
                                 width="100"
                               />
@@ -572,11 +571,11 @@ const Brands = () => {
                         id="select-status"
                         className="select-status"
                         required
-                        value={selectedBrand?.status || ""}
+                        value={selectedBrand?.brandStatus || ""}
                         onChange={(e) =>
                           setSelectedBrand({
                             ...selectedBrand,
-                            status: e.target.value,
+                            brandStatus: e.target.value,
                           })
                         }
                       >

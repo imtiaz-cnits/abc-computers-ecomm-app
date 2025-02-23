@@ -132,39 +132,22 @@ const AddProduct = () => {
   const handleSubmit = async (e, type) => {
     e.preventDefault();
 
-    if (type === "product") {
-      console.log("Category ID:", selectedCategory?._id);
-      console.log("SubCategory ID:", selectedSubCategory?._id);
-      console.log("Brand ID:", selectedBrand?._id);
-      console.log("Product Code:", productCode);
-      console.log("Product Name:", productName);
-      console.log("Status:", productStatus);
-      console.log("Price:", price);
-      console.log("Discount Price:", discountPrice);
-      console.log("Key Feature:", keyFeature);
-      console.log("Specification:", specification);
-      console.log("Description:", description);
-      console.log("Product Image:", productImg);
-      console.log("Stock:", stock);
-      console.log("Color:", color);
-    }
-
-    let formData = new FormData();
-    let requestData = {}; // For JSON requests
+    let formData = {};
+    let requestData = {};
     let url = "";
-    let isFormData = true; // Default to using FormData
+    let isFormData = true;
     let successMessage = "";
-    let updateState = null; // Ensure it's initially null
+    let updateState = null;
 
     // Switch statement to handle different types
     switch (type) {
       case "brand":
-        if (!brandName || !brandStatus) { // Check if brandStatus is missing
+        if (!brandName || !brandStatus) {
           toast.error("Brand name and status are required!");
           return;
         }
         formData.append("brandName", brandName);
-        formData.append("status", brandStatus); // Use brandStatus for brand
+        formData.append("status", brandStatus);
         if (brandImg) formData.append("brandImg", brandImg);
 
         url = "http://localhost:5070/api/v1/brands";
@@ -174,16 +157,16 @@ const AddProduct = () => {
         // Reset after submission
         setBrandName("");
         setBrandImg(null);
-        setBrandStatus(""); // Reset brandStatus
+        setBrandStatus("");
         break;
 
       case "category":
-        if (!categoryName || !categoryStatus) { // Check if categoryStatus is missing
+        if (!categoryName || !categoryStatus) {
           toast.error("Category name and status are required!");
           return;
         }
         formData.append("categoryName", categoryName);
-        formData.append("status", categoryStatus); // Use categoryStatus
+        formData.append("status", categoryStatus);
         if (categoryImg) formData.append("categoryImg", categoryImg);
 
         url = "http://localhost:5070/api/v1/category";
@@ -193,7 +176,7 @@ const AddProduct = () => {
         // Reset after submission
         setCategoryName("");
         setCategoryImg(null);
-        setCategoryStatus(""); // Reset categoryStatus
+        setCategoryStatus("");
         break;
 
       case "subCategory":
@@ -212,7 +195,7 @@ const AddProduct = () => {
 
         // Reset after submission
         setSubCategoryName("");
-        setSubCategoryStatus(""); // Reset subcategory status
+        setSubCategoryStatus("");
         setSelectedCategory(null);
         break;
 
@@ -221,59 +204,41 @@ const AddProduct = () => {
         const subCategoryID = selectedSubCategory?._id;
         const brandID = selectedBrand?._id;
 
-        // Ensure all fields are provided before submission
+        // Validate required fields
         if (!productName || !productStatus || !price || !categoryID || !subCategoryID || !brandID) {
           toast.error("Product name, status, price, brand, category, and subcategory are required!");
           return;
         }
 
-        formData.append("productCode", productCode);
-        formData.append("productName", productName);
-        formData.append("status", productStatus); // Use correct status for products
-        formData.append("price", price);
-        formData.append("discountPrice", discountPrice);
-        formData.append("keyFeature", keyFeature);
-        formData.append("specification", specification);
-        formData.append("description", description);
-        formData.append("stock", stock);
-        formData.append("color", JSON.stringify(color));
-        formData.append("brandID", brandID);
-        formData.append("categoryID", categoryID);
-        formData.append("subCategoryID", subCategoryID);
+        // Append all required fields to FormData
+        formData.productName = productName;
+        formData.productStatus = productStatus;
+        formData.price = price;
+        formData.brandID = brandID;
+        formData.categoryID = categoryID;
+        formData.subCategoryID = subCategoryID;
 
-        if (price <= 0) {
-          toast.error("Price must be a positive number!");
-          return;
-        }
+        // Append optional fields if they exist
+        if (productCode) formData.productCode = productCode;
+        if (discountPrice) formData.discountPrice = discountPrice;
+        if (keyFeature) formData.keyFeature = keyFeature;
+        if (specification) formData.specification = specification;
+        if (description) formData.description = description;
+        if (stock) formData.stock = stock;
+        if (color.length > 0) formData.color = JSON.stringify(color);
+        if (productImgFile) formData.productImg = productImgFile;
 
-        if (productImgFile) {
-          formData.append("productImg", productImgFile);
-        }
+        console.log(productImgFile)
+
+
 
         url = "http://localhost:5070/api/v1/add-product";
         successMessage = "Product added successfully!";
         updateState = setProduct;
-
-        // Reset after submission
-        setProductCode("");
-        setProductName("");
-        setProductStatus(""); // Reset productStatus
-        setPrice("");
-        setDiscountPrice("");
-        setKeyFeature("");
-        setSpecification("");
-        setDescription("");
-        setStock("");
-        setColor([]);
-        setProductImg("");
-        setProductImgFile(null);
-        setSelectedCategory(null);
-        setSelectedSubCategory(null);
-        setSelectedBrand(null);
         break;
 
       default:
-        toast.error("Invalid form type!"); // Default case if the type is not recognized
+        toast.error("Invalid form type!");
         return;
     }
 
@@ -281,21 +246,25 @@ const AddProduct = () => {
     document.querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`)?.click();
 
     try {
-      // Submit the request either with FormData or JSON
+      // console.log("Sending request to:", url);
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
+
+      console.log("Request data:", requestData);
+
       const response = isFormData
           ? await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
           : await axios.post(url, requestData);
 
+      console.log("API response:", response.data);
       toast.success(successMessage);
 
-      // ✅ Check if updateState exists before updating state
       if (updateState) {
         updateState((prevData) => [...prevData, response.data.data]);
       }
-
     } catch (error) {
-      // Log and display error if API request fails
-      console.error("Error:", error.response?.data || error.message);
+      console.error("Error response:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "An unexpected error occurred!");
     }
   };
@@ -319,8 +288,8 @@ const AddProduct = () => {
     } else if (type === "category") {
       setCategoryImg(file); // Set the category image state
     } else if (type === "product") {
-      setProductImg(file); // Set the product image state
-      setProductImgFile(file); // Set the product image file state
+      setProductImg(file)
+      setProductImgFile(file);
     }
   };
 

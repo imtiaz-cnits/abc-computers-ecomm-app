@@ -1,21 +1,23 @@
 const mongoose = require("mongoose");
 
-const DataSchema = mongoose.Schema({
-            productCode: { type: String, required: true },
-            productName: { type: String, required: true },
-            productStatus: { type: String, required: true, enum: ["active", "inactive"] },
-            price: { type: Number, required: true },
-            discountPrice: { type: Number, default: 0 },
-            keyFeature: { type: String },
-            specification: { type: String },
-            description: { type: String },
-            productImg: { type: String },
-            stock: { type: Number, required: true },
-            color: { type: String },
+const DataSchema = mongoose.Schema(
+    {
+        productCode: { type: String },
+        productName: { type: String },
+        productStatus: { type: String },
+        price: { type: Number, min: 0 },
+        discountPrice: { type: Number, default: 0, min: 0 },
+        keyFeature: { type: String },
+        specification: { type: String },
+        description: { type: String },
+        productImg: { type: String, }, // Allow null for productImg
+        stock: { type: Number, min: 0 },
+        color: { type: [String] }, // Array of colors
+        badge: { type: String }, // Add badge field
 
-            brandID: { type: mongoose.Schema.Types.ObjectId, ref: "brands", required: true },
-            categoryID: { type: mongoose.Schema.Types.ObjectId, ref: "categories", required: true },
-            subCategoryID: { type: mongoose.Schema.Types.ObjectId, ref: "subcategories", required: true },
+        brandID: { type: mongoose.Schema.Types.ObjectId, ref: "brands" },
+        categoryID: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },
+        subCategoryID: { type: mongoose.Schema.Types.ObjectId, ref: "subcategories" },
     },
     { timestamps: true, versionKey: false }
 );

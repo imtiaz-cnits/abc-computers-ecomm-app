@@ -11,20 +11,29 @@ const UserProfile = () => {
 
   const { userID, setUserID, existingUserID } = useContext(UserContext);
 
+  const [profileImg, setProfileImg] = useState(null);
   const [profile, setProfile] = useState({});
   const [formData, setFormData] = useState({
     cus_name: "",
-    email: "",
-    mobile: "",
     cus_country: "",
     cus_state: "",
     cus_city: "",
     cus_postcode: "",
     cus_address: "",
+    cus_email: "",
+    cus_mobile: "",
+    img_url: "",
+    userID: "",
+    profileImg: null,
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImg(file);
   };
 
   useEffect(() => {
@@ -44,6 +53,10 @@ const UserProfile = () => {
           cus_city,
           cus_postcode,
           cus_address,
+          cus_email,
+          cus_phone,
+          img_url,
+          userID: newUserID,
         } = result?.data?.data;
         setProfile(result?.data?.data);
         setFormData({
@@ -53,6 +66,10 @@ const UserProfile = () => {
           cus_city,
           cus_postcode,
           cus_address,
+          cus_email,
+          cus_phone,
+          img_url,
+          userID: newUserID,
         });
       }
     };
@@ -96,10 +113,33 @@ const UserProfile = () => {
     }
   };
 
-  const handleEditProfile = (e) => {
+  const handleEditProfile = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    const updatedProfile = {};
+
+    updatedProfile.cus_name = formData?.cus_name;
+    updatedProfile.cus_country = formData?.cus_country;
+    updatedProfile.cus_state = formData?.cus_state;
+    updatedProfile.cus_city = formData?.cus_city;
+    updatedProfile.cus_postcode = formData?.cus_postcode;
+    updatedProfile.cus_address = formData?.cus_address;
+    updatedProfile.cus_email = formData?.cus_email;
+    updatedProfile.cus_phone = formData?.cus_phone;
+    updatedProfile.userID = formData?.userID;
+    updatedProfile.profileImg = profileImg;
+
+    const response = await axios.put(
+      `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`,
+      updatedProfile,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log(response);
   };
 
   return (
@@ -564,7 +604,11 @@ const UserProfile = () => {
                     </span>
                     <input
                       type="text"
+                      name="cus_email"
                       placeholder="enter email address"
+                      defaultValue={profile?.cus_email}
+                      onChange={handleChange}
+                      readOnly
                       required
                     />
                   </div>
@@ -573,7 +617,15 @@ const UserProfile = () => {
                       <span className="edit_profile_input_text">
                         Mobile Number
                       </span>
-                      <input type="number" placeholder="enter number" required />
+                      <input
+                        type="number"
+                        name="cus_phone"
+                        placeholder="enter number"
+                        defaultValue={profile?.cus_phone}
+                        onChange={handleChange}
+                        readOnly
+                        required
+                      />
                     </div>
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Country</span>
@@ -631,42 +683,13 @@ const UserProfile = () => {
                       />
                     </div>
                   </div>
-                  {/* <div className="profile_img_box_items">
-                    <span className="edit_profile_input_text">Full Name</span>
-                    <div className="profile_img_box">
-                      <div className="img_box">
-                        <img id="profileImage" src="" alt="Profile Image" />
-                      </div>
-                      <div className="profile-wrapper">
-                        <label
-                          className="custom-file-input-wrapper"
-                          htmlFor="fileInput"
-                        >
-                          <input
-                            type="file"
-                            id="fileInput"
-                            className="custom-file-input"
-                            aria-label="Upload Photo"
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div> */}
                   <div className="edit_profile_input_box">
                     <span className="edit_profile_input_text">
                       Update Image
                     </span>
                     <div className="upload-profile">
                       <div className="item">
-                        <div className="img-box">
-                          {/* {selectedBrand?.brandImg && (
-                            <img
-                              src={`http://localhost:5070/${selectedBrand.brandImg}`}
-                              alt="Brand"
-                              width="100"
-                            />
-                          )} */}
-                        </div>
+                        <div className="img-box"></div>
 
                         <div className="profile-wrapper">
                           <label className="custom-file-input-wrapper m-0">
@@ -674,6 +697,7 @@ const UserProfile = () => {
                               type="file"
                               className="custom-file-input"
                               aria-label="Upload Photo"
+                              onChange={handleFileChange}
                             />
                           </label>
                           <p>PNG, JPEG, or GIF (Up to 1 MB)</p>

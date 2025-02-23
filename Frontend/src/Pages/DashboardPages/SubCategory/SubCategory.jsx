@@ -8,7 +8,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Select from "react-select";
 import { FaXmark } from "react-icons/fa6";
-import category from "@/Pages/DashboardPages/Category/Category";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faSort } from "@fortawesome/free-solid-svg-icons";
 

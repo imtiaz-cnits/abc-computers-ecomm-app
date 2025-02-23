@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import DashboardActiveLink from "../DashboardActiveLink/DashboardActiveLink";
 import DashboardSubmenu from "../DashboardSubmenu/DashboardSubmenu";
+import Navigate from "@/Components/Shared/Navigate/Navigate";
 
 const DashboardSidebar = () => {
   const path = usePathname();

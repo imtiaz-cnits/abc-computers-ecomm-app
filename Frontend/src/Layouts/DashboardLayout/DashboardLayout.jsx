@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import React, { createContext, useEffect, useState } from "react";
 import "@/assets/css/bootstrap.min.css";
 
-export const AdminRouteContext = createContext(null)
+export const AdminRouteContext = createContext({});
 
 const DashboardLayout = ({ children }) => {
   const path = usePathname();
@@ -15,6 +15,7 @@ const DashboardLayout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
     // ..............Table searchbar filter Start.......................//
     const searchInput = document.querySelector("#searchInput");
     searchInput?.addEventListener("input", function () {
@@ -35,13 +36,14 @@ const DashboardLayout = ({ children }) => {
       });
     });
     // ..............Table searchbar filter End.......................//
-
-
   }, [path]);
 
   const value = {
-    isAdmin, isLoading, setIsAdmin, setIsLoading
-  }
+    isAdmin,
+    isLoading,
+    setIsAdmin,
+    setIsLoading,
+  };
 
   return (
     <AdminRouteContext.Provider value={value}>

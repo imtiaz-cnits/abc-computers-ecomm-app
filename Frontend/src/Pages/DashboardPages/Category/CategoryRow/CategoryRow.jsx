@@ -4,7 +4,7 @@ const CategoryRow = ({ category, index, handleEditClick, handleDeleteClick }) =>
     console.log("Category Data: ", category); // Log category data to see its structure
 
     return (
-        <tr key={category._id || index}>
+        <tr key={category?._id || index}>
             <td>{index + 1}</td>
             <td>
                 {category?.categoryImg ? (

@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 const AdminRoute = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAdmin, isLoading, setIsAdmin, setIsLoading } = useContext(AdminRouteContext)
+  const { isAdmin, isLoading, setIsAdmin, setIsLoading } =
+    useContext(AdminRouteContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,15 +54,19 @@ const AdminRoute = ({ children }) => {
     fetchAdmin();
   }, [pathname]);
 
+  useEffect(() => {
+    if (!isAdmin && !isLoading && !pathname.startsWith("/dashboard/login")) {
+      return router.push("/dashboard/login");
+    }
+  }, [isLoading, isAdmin, isLoading, pathname]);
+
   if (isLoading) {
     return <></>;
   }
 
-  if (!isAdmin && !isLoading && !pathname.startsWith("/dashboard/login")) {
-    return router.push("/dashboard/login");
-  }
-
-  return <>{children}</>;
+  return (
+    <>{isAdmin || pathname.startsWith("/dashboard/login") ? children : <></>}</>
+  );
 };
 
 export default AdminRoute;

@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useEffect, useState } from "react";
 
-export const UserContext = createContext(null);
+export const UserContext = createContext({});
 
 const UserContextProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState("");

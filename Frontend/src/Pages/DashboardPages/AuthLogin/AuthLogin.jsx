@@ -9,8 +9,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const AuthLogin = () => {
-
-  const { setIsLoading } = useContext(AdminRouteContext)
+  const { setIsLoading } = useContext(AdminRouteContext);
 
   const [login, setLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -95,7 +94,7 @@ const AuthLogin = () => {
         localStorage.setItem("token", result.token);
         toast.success("Login successful!");
         if (localStorage.getItem("token")) {
-          setIsLoading(true)
+          setIsLoading(true);
           router.push("/dashboard"); // Redirect to dashboard
         } else {
           toast.error("Login failed! Please check your credentials.");

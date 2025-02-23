@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 
 const fs = require("fs");
+const UserModel = require("../models/UserModel");
 
 // Ensure the upload directory exists
 const uploadDir = path.join(__dirname, "uploads");
@@ -59,15 +60,32 @@ const ProfileAddService = async (data) => {
 };
 
 const ProfileDetailsService = async (userID) => {
+  const user = await UserModel.findOne({ _id: userID });
   const result = await ProfileModel.findOne({ userID });
+
+  const email = user?.email;
+  const mobile = user?.mobile;
+  const img_url = user?.img_url;
+
+  const profile = {
+    ...result?._doc,
+    cus_email: email,
+    cus_phone: mobile,
+    img_url,
+  };
 
   return {
     status: "success",
-    data: result,
+    data: profile,
   };
+};
+
+const ProfileUpdateService = async (req) => {
+  console.log(req.body);
 };
 
 module.exports = {
   ProfileAddService,
   ProfileDetailsService,
+  ProfileUpdateService,
 };

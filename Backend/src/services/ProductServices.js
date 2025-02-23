@@ -38,12 +38,12 @@ const BrandAddService = async (req) => {
     try {
         console.log("Received brand data:", req.body);
 
-        const { brandName, status } = req.body;
+        const { brandName, brandStatus } = req.body;
         const brandImg = req.file ? `/uploads/${req.file.filename}` : null;
 
         console.log("File uploaded:", req.file);
         console.log("Brand Name:", brandName);
-        console.log("Status:", status);
+        console.log("Status:", brandStatus);
         console.log("Brand Image Path:", brandImg);
 
         // Validate required fields
@@ -59,7 +59,7 @@ const BrandAddService = async (req) => {
         }
 
         // Create and save new brand
-        const newBrand = new BrandModel({ brandName, brandImg, status });
+        const newBrand = new BrandModel({ brandName, brandImg, brandStatus });
         await newBrand.save();
 
         console.log("New brand added:", newBrand);
@@ -312,25 +312,27 @@ const ProductAddService = async (req) => {
             productName,
             productStatus,
             price,
-            discount,
             discountPrice,
             keyFeature,
             specification,
             description,
             stock,
             color,
-            badge
         } = req.body;
 
         const productImg = req.file ? `/uploads/${req.file.filename}` : null;
 
-        if (!productName || !status || !brandID || !categoryID || !subCategoryID) {
+        console.log("Received product img:", req.file);
+
+        // Validate required fields
+        if (!productName || !productStatus || !brandID || !categoryID || !subCategoryID) {
             return {
                 status: "fail",
-                message: "Product Name, Status, Brand ID, Category ID, and Sub Category ID are required!"
+                message: "Product Name, Status, Brand ID, Category ID, and Sub Category ID are required!",
             };
         }
 
+        // Check if brand, category, and subcategory exist
         const brandExists = await BrandModel.findById(brandID);
         if (!brandExists) {
             return { status: "fail", message: "Brand not found" };
@@ -346,29 +348,28 @@ const ProductAddService = async (req) => {
             return { status: "fail", message: "Sub Category not found" };
         }
 
+        // Check if product already exists
         const existingProduct = await ProductModel.findOne({ productName });
         if (existingProduct) {
             return { status: "fail", message: "Product already exists" };
         }
 
-        // Include brandID, categoryID, subCategoryID, and productImg
+        // Create new product
         const newProduct = new ProductModel({
             productCode,
             productName,
             productStatus,
             price,
-            discount,
             discountPrice,
             keyFeature,
             specification,
             description,
             stock,
             color,
-            badge,
-            brandID, // Fixed
-            categoryID, // Fixed
-            subCategoryID, // Fixed
-            productImg // Fixed
+            brandID,
+            categoryID,
+            subCategoryID,
+            productImg,
         });
 
         await newProduct.save();
@@ -379,7 +380,7 @@ const ProductAddService = async (req) => {
             data: newProduct,
         };
     } catch (error) {
-        console.error("Error in ProductAddService:", error.message);
+        console.error("Error in ProductAddService:", error);
         return { status: "fail", message: "Error adding product. Please try again." };
     }
 };

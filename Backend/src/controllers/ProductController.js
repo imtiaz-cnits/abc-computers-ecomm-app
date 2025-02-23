@@ -179,9 +179,7 @@ exports.AddProduct = async (req, res) => {
     }
   } catch (error) {
     console.error("Error in AddProduct controller:", error);
-    return res
-        .status(500)
-        .json({ status: "fail", message: "Error adding product." });
+    return res.status(500).json({ status: "fail", message: "Error adding product." });
   }
 };
 

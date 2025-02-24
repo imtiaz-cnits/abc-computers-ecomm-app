@@ -659,7 +659,7 @@ html ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@media screen and (max-width: 1240px) {
+@media screen and (max-width: 1600px) {
   .data-table .table-wrapper {
     overflow-x: auto;
     overflow-y: hidden !important;

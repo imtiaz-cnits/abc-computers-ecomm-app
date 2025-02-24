@@ -387,7 +387,7 @@ const ProductAddService = async (req) => {
 
 const ProductListService = async () => {
     try {
-        let data = await CategoryModel.find().populate("subCategories"); // Ensure subcategories are populated
+        let data = await ProductModel.find().populate("brandID categoryID subCategoryID");
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
         return { status: "Fail", data: e.toString() }; // Ensure JSON error response

@@ -2,14 +2,47 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import products from "@/Pages/WebsitePages/Products/Products";
+import axios from "axios";
 
 const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
   const tableRef = useRef(null);
 
-  const filteredProducts = Array.isArray(product)
-      ? product.slice(skip, skip + limit)
-      : [];
+  const [products, setProducts] = useState([]);
+  // const filteredProducts = Array.isArray(products)
+  //     ? product.slice(skip, skip + limit)
+  //     : [];
+
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5070/api/v1/product-list");
+
+        setProducts(response.data.data || []);
+        // setTotalItems(response?.data?.data.length);
+      } catch (error) {
+        if (error.response) {
+          console.error(
+              `Error fetching brands: ${error.response.status} - ${error.response.data}`
+          );
+        } else if (error.request) {
+          console.error("No response received from server:", error.request);
+        } else {
+          console.error("Error setting up request:", error.message);
+        }
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+
+  useEffect(() => {
+    console.log("Products:", products);
+  }, [products]);
+
+
+
 
   return (
     <div className="main-content">
@@ -70,7 +103,7 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                     <th>SL NO</th>
                     <th>IMAGE</th>
                     <th>CODE</th>
-                    <th>PRODUCT NAME</th>
+                    <th>NAME</th>
                     <th>PRICE</th>
                     <th>DISCOUNT PRICE</th>
                     <th>BRAND</th>
@@ -82,8 +115,8 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                   </tr>
                   </thead>
                   <tbody>
-                  {filteredProducts?.length > 0 ? (
-                      filteredProducts?.map((product, index) => (
+                  {products?.length > 0 ? (
+                      products?.map((product, index) => (
                   <tr key={product._id || index}>
                     <td>{index + 1}</td>
                     <td>
@@ -102,15 +135,15 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                         "No Image"
                     )}
                     </td>
-                    <td>#001</td>
-                    <td>Dell Latitude 3530 Core i3 12th Gen 15.6" FHD Touch Laptop</td>
-                    <td>72,300</td>
-                    <td>68,500</td>
-                    <td>DELL</td>
-                    <td>Laptop</td>
-                    <td>Business Laptops</td>
-                    <td>5</td>
-                    <td>Sliver, Black</td>
+                    <td>{product?.productCode}</td>
+                    <td>{product?.productName}</td>
+                    <td>{product?.price}</td>
+                    <td>{product?.discountPrice}</td>
+                    <td>{product?.brandID?.brandName}</td>
+                    <td>{product?.categoryID?.categoryName}</td>
+                    <td>{product?.subCategoryID?.subCategoryName}</td>
+                    <td></td>
+                    <td></td>
                     <td>
                       <div id="action_btn">
                         <Link href={"/dashboard/products/update-product/0001"}>

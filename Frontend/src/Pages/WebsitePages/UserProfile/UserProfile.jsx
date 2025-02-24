@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import "./UserProfile.css";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
   const router = useRouter();
 
   const { userID, setUserID, existingUserID } = useContext(UserContext);
 
+  const [profileImgPreview, setProfileImgPreview] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [profile, setProfile] = useState({});
   const [formData, setFormData] = useState({
@@ -33,49 +35,63 @@ const UserProfile = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
+    if (!file) return;
+
     setProfileImg(file);
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImgPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+
+      URL.revokeObjectURL(img.src);
+      e.target.value = "";
+    };
   };
 
   useEffect(() => {
-    console.log(
-      `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`
-    );
     const fetchProfile = async () => {
       const result = await axios.get(
-        `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`
+        `http://localhost:5070/api/v1/profile-details/${existingUserID}`
       );
 
       if (result?.data?.status === "success") {
-        const {
-          cus_name,
-          cus_country,
-          cus_state,
-          cus_city,
-          cus_postcode,
-          cus_address,
-          cus_email,
-          cus_phone,
-          img_url,
-          userID: newUserID,
-        } = result?.data?.data;
         setProfile(result?.data?.data);
-        setFormData({
-          cus_name,
-          cus_country,
-          cus_state,
-          cus_city,
-          cus_postcode,
-          cus_address,
-          cus_email,
-          cus_phone,
-          img_url,
-          userID: newUserID,
-        });
       }
     };
 
     fetchProfile();
   }, [userID]);
+
+  useEffect(() => {
+    const {
+      cus_name,
+      cus_country,
+      cus_state,
+      cus_city,
+      cus_postcode,
+      cus_address,
+      userID: userInfo,
+    } = profile;
+
+    setFormData({
+      cus_name,
+      cus_country,
+      cus_state,
+      cus_city,
+      cus_postcode,
+      cus_address,
+      cus_email: userInfo?.email,
+      cus_phone: userInfo?.mobile,
+      img_url: userInfo?.img_url,
+    });
+  }, [profile]);
 
   const handleLogout = async () => {
     try {
@@ -124,22 +140,28 @@ const UserProfile = () => {
     updatedProfile.cus_city = formData?.cus_city;
     updatedProfile.cus_postcode = formData?.cus_postcode;
     updatedProfile.cus_address = formData?.cus_address;
-    updatedProfile.cus_email = formData?.cus_email;
-    updatedProfile.cus_phone = formData?.cus_phone;
     updatedProfile.userID = formData?.userID;
     updatedProfile.profileImg = profileImg;
 
-    const response = await axios.put(
-      `http://localhost:5070/api/v1/Profile-Details/${existingUserID}`,
-      updatedProfile,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    try {
+      const response = await axios.put(
+        `http://localhost:5070/api/v1/profile/${existingUserID}`,
+        updatedProfile,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    console.log(response);
+      if (response?.data?.status === "success") {
+        setProfile(response?.data?.data);
+        toast.success("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error(error?.response?.data?.message || "An error occurred.");
+    }
   };
 
   return (
@@ -606,7 +628,7 @@ const UserProfile = () => {
                       type="text"
                       name="cus_email"
                       placeholder="enter email address"
-                      defaultValue={profile?.cus_email}
+                      defaultValue={profile?.userID?.email}
                       onChange={handleChange}
                       readOnly
                       required
@@ -621,7 +643,7 @@ const UserProfile = () => {
                         type="number"
                         name="cus_phone"
                         placeholder="enter number"
-                        defaultValue={profile?.cus_phone}
+                        defaultValue={profile?.userID?.mobile}
                         onChange={handleChange}
                         readOnly
                         required
@@ -635,7 +657,6 @@ const UserProfile = () => {
                         name="cus_country"
                         defaultValue={profile?.cus_country}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                     <div className="edit_profile_input_box">
@@ -646,7 +667,6 @@ const UserProfile = () => {
                         name="cus_state"
                         defaultValue={profile?.cus_state}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                     <div className="edit_profile_input_box">
@@ -657,7 +677,6 @@ const UserProfile = () => {
                         name="cus_city"
                         defaultValue={profile?.cus_city}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                     <div className="edit_profile_input_box">
@@ -668,7 +687,6 @@ const UserProfile = () => {
                         name="cus_postcode"
                         defaultValue={profile?.cus_postcode}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                     <div className="edit_profile_input_box">
@@ -679,7 +697,6 @@ const UserProfile = () => {
                         name="cus_address"
                         defaultValue={profile?.cus_address}
                         onChange={handleChange}
-                        required
                       />
                     </div>
                   </div>
@@ -689,7 +706,23 @@ const UserProfile = () => {
                     </span>
                     <div className="upload-profile">
                       <div className="item">
-                        <div className="img-box"></div>
+                        <div className="img-box">
+                          {profileImgPreview ? (
+                            <img
+                              src={profileImgPreview}
+                              alt="profile"
+                              width="120"
+                            />
+                          ) : profile?.userID?.img_url ? (
+                            <img
+                              src={`http://localhost:5070${profile?.userID?.img_url}`}
+                              alt="profile"
+                              width="120"
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </div>
 
                         <div className="profile-wrapper">
                           <label className="custom-file-input-wrapper m-0">

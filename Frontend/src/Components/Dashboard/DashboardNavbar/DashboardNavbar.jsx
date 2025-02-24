@@ -12,8 +12,6 @@ const DashboardNavbar = () => {
     return;
   }
 
-  // TODO: Fix dropdown menu
-
   useEffect(() => {
     // Sidebar Close on Outside Click
     document.addEventListener("click", function (event) {

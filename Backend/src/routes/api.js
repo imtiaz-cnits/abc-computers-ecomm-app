@@ -40,10 +40,10 @@ router.post("/Login", UserController.Login);
 router.post("/Logout", UserController.UserLogout);
 
 // Profile API
-router.post("/Profile", ProfileController.AddProfile);
-router.get("/Profile-details/:userID", ProfileController.ProfileDetails);
+router.post("/profile", ProfileController.AddProfile);
+router.get("/profile-details/:userID", ProfileController.ProfileDetails);
 router.put(
-  "/Profile-details/:userID",
+  "/profile/:userID",
   upload.single("profileImg"),
   ProfileController.UpdateProfile
 );
@@ -79,7 +79,11 @@ router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 // Product Add CRUD APIs
-router.post("/add-product", upload.single("productImg"), ProductController.AddProduct);
+router.post(
+  "/add-product",
+  upload.single("productImg"),
+  ProductController.AddProduct
+);
 router.get("/product-list", ProductController.ProductList);
 router.put("/update-product/:id", ProductController.ProductUpdate);
 router.delete("/remove-product/:id", ProductController.ProductDelete);

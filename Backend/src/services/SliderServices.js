@@ -33,6 +33,7 @@ const upload = multer({
 // Hero Slider CRUD Services
 
 const HeroSliderAddService = async (req) => {
+  console.log(req.body);
   try {
     const { title, des, status } = req.body;
     const slideImg = req.file ? `/uploads/${req.file.filename}` : null;

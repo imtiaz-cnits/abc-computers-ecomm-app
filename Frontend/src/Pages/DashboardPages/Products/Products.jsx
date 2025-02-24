@@ -142,8 +142,25 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                     <td>{product?.brandID?.brandName}</td>
                     <td>{product?.categoryID?.categoryName}</td>
                     <td>{product?.subCategoryID?.subCategoryName}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{product?.stock}</td>
+                    <td>
+                      {(() => {
+                        let colors = [];
+
+                        if (Array.isArray(product?.color) && typeof product.color[0] === "string") {
+                          try {
+                            colors = JSON.parse(product.color[0]); // Parse the JSON string
+                          } catch (error) {
+                            console.error("Error parsing color JSON:", error);
+                          }
+                        }
+
+                        return colors.length > 0 ? colors.map(c => c.name).join(", ") : "No color available";
+                      })()}
+                    </td>
+
+
+
                     <td>
                       <div id="action_btn">
                         <Link href={"/dashboard/products/update-product/0001"}>

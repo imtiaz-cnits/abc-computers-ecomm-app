@@ -10,10 +10,10 @@ const DataSchema = mongoose.Schema(
         keyFeature: { type: String },
         specification: { type: String },
         description: { type: String },
-        productImg: { type: String, }, // Allow null for productImg
+        productImg: { type: String, },
         stock: { type: Number, min: 0 },
-        color: { type: [String] }, // Array of colors
-        badge: { type: String }, // Add badge field
+        color: { type: [String] },
+        badge: { type: String },
 
         brandID: { type: mongoose.Schema.Types.ObjectId, ref: "brands" },
         categoryID: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },

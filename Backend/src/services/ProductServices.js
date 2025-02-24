@@ -396,27 +396,72 @@ const ProductListService = async () => {
 
 const ProductUpdateService = async (req) => {
     try {
-        const { categoryName, status } = req.body;
-        const categoryImg = req.file ? `/uploads/${req.file.filename}` : null;
+        // Destructure the necessary data from the request body
+        const {
+            productCode,
+            productName,
+            price,
+            discountPrice,
+            stock,
+            keyFeature,
+            specification,
+            description,
+            color,
+            brandID,
+            categoryID,
+            subCategoryID,
+        } = req.body;
 
-        // Check if the category exists
-        const existingCategory = await CategoryModel.findById(req.params.id);
-        if (!existingCategory) {
-            return { status: "fail", message: "Category not found" };
+        // Ensure all required fields are present
+        if (!productCode || !productName || !price || !stock) {
+            return { status: "fail", message: "Missing required fields (productCode, productName, price, stock)." };
         }
 
-        // Update the category fields
-        existingCategory.categoryName = categoryName || existingCategory.categoryName;
-        existingCategory.status = status || existingCategory.status;
-        if (categoryImg) existingCategory.categoryImg = categoryImg; // Update image if new one is uploaded
+        // Handle color parsing (check if color is a valid JSON string)
+        let parsedColors = [];
+        try {
+            parsedColors = color ? JSON.parse(color) : []; // Default to empty array if no color is provided
+        } catch (error) {
+            return { status: "fail", message: "Invalid color data format. Must be a valid JSON array." };
+        }
 
-        // Save updated category
-        await existingCategory.save();
+        // Handle image upload (if any)
+        const productImg = req.file ? `/uploads/${req.file.filename}` : null;
 
-        return { status: "success", message: "Category updated successfully", data: existingCategory };
+        // Find the existing product by its ID (from req.params.id)
+        const existingProduct = await ProductModel.findById(req.params.id);
+        if (!existingProduct) {
+            return { status: "fail", message: "Product not found" };
+        }
+
+        // Update the fields of the existing product with new data, falling back to existing values
+        existingProduct.productCode = productCode || existingProduct.productCode;
+        existingProduct.productName = productName || existingProduct.productName;
+        existingProduct.price = price || existingProduct.price;
+        existingProduct.discountPrice = discountPrice || existingProduct.discountPrice;
+        existingProduct.stock = stock || existingProduct.stock;
+        existingProduct.keyFeature = keyFeature || existingProduct.keyFeature;
+        existingProduct.specification = specification || existingProduct.specification;
+        existingProduct.description = description || existingProduct.description;
+        existingProduct.color = parsedColors;  // Update color as parsed array
+
+        // Optional image update
+        if (productImg) {
+            existingProduct.productImg = productImg;
+        }
+
+        // Handle relationships (if any)
+        existingProduct.brandID = brandID || existingProduct.brandID;
+        existingProduct.categoryID = categoryID || existingProduct.categoryID;
+        existingProduct.subCategoryID = subCategoryID || existingProduct.subCategoryID;
+
+        // Save the updated product to the database
+        await existingProduct.save();
+
+        return { status: "success", message: "Product updated successfully", data: existingProduct };
     } catch (error) {
-        console.error("Error in CategoryUpdateService:", error.message);
-        return { status: "fail", message: "Error updating category. Please try again." };
+        console.error("Error in ProductUpdateService:", error.message);
+        return { status: "fail", message: "Error updating product. Please try again." };
     }
 };
 

@@ -60,28 +60,66 @@ const ProfileAddService = async (data) => {
 };
 
 const ProfileDetailsService = async (userID) => {
-  const user = await UserModel.findOne({ _id: userID });
-  const result = await ProfileModel.findOne({ userID });
-
-  const email = user?.email;
-  const mobile = user?.mobile;
-  const img_url = user?.img_url;
-
-  const profile = {
-    ...result?._doc,
-    cus_email: email,
-    cus_phone: mobile,
-    img_url,
-  };
+  const result = await ProfileModel.findOne({ userID }).populate(
+    "userID",
+    "email mobile img_url"
+  );
 
   return {
     status: "success",
-    data: profile,
+    data: result,
   };
 };
 
 const ProfileUpdateService = async (req) => {
-  console.log(req.body);
+  const {
+    cus_name,
+    cus_country,
+    cus_state,
+    cus_city,
+    cus_postcode,
+    cus_address,
+  } = req.body;
+
+  const profileImg = req.file ? `/uploads/${req.file.filename}` : null;
+
+  const existingProfile = await ProfileModel.findOne({
+    userID: req.params.userID,
+  });
+
+  const existingUser = await UserModel.findById(req.params.userID);
+
+  if (!existingProfile || !existingUser) {
+    return { status: "fail", message: "Profile not found" };
+  }
+
+  existingProfile.cus_name = cus_name || existingProfile.cus_name;
+  existingProfile.cus_country = cus_country || existingProfile.cus_country;
+  existingProfile.cus_state = cus_state || existingProfile.cus_state;
+  existingProfile.cus_city = cus_city || existingProfile.cus_city;
+  existingProfile.cus_postcode = cus_postcode || existingProfile.cus_postcode;
+  existingProfile.cus_address = cus_address || existingProfile.cus_address;
+
+  if (profileImg) existingUser.img_url = profileImg;
+  existingUser.name = cus_name || existingUser.name;
+
+  await existingProfile.save();
+  await existingUser.save();
+
+  const email = existingUser?.email;
+  const mobile = existingUser?.mobile;
+  const img_url = existingUser?.img_url;
+
+  const updatedProfile = {
+    ...existingProfile._doc,
+    userID: { email, mobile, img_url },
+  };
+
+  return {
+    status: "success",
+    message: "Profile updated successfully",
+    data: updatedProfile,
+  };
 };
 
 module.exports = {

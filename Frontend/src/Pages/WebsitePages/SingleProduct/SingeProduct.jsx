@@ -127,7 +127,6 @@ const SingleProduct = () => {
           <div className="single_product_wrapper">
             <div className="row no-gutters">
               <div className="col-lg-6">
-                {/* // TODO: Fix light slider */}
 
                 <Swiper
                   style={{

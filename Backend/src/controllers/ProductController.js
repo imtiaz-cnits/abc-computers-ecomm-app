@@ -194,17 +194,19 @@ exports.ProductList = async (req, res) => {
 
 exports.ProductUpdate = async (req, res) => {
   try {
-    console.log("Request Body:", req.body); // Log request body to verify data
+    console.log("Request Body:", req.body); // Log the incoming request to verify data
+
+    // Make sure the 'id' parameter is extracted from the URL correctly
     const result = await ProductUpdateService(req);
 
     if (result.status === "success") {
-      return res.status(200).json(result.data); // Ensure updated product data is sent back
+      return res.status(200).json(result.data); // Send updated product data back
     } else {
       return res.status(400).json({ status: "fail", message: result.message });
     }
   } catch (e) {
     console.error("Error:", e);
-    return res.status(500).json({ status: "Fail", message: e.toString() });
+    return res.status(500).json({ status: "fail", message: e.toString() });
   }
 };
 

@@ -320,6 +320,22 @@ const AddProduct = () => {
     }
   };
 
+  const handleUpload = async () => {
+    const formData = new FormData();
+    for (let i = 0; i < productImg.length; i++) {
+      formData.append("productImg", productImg[i]);
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
+
   const handleBrandChange = (selectedOption) => {
     if (selectedOption) {
       const brand = brands.find((b) => b._id === selectedOption.value);
@@ -705,6 +721,7 @@ const AddProduct = () => {
                             type="file"
                             className="custom-file-input"
                             aria-label="Upload Photo"
+                            multiple={true}
                             ref={fileInputRef}
                             onChange={(e) => handleFileChange(e, "product")}
                           />

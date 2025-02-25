@@ -2,7 +2,7 @@ import UpdateProduct from "@/Pages/DashboardPages/UpdateProduct/UpdateProduct";
 import React from "react";
 
 const UpdateProductPage = async ({ params }) => {
-  const id = await params?.id;
+  const { id } = await params;
   return (
     <>
       <UpdateProduct id={id} />

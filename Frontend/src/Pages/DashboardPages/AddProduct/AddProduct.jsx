@@ -66,10 +66,18 @@ const AddProduct = () => {
     productImg: null,
   });
   const reactColors = useRef();
-  const onDeleteColors = useCallback((colorIndex) => {
-      setColor(color.filter((_, i) => i !== colorIndex));}, [color]);
-  const onAdditionColors = useCallback((newColor) => { setColor([...color, newColor]); }, [color]);
-
+  const onDeleteColors = useCallback(
+    (colorIndex) => {
+      setColor(color.filter((_, i) => i !== colorIndex));
+    },
+    [color]
+  );
+  const onAdditionColors = useCallback(
+    (newColor) => {
+      setColor([...color, newColor?.name]);
+    },
+    [color]
+  );
 
   // ======= Add Product Handles ======= //
   const handleProductCodeChange = (e) => setProductCode(e.target.value);
@@ -78,12 +86,12 @@ const AddProduct = () => {
   const handleProductPriceChange = (e) => setPrice(e.target.value);
   const handleProductDiscountChange = (e) => setDiscountPrice(e.target.value);
   const handleProductKeyFeatureChange = (e) => setKeyFeature(e.target.value);
-  const handleProductSpecificationChange = (e) => setSpecification(e.target.value);
+  const handleProductSpecificationChange = (e) =>
+    setSpecification(e.target.value);
   const handleProductDescriptionChange = (e) => setDescription(e.target.value);
   const handleProductStockChange = (e) => setStock(e.target.value);
   const handleProductColorChange = (e) => setColor(e.target.value);
   // ======= Add Product Handles ======= //
-
 
   // Fetch brands when the component mounts
   useEffect(() => {
@@ -103,7 +111,9 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/category");
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/category"
+        );
         setCategories(response.data.data); // Assuming categories are returned in `data.data`
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -117,7 +127,9 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchSubCategory = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/sub-category");
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/sub-category"
+        );
         setSubCategories(response.data.data);
       } catch (error) {
         console.error("Error fetching sub categories:", error);
@@ -126,7 +138,6 @@ const AddProduct = () => {
     };
     fetchSubCategory();
   }, []);
-
 
   // ======== Handle Submit for Brand, Category & Sub Category ======== //
   const handleSubmit = async (e, type) => {
@@ -146,9 +157,9 @@ const AddProduct = () => {
           toast.error("Brand name and status are required!");
           return;
         }
-        formData.append("brandName", brandName);
-        formData.append("status", brandStatus);
-        if (brandImg) formData.append("brandImg", brandImg);
+        formData.brandName = brandName;
+        formData.status = brandStatus;
+        if (brandImg) formData.brandImg = brandImg;
 
         url = "http://localhost:5070/api/v1/brands";
         successMessage = "Brand added successfully!";
@@ -165,9 +176,9 @@ const AddProduct = () => {
           toast.error("Category name and status are required!");
           return;
         }
-        formData.append("categoryName", categoryName);
-        formData.append("status", categoryStatus);
-        if (categoryImg) formData.append("categoryImg", categoryImg);
+        formData.categoryName = categoryName;
+        formData.status = categoryStatus;
+        if (categoryImg) formData.categoryImg = categoryImg;
 
         url = "http://localhost:5070/api/v1/category";
         successMessage = "Category added successfully!";
@@ -205,8 +216,17 @@ const AddProduct = () => {
         const brandID = selectedBrand?._id;
 
         // Validate required fields
-        if (!productName || !productStatus || !price || !categoryID || !subCategoryID || !brandID) {
-          toast.error("Product name, status, price, brand, category, and subcategory are required!");
+        if (
+          !productName ||
+          !productStatus ||
+          !price ||
+          !categoryID ||
+          !subCategoryID ||
+          !brandID
+        ) {
+          toast.error(
+            "Product name, status, price, brand, category, and subcategory are required!"
+          );
           return;
         }
 
@@ -225,12 +245,10 @@ const AddProduct = () => {
         if (specification) formData.specification = specification;
         if (description) formData.description = description;
         if (stock) formData.stock = stock;
-        if (color.length > 0) formData.color = JSON.stringify(color);
+        if (color.length > 0) formData.color = color;
         if (productImgFile) formData.productImg = productImgFile;
 
-        console.log(productImgFile)
-
-
+        console.log(productImgFile);
 
         url = "http://localhost:5070/api/v1/add-product";
         successMessage = "Product added successfully!";
@@ -243,7 +261,11 @@ const AddProduct = () => {
     }
 
     // Close modal or form (adjust according to your UI)
-    document.querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`)?.click();
+    document
+      .querySelector(
+        `#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`
+      )
+      ?.click();
 
     try {
       // console.log("Sending request to:", url);
@@ -254,8 +276,10 @@ const AddProduct = () => {
       console.log("Request data:", requestData);
 
       const response = isFormData
-          ? await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
-          : await axios.post(url, requestData);
+        ? await axios.post(url, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+        : await axios.post(url, requestData);
 
       console.log("API response:", response.data);
       toast.success(successMessage);
@@ -265,7 +289,9 @@ const AddProduct = () => {
       }
     } catch (error) {
       console.error("Error response:", error.response?.data || error.message);
-      toast.error(error.response?.data?.message || "An unexpected error occurred!");
+      toast.error(
+        error.response?.data?.message || "An unexpected error occurred!"
+      );
     }
   };
 
@@ -277,7 +303,8 @@ const AddProduct = () => {
     if (!file) return;
 
     // Check file type and size (optional validation)
-    if (file.size > 1024 * 1024) { // Limit file size to 1MB
+    if (file.size > 1024 * 1024) {
+      // Limit file size to 1MB
       alert("File size must be less than 1 MB");
       return;
     }
@@ -288,14 +315,14 @@ const AddProduct = () => {
     } else if (type === "category") {
       setCategoryImg(file); // Set the category image state
     } else if (type === "product") {
-      setProductImg(file)
+      setProductImg(file);
       setProductImgFile(file);
     }
   };
 
   const handleBrandChange = (selectedOption) => {
     if (selectedOption) {
-      const brand = brands.find(b => b._id === selectedOption.value);
+      const brand = brands.find((b) => b._id === selectedOption.value);
       setSelectedBrand(brand); // Ensure the selected brand is updated
     } else {
       setSelectedBrand(null); // Reset when nothing is selected
@@ -305,11 +332,15 @@ const AddProduct = () => {
   const handleCategoryChange = (selectedOption) => {
     if (selectedOption) {
       // Find the selected category by ID
-      const selectedCat = categories.find(cat => cat._id === selectedOption.value);
+      const selectedCat = categories.find(
+        (cat) => cat._id === selectedOption.value
+      );
 
       // Filter subcategories based on selected category's ID
-      const filteredSubCategories = subCategories.filter(sub =>
-          sub.categoryId === selectedOption.value || sub.categoryId?._id === selectedOption.value
+      const filteredSubCategories = subCategories.filter(
+        (sub) =>
+          sub.categoryId === selectedOption.value ||
+          sub.categoryId?._id === selectedOption.value
       );
 
       // Update the selected category and filtered subcategories
@@ -327,7 +358,9 @@ const AddProduct = () => {
   const handleSubCategoryChange = (selectedOption) => {
     if (selectedOption) {
       // Find the subcategory from filtered list by ID
-      const subCat = filteredSubCategories.find(sub => sub._id === selectedOption.value);
+      const subCat = filteredSubCategories.find(
+        (sub) => sub._id === selectedOption.value
+      );
 
       // Update the selected subcategory
       setSelectedSubCategory(subCat);
@@ -336,7 +369,6 @@ const AddProduct = () => {
       setSelectedSubCategory(null);
     }
   };
-
 
   // ======= Add Brand Handles ======= //
   const handleAddClick = () => {
@@ -371,11 +403,9 @@ const AddProduct = () => {
 
   // ======= Add Sub Category Handles ======= //
   const handleSubCategoryNameChange = (e) => setSubCategoryName(e.target.value);
-  const handleSubCategoryStatusChange = (e) => setSubCategoryStatus(e.target.value);
+  const handleSubCategoryStatusChange = (e) =>
+    setSubCategoryStatus(e.target.value);
   // ======= Add Sub Category Handles ======= //
-
-
-
 
   return (
     <>
@@ -385,31 +415,50 @@ const AddProduct = () => {
             <div className="heading-wrap">
               <h2 className="heading">Add New Product</h2>
             </div>
-            <form className="add-product-form" onSubmit={(e) => handleSubmit(e, "product")}>
+            <form
+              className="add-product-form"
+              onSubmit={(e) => handleSubmit(e, "product")}
+            >
               <div className="row">
                 <div className="form-row select-input-box col-lg-6">
                   <label htmlFor="select-to">Brand *</label>
                   <div className="input-field">
                     <Select
-                        className="select-search"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="brands"
-                        options={brands.map(brand => ({
-                          label: brand.brandName,
-                          value: brand._id,
-                          ...brand, // Keep the full brand object so we can use it later
-                        }))}
-                        placeholder="Select Brands..."
-                        onChange={handleBrandChange}
-                        value={selectedBrand?._id ? {
-                          label: selectedBrand.brandName,
-                          value: selectedBrand._id
-                        } : null} // Bind the value to the selected brand
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="brands"
+                      options={brands.map((brand) => ({
+                        label: brand.brandName,
+                        value: brand._id,
+                        ...brand, // Keep the full brand object so we can use it later
+                      }))}
+                      placeholder="Select Brands..."
+                      onChange={handleBrandChange}
+                      value={
+                        selectedBrand?._id
+                          ? {
+                              label: selectedBrand.brandName,
+                              value: selectedBrand._id,
+                            }
+                          : null
+                      } // Bind the value to the selected brand
                     />
-                    <button type="button" className="add-btn" data-bs-toggle="modal" data-bs-target="#addBrand" onClick={handleAddClick}>
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addBrand"
+                      onClick={handleAddClick}
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
                         <path
                           d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
                           stroke="white"
@@ -426,30 +475,50 @@ const AddProduct = () => {
                   <label htmlFor="select-to">Category *</label>
                   <div className="input-field">
                     <Select
-                        className="select-search"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="categories"
-                        options={categories?.length ? categories.map((category) => ({
-                          label: category.categoryName,
-                          value: category._id,
-                        })) : [{label: "No categories available", value: ""}]}
-                        placeholder="Select Category..."
-                        onChange={handleCategoryChange}  // Ensure this is correctly handled
-                        value={selectedCategory ? {
-                          label: selectedCategory.categoryName,
-                          value: selectedCategory._id,
-                        } : null}  // Ensure value is null when no category is selected
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={
+                        categories?.length
+                          ? categories.map((category) => ({
+                              label: category.categoryName,
+                              value: category._id,
+                            }))
+                          : [{ label: "No categories available", value: "" }]
+                      }
+                      placeholder="Select Category..."
+                      onChange={handleCategoryChange} // Ensure this is correctly handled
+                      value={
+                        selectedCategory
+                          ? {
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
+                          : null
+                      } // Ensure value is null when no category is selected
                     />
-                    <button type="button" className="add-btn" data-bs-toggle="modal" data-bs-target="#addCategory" onClick={handleAddClick}>
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addCategory"
+                      onClick={handleAddClick}
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
                         <path
-                            d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                            stroke="white"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                       </svg>
                       ADD
@@ -463,38 +532,59 @@ const AddProduct = () => {
                   <label htmlFor="select-to">Sub Category *</label>
                   <div className="input-field">
                     <Select
-                        className="select-search"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="subCategories"
-                        options={selectedCategory ? filteredSubCategories.map((subCat) => ({
-                          label: subCat.subCategoryName,
-                          value: subCat._id,
-                        })) : []}  // Ensure options are only populated when category is selected
-                        placeholder="Select Sub Category..."
-                        value={selectedSubCategory ? {
-                          label: selectedSubCategory.subCategoryName,
-                          value: selectedSubCategory._id,
-                        } : null}  // Ensure value is null when no subcategory is selected
-                        onChange={(selectedOption) => {
-                          if (selectedOption) {
-                            const subCat = filteredSubCategories.find(sub => sub._id === selectedOption.value);
-                            setSelectedSubCategory(subCat);  // Set selected subcategory
-                          } else {
-                            setSelectedSubCategory(null);  // Reset when nothing is selected
-                          }
-                        }}
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="subCategories"
+                      options={
+                        selectedCategory
+                          ? filteredSubCategories.map((subCat) => ({
+                              label: subCat.subCategoryName,
+                              value: subCat._id,
+                            }))
+                          : []
+                      } // Ensure options are only populated when category is selected
+                      placeholder="Select Sub Category..."
+                      value={
+                        selectedSubCategory
+                          ? {
+                              label: selectedSubCategory.subCategoryName,
+                              value: selectedSubCategory._id,
+                            }
+                          : null
+                      } // Ensure value is null when no subcategory is selected
+                      onChange={(selectedOption) => {
+                        if (selectedOption) {
+                          const subCat = filteredSubCategories.find(
+                            (sub) => sub._id === selectedOption.value
+                          );
+                          setSelectedSubCategory(subCat); // Set selected subcategory
+                        } else {
+                          setSelectedSubCategory(null); // Reset when nothing is selected
+                        }
+                      }}
                     />
-                    <button type="button" className="add-btn" data-bs-toggle="modal" data-bs-target="#addSubCategory"
-                            onClick={handleAddClick}>
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addSubCategory"
+                      onClick={handleAddClick}
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
                         <path
-                            d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                            stroke="white"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                       </svg>
                       ADD
@@ -504,20 +594,33 @@ const AddProduct = () => {
 
                 <div className="form-row col-lg-6">
                   <label htmlFor="product-code">Product Code *</label>
-                  <input type="text" placeholder="Product Code" required value={productCode} onChange={handleProductCodeChange} />
+                  <input
+                    type="text"
+                    placeholder="Product Code"
+                    required
+                    value={productCode}
+                    onChange={handleProductCodeChange}
+                  />
                 </div>
               </div>
 
               <div className="row">
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Product Name *</label>
-                  <input type="text" placeholder="Product Name" required value={productName} onChange={handleProductNameChange} />
+                  <input
+                    type="text"
+                    placeholder="Product Name"
+                    required
+                    value={productName}
+                    onChange={handleProductNameChange}
+                  />
                 </div>
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Status</label>
                   <select
-                      value={productStatus}
-                      onChange={handleProductStatusChange}>
+                    value={productStatus}
+                    onChange={handleProductStatusChange}
+                  >
                     <option value="">Select Status</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -528,11 +631,24 @@ const AddProduct = () => {
               <div className="row">
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Product Price *</label>
-                  <input type="number" placeholder="Product Price" required min={0} value={price} onChange={handleProductPriceChange} />
+                  <input
+                    type="number"
+                    placeholder="Product Price"
+                    required
+                    min={0}
+                    value={price}
+                    onChange={handleProductPriceChange}
+                  />
                 </div>
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Discount Price</label>
-                  <input type="number" placeholder="Discount Price" min={0} value={discountPrice} onChange={handleProductDiscountChange} />
+                  <input
+                    type="number"
+                    placeholder="Discount Price"
+                    min={0}
+                    value={discountPrice}
+                    onChange={handleProductDiscountChange}
+                  />
                 </div>
               </div>
 
@@ -540,10 +656,10 @@ const AddProduct = () => {
                 <div className="form-row">
                   <label htmlFor="">Key Features*</label>
                   <FroalaEditorComponent
-                      tag="textarea"
-                      onModelChange={(content) => setKeyFeature(content)}
-                      value={keyFeature}
-                      onChange={handleProductKeyFeatureChange}
+                    tag="textarea"
+                    onModelChange={(content) => setKeyFeature(content)}
+                    value={keyFeature}
+                    onChange={handleProductKeyFeatureChange}
                   />
                 </div>
               </div>
@@ -552,10 +668,10 @@ const AddProduct = () => {
                 <div className="form-row">
                   <label htmlFor="">Specifications*</label>
                   <FroalaEditorComponent
-                      tag="textarea"
-                      onModelChange={(content) => setSpecification(content)}
-                      value={specification}
-                      onChange={handleProductSpecificationChange}
+                    tag="textarea"
+                    onModelChange={(content) => setSpecification(content)}
+                    value={specification}
+                    onChange={handleProductSpecificationChange}
                   />
                 </div>
               </div>
@@ -564,10 +680,10 @@ const AddProduct = () => {
                 <div className="form-row">
                   <label htmlFor="">Description*</label>
                   <FroalaEditorComponent
-                      tag="textarea"
+                    tag="textarea"
                     onModelChange={(content) => setDescription(content)}
-                      value={description}
-                      onChange={handleProductDescriptionChange}
+                    value={description}
+                    onChange={handleProductDescriptionChange}
                   />
                 </div>
               </div>
@@ -579,7 +695,7 @@ const AddProduct = () => {
                     <div className="item">
                       <div className="img-box">
                         {productImg && (
-                            <img src={productImg} alt="Slide" width="60" />
+                          <img src={productImg} alt="Slide" width="60" />
                         )}
                       </div>
 
@@ -600,7 +716,13 @@ const AddProduct = () => {
                 </div>
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Stock*</label>
-                  <input type="number" placeholder="Stock" min={0} value={stock} onChange={handleProductStockChange} />
+                  <input
+                    type="number"
+                    placeholder="Stock"
+                    min={0}
+                    value={stock}
+                    onChange={handleProductStockChange}
+                  />
                 </div>
               </div>
 
@@ -609,19 +731,17 @@ const AddProduct = () => {
                   <label htmlFor="">Colors*</label>
                   <ReactTags
                     ref={reactColors}
-                    tags={color}
+                    tags={color.map((c) => ({
+                      name: c,
+                    }))}
                     onDelete={onDeleteColors}
                     onAddition={onAdditionColors}
-                    suggestions={[
-                      { id: 3, name: "Bananas" },
-                      { id: 4, name: "Mangos" },
-                      { id: 5, name: "Lemons" },
-                      { id: 6, name: "Apricots", disabled: true },
-                    ]}
+                    suggestions={[]}
                     allowNew
                     removeButtonText="Click to remove color"
                     placeholderText="Add new color"
-                    value={color} onChange={handleProductColorChange}
+                    value={color}
+                    onChange={handleProductColorChange}
                   />
                 </div>
               </div>
@@ -639,11 +759,22 @@ const AddProduct = () => {
       {/* Modals */}
 
       {/* Brand Modal Start */}
-      <section className="modal fade" id="addBrand" tabIndex="-1" aria-labelledby="addBrandLabel" aria-hidden="true">
+      <section
+        className="modal fade"
+        id="addBrand"
+        tabIndex="-1"
+        aria-labelledby="addBrandLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="heading-wrap">
-              <button type="button" className="close-btn close" data-bs-dismiss="modal" aria-label="Close">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
                 <FaXmark />
               </button>
               <h2 className="heading">ADD NEW BRAND</h2>
@@ -654,22 +785,22 @@ const AddProduct = () => {
                   <div className="form-row">
                     <label htmlFor="">BRAND NAME</label>
                     <input
-                        type="text"
-                        placeholder="Type here.."
-                        required
-                        value={brandName}
-                        onChange={handleBrandNameChange}
+                      type="text"
+                      placeholder="Type here.."
+                      required
+                      value={brandName}
+                      onChange={handleBrandNameChange}
                     />
                   </div>
 
                   <div className="form-row select-input-box">
                     <label htmlFor="select-status">BRAND STATUS</label>
                     <select
-                        id="select-status"
-                        className="select-status"
-                        required
-                        value={brandStatus}
-                        onChange={handleBrandStatusChange}
+                      id="select-status"
+                      className="select-status"
+                      required
+                      value={brandStatus}
+                      onChange={handleBrandStatusChange}
                     >
                       <option value="">Select Status</option>
                       <option value="active">Active</option>
@@ -683,17 +814,21 @@ const AddProduct = () => {
                       <div className="item">
                         <div className="img-box">
                           {selectedBrand?.brandImg && (
-                              <img src={`http://localhost:5070/${selectedBrand.brandImg}`} alt="Brand" width="100" />
+                            <img
+                              src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                              alt="Brand"
+                              width="100"
+                            />
                           )}
                         </div>
                         <div className="profile-wrapper">
                           <label className="custom-file-input-wrapper m-0">
                             <input
-                                type="file"
-                                className="custom-file-input"
-                                aria-label="Upload Photo"
-                                ref={brandFileInputRef} // Separate file input ref for brand modal
-                                onChange={(e) => handleFileChange(e, "brand")}
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                              ref={brandFileInputRef} // Separate file input ref for brand modal
+                              onChange={(e) => handleFileChange(e, "brand")}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -703,7 +838,9 @@ const AddProduct = () => {
                   </div>
                 </div>
                 <div className="actions">
-                  <button type="submit" className="btn-save">SUBMIT</button>
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
                 </div>
               </div>
             </form>
@@ -713,7 +850,13 @@ const AddProduct = () => {
       {/* Brand Modal End */}
 
       {/* Category Modal Start */}
-      <section className="modal fade" id="addCategory" tabIndex="-1" aria-labelledby="addCategoryLabel" aria-hidden="true">
+      <section
+        className="modal fade"
+        id="addCategory"
+        tabIndex="-1"
+        aria-labelledby="addCategoryLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="heading-wrap">
@@ -734,11 +877,11 @@ const AddProduct = () => {
                   <div className="form-row">
                     <label htmlFor="">CATEGORY NAME</label>
                     <input
-                        type="text"
-                        placeholder="Type here.."
-                        required
-                        value={categoryName || ""}  // Ensure default empty string when no value
-                        onChange={handleCategoryNameChange}
+                      type="text"
+                      placeholder="Type here.."
+                      required
+                      value={categoryName || ""} // Ensure default empty string when no value
+                      onChange={handleCategoryNameChange}
                     />
                   </div>
 
@@ -763,22 +906,22 @@ const AddProduct = () => {
                       <div className="item">
                         <div className="img-box">
                           {selectedCategory?.categoryImg && (
-                              <img
-                                  src={`http://localhost:5070/${selectedCategory.categoryImg}`}
-                                  alt="Category"
-                                  width="100"
-                              />
+                            <img
+                              src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                              alt="Category"
+                              width="100"
+                            />
                           )}
                         </div>
 
                         <div className="profile-wrapper">
                           <label className="custom-file-input-wrapper m-0">
                             <input
-                                type="file"
-                                className="custom-file-input"
-                                aria-label="Upload Photo"
-                                ref={categoryFileInputRef}
-                                onChange={(e) => handleFileChange(e, "category")}
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                              ref={categoryFileInputRef}
+                              onChange={(e) => handleFileChange(e, "category")}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -800,7 +943,13 @@ const AddProduct = () => {
       {/* Category Modal End */}
 
       {/* Sub Category Modal Start */}
-      <section className="modal fade" id="addSubCategory" tabIndex="-1" aria-labelledby="addSubCategoryLabel" aria-hidden="true">
+      <section
+        className="modal fade"
+        id="addSubCategory"
+        tabIndex="-1"
+        aria-labelledby="addSubCategoryLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="heading-wrap">
@@ -821,43 +970,47 @@ const AddProduct = () => {
                   <div className="form-row">
                     <label htmlFor="">SELECT CATEGORY</label>
                     <Select
-                        className="select-search"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="categories"
-                        options={categories?.map((category) => ({
-                          label: category.categoryName,
-                          value: category._id,
-                          ...category,
-                        }))}
-                        placeholder="Select Categories"
-                        onChange={handleSubCategoryChange}  // Ensure this is correctly wired
-                        value={selectedCategory ? {
-                          label: selectedCategory.categoryName,
-                          value: selectedCategory._id,
-                        } : null} // Correct binding
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={categories?.map((category) => ({
+                        label: category.categoryName,
+                        value: category._id,
+                        ...category,
+                      }))}
+                      placeholder="Select Categories"
+                      onChange={handleSubCategoryChange} // Ensure this is correctly wired
+                      value={
+                        selectedCategory
+                          ? {
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
+                          : null
+                      } // Correct binding
                     />
                   </div>
                   <div className="form-row">
                     <label htmlFor="">SUB CATEGORY NAME</label>
                     <input
-                        type="text"
-                        placeholder="Type here.."
-                        required
-                        value={subCategoryName || ""}  // Ensure default empty string
-                        onChange={handleSubCategoryNameChange}
+                      type="text"
+                      placeholder="Type here.."
+                      required
+                      value={subCategoryName || ""} // Ensure default empty string
+                      onChange={handleSubCategoryNameChange}
                     />
                   </div>
 
                   <div className="form-row select-input-box">
                     <label htmlFor="select-status">STATUS</label>
                     <select
-                        id="select-status"
-                        className="select-status"
-                        required
-                        value={subCategoryStatus || ""}  // Default empty string when no value
-                        onChange={handleSubCategoryStatusChange}
+                      id="select-status"
+                      className="select-status"
+                      required
+                      value={subCategoryStatus || ""} // Default empty string when no value
+                      onChange={handleSubCategoryStatusChange}
                     >
                       <option value="">Select Status</option>
                       <option value="active">Active</option>

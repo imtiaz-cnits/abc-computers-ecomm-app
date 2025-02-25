@@ -3,8 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
-const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
+const Products = () => {
   const tableRef = useRef(null);
 
   const [products, setProducts] = useState([]);
@@ -12,18 +14,19 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
   //     ? product.slice(skip, skip + limit)
   //     : [];
 
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/product-list");
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/product-list"
+        );
 
         setProducts(response.data.data || []);
         // setTotalItems(response?.data?.data.length);
       } catch (error) {
         if (error.response) {
           console.error(
-              `Error fetching brands: ${error.response.status} - ${error.response.data}`
+            `Error fetching brands: ${error.response.status} - ${error.response.data}`
           );
         } else if (error.request) {
           console.error("No response received from server:", error.request);
@@ -36,13 +39,39 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
     fetchProducts();
   }, []);
 
+  const handleDeleteClick = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#5AA469",
+      cancelButtonColor: "#FF0000",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `http://localhost:5070/api/v1/remove-product/${id}`
+          );
 
-  useEffect(() => {
-    console.log("Products:", products);
-  }, [products]);
+          if (response?.data?.status === "success") {
+            toast.success("Product deleted successfully!");
 
-
-
+            // Update state by removing the deleted slide
+            setProducts((prevProducts) =>
+              prevProducts.filter((product) => product._id !== id)
+            );
+          } else {
+            toast.error(response?.data?.message || "Failed to delete product.");
+          }
+        } catch (error) {
+          console.error("Error deleting slide:", error);
+          toast.error(error?.response?.data?.message || "An error occurred.");
+        }
+      }
+    });
+  };
 
   return (
     <div className="main-content">
@@ -99,106 +128,116 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                   ref={tableRef}
                 >
                   <thead>
-                  <tr>
-                    <th>SL NO</th>
-                    <th>IMAGE</th>
-                    <th>CODE</th>
-                    <th>NAME</th>
-                    <th>PRICE</th>
-                    <th>DISCOUNT PRICE</th>
-                    <th>BRAND</th>
-                    <th>CATEGORY</th>
-                    <th>SUB-CATEGORY</th>
-                    <th>STOCK</th>
-                    <th>COLORS</th>
-                    <th>ACTION</th>
-                  </tr>
+                    <tr>
+                      <th>SL NO</th>
+                      <th>IMAGE</th>
+                      <th>CODE</th>
+                      <th>NAME</th>
+                      <th>PRICE</th>
+                      <th>DISCOUNT PRICE</th>
+                      <th>BRAND</th>
+                      <th>CATEGORY</th>
+                      <th>SUB-CATEGORY</th>
+                      <th>STOCK</th>
+                      <th>COLORS</th>
+                      <th>ACTION</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  {products?.length > 0 ? (
+                    {products?.length > 0 ? (
                       products?.map((product, index) => (
-                  <tr key={product._id || index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {product?.productImg ? (
-                        <img
-                            src={`http://localhost:5070${product.productImg}`}
-                            alt={product?.productName || "Product"}
-                            style={{
-                              width: "50px",
-                              height: "50px",
-                              objectFit: "cover",
-                              borderRadius: "5px",
-                            }}
-                        />
-                    ) : (
-                        "No Image"
-                    )}
-                    </td>
-                    <td>{product?.productCode}</td>
-                    <td>{product?.productName}</td>
-                    <td>{product?.price}</td>
-                    <td>{product?.discountPrice}</td>
-                    <td>{product?.brandID?.brandName}</td>
-                    <td>{product?.categoryID?.categoryName}</td>
-                    <td>{product?.subCategoryID?.subCategoryName}</td>
-                    <td>{product?.stock}</td>
-                    <td>
-                      {(() => {
-                        let colors = [];
+                        <tr key={product._id || index}>
+                          <td>{index + 1}</td>
+                          <td>
+                            {product?.productImg ? (
+                              <img
+                                src={`http://localhost:5070${product.productImg}`}
+                                alt={product?.productName || "Product"}
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  objectFit: "cover",
+                                  borderRadius: "5px",
+                                }}
+                              />
+                            ) : (
+                              "No Image"
+                            )}
+                          </td>
+                          <td>{product?.productCode}</td>
+                          <td>{product?.productName}</td>
+                          <td>{product?.price}</td>
+                          <td>{product?.discountPrice}</td>
+                          <td>{product?.brandID?.brandName}</td>
+                          <td>{product?.categoryID?.categoryName}</td>
+                          <td>{product?.subCategoryID?.subCategoryName}</td>
+                          <td>{product?.stock}</td>
+                          <td>{product?.color?.join(", ")}</td>
+                          <td>
+                            <div id="action_btn">
+                              <Link
+                                href={`/dashboard/products/update-product/${product._id}`}
+                              >
+                                <svg
+                                  width="44"
+                                  height="44"
+                                  viewBox="0 0 44 44"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <rect
+                                    width="44"
+                                    height="44"
+                                    rx="6"
+                                    fill="#F4FFF2"
+                                  />
+                                  <path
+                                    d="M20.833 12.6668H15.933C13.9728 12.6668 12.9927 12.6668 12.244 13.0482C11.5855 13.3838 11.05 13.9192 10.7145 14.5778C10.333 15.3265 10.333 16.3066 10.333 18.2668V28.0668C10.333 30.027 10.333 31.007 10.7145 31.7557C11.05 32.4143 11.5855 32.9497 12.244 33.2853C12.9927 33.6668 13.9728 33.6668 15.933 33.6668H25.733C27.6932 33.6668 28.6733 33.6668 29.422 33.2853C30.0805 32.9497 30.616 32.4143 30.9515 31.7557C31.333 31.007 31.333 30.027 31.333 28.0668V23.1668M17.333 26.6668H19.2866C19.8573 26.6668 20.1427 26.6668 20.4112 26.6023C20.6493 26.5451 20.8769 26.4509 21.0857 26.3229C21.3211 26.1786 21.5229 25.9769 21.9265 25.5733L33.083 14.4168C34.0495 13.4503 34.0495 11.8833 33.083 10.9168C32.1165 9.95027 30.5495 9.95027 29.583 10.9168L18.4264 22.0733C18.0229 22.4769 17.8211 22.6786 17.6768 22.9141C17.5489 23.1229 17.4546 23.3505 17.3974 23.5886C17.333 23.8571 17.333 24.1425 17.333 24.7132V26.6668Z"
+                                    stroke="#5AA469"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </Link>
 
-                        if (Array.isArray(product?.color) && typeof product.color[0] === "string") {
-                          try {
-                            colors = JSON.parse(product.color[0]); // Parse the JSON string
-                          } catch (error) {
-                            console.error("Error parsing color JSON:", error);
-                          }
-                        }
-
-                        return colors.length > 0 ? colors.map(c => c.name).join(", ") : "No color available";
-                      })()}
-                    </td>
-                    <td>
-                      <div id="action_btn">
-                        <Link href={`/dashboard/products/update-product/${product._id}`}>
-                          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="44" height="44" rx="6" fill="#F4FFF2"/>
-                            <path
-                                d="M20.833 12.6668H15.933C13.9728 12.6668 12.9927 12.6668 12.244 13.0482C11.5855 13.3838 11.05 13.9192 10.7145 14.5778C10.333 15.3265 10.333 16.3066 10.333 18.2668V28.0668C10.333 30.027 10.333 31.007 10.7145 31.7557C11.05 32.4143 11.5855 32.9497 12.244 33.2853C12.9927 33.6668 13.9728 33.6668 15.933 33.6668H25.733C27.6932 33.6668 28.6733 33.6668 29.422 33.2853C30.0805 32.9497 30.616 32.4143 30.9515 31.7557C31.333 31.007 31.333 30.027 31.333 28.0668V23.1668M17.333 26.6668H19.2866C19.8573 26.6668 20.1427 26.6668 20.4112 26.6023C20.6493 26.5451 20.8769 26.4509 21.0857 26.3229C21.3211 26.1786 21.5229 25.9769 21.9265 25.5733L33.083 14.4168C34.0495 13.4503 34.0495 11.8833 33.083 10.9168C32.1165 9.95027 30.5495 9.95027 29.583 10.9168L18.4264 22.0733C18.0229 22.4769 17.8211 22.6786 17.6768 22.9141C17.5489 23.1229 17.4546 23.3505 17.3974 23.5886C17.333 23.8571 17.333 24.1425 17.333 24.7132V26.6668Z"
-                                stroke="#5AA469"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                          </svg>
-                        </Link>
-
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-                          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect
-                                width="44"
-                                height="44"
-                                rx="6"
-                                fill="#FFD9D7"
-                            />
-                            <path
-                                d="M26.6667 14.9999V14.0666C26.6667 12.7598 26.6667 12.1064 26.4123 11.6073C26.1886 11.1682 25.8317 10.8113 25.3926 10.5876C24.8935 10.3333 24.2401 10.3333 22.9333 10.3333H21.0667C19.7599 10.3333 19.1065 10.3333 18.6074 10.5876C18.1683 10.8113 17.8114 11.1682 17.5877 11.6073C17.3333 12.1064 17.3333 12.7598 17.3333 14.0666V14.9999M19.6667 21.4166V27.2499M24.3333 21.4166V27.2499M11.5 14.9999H32.5M30.1667 14.9999V28.0666C30.1667 30.0268 30.1667 31.0069 29.7852 31.7556C29.4496 32.4141 28.9142 32.9496 28.2556 33.2851C27.5069 33.6666 26.5268 33.6666 24.5667 33.6666H19.4333C17.4731 33.6666 16.4931 33.6666 15.7444 33.2851C15.0858 32.9496 14.5504 32.4141 14.2148 31.7556C13.8333 31.0069 13.8333 30.0268 13.8333 28.0666V14.9999"
-                                stroke="#CA0B00"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                          </svg>
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
+                              <a
+                                href="#"
+                                onClick={() => {
+                                  handleDeleteClick(product?._id);
+                                }}
+                              >
+                                <svg
+                                  width="44"
+                                  height="44"
+                                  viewBox="0 0 44 44"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <rect
+                                    width="44"
+                                    height="44"
+                                    rx="6"
+                                    fill="#FFD9D7"
+                                  />
+                                  <path
+                                    d="M26.6667 14.9999V14.0666C26.6667 12.7598 26.6667 12.1064 26.4123 11.6073C26.1886 11.1682 25.8317 10.8113 25.3926 10.5876C24.8935 10.3333 24.2401 10.3333 22.9333 10.3333H21.0667C19.7599 10.3333 19.1065 10.3333 18.6074 10.5876C18.1683 10.8113 17.8114 11.1682 17.5877 11.6073C17.3333 12.1064 17.3333 12.7598 17.3333 14.0666V14.9999M19.6667 21.4166V27.2499M24.3333 21.4166V27.2499M11.5 14.9999H32.5M30.1667 14.9999V28.0666C30.1667 30.0268 30.1667 31.0069 29.7852 31.7556C29.4496 32.4141 28.9142 32.9496 28.2556 33.2851C27.5069 33.6666 26.5268 33.6666 24.5667 33.6666H19.4333C17.4731 33.6666 16.4931 33.6666 15.7444 33.2851C15.0858 32.9496 14.5504 32.4141 14.2148 31.7556C13.8333 31.0069 13.8333 30.0268 13.8333 28.0666V14.9999"
+                                    stroke="#CA0B00"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
                       ))
-                  ) : (
+                    ) : (
                       <tr>
                         <td colSpan="12">No categories available</td>
                       </tr>
-                  )}
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -214,9 +253,9 @@ const Products = ({ product, index, handleEditClick, handleDeleteClick }) => {
                   </label>
                   <div className="select-container">
                     <select
-                        id="entries"
-                        className="form-control"
-                        style={{width: "auto"}}
+                      id="entries"
+                      className="form-control"
+                      style={{ width: "auto" }}
                     >
                       <option value="10">10</option>
                       <option value="15">15</option>

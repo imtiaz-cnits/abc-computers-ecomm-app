@@ -31,12 +31,8 @@ const AdminRoute = ({ children }) => {
         if (result?.status === "success") {
           setIsAdmin(true);
           setIsLoading(false);
-          if (pathname === "/dashboard") {
-            toast.success(result?.message);
-          }
           return;
         } else {
-          console.log("hehe");
           setIsAdmin(false);
           setIsLoading(false);
           if (pathname !== "/dashboard") {

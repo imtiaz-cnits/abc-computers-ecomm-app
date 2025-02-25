@@ -373,9 +373,11 @@ const ProductAddService = async (req) => {
       color,
     } = req.body;
 
-    const productImg = req.file ? `/uploads/${req.file.filename}` : null;
+    const productImgs = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
-    console.log("Received product img:", productImg);
+    console.log(req.files);
+
+    console.log("Received product img:", productImgs);
 
     // Validate required fields
     if (
@@ -429,7 +431,7 @@ const ProductAddService = async (req) => {
       brandID,
       categoryID,
       subCategoryID,
-      productImg,
+      productImgs,
     });
 
     await newProduct.save();

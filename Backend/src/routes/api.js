@@ -81,7 +81,7 @@ router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 // Product Add CRUD APIs
 router.post(
   "/add-product",
-  upload.array("productImg", 8),
+  upload.array("productImgs", 8),
   ProductController.AddProduct
 );
 router.get("/product-list", ProductController.ProductList);

@@ -10,7 +10,7 @@ const DataSchema = mongoose.Schema(
         keyFeature: { type: String },
         specification: { type: String },
         description: { type: String },
-        productImg: { type: String, },
+        productImgs: { type: [String] },
         stock: { type: Number, min: 0 },
         color: { type: [String] },
         badge: { type: String },

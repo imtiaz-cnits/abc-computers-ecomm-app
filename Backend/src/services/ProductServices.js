@@ -375,7 +375,7 @@ const ProductAddService = async (req) => {
 
     const productImg = req.file ? `/uploads/${req.file.filename}` : null;
 
-    console.log("Received product img:", req.file);
+    console.log("Received product img:", productImg);
 
     // Validate required fields
     if (

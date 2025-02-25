@@ -14,7 +14,8 @@ const {
   ProductAddService,
   ProductListService,
   ProductUpdateService,
-  ProductDeleteService
+  ProductDeleteService,
+  ProductDetailsService,
 } = require("../services/ProductServices");
 
 // ====================== Brands All Controller ====================== //
@@ -179,13 +180,26 @@ exports.AddProduct = async (req, res) => {
     }
   } catch (error) {
     console.error("Error in AddProduct controller:", error);
-    return res.status(500).json({ status: "fail", message: "Error adding product." });
+    return res
+      .status(500)
+      .json({ status: "fail", message: "Error adding product." });
   }
 };
 
 exports.ProductList = async (req, res) => {
   try {
     let result = await ProductListService();
+    return res.status(200).json(result); // Ensure JSON response
+  } catch (e) {
+    return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response
+  }
+};
+
+exports.ProductDetails = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    let result = await ProductDetailsService(id);
     return res.status(200).json(result); // Ensure JSON response
   } catch (e) {
     return res.status(500).json({ status: "Fail", data: e.toString() }); // Ensure JSON error response

@@ -8,266 +8,841 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import { FaXmark } from "react-icons/fa6";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 import("froala-editor/js/plugins.pkgd.min.js");
 
 const UpdateProduct = ({ id }) => {
+  const BrandModalCloseBtn = useRef(null);
+  const CategoryModalCloseBtn = useRef(null);
+  const SubCategoryCloseModal = useRef(null);
 
+  const [productImgPreview, setProductImgPreview] = useState("");
 
-  console.log(id);
-
-  const [keyFeatures, setKeyFeatures] = useState("");
-  const [specifications, setSpecifications] = useState("");
+  const [productData, setProductData] = useState({});
+  const [productCode, setProductCode] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productStatus, setProductStatus] = useState("");
+  const [price, setPrice] = useState("");
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [keyFeature, setKeyFeature] = useState("");
+  const [specification, setSpecification] = useState("");
   const [description, setDescription] = useState("");
-  const [colors, setColors] = useState([]);
+  const [productImg, setProductImg] = useState("");
+  const [productImgFile, setProductImgFile] = useState(null);
+  const [stock, setStock] = useState("");
+  const [color, setColor] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState({
+    productName: "",
+    productStatus: "",
+    productImg: null,
+  });
+
+  // Set Brand Infos for Brand Selection
+  const [brandName, setBrandName] = useState("");
+  const [brandStatus, setBrandStatus] = useState("");
+  const [brandImg, setBrandImg] = useState(null);
+  const [brands, setBrands] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState({});
+
+  // Set Category Infos for Category Selection
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryStatus, setCategoryStatus] = useState("");
+  const [categoryImg, setCategoryImg] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Set Sub Category Infos for Sub Category Selection
+  const [subCategoryName, setSubCategoryName] = useState("");
+  const [subCategoryStatus, setSubCategoryStatus] = useState("");
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState({
+    subCategoryName: "",
+    status: "",
+    subCategoryImg: null,
+  });
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+
   const reactColors = useRef();
   const onDeleteColors = useCallback(
-      (colorIndex) => {
-        setColors(colors.filter((_, i) => i !== colorIndex));
-      },
-      [colors]
+    (colorIndex) => {
+      setColor(color.filter((_, i) => i !== colorIndex));
+    },
+    [color]
   );
 
   const onAdditionColors = useCallback(
-      (newColor) => {
-        setColors([...colors, newColor]);
-      },
-      [colors]
+    (newColor) => {
+      setColor([...color, newColor?.name]);
+    },
+    [color]
   );
 
-  const brands = [
-    { value: "asus", label: "asus" },
-    { value: "dell", label: "dell" },
-    { value: "logitech", label: "logitech" },
-  ];
-  const categories = [
-    { value: "Monitor", label: "Monitor" },
-    { value: "Mouse", label: "Mouse" },
-    { value: "Keyboard", label: "Keyboard" },
-  ];
-  const subCategories = [
-    { value: "Led", label: "Led" },
-    { value: "Mechanical", label: "Mechanical" },
-    { value: "Logitech", label: "Logitech" },
-  ];
+  // ======= Update Product Handles ======= //
+  const handleProductCodeChange = (e) => setProductCode(e.target.value);
+  const handleProductNameChange = (e) => setProductName(e.target.value);
+  const handleProductStatusChange = (e) => setProductStatus(e.target.value);
+  const handleProductPriceChange = (e) => setPrice(e.target.value);
+  const handleProductDiscountChange = (e) => setDiscountPrice(e.target.value);
+  const handleProductKeyFeatureChange = (e) => setKeyFeature(e.target.value);
+  const handleProductSpecificationChange = (e) =>
+    setSpecification(e.target.value);
+  const handleProductDescriptionChange = (e) => setDescription(e.target.value);
+  const handleProductStockChange = (e) => setStock(e.target.value);
+  const handleProductColorChange = (e) => setColor(e.target.value);
+  // ======= Update Product Handles ======= //
 
-  const handleUpdateProduct = (e) => {
+  const handleBrandNameChange = (e) => setBrandName(e.target.value);
+  const handleBrandStatusChange = (e) => setBrandStatus(e.target.value);
+  // ======= Add Brand Handles ======= //
+
+  // ======= Add Category Handles ======= //
+  const handleCategoryNameChange = (e) => setCategoryName(e.target.value);
+  const handleCategoryStatusChange = (e) => setCategoryStatus(e.target.value);
+  // ======= Add Category Handles ======= //
+
+  // ======= Add Sub Category Handles ======= //
+  const handleSubCategoryNameChange = (e) => setSubCategoryName(e.target.value);
+  const handleSubCategoryStatusChange = (e) =>
+    setSubCategoryStatus(e.target.value);
+  // ======= Add Sub Category Handles ======= //
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const response = await axios.get(
+        `http://localhost:5070/api/v1/product-details/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const product = response?.data?.data;
+      const brand = product?.brandID;
+      const category = product?.categoryID;
+      const subCategory = product?.subCategoryID;
+      const colors = product?.color;
+      console.log(colors);
+
+      setProductData(product);
+
+      setSelectedBrand(brand);
+      setSelectedCategory(category);
+      setSelectedSubCategory(subCategory);
+      setProductCode(product?.productCode);
+      setProductName(product?.productName);
+      setProductStatus(product?.productStatus);
+      setPrice(product?.price);
+      setDiscountPrice(product?.discountPrice);
+      setKeyFeature(product?.keyFeature);
+      setSpecification(product?.specification);
+      setDescription(product?.description);
+      setStock(product?.stock);
+      setColor(product?.color);
+      setProductImg(product?.productImg);
+
+      // Set filtered sub categories
+      const filteredSubCategories = subCategories?.filter(
+        (sub) => sub.categoryId?._id === category?._id
+      );
+
+      setFilteredSubCategories(filteredSubCategories);
+    };
+
+    fetchProduct();
+  }, [id, subCategories]);
+
+  useEffect(() => {
+    console.log(color);
+  }, [color]);
+
+  // Fetch brands when the component mounts
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axios.get("http://localhost:5070/api/v1/brands");
+        setBrands(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+        toast.error("Failed to load brands.");
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  // Fetch categories when the component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/category"
+        );
+        setCategories(response.data.data); // Assuming categories are returned in `data.data`
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to load categories.");
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch sub categories when the component mounts
+  useEffect(() => {
+    const fetchSubCategory = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5070/api/v1/sub-category"
+        );
+        setSubCategories(response.data.data);
+      } catch (error) {
+        console.error("Error fetching sub categories:", error);
+        toast.error("Failed to load sub categories.");
+      }
+    };
+    fetchSubCategory();
+  }, []);
+
+  const handleBrandChange = (selectedOption) => {
+    if (selectedOption) {
+      const brand = brands.find((b) => b._id === selectedOption.value);
+      setSelectedBrand(brand); // Ensure the selected brand is updated
+    } else {
+      setSelectedBrand(null); // Reset when nothing is selected
+    }
+  };
+
+  const handleCategoryChange = (selectedOption) => {
+    if (selectedOption) {
+      // Find the selected category by ID
+      const selectedCat = categories.find(
+        (cat) => cat._id === selectedOption.value
+      );
+
+      // Filter subcategories based on selected category's ID
+      const filteredSubCategories = subCategories.filter(
+        (sub) =>
+          sub.categoryId === selectedOption.value ||
+          sub.categoryId?._id === selectedOption.value
+      );
+
+      // Update the selected category and filtered subcategories
+      setSelectedCategory(selectedCat);
+      setFilteredSubCategories(filteredSubCategories);
+      setSelectedSubCategory(null); // Reset subcategory selection when category changes
+    } else {
+      // Reset states when no category is selected
+      setSelectedCategory(null);
+      setFilteredSubCategories([]); // Clear subcategories dropdown
+      setSelectedSubCategory(null); // Reset subcategory selection
+    }
+  };
+
+  const handleAddBrand = async (e) => {
     e.preventDefault();
-    console.log(e);
+
+    const formData = {};
+
+    if (!brandName || !brandStatus) {
+      toast.error("Brand name and status are required!");
+      return;
+    }
+    formData.brandName = brandName;
+    formData.status = brandStatus;
+    if (brandImg) formData.brandImg = brandImg;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5070/api/v1/brands",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response?.data?.status === "success") {
+        toast.success("Brand added successfully!");
+        setBrands([...brands, response?.data?.data]);
+        setSelectedBrand(response?.data?.data);
+        BrandModalCloseBtn.current.click();
+      }
+    } catch (error) {
+      console.error("Error response:", error.response?.data || error.message);
+      toast.error(
+        error.response?.data?.message || "An unexpected error occurred!"
+      );
+    }
+
+    // Reset after submission
+    setBrandName("");
+    setBrandImg(null);
+    setBrandStatus("");
+  };
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+
+    const formData = {};
+
+    if (!categoryName || !categoryStatus) {
+      toast.error("Category name and status are required!");
+      return;
+    }
+    formData.categoryName = categoryName;
+    formData.status = categoryStatus;
+    if (categoryImg) formData.categoryImg = categoryImg;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5070/api/v1/category",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response?.data?.status === "success") {
+        toast.success("Category added successfully!");
+        setCategories([...categories, response?.data?.data]);
+        setSelectedCategory(response?.data?.data);
+
+        // Set filtered sub categories
+        const filteredSubCategories = subCategories?.filter(
+          (sub) => sub.categoryId?._id === response?.data?.data?._id
+        );
+
+        setFilteredSubCategories(filteredSubCategories);
+        setSelectedSubCategory(null);
+
+        CategoryModalCloseBtn.current.click();
+      }
+    } catch (error) {
+      console.error("Error response:", error.response?.data || error.message);
+      toast.error(
+        error.response?.data?.message || "An unexpected error occurred!"
+      );
+    }
+
+    // Reset after submission
+    setCategoryName("");
+    setCategoryImg(null);
+    setCategoryStatus("");
+  };
+
+  const handleAddSubCategory = async (e) => {
+    e.preventDefault();
+
+    let formData = {};
+
+    const categoryId = selectedCategory?._id;
+
+    if (!subCategoryName || !subCategoryStatus || !categoryId) {
+      toast.error("Sub Category name, status, and category are required!");
+      return;
+    }
+
+    formData.subCategoryName = subCategoryName;
+    formData.subCategoryStatus = subCategoryStatus;
+    formData.categoryId = categoryId;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5070/api/v1/sub-category",
+        formData
+      );
+
+      if (response?.data?.status === "success") {
+        toast.success("Sub Category added successfully!");
+        setFilteredSubCategories([
+          ...filteredSubCategories,
+          response?.data?.data,
+        ]);
+        setSelectedSubCategory(response?.data?.data);
+        SubCategoryCloseModal.current.click();
+      }
+    } catch (error) {
+      console.error("Error response:", error.response?.data || error.message);
+      toast.error(
+        error.response?.data?.message || "An unexpected error occurred!"
+      );
+    }
+
+    // Reset after submission
+    setSubCategoryName("");
+    setSubCategoryStatus("");
+  };
+
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    const updatedProduct = {
+      productCode,
+      productName,
+      price,
+      discountPrice,
+      stock,
+      keyFeature,
+      specification,
+      description,
+      color,
+      brandID: selectedBrand?._id,
+      categoryID: selectedCategory?._id,
+      subCategoryID: selectedSubCategory?._id,
+    };
+
+    if (productImgFile) {
+      updatedProduct.productImg = productImgFile;
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5070/api/v1/update-product/${id}`,
+        updatedProduct,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response?.status === 200) {
+        toast.success("Product updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error response:", error.response?.data || error.message);
+      toast.error(
+        error.response?.data?.message || "An unexpected error occurred!"
+      );
+    }
   };
 
   return (
-      <>
-        <div className="main-content">
-          <div className="page-content">
-            <div className="col-10 m-auto">
-              <div className="heading-wrap">
-                <h2 className="heading">Update Product</h2>
+    <>
+      <div className="main-content">
+        <div className="page-content">
+          <div className="col-10 m-auto">
+            <div className="heading-wrap">
+              <h2 className="heading">Update Product</h2>
+            </div>
+            <form className="add-product-form" onSubmit={handleUpdateProduct}>
+              <div className="row">
+                <div className="form-row select-input-box col-lg-6">
+                  <label htmlFor="select-to">Brand *</label>
+                  <div className="input-field">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="brands"
+                      options={brands.map((brand) => ({
+                        label: brand.brandName,
+                        value: brand._id,
+                        ...brand, // Keep the full brand object so we can use it later
+                      }))}
+                      placeholder="Select Brands..."
+                      onChange={handleBrandChange}
+                      value={
+                        selectedBrand?._id
+                          ? {
+                              label: selectedBrand.brandName,
+                              value: selectedBrand._id,
+                            }
+                          : null
+                      } // Bind the value to the selected brand
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addBrand"
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></path>
+                      </svg>
+                      ADD
+                    </button>
+                  </div>
+                </div>
+                <div className="form-row select-input-box col-lg-6">
+                  <label htmlFor="select-to">Category *</label>
+                  <div className="input-field">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={
+                        categories?.length
+                          ? categories.map((category) => ({
+                              label: category.categoryName,
+                              value: category._id,
+                            }))
+                          : [{ label: "No categories available", value: "" }]
+                      }
+                      placeholder="Select Category..."
+                      onChange={handleCategoryChange} // Ensure this is correctly handled
+                      value={
+                        selectedCategory
+                          ? {
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
+                          : null
+                      } // Ensure value is null when no category is selected
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addCategory"
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></path>
+                      </svg>
+                      ADD
+                    </button>
+                  </div>
+                </div>
               </div>
-              <form className="add-product-form" onSubmit={handleUpdateProduct}>
-                <div className="row">
-                  <div className="form-row select-input-box col-lg-6">
-                    <label htmlFor="select-to">Brand *</label>
-                    <div className="input-field">
-                      <Select
-                          className="select-search"
-                          classNamePrefix="select"
-                          defaultValue={brands[0]}
-                          isClearable={true}
-                          isSearchable={true}
-                          name="brands"
-                          options={brands}
-                          placeholder="Select Brand"
-                      />
-                      <button
-                          type="button"
-                          className="add-btn"
-                          data-bs-toggle="modal"
-                          data-bs-target="#addBrand"
+
+              <div className="row">
+                <div className="form-row select-input-box col-lg-6">
+                  <label htmlFor="select-to">Sub Category *</label>
+                  <div className="input-field">
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="subCategories"
+                      options={
+                        selectedCategory
+                          ? filteredSubCategories.map((subCat) => ({
+                              label: subCat.subCategoryName,
+                              value: subCat._id,
+                            }))
+                          : []
+                      } // Ensure options are only populated when category is selected
+                      placeholder="Select Sub Category..."
+                      value={
+                        selectedSubCategory
+                          ? {
+                              label: selectedSubCategory.subCategoryName,
+                              value: selectedSubCategory._id,
+                            }
+                          : null
+                      } // Ensure value is null when no subcategory is selected
+                      onChange={(selectedOption) => {
+                        if (selectedOption) {
+                          const subCat = filteredSubCategories.find(
+                            (sub) => sub._id === selectedOption.value
+                          );
+                          setSelectedSubCategory(subCat); // Set selected subcategory
+                        } else {
+                          setSelectedSubCategory(null); // Reset when nothing is selected
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="add-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addSubCategory"
+                    >
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 32 32"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                              d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                        ADD
-                      </button>
-                    </div>
-                  </div>
-                  <div className="form-row select-input-box col-lg-6">
-                    <label htmlFor="select-to">Category *</label>
-                    <div className="input-field">
-                      <Select
-                          className="select-search"
-                          classNamePrefix="select"
-                          defaultValue={categories[0]}
-                          isClearable={true}
-                          isSearchable={true}
-                          name="categories"
-                          options={categories}
-                          placeholder="Select Category"
-                      />
-                      <button
-                          type="button"
-                          className="add-btn"
-                          data-bs-toggle="modal"
-                          data-bs-target="#addCategory"
-                      >
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 32 32"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                              d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                        ADD
-                      </button>
-                    </div>
+                        <path
+                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></path>
+                      </svg>
+                      ADD
+                    </button>
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="form-row select-input-box col-lg-6">
-                    <label htmlFor="select-to">Sub Category *</label>
-                    <div className="input-field">
-                      <Select
-                          className="select-search"
-                          classNamePrefix="select"
-                          defaultValue={subCategories[0]}
-                          isClearable={true}
-                          isSearchable={true}
-                          name="subCategories"
-                          options={subCategories}
-                          placeholder="Select Sub Category"
-                      />
-                      <button
-                          type="button"
-                          className="add-btn"
-                          data-bs-toggle="modal"
-                          data-bs-target="#addSubCategory"
-                      >
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 32 32"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                              d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                        ADD
-                      </button>
+                <div className="form-row col-lg-6">
+                  <label htmlFor="product-code">Product Code *</label>
+                  <input
+                    type="text"
+                    placeholder="Product Code"
+                    value={productCode}
+                    onChange={handleProductCodeChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Product Name *</label>
+                  <input
+                    type="text"
+                    placeholder="Product Name"
+                    value={productName}
+                    onChange={handleProductNameChange}
+                  />
+                </div>
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Status</label>
+                  <select
+                    value={productStatus}
+                    onChange={handleProductStatusChange}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Product Price *</label>
+                  <input
+                    type="number"
+                    placeholder="Product Price"
+                    min={0}
+                    value={price}
+                    onChange={handleProductPriceChange}
+                  />
+                </div>
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Discount Price</label>
+                  <input
+                    type="number"
+                    placeholder="Discount Price"
+                    min={0}
+                    value={discountPrice}
+                    onChange={handleProductDiscountChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row">
+                  <label htmlFor="">Key Features*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setKeyFeature(content)}
+                    model={keyFeature}
+                    onChange={handleProductKeyFeatureChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row">
+                  <label htmlFor="">Specifications*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setSpecification(content)}
+                    model={specification}
+                    onChange={handleProductSpecificationChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row">
+                  <label htmlFor="">Description*</label>
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    onModelChange={(content) => setDescription(content)}
+                    model={description}
+                    onChange={handleProductDescriptionChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="form-row col-lg-6">
+                  <label htmlFor="photo">Product Photo</label>
+                  <div className="upload-profile">
+                    <div className="item">
+                      <div className="img-box">
+                        {productImgPreview ? (
+                          <img
+                            src={productImgPreview}
+                            alt="product"
+                            width="60"
+                          />
+                        ) : productImg ? (
+                          <img
+                            src={`http://localhost:5070${productImg}`}
+                            alt="profile"
+                            width="60"
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+
+                      <div className="profile-wrapper">
+                        <label className="custom-file-input-wrapper m-0">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            aria-label="Upload Photo"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              setProductImgFile(file);
+                            }}
+                          />
+                        </label>
+                        <p>PNG,JPEG or GIF (Upto 1 MB)</p>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="product-code">Product Code *</label>
-                    <input type="text" placeholder="Product Code" required />
-                  </div>
                 </div>
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Stock*</label>
+                  <input
+                    type="number"
+                    placeholder="Stock"
+                    min={0}
+                    value={stock}
+                    onChange={handleProductStockChange}
+                  />
+                </div>
+              </div>
 
-                <div className="row">
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Product Name *</label>
-                    <input type="text" placeholder="Product Name" required />
+              <div className="row">
+                <div className="form-row col-lg-6">
+                  <label htmlFor="">Colors*</label>
+                  <ReactTags
+                    ref={reactColors}
+                    tags={color.map((c) => ({
+                      name: c,
+                    }))}
+                    onDelete={onDeleteColors}
+                    onAddition={onAdditionColors}
+                    suggestions={[]}
+                    allowNew
+                    removeButtonText="Click to remove color"
+                    placeholderText="Add new color"
+                    value={color}
+                    onChange={handleProductColorChange}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <button type="submit" className="submit-btn">
+                  Update Product
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Modals */}
+
+      {/* Brand Modal Start */}
+      <section
+        className="modal fade"
+        id="addBrand"
+        tabIndex="-1"
+        aria-labelledby="addBrandLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={BrandModalCloseBtn}
+              >
+                <FaXmark />
+              </button>
+              <h2 className="heading">ADD NEW BRAND</h2>
+            </div>
+            <form onSubmit={handleAddBrand}>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">BRAND NAME</label>
+                    <input
+                      type="text"
+                      placeholder="Type here.."
+                      value={brandName}
+                      onChange={handleBrandNameChange}
+                    />
                   </div>
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Status</label>
-                    <select>
+
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">BRAND STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      value={brandStatus}
+                      onChange={handleBrandStatusChange}
+                    >
+                      <option value="">Select Status</option>
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="row">
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Product Price *</label>
-                    <input
-                        type="number"
-                        placeholder="Product Price"
-                        required
-                        min={0}
-                    />
-                  </div>
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Discount Price</label>
-                    <input type="number" placeholder="Discount Price" min={0} />
-                  </div>
-                </div>
-
-                <div className="row">
                   <div className="form-row">
-                    <label htmlFor="">Key Features*</label>
-                    <FroalaEditorComponent
-                        tag="textarea"
-                        onModelChange={(content) => setKeyFeatures(content)}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="form-row">
-                    <label htmlFor="">Specifications*</label>
-                    <FroalaEditorComponent
-                        tag="textarea"
-                        onModelChange={(content) => setSpecifications(content)}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="form-row">
-                    <label htmlFor="">Description*</label>
-                    <FroalaEditorComponent
-                        tag="textarea"
-                        onModelChange={(content) => setDescription(content)}
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="photo">Product Photo</label>
+                    <label htmlFor="photo">BRAND PHOTO</label>
                     <div className="upload-profile">
                       <div className="item">
                         <div className="img-box">
-                          <img
-                              src={uploadImg.src}
-                              width={30}
-                              height={30}
-                              alt=""
-                          />
+                          {selectedBrand?.brandImg && (
+                            <img
+                              src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                              alt="Brand"
+                              width="100"
+                            />
+                          )}
                         </div>
-
                         <div className="profile-wrapper">
                           <label className="custom-file-input-wrapper m-0">
                             <input
-                                type="file"
-                                className="custom-file-input"
-                                aria-label="Upload Photo"
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+
+                                setBrandImg(file);
+                              }}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -275,291 +850,199 @@ const UpdateProduct = ({ id }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Stock*</label>
-                    <input type="number" placeholder="Stock" min={0} />
-                  </div>
                 </div>
-
-                <div className="row">
-                  <div className="form-row col-lg-6">
-                    <label htmlFor="">Colors*</label>
-                    <ReactTags
-                        ref={reactColors}
-                        tags={colors}
-                        onDelete={onDeleteColors}
-                        onAddition={onAdditionColors}
-                        suggestions={[
-                          { id: 3, name: "Bananas" },
-                          { id: 4, name: "Mangos" },
-                          { id: 5, name: "Lemons" },
-                          { id: 6, name: "Apricots", disabled: true },
-                        ]}
-                        allowNew
-                        removeButtonText="Click to remove color"
-                        placeholderText="Add new color"
-                    />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <button type="submit" className="submit-btn">
-                    ADD Product
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
                   </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
+      </section>
+      {/* Brand Modal End */}
 
-        {/* Modals */}
+      {/* Category Modal Start */}
+      <section
+        className="modal fade"
+        id="addCategory"
+        tabIndex="-1"
+        aria-labelledby="addCategoryLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={CategoryModalCloseBtn}
+              >
+                <FaXmark />
+              </button>
+              <h2 className="heading">ADD NEW CATEGORY</h2>
+            </div>
 
-        {/* Brand Modal */}
-        <section
-            className="modal fade"
-            id="addBrand"
-            tabIndex="-1"
-            aria-labelledby="addBrandLabel"
-            aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="heading-wrap">
-                <button
-                    type="button"
-                    className="close-btn close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                >
-                  <FaXmark />
-                </button>
-                <h2 className="heading">ADD NEW BRAND</h2>
-              </div>
-              <form>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-row">
-                      <label htmlFor="">BRAND NAME</label>
-                      <input type="text" placeholder="Type here.." required />
-                    </div>
+            <form onSubmit={handleAddCategory}>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">CATEGORY NAME</label>
+                    <input
+                      type="text"
+                      placeholder="Type here.."
+                      value={categoryName || ""} // Ensure default empty string when no value
+                      onChange={handleCategoryNameChange}
+                    />
+                  </div>
 
-                    <div className="form-row select-input-box">
-                      <label htmlFor="select-status">BRAND STATUS</label>
-                      <select
-                          id="select-status"
-                          className="select-status"
-                          required
-                      >
-                        <option value="">Select Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                    </div>
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      value={categoryStatus}
+                      onChange={handleCategoryStatusChange}
+                    >
+                      <option value="">Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
 
-                    <div className="form-row">
-                      <label htmlFor="photo">BRAND PHOTO</label>
-                      <div className="upload-profile">
-                        <div className="item">
-                          <div className="img-box">
+                  <div className="form-row">
+                    <label htmlFor="photo">CATEGORY PHOTO</label>
+                    <div className="upload-profile">
+                      <div className="item">
+                        <div className="img-box">
+                          {selectedCategory?.categoryImg && (
                             <img
-                                src={uploadImg.src}
-                                width={30}
-                                height={30}
-                                alt=""
+                              src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                              alt="Category"
+                              width="100"
                             />
-                          </div>
+                          )}
+                        </div>
 
-                          <div className="profile-wrapper">
-                            <label className="custom-file-input-wrapper m-0">
-                              <input
-                                  type="file"
-                                  className="custom-file-input"
-                                  aria-label="Upload Photo"
-                              />
-                            </label>
-                            <p>PNG,JPEG or GIF (Upto 1 MB)</p>
-                          </div>
+                        <div className="profile-wrapper">
+                          <label className="custom-file-input-wrapper m-0">
+                            <input
+                              type="file"
+                              className="custom-file-input"
+                              aria-label="Upload Photo"
+                              onChange={(e) => handleFileChange(e, "category")}
+                            />
+                          </label>
+                          <p>PNG,JPEG or GIF (Upto 1 MB)</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="actions">
-                    <button type="submit" className="btn-save">
-                      SUBMIT
-                    </button>
-                  </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        {/* Category Modal */}
-
-        <div
-            className="modal fade"
-            id="addCategory"
-            tabIndex="-1"
-            aria-labelledby="addCategoryLabel"
-            aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="heading-wrap">
-                <button
-                    type="button"
-                    className="close-btn close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                >
-                  <FaXmark />
-                </button>
-                <h2 className="heading">ADD NEW CATEGORY</h2>
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
+                </div>
               </div>
-
-              <form>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-row">
-                      <label htmlFor="">CATEGORY NAME</label>
-                      <input type="text" placeholder="Type here.." required />
-                    </div>
-
-                    <div className="form-row select-input-box">
-                      <label htmlFor="select-status">STATUS</label>
-                      <select
-                          id="select-status"
-                          className="select-status"
-                          required
-                      >
-                        <option value="">Select Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                    </div>
-
-                    <div className="form-row">
-                      <label htmlFor="photo">CATEGORY PHOTO</label>
-                      <div className="upload-profile">
-                        <div className="item">
-                          <div className="img-box">
-                            <img
-                                src={uploadImg.src}
-                                width={30}
-                                height={30}
-                                alt=""
-                            />
-                          </div>
-
-                          <div className="profile-wrapper">
-                            <label className="custom-file-input-wrapper m-0">
-                              <input
-                                  type="file"
-                                  className="custom-file-input"
-                                  aria-label="Upload Photo"
-                              />
-                            </label>
-                            <p>PNG,JPEG or GIF (Upto 1 MB)</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="actions">
-                    <button type="submit" className="btn-save">
-                      SUBMIT
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
+            </form>
           </div>
         </div>
+      </section>
+      {/* Category Modal End */}
 
-        {/* Sub  Category Modal */}
+      {/* Sub Category Modal Start */}
+      <section
+        className="modal fade"
+        id="addSubCategory"
+        tabIndex="-1"
+        aria-labelledby="addSubCategoryLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="heading-wrap">
+              <button
+                type="button"
+                className="close-btn close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={SubCategoryCloseModal}
+              >
+                <FaXmark />
+              </button>
+              <h2 className="heading">ADD SUB CATEGORY</h2>
+            </div>
 
-        <div
-            className="modal fade"
-            id="addSubCategory"
-            tabIndex="-1"
-            aria-labelledby="addSubCategoryLabel"
-            aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="heading-wrap">
-                <button
-                    type="button"
-                    className="close-btn close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                >
-                  <FaXmark />
-                </button>
-                <h2 className="heading">ADD SUB CATEGORY</h2>
-              </div>
-
-              <form>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-row">
-                      <label htmlFor="">CATEGORY NAME</label>
-                      <input type="text" placeholder="Type here.." required />
-                    </div>
-
-                    <div className="form-row select-input-box">
-                      <label htmlFor="select-status">STATUS</label>
-                      <select
-                          id="select-status"
-                          className="select-status"
-                          required
-                      >
-                        <option value="">Select Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                    </div>
-
-                    <div className="form-row">
-                      <label htmlFor="photo">CATEGORY PHOTO</label>
-                      <div className="upload-profile">
-                        <div className="item">
-                          <div className="img-box">
-                            <img
-                                src={uploadImg.src}
-                                width={30}
-                                height={30}
-                                alt=""
-                            />
-                          </div>
-
-                          <div className="profile-wrapper">
-                            <label className="custom-file-input-wrapper m-0">
-                              <input
-                                  type="file"
-                                  className="custom-file-input"
-                                  aria-label="Upload Photo"
-                              />
-                            </label>
-                            <p>PNG,JPEG or GIF (Upto 1 MB)</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <form onSubmit={handleAddSubCategory}>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-row">
+                    <label htmlFor="">SELECT CATEGORY</label>
+                    <Select
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={categories?.map((category) => ({
+                        label: category.categoryName,
+                        value: category._id,
+                        ...category,
+                      }))}
+                      placeholder="Select Categories"
+                      onChange={handleCategoryChange} // Ensure this is correctly wired
+                      value={
+                        selectedCategory
+                          ? {
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
+                          : null
+                      } // Correct binding
+                    />
                   </div>
-                  <div className="actions">
-                    <button type="submit" className="btn-save">
-                      SUBMIT
-                    </button>
+                  <div className="form-row">
+                    <label htmlFor="">SUB CATEGORY NAME</label>
+                    <input
+                      type="text"
+                      placeholder="Type here.."
+                      value={subCategoryName || ""} // Ensure default empty string
+                      onChange={handleSubCategoryNameChange}
+                    />
+                  </div>
+
+                  <div className="form-row select-input-box">
+                    <label htmlFor="select-status">STATUS</label>
+                    <select
+                      id="select-status"
+                      className="select-status"
+                      value={subCategoryStatus || ""} // Default empty string when no value
+                      onChange={handleSubCategoryStatusChange}
+                    >
+                      <option value="">Select Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
                   </div>
                 </div>
-              </form>
-            </div>
+                <div className="actions">
+                  <button type="submit" className="btn-save">
+                    SUBMIT
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
+      </section>
+      {/* Sub Category Modal End */}
 
-        {/* Modals */}
-      </>
+      {/* Modals */}
+    </>
   );
 };
 

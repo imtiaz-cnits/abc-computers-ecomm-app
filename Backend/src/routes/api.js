@@ -79,9 +79,18 @@ router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 // Product Add CRUD APIs
-router.post("/add-product", upload.single("productImg"), ProductController.AddProduct);
+router.post(
+  "/add-product",
+  upload.single("productImg"),
+  ProductController.AddProduct
+);
 router.get("/product-list", ProductController.ProductList);
-router.put("/update-product/:id", ProductController.ProductUpdate);
+router.get("/product-details/:id", ProductController.ProductDetails);
+router.put(
+  "/update-product/:id",
+  upload.single("productImg"),
+  ProductController.ProductUpdate
+);
 router.delete("/remove-product/:id", ProductController.ProductDelete);
 
 // Hero Slider CRUD APIs

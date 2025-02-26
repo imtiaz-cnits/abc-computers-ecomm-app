@@ -42,34 +42,18 @@ router.post("/Logout", UserController.UserLogout);
 // Profile API
 router.post("/profile", ProfileController.AddProfile);
 router.get("/profile-details/:userID", ProfileController.ProfileDetails);
-router.put(
-  "/profile/:userID",
-  upload.single("profileImg"),
-  ProfileController.UpdateProfile
-);
+router.put("/profile/:userID", upload.single("profileImg"), ProfileController.UpdateProfile);
 
 // Brand CRUD APIs
 router.post("/brands", upload.single("brandImg"), ProductController.AddBrands);
 router.get("/brands", ProductController.ProductBrandList);
-router.put(
-  "/brands/:id",
-  upload.single("brandImg"),
-  ProductController.ProductBrandUpdate
-);
+router.put("/brands/:id", upload.single("brandImg"), ProductController.ProductBrandUpdate);
 router.delete("/brands/:id", ProductController.ProductBrandDelete);
 
 // Category CRUD APIs
-router.post(
-  "/category",
-  upload.single("categoryImg"),
-  ProductController.AddCategory
-);
+router.post("/category", upload.single("categoryImg"), ProductController.AddCategory);
 router.get("/category", ProductController.CategoryList);
-router.put(
-  "/category/:id",
-  upload.single("categoryImg"),
-  ProductController.CategoryUpdate
-);
+router.put("/category/:id", upload.single("categoryImg"), ProductController.CategoryUpdate);
 router.delete("/category/:id", ProductController.CategoryDelete);
 
 // Sub Category CRUD APIs
@@ -79,33 +63,48 @@ router.put("/sub-category/:id", ProductController.SubCategoryUpdate);
 router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 
 // Product Add CRUD APIs
-router.post(
-  "/add-product",
-  upload.array("productImgs", 8),
-  ProductController.AddProduct
-);
+router.post("/add-product", upload.array("productImgs", 8), ProductController.AddProduct);
 router.get("/product-list", ProductController.ProductList);
 router.get("/product-details/:id", ProductController.ProductDetails);
-router.put(
-  "/update-product/:id",
-  upload.array("productImgs", 8),
-  ProductController.ProductUpdate
-);
+router.put("/update-product/:id", upload.array("productImgs", 8), ProductController.ProductUpdate);
 router.delete("/remove-product/:id", ProductController.ProductDelete);
 
 // Hero Slider CRUD APIs
-router.post(
-  "/hero-slider",
-  upload.single("slideImg"),
-  SliderController.AddHeroSlider
-);
+router.post("/hero-slider", upload.single("slideImg"), SliderController.AddHeroSlider);
 router.get("/hero-slider", SliderController.HeroSliderList);
-router.put(
-  "/hero-slider/:id",
-  upload.single("slideImg"),
-  SliderController.HeroSliderUpdate
-);
+router.put("/hero-slider/:id", upload.single("slideImg"), SliderController.HeroSliderUpdate);
 router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // router.get("/UserOTP/:email", UserController.UserOTP);
 // router.get("/VerifyOTP/:email/:otp", UserController.VerifyOTP);

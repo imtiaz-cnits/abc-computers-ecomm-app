@@ -1,11 +1,24 @@
-import React from 'react';
-import brandImg1 from "@/assets/img/home/brand-logo1.webp"
-import brandImg2 from "@/assets/img/home/brand-logo2.webp"
-import brandImg3 from "@/assets/img/home/brand-logo3.webp"
-import brandImg4 from "@/assets/img/home/brand-logo4.webp"
-import brandImg5 from "@/assets/img/home/brand-logo5.webp"
+"use client";
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Brands = () => {
+    const [brands, setBrands] = useState([]);
+
+    useEffect(() => {
+        const fetchBrands = async () => {
+            const response = await axios.get("http://localhost:5070/api/v1/brands");
+
+            if (response?.data?.status === "success") {
+                setBrands(response?.data?.data);
+            }
+        };
+
+        fetchBrands();
+    }, []);
+
+
     return (
         <div className="brand">
             <div className="container">
@@ -17,36 +30,11 @@ const Brands = () => {
 
                 <div className="carousel-container">
                     <div className="owl-carousel owl-theme brand-carousel">
-                        <div className="item">
-                            <img src={brandImg1.src} alt="Brand 1" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg2.src} alt="Brand 2" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg3.src} alt="Brand 3" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg4.src} alt="Brand 4" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg5.src} alt="Brand 5" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg1.src} alt="Brand 1" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg2.src} alt="Brand 2" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg3.src} alt="Brand 3" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg4.src} alt="Brand 4" />
-                        </div>
-                        <div className="item">
-                            <img src={brandImg5.src} alt="Brand 5" />
-                        </div>
+                        {brands?.slice(0, 12)?.map((brand) => (
+                            <div className="item">
+                                <img src={`http://localhost:5070${brand.brandImg}`} alt="" />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

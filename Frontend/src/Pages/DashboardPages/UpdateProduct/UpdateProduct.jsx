@@ -30,14 +30,10 @@ const UpdateProduct = ({ id }) => {
   const [specification, setSpecification] = useState("");
   const [description, setDescription] = useState("");
   const [productImg, setProductImg] = useState("");
+  const [productImgFiles, setProductImgFiles] = useState([]);
   const [productImgFile, setProductImgFile] = useState(null);
   const [stock, setStock] = useState("");
   const [color, setColor] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState({
-    productName: "",
-    productStatus: "",
-    productImg: null,
-  });
 
   // Set Brand Infos for Brand Selection
   const [brandName, setBrandName] = useState("");
@@ -119,12 +115,11 @@ const UpdateProduct = ({ id }) => {
         }
       );
 
-      const product = response?.data?.data;
+      const productDetails = response?.data?.data;
+      const product = productDetails?.productID;
       const brand = product?.brandID;
       const category = product?.categoryID;
       const subCategory = product?.subCategoryID;
-      const colors = product?.color;
-      console.log(colors);
 
       setProductData(product);
 
@@ -136,9 +131,9 @@ const UpdateProduct = ({ id }) => {
       setProductStatus(product?.productStatus);
       setPrice(product?.price);
       setDiscountPrice(product?.discountPrice);
-      setKeyFeature(product?.keyFeature);
-      setSpecification(product?.specification);
-      setDescription(product?.description);
+      setKeyFeature(productDetails?.keyFeature);
+      setSpecification(productDetails?.specification);
+      setDescription(productDetails?.description);
       setStock(product?.stock);
       setColor(product?.color);
       setProductImg(product?.productImg);
@@ -153,10 +148,6 @@ const UpdateProduct = ({ id }) => {
 
     fetchProduct();
   }, [id, subCategories]);
-
-  useEffect(() => {
-    console.log(color);
-  }, [color]);
 
   // Fetch brands when the component mounts
   useEffect(() => {
@@ -203,6 +194,22 @@ const UpdateProduct = ({ id }) => {
     };
     fetchSubCategory();
   }, []);
+
+  const handleUpload = async (e) => {
+    const files = e.target.files;
+
+    const newFiles = [];
+
+    for (const i in files) {
+      if (Object.prototype.hasOwnProperty.call(files, i)) {
+        const file = files[i];
+
+        newFiles.push(file);
+      }
+    }
+
+    setProductImgFiles([...newFiles]);
+  };
 
   const handleBrandChange = (selectedOption) => {
     if (selectedOption) {
@@ -375,29 +382,32 @@ const UpdateProduct = ({ id }) => {
 
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
-    const updatedProduct = {
-      productCode,
-      productName,
-      price,
-      discountPrice,
-      stock,
-      keyFeature,
-      specification,
-      description,
-      color,
-      brandID: selectedBrand?._id,
-      categoryID: selectedCategory?._id,
-      subCategoryID: selectedSubCategory?._id,
-    };
 
-    if (productImgFile) {
-      updatedProduct.productImg = productImgFile;
+    const formData = new FormData();
+
+    if (productImgFiles.length > 0) {
+      productImgFiles.forEach((file) => {
+        formData.append("productImgs", file); // Correct field name
+      });
     }
+
+    formData.append("productCode", productCode);
+    formData.append("productName", productName);
+    formData.append("price", price);
+    formData.append("discountPrice", discountPrice);
+    formData.append("stock", stock);
+    formData.append("keyFeature", keyFeature);
+    formData.append("specification", specification);
+    formData.append("description", description);
+    formData.append("color", JSON.stringify(color));
+    formData.append("brandID", selectedBrand?._id);
+    formData.append("categoryID", selectedCategory?._id);
+    formData.append("subCategoryID", selectedSubCategory?._id);
 
     try {
       const response = await axios.put(
         `http://localhost:5070/api/v1/update-product/${id}`,
-        updatedProduct,
+        formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
@@ -715,10 +725,8 @@ const UpdateProduct = ({ id }) => {
                             type="file"
                             className="custom-file-input"
                             aria-label="Upload Photo"
-                            onChange={(e) => {
-                              const file = e.target.files[0];
-                              setProductImgFile(file);
-                            }}
+                            multiple={true}
+                            onChange={handleUpload}
                           />
                         </label>
                         <p>PNG,JPEG or GIF (Upto 1 MB)</p>
@@ -933,7 +941,11 @@ const UpdateProduct = ({ id }) => {
                               type="file"
                               className="custom-file-input"
                               aria-label="Upload Photo"
-                              onChange={(e) => handleFileChange(e, "category")}
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+
+                                setCategoryImg(file);
+                              }}
                             />
                           </label>
                           <p>PNG,JPEG or GIF (Upto 1 MB)</p>

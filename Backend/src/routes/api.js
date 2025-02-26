@@ -81,14 +81,14 @@ router.delete("/sub-category/:id", ProductController.SubCategoryDelete);
 // Product Add CRUD APIs
 router.post(
   "/add-product",
-  upload.array("productImg", 8),
+  upload.array("productImgs", 8),
   ProductController.AddProduct
 );
 router.get("/product-list", ProductController.ProductList);
 router.get("/product-details/:id", ProductController.ProductDetails);
 router.put(
   "/update-product/:id",
-  upload.single("productImg"),
+  upload.array("productImgs", 8),
   ProductController.ProductUpdate
 );
 router.delete("/remove-product/:id", ProductController.ProductDelete);

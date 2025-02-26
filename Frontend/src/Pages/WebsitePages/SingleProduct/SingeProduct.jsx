@@ -3,6 +3,7 @@ import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import React, { useEffect, useRef, useState } from "react";
 import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
+import "./SingleProduct.css";
 
 import productImg1 from "@/assets/img/product/populer-product-img1.webp";
 import productImg2 from "@/assets/img/product/single-product-slider-2.webp";
@@ -34,72 +35,32 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import { FreeMode, Thumbs } from "swiper/modules";
+import axios from "axios";
 
-const SingleProduct = () => {
+const SingleProduct = ({ id }) => {
+  const [productDetails, setProductDetails] = useState({});
+  const product = productDetails?.productID;
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const productImages = [
-    productImg1,
-    productImg2,
-    productImg3,
-    productImg4,
-    productImg5,
-    productImg1,
-    productImg2,
-    productImg3,
-    productImg4,
-    productImg5,
-  ];
-
   useEffect(() => {
-    // Video Modal JS Start.........................................
-    const modalBtn = document.querySelectorAll(".openModalBtn");
-    const modals = document.querySelectorAll(".video_modal");
-    const closeBtn = document.querySelectorAll(".close");
-
-    // Open the modal and start the video when the button is clicked
-    modalBtn.forEach((btn) => {
-      btn.onclick = function () {
-        const modalId = btn.getAttribute("data-modal");
-        const modal = document.getElementById(`myModal${modalId}`);
-        const iframe = modal.querySelector("iframe");
-
-        // Add autoplay to the iframe source
-        iframe.src = iframe.src.includes("autoplay=1")
-          ? iframe.src
-          : iframe.src + "?autoplay=1";
-
-        modal.style.display = "block"; // Show the modal
-      };
-    });
-
-    // Close the modal and stop the video when the close button is clicked
-    closeBtn.forEach((btn) => {
-      btn.onclick = function () {
-        const modalId = btn.getAttribute("data-close");
-        const modal = document.getElementById(`myModal${modalId}`);
-        modal.style.display = "none"; // Hide the modal
-
-        // Stop the video by resetting the iframe's source
-        const iframe = modal.querySelector("iframe");
-        iframe.src = iframe.src.split("?")[0];
-      };
-    });
-
-    // Close the modal if the user clicks outside the modal content
-    window.onclick = function (event) {
-      modals.forEach((modal) => {
-        if (event.target === modal) {
-          modal.style.display = "none";
-
-          // Stop the video by resetting the iframe's source
-          const iframe = modal.querySelector("iframe");
-          iframe.src = iframe.src.split("?")[0];
+    const fetchProduct = async () => {
+      const response = await axios.get(
+        `http://localhost:5070/api/v1/product-details/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      });
+      );
+
+      if (response?.data?.status === "success") {
+        setProductDetails(response?.data?.data);
+      }
     };
-    // Video Modal JS End.........................................
-  }, []);
+
+    fetchProduct();
+  }, [id]);
 
   // Slider Product Quantity Start..................
   const decreaseQuantity = () => {
@@ -119,7 +80,7 @@ const SingleProduct = () => {
 
   return (
     <>
-      <Breadcrumb pageTitle={"Single Product"} />
+      <Breadcrumb pageTitle={product?.productName} />
 
       {/* <!-- Product Single Start --> */}
       <div className="single_product">
@@ -127,7 +88,6 @@ const SingleProduct = () => {
           <div className="single_product_wrapper">
             <div className="row no-gutters">
               <div className="col-lg-6">
-
                 <Swiper
                   style={{
                     "--swiper-navigation-color": "#fff",
@@ -139,9 +99,9 @@ const SingleProduct = () => {
                   modules={[FreeMode, Thumbs]}
                   className="mySwiper2"
                 >
-                  {productImages?.map((img, idx) => (
+                  {productDetails?.productImgs?.map((img, idx) => (
                     <SwiperSlide key={idx}>
-                        <img src={img.src} alt="" />
+                      <img src={`http://localhost:5070${img}`} alt="" />
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -155,12 +115,11 @@ const SingleProduct = () => {
                   modules={[FreeMode, Thumbs]}
                   className="mySwiper"
                 >
-                  {productImages?.map((img, idx) => (
+                  {productDetails?.productImgs?.map((img, idx) => (
                     <SwiperSlide
                       key={idx}
-                      onClick={() => mainSwiperRef.current?.slideTo(idx)}
                     >
-                        <img src={img.src} alt="" />
+                      <img src={`http://localhost:5070${img}`} alt="" />
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -168,27 +127,36 @@ const SingleProduct = () => {
               <div className="col-lg-6">
                 {/* <!-- Product Details Section --> */}
                 <div className="product_details_custom">
-                  <h1>DJI Osmo Mobile 6</h1>
+                  <h1>{product?.productName}</h1>
                   <div className="price">
-                    <span className="discounted_price">$149.99</span>
-                    <span className="original_price">$169.99</span>
+                    <span className="discounted_price">
+                      ${product?.discountPrice}
+                    </span>
+                    <span className="original_price">${product?.price}</span>
                   </div>
 
                   <div className="product_all_details">
                     <div className="availability_custom">
                       <span className="available">Available</span>
-                      <p className="in_stock">
-                        : <span>In Stock</span>
+                      <p
+                        className={`in_stock ${
+                          product?.stock <= 0 ? "text-danger" : ""
+                        }`}
+                      >
+                        :{" "}
+                        <span>
+                          {product?.stock > 0 ? "In Stock" : "Out of Stock"}
+                        </span>
                       </p>
                     </div>
 
                     <div className="key_feature">
                       <p>Key Features</p>
-                      <p>Model: FP-J30E-B</p>
-                      <p>Plasma cluster Ion Technology</p>
-                      <p>Plasma cluster Indicator Light</p>
-                      <p>Replacement Filter (Automatic Detection)</p>
-                      <p>Special Program Mode (Haze Mode)</p>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: productDetails?.keyFeature,
+                        }}
+                      ></div>
                     </div>
                   </div>
 
@@ -266,75 +234,11 @@ const SingleProduct = () => {
             </a>
           </div>
           <div id="specification" className="table_wrapper">
-            <table>
-              <thead>
-                <th colSpan="2">General Information</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Coverage Area</td>
-                  <td>23m</td>
-                </tr>
-                <tr>
-                  <td>Air Flow</td>
-                  <td>
-                    Airflow (Max/Med/Low) (m³/hour) - Without Humidifying: 180 /
-                    120 / 60
-                  </td>
-                </tr>
-                <tr>
-                  <td>Noise Level</td>
-                  <td>
-                    Noise Level (Max/Med/Low) (dB) - Without Humidifying: 44 /36
-                    /23
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="item">Sensor</div>
-                  </td>
-                  <td>
-                    <span>Dust Sensor</span> <br />
-                    <span>Odor Sensor</span> <br />
-                    <span>Temperature & Humidity Sensor</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Power</td>
-                  <td>Standby Power (W): 1</td>
-                </tr>
-                <tr>
-                  <td>Others</td>
-                  <td>Auto Restart: Yes</td>
-                </tr>
-              </tbody>
-              <thead>
-                <th colSpan="2">Physical Information</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Dimension</td>
-                  <td>431 x 411 x 211 mm</td>
-                </tr>
-                <tr>
-                  <td>Weight</td>
-                  <td>4kg</td>
-                </tr>
-                <tr>
-                  <td>Color</td>
-                  <td>White</td>
-                </tr>
-              </tbody>
-              <thead>
-                <th colSpan="2">Warranty Information</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Warranty</td>
-                  <td>No Warranty.</td>
-                </tr>
-              </tbody>
-            </table>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: productDetails?.specification,
+              }}
+            ></div>
           </div>
         </div>
       </div>
@@ -345,312 +249,15 @@ const SingleProduct = () => {
         <div className="container">
           <div className="document">
             <h2 className="title">Description</h2>
-            <ul className="item">
-              <li>
-                <a href="#">Instructions for Use (IFU) (PDF)</a>
-              </li>
-              <li>
-                <a href="#">Safety Information (PDF)</a>
-              </li>
-              <li>
-                <a href="#">User Guide (PDF)</a>
-              </li>
-              <li>
-                <a href="#">User Manual (PDF)</a>
-              </li>
-            </ul>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: productDetails?.description,
+              }}
+            ></div>
           </div>
         </div>
       </div>
       {/* <!-- Product Documents End --> */}
-
-      {/* <!-- View Product Start --> */}
-      <section id="view_product">
-        <div className="container">
-          <div className="heading">
-            <h2>View Product</h2>
-          </div>
-          <div className="product_wrapper">
-            <div className="row g-3">
-              <div className="col-12">
-                <div className="product_view">
-                  <img src={viewProductImg1.src} alt="" />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="product_view">
-                  <img src={viewProductImg2.src} alt="" />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="product_view">
-                  <img src={viewProductImg3.src} alt="" />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="product_view">
-                  <img src={viewProductImg4.src} alt="" />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="product_view">
-                  <img src={viewProductImg5.src} alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* <!-- View Product End --> */}
-
-      {/* <!-- What’s in the box Start --> */}
-      <div className="in_box_item">
-        <div className="container">
-          <div className="document">
-            <h2 className="title">What’s in the box</h2>
-            <ul className="item">
-              <li>
-                <a href="#">Osmo Gimbal- Mobile 6 x1</a>
-              </li>
-              <li>
-                <a href="#">DJI OM Magnetic Phone Clamp 3 x1</a>
-              </li>
-              <li>
-                <a href="#">Grip Tripod x1</a>
-              </li>
-              <li>
-                <a href="#">Power Cable x1</a>
-              </li>
-              <li>
-                <a href="#">Storage Pouch x1</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      {/* <!-- What’s in the box End --> */}
-
-      {/* <!-- Product Video Slider Start --> */}
-      <div id="product_video">
-        <div className="container">
-          <div className="heading">
-            <div>
-              <h2>Videos for this product</h2>
-            </div>
-          </div>
-
-          <div className="carousel-container">
-            <div className="owl-carousel owl-theme video-carousel">
-              <div className="item">
-                <div className="product_video_card">
-                  <div className="product">
-                    <img src={productVideo1.src} alt="" />
-                  </div>
-                  <span className="product_rate">3.30</span>
-                  <div className="product_reviews d-flex">
-                    <div className="profiles">
-                      <img src={sliderProfile1.src} alt="" />
-                    </div>
-
-                    <div className="details">
-                      <h2 className="name">DJI Osmo Mobile 6 - Review</h2>
-                      <h3 className="person">Danny M.</h3>
-                    </div>
-                  </div>
-                </div>
-                <a className="play_btn openModalBtn" data-modal="1">
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="40"
-                      fill="black"
-                      fillOpacity="0.8"
-                    />
-                    <path
-                      d="M56 40L32 53.8564L32 26.1436L56 40Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div className="item">
-                <div className="product_video_card">
-                  <div className="product">
-                    <img src={productVideo1.src} alt="" />
-                  </div>
-                  <span className="product_rate">3.30</span>
-                  <div className="product_reviews d-flex">
-                    <div className="profiles">
-                      <img src={sliderProfile1.src} alt="" />
-                    </div>
-
-                    <div className="details">
-                      <h2 className="name">DJI Osmo Mobile 6 - Review</h2>
-                      <h3 className="person">Danny M.</h3>
-                    </div>
-                  </div>
-                </div>
-                <a className="play_btn openModalBtn" data-modal="2">
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="40"
-                      fill="black"
-                      fillOpacity="0.8"
-                    />
-                    <path
-                      d="M56 40L32 53.8564L32 26.1436L56 40Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div className="item">
-                <div className="product_video_card">
-                  <div className="product">
-                    <img src={productVideo1.src} alt="" />
-                  </div>
-                  <span className="product_rate">3.30</span>
-                  <div className="product_reviews d-flex">
-                    <div className="profiles">
-                      <img src={sliderProfile1.src} alt="" />
-                    </div>
-
-                    <div className="details">
-                      <h2 className="name">DJI Osmo Mobile 6 - Review</h2>
-                      <h3 className="person">Danny M.</h3>
-                    </div>
-                  </div>
-                </div>
-                <a className="play_btn openModalBtn" data-modal="3">
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="40"
-                      fill="black"
-                      fillOpacity="0.8"
-                    />
-                    <path
-                      d="M56 40L32 53.8564L32 26.1436L56 40Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div className="item">
-                <div className="product_video_card">
-                  <div className="product">
-                    <img src={productVideo1.src} alt="" />
-                  </div>
-                  <span className="product_rate">3.30</span>
-                  <div className="product_reviews d-flex">
-                    <div className="profiles">
-                      <img src={sliderProfile1.src} alt="" />
-                    </div>
-
-                    <div className="details">
-                      <h2 className="name">DJI Osmo Mobile 6 - Review</h2>
-                      <h3 className="person">Danny M.</h3>
-                    </div>
-                  </div>
-                </div>
-                <a className="play_btn openModalBtn" data-modal="5">
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="40"
-                      fill="black"
-                      fillOpacity="0.8"
-                    />
-                    <path
-                      d="M56 40L32 53.8564L32 26.1436L56 40Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div className="item">
-                <div className="product_video_card">
-                  <div className="product">
-                    <img src={productVideo1.src} alt="" />
-                  </div>
-                  <span className="product_rate">3.30</span>
-                  <div className="product_reviews d-flex">
-                    <div className="profiles">
-                      <img src={sliderProfile1.src} alt="" />
-                    </div>
-
-                    <div className="details">
-                      <h2 className="name">DJI Osmo Mobile 6 - Review</h2>
-                      <h3 className="person">Danny M.</h3>
-                    </div>
-                  </div>
-                </div>
-                <a className="play_btn openModalBtn" data-modal="4">
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="40"
-                      fill="black"
-                      fillOpacity="0.8"
-                    />
-                    <path
-                      d="M56 40L32 53.8564L32 26.1436L56 40Z"
-                      fill="white"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            {/* <!-- Custom navigation buttons --> */}
-            <div className="custom-nav">
-              <button className="prev-btn">
-                <FaChevronLeft />
-              </button>
-              <button className="next-btn">
-                <FaChevronRight />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <!-- Video modal Start --> */}
 
       {/* <!-- Modal 1 --> */}
       <div id="myModal1" className="modal video_modal">

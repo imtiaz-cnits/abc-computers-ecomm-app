@@ -57,7 +57,7 @@ const AddProduct = () => {
   const [specification, setSpecification] = useState("");
   const [description, setDescription] = useState("");
   const [productImg, setProductImg] = useState("");
-  const [productImgFile, setProductImgFile] = useState(null);
+  const [productImgFiles, setProductImgFiles] = useState([]);
   const [stock, setStock] = useState("");
   const [color, setColor] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({
@@ -214,6 +214,7 @@ const AddProduct = () => {
         const categoryID = selectedCategory?._id;
         const subCategoryID = selectedSubCategory?._id;
         const brandID = selectedBrand?._id;
+        formData = new FormData();
 
         // Validate required fields
         if (
@@ -230,25 +231,28 @@ const AddProduct = () => {
           return;
         }
 
+        if (productImgFiles.length > 0) {
+          productImgFiles.forEach((file) => {
+            formData.append("productImgs", file); // Correct field name
+          });
+        }
+
         // Append all required fields to FormData
-        formData.productName = productName;
-        formData.productStatus = productStatus;
-        formData.price = price;
-        formData.brandID = brandID;
-        formData.categoryID = categoryID;
-        formData.subCategoryID = subCategoryID;
+        formData.append("productName", productName);
+        formData.append("productStatus", productStatus);
+        formData.append("price", price);
+        formData.append("brandID", brandID);
+        formData.append("categoryID", categoryID);
+        formData.append("subCategoryID", subCategoryID);
 
         // Append optional fields if they exist
-        if (productCode) formData.productCode = productCode;
-        if (discountPrice) formData.discountPrice = discountPrice;
-        if (keyFeature) formData.keyFeature = keyFeature;
-        if (specification) formData.specification = specification;
-        if (description) formData.description = description;
-        if (stock) formData.stock = stock;
-        if (color.length > 0) formData.color = color;
-        if (productImgFile) formData.productImg = productImgFile;
-
-        console.log(productImgFile);
+        if (productCode) formData.append("productCode", productCode);
+        if (discountPrice) formData.append("discountPrice", discountPrice);
+        if (keyFeature) formData.append("keyFeature", keyFeature);
+        if (specification) formData.append("specification", specification);
+        if (description) formData.append("description", description);
+        if (stock) formData.append("stock", stock);
+        if (color.length > 0) formData.append("color", JSON.stringify(color));
 
         url = "http://localhost:5070/api/v1/add-product";
         successMessage = "Product added successfully!";
@@ -314,26 +318,23 @@ const AddProduct = () => {
       setBrandImg(file); // Set the brand image state
     } else if (type === "category") {
       setCategoryImg(file); // Set the category image state
-    } else if (type === "product") {
-      setProductImg(file);
-      setProductImgFile(file);
     }
   };
 
-  const handleUpload = async () => {
-    const formData = new FormData();
-    for (let i = 0; i < productImg.length; i++) {
-      formData.append("productImg", productImg[i]);
+  const handleUpload = async (e) => {
+    const files = e.target.files;
+
+    const newFiles = [];
+
+    for (const i in files) {
+      if (Object.prototype.hasOwnProperty.call(files, i)) {
+        const file = files[i];
+
+        newFiles.push(file);
+      }
     }
 
-    try {
-      const response = await axios.post("http://localhost:5000/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error uploading files:", error);
-    }
+    setProductImgFiles([...newFiles]);
   };
 
   const handleBrandChange = (selectedOption) => {
@@ -404,7 +405,7 @@ const AddProduct = () => {
     setSpecification("");
     setDescription("");
     setProductImg("");
-    setProductImgFile(null);
+    setProductImgFiles([]);
     setStock("");
     setColor([]);
   };
@@ -723,7 +724,7 @@ const AddProduct = () => {
                             aria-label="Upload Photo"
                             multiple={true}
                             ref={fileInputRef}
-                            onChange={(e) => handleFileChange(e, "product")}
+                            onChange={handleUpload}
                           />
                         </label>
                         <p>PNG,JPEG or GIF (Upto 1 MB)</p>

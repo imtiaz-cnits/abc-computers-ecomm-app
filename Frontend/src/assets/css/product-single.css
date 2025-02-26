@@ -160,12 +160,20 @@ body {
   margin-top: 40px;
 }
 
-.product_des .table_wrapper table {
+.product_des .table_wrapper div {
   width: 100%;
+}
+
+.product_des .table_wrapper table {
+  width: 100% !important;
 }
 
 .product_des .table_wrapper table thead {
   background: var(--border-color3);
+}
+
+.product_des .table_wrapper table thead td {
+  margin: 0 !important;
 }
 
 .product_des .table_wrapper table tbody tr {
@@ -222,14 +230,20 @@ body {
   width: 100%;
 }
 
+.mySwiper2 .swiper-slide {
+  aspect-ratio: 1920 / 1080;
+}
+
 .mySwiper2 .swiper-slide img {
   border: 1px solid #9292923b;
   border-radius: 10px;
+  width: 100%;
 }
 
 .mySwiper {
   box-sizing: border-box;
   margin: 5px 0 0;
+  max-height: 100px;
 }
 
 .mySwiper .swiper-slide {

@@ -9,6 +9,7 @@ const multer = require("multer");
 const path = require("path");
 
 const fs = require("fs");
+const ProductDetailsModel = require("../models/ProductDetailModel");
 
 // Ensure the upload directory exists
 const uploadDir = path.join(__dirname, "uploads");
@@ -373,11 +374,11 @@ const ProductAddService = async (req) => {
       color,
     } = req.body;
 
-    const productImgs = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+    const parsedColor = JSON.parse(color);
 
-    console.log(req.files);
-
-    console.log("Received product img:", productImgs);
+    const productImgs = req.files
+      ? req.files.map((file) => `/uploads/${file.filename}`)
+      : [];
 
     // Validate required fields
     if (
@@ -423,18 +424,24 @@ const ProductAddService = async (req) => {
       productStatus,
       price,
       discountPrice,
-      keyFeature,
-      specification,
-      description,
       stock,
-      color,
       brandID,
       categoryID,
       subCategoryID,
-      productImgs,
+      color: parsedColor,
     });
 
     await newProduct.save();
+
+    const newProductDetails = new ProductDetailsModel({
+      productID: newProduct?._id,
+      keyFeature,
+      specification,
+      description,
+      productImgs,
+    });
+
+    await newProductDetails.save();
 
     return {
       status: "success",
@@ -463,9 +470,14 @@ const ProductListService = async () => {
 
 const ProductDetailsService = async (id) => {
   try {
-    let data = await ProductModel.findById({ _id: id }).populate(
-      "brandID categoryID subCategoryID"
-    );
+    let data = await ProductDetailsModel.findOne({ productID: id }).populate({
+      path: "productID",
+      populate: [
+        { path: "brandID" },
+        { path: "categoryID" },
+        { path: "subCategoryID" },
+      ],
+    });
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
     return { status: "Fail", data: e.toString() }; // Ensure JSON error response
@@ -490,6 +502,8 @@ const ProductUpdateService = async (req) => {
       subCategoryID,
     } = req.body;
 
+    const parsedColor = JSON.parse(color);
+
     // Ensure all required fields are present
     if (!productCode || !productName || !price || !stock) {
       return {
@@ -500,12 +514,22 @@ const ProductUpdateService = async (req) => {
     }
 
     // Handle image upload (if any)
-    const productImg = req.file ? `/uploads/${req.file.filename}` : null;
+    const productImgs = req.files
+      ? req.files.map((file) => `/uploads/${file.filename}`)
+      : [];
 
     // Find the existing product by its ID (from req.params.id)
     const existingProduct = await ProductModel.findById(req.params.id);
     if (!existingProduct) {
       return { status: "fail", message: "Product not found" };
+    }
+
+    // Find the existing product details by its productID (from req.params.id)
+    const existingProductDetails = await ProductDetailsModel.findOne({
+      productID: req.params.id,
+    });
+    if (!existingProductDetails) {
+      return { status: "fail", message: "Product Details not found" };
     }
 
     // Update the fields of the existing product with new data, falling back to existing values
@@ -515,16 +539,7 @@ const ProductUpdateService = async (req) => {
     existingProduct.discountPrice =
       discountPrice || existingProduct.discountPrice;
     existingProduct.stock = stock || existingProduct.stock;
-    existingProduct.keyFeature = keyFeature || existingProduct.keyFeature;
-    existingProduct.specification =
-      specification || existingProduct.specification;
-    existingProduct.description = description || existingProduct.description;
-    existingProduct.color = color;
-
-    // Optional image update
-    if (productImg) {
-      existingProduct.productImg = productImg;
-    }
+    existingProduct.color = parsedColor;
 
     // Handle relationships (if any)
     existingProduct.brandID = brandID || existingProduct.brandID;
@@ -532,8 +547,24 @@ const ProductUpdateService = async (req) => {
     existingProduct.subCategoryID =
       subCategoryID || existingProduct.subCategoryID;
 
+    // Update product details
+    existingProductDetails.keyFeature =
+      keyFeature || existingProductDetails.keyFeature;
+    existingProductDetails.specification =
+      specification || existingProductDetails.specification;
+    existingProductDetails.description =
+      description || existingProductDetails.description;
+
+    // Optional image update
+    if (productImgs.length) {
+      existingProductDetails.productImgs = productImgs;
+    }
+
     // Save the updated product to the database
     await existingProduct.save();
+
+    // Save the updated product details to the database
+    await existingProductDetails.save();
 
     return {
       status: "success",

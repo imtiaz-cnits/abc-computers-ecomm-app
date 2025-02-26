@@ -431,7 +431,7 @@ const Category = () => {
                           <div className="img-box">
                             {selectedCategory?.categoryImg && (
                               <img
-                                src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                                src={`http://localhost:5070${selectedCategory.categoryImg}`}
                                 alt="Category"
                                 width="100"
                               />

@@ -39,6 +39,10 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
+
   const handleDeleteClick = (id) => {
     Swal.fire({
       title: "Are you sure?",

@@ -214,7 +214,7 @@ const AddProduct = () => {
         const categoryID = selectedCategory?._id;
         const subCategoryID = selectedSubCategory?._id;
         const brandID = selectedBrand?._id;
-        formData = new FormData()
+        formData = new FormData();
 
         // Validate required fields
         if (
@@ -232,7 +232,7 @@ const AddProduct = () => {
         }
 
         if (productImgFiles.length > 0) {
-          productImgFiles.forEach(file => {
+          productImgFiles.forEach((file) => {
             formData.append("productImgs", file); // Correct field name
           });
         }
@@ -252,7 +252,7 @@ const AddProduct = () => {
         if (specification) formData.append("specification", specification);
         if (description) formData.append("description", description);
         if (stock) formData.append("stock", stock);
-        if (color.length > 0) formData.append("color", color);
+        if (color.length > 0) formData.append("color", JSON.stringify(color));
 
         url = "http://localhost:5070/api/v1/add-product";
         successMessage = "Product added successfully!";
@@ -281,8 +281,8 @@ const AddProduct = () => {
 
       const response = isFormData
         ? await axios.post(url, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
+            headers: { "Content-Type": "multipart/form-data" },
+          })
         : await axios.post(url, requestData);
 
       console.log("API response:", response.data);
@@ -322,20 +322,19 @@ const AddProduct = () => {
   };
 
   const handleUpload = async (e) => {
-    const files = e.target.files
+    const files = e.target.files;
 
-    const newFiles = []
+    const newFiles = [];
 
     for (const i in files) {
       if (Object.prototype.hasOwnProperty.call(files, i)) {
-        const file = files[i]
+        const file = files[i];
 
-        newFiles.push(file)
-
+        newFiles.push(file);
       }
     }
 
-    setProductImgFiles([...newFiles])
+    setProductImgFiles([...newFiles]);
   };
 
   const handleBrandChange = (selectedOption) => {
@@ -457,9 +456,9 @@ const AddProduct = () => {
                       value={
                         selectedBrand?._id
                           ? {
-                            label: selectedBrand.brandName,
-                            value: selectedBrand._id,
-                          }
+                              label: selectedBrand.brandName,
+                              value: selectedBrand._id,
+                            }
                           : null
                       } // Bind the value to the selected brand
                     />
@@ -501,9 +500,9 @@ const AddProduct = () => {
                       options={
                         categories?.length
                           ? categories.map((category) => ({
-                            label: category.categoryName,
-                            value: category._id,
-                          }))
+                              label: category.categoryName,
+                              value: category._id,
+                            }))
                           : [{ label: "No categories available", value: "" }]
                       }
                       placeholder="Select Category..."
@@ -511,9 +510,9 @@ const AddProduct = () => {
                       value={
                         selectedCategory
                           ? {
-                            label: selectedCategory.categoryName,
-                            value: selectedCategory._id,
-                          }
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
                           : null
                       } // Ensure value is null when no category is selected
                     />
@@ -558,18 +557,18 @@ const AddProduct = () => {
                       options={
                         selectedCategory
                           ? filteredSubCategories.map((subCat) => ({
-                            label: subCat.subCategoryName,
-                            value: subCat._id,
-                          }))
+                              label: subCat.subCategoryName,
+                              value: subCat._id,
+                            }))
                           : []
                       } // Ensure options are only populated when category is selected
                       placeholder="Select Sub Category..."
                       value={
                         selectedSubCategory
                           ? {
-                            label: selectedSubCategory.subCategoryName,
-                            value: selectedSubCategory._id,
-                          }
+                              label: selectedSubCategory.subCategoryName,
+                              value: selectedSubCategory._id,
+                            }
                           : null
                       } // Ensure value is null when no subcategory is selected
                       onChange={(selectedOption) => {
@@ -1004,9 +1003,9 @@ const AddProduct = () => {
                       value={
                         selectedCategory
                           ? {
-                            label: selectedCategory.categoryName,
-                            value: selectedCategory._id,
-                          }
+                              label: selectedCategory.categoryName,
+                              value: selectedCategory._id,
+                            }
                           : null
                       } // Correct binding
                     />

@@ -1,15 +1,19 @@
 "use client";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "@/assets/img/navbar-logo.png";
-import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
+import { FaAngleRight, FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import cartImg2 from "@/assets/img/cart-product-img2.webp";
 import cartImg3 from "@/assets/img/cart-product-img3.webp";
 import Link from "next/link";
+import axios from "axios";
+import MenuItem from "./MenuItem/MenuItem";
 
 const Navbar = () => {
   const [search, setSearch] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const menuUlRef = useRef(null);
 
   const path = usePathname();
 
@@ -22,6 +26,18 @@ const Navbar = () => {
       item.classList.remove("sub-open");
     });
   };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await axios.get("http://localhost:5070/api/v1/category");
+
+      if (response?.data?.status === "success") {
+        setCategories(response?.data?.data);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     document.addEventListener("click", function (event) {
@@ -51,15 +67,6 @@ const Navbar = () => {
           menuTrigger.innerHTML = '<span class="menulines"></span>';
           document.getElementById("mainmenu")?.prepend(menuTrigger);
         }
-
-        // Add .navtrigger if it doesn't exist
-        document.querySelectorAll(".megamenu > a").forEach((anchor) => {
-          if (!anchor.querySelector(".navtrigger")) {
-            let navTrigger = document.createElement("span");
-            navTrigger.className = "navtrigger";
-            anchor.appendChild(navTrigger);
-          }
-        });
 
         // Wrap .menu in .mobile-menu if it doesn't exist
         if (!document.querySelector(".mobile-menu")) {
@@ -94,7 +101,6 @@ const Navbar = () => {
       } else {
         // Remove elements added for mobile view
         document.getElementById("menu_trigger")?.remove();
-        document.querySelectorAll(".navtrigger").forEach((el) => el.remove());
         document.querySelectorAll(".mobile-menu").forEach((mobileMenu) => {
           let menu = mobileMenu.querySelector(".menu");
           if (menu) {
@@ -109,42 +115,6 @@ const Navbar = () => {
     // Run on resize
     window.addEventListener("resize", handleResize);
     handleResize();
-
-    // While open submenu, add class
-    document.addEventListener("click", function (event) {
-      if (event.target.closest(".navtrigger")) {
-        // Open the clicked submenu
-        let parentLi = event.target.closest("li");
-        if (parentLi) {
-          parentLi.classList.add("sub-open");
-        }
-
-        event.preventDefault();
-      }
-    });
-
-    document
-      .querySelectorAll(".menu > .megamenu > a .navtrigger")
-      .forEach((item) => {
-        item.addEventListener("click", function (event) {
-          // Close all other open submenus
-          document.querySelectorAll("li.megamenu").forEach((item) => {
-            item.classList.remove("sub-open");
-          });
-        });
-      });
-
-    // Back to menu in mobile
-    document.addEventListener("click", function (event) {
-      if (event.target.closest(".back-trigger")) {
-        let parentLi = event.target.closest("li");
-        if (parentLi) {
-          parentLi.classList.remove("sub-open");
-        }
-
-        event.preventDefault();
-      }
-    });
 
     // Close mobile menu when close_btn is clicked
     document.addEventListener("click", function (event) {
@@ -188,7 +158,7 @@ const Navbar = () => {
     const overlay = document.getElementById("overlay_cart");
     cartSidebar.classList.remove("active");
     overlay.classList.remove("active");
-  }, [path]);
+  }, [path, categories]);
 
   // Navbar header Add to Cart Sidebar Js Start...................
   const toggleCart = () => {
@@ -226,6 +196,19 @@ const Navbar = () => {
 
   const handleSearch = () => {
     setSearch(!search);
+  };
+
+  const handleSubOpen = (li) => {
+    const menuItems = menuUlRef.current.children;
+    const activeLi = Array.from(menuItems).find((el) =>
+      el.classList.contains("sub-open")
+    );
+
+    if (activeLi) {
+      activeLi.classList.remove("sub-open");
+    }
+
+    li.classList.add("sub-open");
   };
 
   return (
@@ -693,452 +676,20 @@ const Navbar = () => {
         <div className="container">
           <div className="menu-box">
             <div id="mainmenu">
-              <ul className="menu">
+              <ul className="menu" ref={menuUlRef}>
                 <button
                   className="close_btn"
                   onClick={() => toggleMobileMenu()}
                 >
                   <FaTimes className="icon" />
                 </button>
-                <li>
-                  <a href="./product.html">Desktop</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Laptop</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Component</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Monitor</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">UPS</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Phone</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Office Equipment</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Camera</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Security</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Networking</a>
-                  <ul className="submenu">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Software</a>
-                  <ul className="submenu position1">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu position2">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu position2">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Accessories</a>
-                  <ul className="submenu position1">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu position2">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu position2">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Gadget</a>
-                  <ul className="submenu position1">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu position2">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu position2">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Product</a>
-                  <ul className="submenu position1">
-                    <li>
-                      <a href="#">Web Design</a>
-                      <ul className="submenu position2">
-                        <li>
-                          <a href="#">Photoshop</a>
-                          <ul className="submenu position2">
-                            <li>
-                              <a href="#">Photoshop</a>
-                            </li>
-                            <li>
-                              <a href="#">Illustrator</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="#">Illustrator</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="#">Web Development</a>
-                    </li>
-                    <li>
-                      <a href="#">SEO</a>
-                    </li>
-                  </ul>
-                </li>
+                {categories?.map((category, idx) => (
+                  <MenuItem
+                    handleSubOpen={handleSubOpen}
+                    category={category}
+                    key={category?._id}
+                  />
+                ))}
               </ul>
             </div>
           </div>

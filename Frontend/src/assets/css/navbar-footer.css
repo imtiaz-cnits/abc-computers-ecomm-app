@@ -446,6 +446,10 @@ body {
     width: 100%;
   }
 
+  #navbar .menu .megamenu {
+    padding: 10px 0;
+  }
+
   #navbar .menu .megamenu > a:after {
     content: "";
     position: absolute;
@@ -471,11 +475,15 @@ body {
     visibility: visible;
   }
 
-  #navbar .menu li.megamenu > a {
+  #navbar .menu li.megamenu span {
     position: relative;
+  }
+
+  #navbar .menu li.megamenu span a {
     padding: 10px 0;
     font-weight: 500;
     font-size: 16px;
+    display: inline;
   }
 
   /* Dropdown icon */
@@ -554,6 +562,10 @@ body {
 }
 
 @media only screen and (max-width: 1150px) {
+  #navbar .menu .megamenu {
+    padding: 0;
+  }
+
   /* Mobile Menu */
   #navbar .menu-box {
     padding: 0;
@@ -662,7 +674,7 @@ body {
     padding: 0px 20px;
   }
 
-  .mobile-menu li a .navtrigger {
+  .mobile-menu li.megamenu .navtrigger {
     position: absolute;
     right: 0;
     top: 0;
@@ -672,7 +684,7 @@ body {
     border: 1px solid var(--border-color);
   }
 
-  .mobile-menu li a .navtrigger:before {
+  .mobile-menu li.megamenu .navtrigger:before {
     content: "";
     position: absolute;
     top: 50%;

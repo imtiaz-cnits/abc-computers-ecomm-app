@@ -23,7 +23,9 @@ const storage = multer.diskStorage({
     cb(null, "uploads/"); // Directory to store uploaded files
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Generate a unique file name
+    // Ensure unique filenames using timestamp + random number
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
 
@@ -181,6 +183,7 @@ const CategoryAddService = async (req) => {
 const CategoryListService = async () => {
   try {
     let data = await CategoryModel.find().populate("subCategories"); // Ensure subcategories are populated
+
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
     return { status: "Fail", data: e.toString() }; // Ensure JSON error response
@@ -268,10 +271,16 @@ const SubCategoryAddService = async (req) => {
 
     const newSubCategory = new SubCategoryModel({
       subCategoryName,
-      subCategoryStatus,
+      status: subCategoryStatus,
       categoryId,
     });
     await newSubCategory.save();
+
+    await CategoryModel.findByIdAndUpdate(
+      categoryId,
+      { $push: { subCategories: newSubCategory._id } },
+      { new: true }
+    );
 
     return {
       status: "success",
@@ -301,6 +310,15 @@ const SubCategoryUpdateService = async (req) => {
     const { subCategoryName, status, categoryId } = req.body;
 
     const existingSubCategory = await SubCategoryModel.findById(req.params.id);
+
+    if (existingSubCategory) {
+      // Remove the subcategory reference from the category's subCategories array
+      await CategoryModel.updateOne(
+        { _id: existingSubCategory?.categoryId },
+        { $pull: { subCategories: req.params.id } } // Remove subcategory ID
+      );
+    }
+
     if (!existingSubCategory) {
       return { status: "fail", message: "Sub Category not found" };
     }
@@ -308,6 +326,13 @@ const SubCategoryUpdateService = async (req) => {
     // Ensure category exists
     if (categoryId) {
       const categoryExists = await CategoryModel.findById(categoryId);
+
+      await CategoryModel.findByIdAndUpdate(
+        categoryId,
+        { $push: { subCategories: req.params.id } },
+        { new: true }
+      );
+
       if (!categoryExists) {
         return { status: "fail", message: "Category not found" };
       }
@@ -341,6 +366,12 @@ const SubCategoryDeleteService = async (subCategoryId) => {
     if (!subCategory) {
       return { status: "fail", message: "Sub Category not found" };
     }
+
+    // Remove the subcategory reference from the category's subCategories array
+    await CategoryModel.updateOne(
+      { _id: subCategory.categoryId },
+      { $pull: { subCategories: subCategoryId } } // Remove subcategory ID
+    );
 
     // Delete the sub category
     await SubCategoryModel.findByIdAndDelete(subCategoryId);
@@ -429,6 +460,7 @@ const ProductAddService = async (req) => {
       categoryID,
       subCategoryID,
       color: parsedColor,
+      productImg: productImgs[0],
     });
 
     await newProduct.save();
@@ -540,6 +572,11 @@ const ProductUpdateService = async (req) => {
       discountPrice || existingProduct.discountPrice;
     existingProduct.stock = stock || existingProduct.stock;
     existingProduct.color = parsedColor;
+
+    // Optional image update
+    if (productImgs.length) {
+      existingProduct.productImg = productImgs[0];
+    }
 
     // Handle relationships (if any)
     existingProduct.brandID = brandID || existingProduct.brandID;

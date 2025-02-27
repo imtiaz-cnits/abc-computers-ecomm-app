@@ -1806,9 +1806,9 @@ body {
   display: block;
   display: -webkit-box;
   max-width: 100%;
-  height: 33px !important;
+  /* height: 33px !important; */
   margin: 6px 0;
-  line-height: 16px;
+  line-height: 20px;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -1942,8 +1942,9 @@ body {
     text-overflow: ellipsis;
   }
 
-  #specials .progress_bar {
+  #specials .progress-bar {
     margin-bottom: 10px;
+    text-align: start !important;
   }
 
   .ce_ixelgen_progress_bar .item_label,

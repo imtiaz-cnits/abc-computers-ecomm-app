@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import categoryImg1 from "@/assets/img/home/catagories-img1.webp";
 import axios from "axios";
 
 const FeaturedCategories = () => {
@@ -31,7 +30,10 @@ const FeaturedCategories = () => {
         <div className="categories_wrapper">
           <div className="row g-3 g-md-4">
             {categories?.slice(0, 12)?.map((category) => (
-              <div className="col-lg-2 col-6 col-sm-4 d-flex align-item-stretch">
+              <div
+                key={category?._id}
+                className="col-lg-2 col-6 col-sm-4 d-flex align-item-stretch"
+              >
                 <a href="#" className="categories_card">
                   <div className="categories_title">
                     <h2>{category?.categoryName}</h2>

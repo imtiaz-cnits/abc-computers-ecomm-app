@@ -33,11 +33,6 @@ const JavascriptClient = () => {
         src="/js/website/specials-product-slider.js"
         strategy="afterInteractive"
       />
-      <Script
-        src="/js/website/product-progressbar.js"
-        strategy="afterInteractive"
-      />
-      <Script src="/js/website/brand-slider.js" strategy="afterInteractive" />
       <Script src="/js/website/app.js" strategy="afterInteractive" />
       <Script
         src="/js/website/product-video-slider.js"

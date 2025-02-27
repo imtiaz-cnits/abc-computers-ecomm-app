@@ -1,6 +1,10 @@
 import SingleProduct from "@/Pages/WebsitePages/SingleProduct/SingeProduct";
 import React from "react";
 
+export const metadata = {
+  title: "Products | ABC Computers",
+};
+
 const ProductSinglePage = async ({ params }) => {
   const { id } = await params;
 

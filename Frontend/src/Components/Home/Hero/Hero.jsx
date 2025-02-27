@@ -3,21 +3,6 @@ import React, { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import heroPriceShape from "@/assets/icons/hero-slider-price-shape.png";
-
-import heroSlide1 from "@/assets/img/home/hero-slide1.webp";
-import heroSlide2 from "@/assets/img/home/hero-slide2.webp";
-import heroSlide3 from "@/assets/img/home/hero-slide3.webp";
-
-import heroCard1 from "@/assets/img/home/hero-product-card1-img.webp";
-import heroCard2 from "@/assets/img/home/hero-product-card2-img.webp";
-
-import heroProduct1 from "@/assets/img/home/hero-slider-product-card1-product-img.webp";
-import heroProduct6 from "@/assets/img/home/herpo-slide6.webp";
-import heroProduct4 from "@/assets/img/home/hero-img4.webp";
-
-import discountProduct1 from "@/assets/img/home/hero-slider3-discount-product-img1.webp";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import axios from "axios";

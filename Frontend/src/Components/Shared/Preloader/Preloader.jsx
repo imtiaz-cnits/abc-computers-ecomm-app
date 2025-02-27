@@ -16,7 +16,7 @@ const Preloader = () => {
       document.body.classList.add("fade-in");
       document.querySelector(".preloader_wrapper").style.display = "none";
     }, 2000);
-  }, []);
+  }, [path]);
 
   return (
     <div className="preloader_wrapper">

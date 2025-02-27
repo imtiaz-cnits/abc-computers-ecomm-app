@@ -10,6 +10,7 @@ const DataSchema = mongoose.Schema(
     stock: { type: Number, min: 0 },
     badge: { type: String },
     color: { type: [String] },
+    productImg: { type: String },
 
     brandID: { type: mongoose.Schema.Types.ObjectId, ref: "brands" },
     categoryID: { type: mongoose.Schema.Types.ObjectId, ref: "categories" },

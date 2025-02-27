@@ -5,20 +5,6 @@ import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
 import "./SingleProduct.css";
 
-import productImg1 from "@/assets/img/product/populer-product-img1.webp";
-import productImg2 from "@/assets/img/product/single-product-slider-2.webp";
-import productImg3 from "@/assets/img/product/single-product-slider-3.webp";
-import productImg4 from "@/assets/img/product/single-product-slider-4.webp";
-import productImg5 from "@/assets/img/product/single-product-slider-5.webp";
-
-import viewProductImg1 from "@/assets/img/product/view-product-img1.webp";
-import viewProductImg2 from "@/assets/img/product/view-product-img2.webp";
-import viewProductImg3 from "@/assets/img/product/view-product-img3.webp";
-import viewProductImg4 from "@/assets/img/product/view-product-img4.webp";
-import viewProductImg5 from "@/assets/img/product/view-product-img5.webp";
-
-import productVideo1 from "@/assets/img/product/product-video-img1.webp";
-
 import moreProduct1 from "@/assets/img/product/more-product-img1.webp";
 import moreProduct2 from "@/assets/img/product/more-product-img2.webp";
 import moreProduct3 from "@/assets/img/product/more-product-img3.webp";
@@ -29,7 +15,6 @@ import recentImg2 from "@/assets/img/product/recent-shopping-img2.webp";
 import recentImg3 from "@/assets/img/product/recent-shopping-img3.webp";
 import recentImg4 from "@/assets/img/product/recent-shopping-img4.webp";
 
-import sliderProfile1 from "@/assets/img/product/video-slider.profile1.webp";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const PopularProducts = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,7 @@ const PopularProducts = () => {
           <div id="newproduct" className="tab-content active">
             <div className="row g-3 g-md-4">
               {products?.slice(0, 8)?.map((product) => (
-                  <div className="col-lg-3 col-6 d-flex align-item-stretch">
+                  <div key={product?._id} className="col-lg-3 col-6 d-flex align-item-stretch">
                     <div className="populer_product_card">
                       <div className="product">
                         <img src={`http://localhost:5070${product.productImg}`} alt=""/>
@@ -73,7 +74,7 @@ const PopularProducts = () => {
                               />
                             </svg>
                           </a>
-                          <a href="./product-single.html" className="icon">
+                          <Link href={`/products/${product?._id}`} className="icon">
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                               <g clipPath="url(#clip0_1_35)">
@@ -104,7 +105,7 @@ const PopularProducts = () => {
                                 </clipPath>
                               </defs>
                             </svg>
-                          </a>
+                          </Link>
                           <a href="./product-single.html" className="icon">
                             <svg width="36" height="32" viewBox="0 0 36 32" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -35,6 +37,8 @@ const Hero = () => {
     fetchData();
   }, []);
 
+  if (banners?.length === 0) return null;
+
   return (
     <div id="hero">
       <div className="hero-slider-container">
@@ -47,7 +51,10 @@ const Hero = () => {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
-          autoplay={true}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
           modules={[Pagination, Navigation, Autoplay]}
           className="mySwiper swiper-wrapper"
         >

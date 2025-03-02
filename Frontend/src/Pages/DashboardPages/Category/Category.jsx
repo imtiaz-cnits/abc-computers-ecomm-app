@@ -59,6 +59,29 @@ const Category = () => {
     setTotalPages(Math.ceil(categories.length / limit));
   }, [categories, limit]);
 
+  useEffect(() => {
+    // ..............Table searchbar filter Start.......................//
+    const searchInput = document.querySelector("#searchInput");
+    searchInput?.addEventListener("input", function () {
+      const filter = searchInput?.value?.toLowerCase();
+      const rows = document?.querySelectorAll("#printTable tbody tr");
+
+      rows?.forEach((row) => {
+        const cells = row.querySelectorAll("td");
+        let isMatch = false;
+
+        cells.forEach((cell) => {
+          if (cell.textContent.toLowerCase().includes(filter)) {
+            isMatch = true;
+          }
+        });
+
+        row.style.display = isMatch ? "" : "none";
+      });
+    });
+    // ..............Table searchbar filter End.......................//
+  }, []);
+
   const handleSort = (key) => {
     const direction =
       sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";

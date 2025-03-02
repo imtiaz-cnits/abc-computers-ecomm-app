@@ -14,7 +14,6 @@ import BackToTop from "@/Components/Shared/BackToTop/BackToTop";
 import { Toaster } from "react-hot-toast"; // Import Toaster
 import UserContextProvider from "@/Utilities/Contexts/UserContextProvider";
 import QuickViewContextProvider from "@/Utilities/Contexts/QuickViewContextProvider";
-import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 
 export const metadata = {
   title: "Home | ABC Computers",

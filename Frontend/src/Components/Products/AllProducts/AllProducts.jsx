@@ -6,11 +6,18 @@ import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
+import "../../../assets/css/product.css";
 
-const AllProducts = () => {
+const AllProducts = ({ catId }) => {
   const [filterPrice, setFilterPrice] = useState(0);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { setProduct } = useContext(QuickViewContext);
+  const [categoryId, setCategoryId] = useState(catId || null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,6 +30,37 @@ const AllProducts = () => {
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await axios.get("http://localhost:5070/api/v1/category");
+
+      if (response?.data?.status === "success") {
+        setCategories(response?.data?.data);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    let newProducts = [];
+
+    // Category Filter
+    newProducts = categoryId
+      ? products?.filter((p) => p.categoryID?._id === categoryId)
+      : products;
+
+    const pageLength = Math.ceil(newProducts?.length / limit);
+    const totalPages = Array.from({ length: pageLength }, (_, i) => i + 1);
+
+    const skip = (page - 1) * limit;
+
+    const paginatedProducts = newProducts?.slice(skip, skip + limit);
+
+    setPages(totalPages);
+    setFilteredProducts(paginatedProducts);
+  }, [categoryId, products, page, limit]);
 
   useEffect(() => {
     // Sidebar Phone View Toggle......
@@ -76,84 +114,6 @@ const AllProducts = () => {
     });
     // Grid View and Single View.........
 
-    // Function to update the showing entries dynamically
-    function updateShowingEntries() {
-      const products = document.querySelectorAll(".product-card");
-      const visibleProducts = Array.from(products).filter(
-        (product) => product.style.display !== "none"
-      );
-      const totalProducts = products.length;
-      const visibleCount = visibleProducts.length;
-
-      // Update the display-info span with the dynamic count
-      const displayInfo = document.getElementById("display-info");
-      displayInfo.innerText = `Showing 1–${visibleCount} of ${totalProducts} results`;
-    }
-
-    // Function to filter products by category
-    function filterByCategory(category) {
-      const products = document.querySelectorAll(".product-card");
-
-      products.forEach((product) => {
-        // Show all products if "all" category is selected
-        if (category === "all") {
-          product.style.display = "block";
-        } else {
-          // Show product if it matches the category, otherwise hide it
-          product.style.display =
-            product.getAttribute("data-category") === category
-              ? "block"
-              : "none";
-        }
-      });
-
-      // Update the showing entries after filtering
-      updateShowingEntries();
-
-      // Set the active category link
-      setActiveCategoryLink(category);
-    }
-
-    // Function to set the active category link
-    function setActiveCategoryLink(activeCategory) {
-      const categoryLinks = document.querySelectorAll(".category-link");
-
-      categoryLinks.forEach((link) => {
-        // Remove 'active' class from all links
-        link.classList.remove("active");
-
-        // Add 'active' class to the clicked link
-        if (link.getAttribute("data-category") === activeCategory) {
-          link.classList.add("active");
-        }
-      });
-    }
-
-    // Add event listeners to category links
-    const categoryLinks = document.querySelectorAll(".category-link");
-    categoryLinks.forEach((link) => {
-      link.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent default link behavior
-        const category = this.getAttribute("data-category");
-        filterByCategory(category); // Filter by the clicked category
-      });
-    });
-
-    // // Search functionality Start..............
-    // Function to update showing entries dynamically
-    function updateShowingEntries() {
-      const products = document.querySelectorAll(".product-card");
-      const visibleProducts = Array.from(products).filter(
-        (product) => product.style.display !== "none"
-      );
-      const totalProducts = products.length;
-      const visibleCount = visibleProducts.length;
-
-      // Update the display-info span with the dynamic count
-      const displayInfo = document.getElementById("display-info");
-      displayInfo.innerText = `Showing 1–${visibleCount} of ${totalProducts} results`;
-    }
-
     // Select all search bars
     const searchBars = document.querySelectorAll(".search-bar");
 
@@ -172,32 +132,8 @@ const AllProducts = () => {
             ? "block"
             : "none";
         });
-
-        // Update the showing entries after searching
-        updateShowingEntries();
       });
     });
-
-    // Initial call to set the correct product count
-    updateShowingEntries();
-
-    // Initial call to show all products when the page loads
-    filterByCategory("all");
-
-    // Filter Price Start............
-    function updatePrice(value) {
-      document.getElementById("priceValue").innerText = value;
-
-      // Calculate the percentage based on the value
-      var percentage = (value / 150) * 100;
-
-      // Update the background gradient to reflect the exact color #e31736
-      document.getElementById(
-        "priceRange"
-      ).style.background = `linear-gradient(to right, #e31736 ${percentage}%, #ddd ${percentage}%)`;
-    }
-
-    // Filter Price Start............
   }, []);
 
   const updatePrice = (value) => {
@@ -207,12 +143,26 @@ const AllProducts = () => {
     setFilterPrice(value);
 
     // Calculate the percentage based on the value
-    var percentage = (value / 150) * 100;
+    var percentage = (value / 999) * 100;
 
     // Update the background gradient to reflect the exact color #e31736
     document.getElementById(
       "priceRange"
     ).style.background = `linear-gradient(to right, #e31736 ${percentage}%, #ddd ${percentage}%)`;
+  };
+
+  const handleNextPage = () => {
+    if (page >= pages?.length) return;
+
+    setPage(page + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page <= 1) return;
+
+    console.log("hehe");
+
+    setPage(page - 1);
   };
 
   return (
@@ -247,91 +197,34 @@ const AllProducts = () => {
                     type="range"
                     id="priceRange"
                     min="0"
-                    max="150"
+                    max="999"
                     value={filterPrice}
                     step="1"
                     onInput={(e) => updatePrice(e.target.value)}
                   />
                   <p>
-                    Price: $<span id="priceValue">0</span> - $1000
+                    Price: ৳<span id="priceValue">0</span> - ৳1000
                   </p>
                 </div>
               </div>
               <div className="categories">
                 <h2>Categories</h2>
                 <ul>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="computer-laptops"
-                    >
-                      Computer & Laptops <span>(34)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="watches"
-                    >
-                      Watches <span>(120)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="cameras"
-                    >
-                      Cameras <span>(45)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="accessories"
-                    >
-                      Accessories <span>(220)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="vr-headsets"
-                    >
-                      VR Headsets <span>(20)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="speakers"
-                    >
-                      Speakers <span>(49)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="monitors"
-                    >
-                      Monitors <span>(32)</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="category-link"
-                      data-category="headphones"
-                    >
-                      Ear Buds & Headphones <span>(120)</span>
-                    </a>
-                  </li>
+                  {categories?.slice(0, 8)?.map((category) => (
+                    <li key={category?._id}>
+                      <a
+                        href="#"
+                        className="category-link"
+                        data-category={category?._id}
+                        onClick={() => {
+                          setCategoryId(category?._id);
+                          setPage(1);
+                        }}
+                      >
+                        {category?.categoryName}
+                      </a>
+                    </li>
+                  ))}
                   <li>
                     <a href="#" className="category-link" data-category="more">
                       More... <span></span>
@@ -526,7 +419,13 @@ const AllProducts = () => {
                 </div>
                 <div className="product_showing">
                   <div className="showing-entries">
-                    <span id="display-info"></span>
+                    <span id="display-info">
+                      {`Showing ${(page - 1) * limit + 1}-${
+                        page * limit > filteredProducts?.length
+                          ? filteredProducts?.length
+                          : page * limit
+                      } of ${filteredProducts?.length} results`}
+                    </span>
                   </div>
 
                   <div className="grid_icon">
@@ -662,10 +561,10 @@ const AllProducts = () => {
               {/* <!-- Main Product Grid --> */}
               <main className="product-grid product-list">
                 {/* <!-- Product Card Example --> */}
-                {products?.map((product) => (
+                {filteredProducts?.map((product) => (
                   <div
                     className="product-card"
-                    data-category={product?.categoryID?.categoryName}
+                    data-category={product?.categoryID?._id}
                     key={product?._id}
                   >
                     <div className="special_product_card">
@@ -712,7 +611,10 @@ const AllProducts = () => {
                               />
                             </svg>
                           </a>
-                          <a href="#" className="icon">
+                          <a
+                            href={`/products/${product?._id}`}
+                            className="icon"
+                          >
                             <svg
                               width="32"
                               height="32"
@@ -768,39 +670,51 @@ const AllProducts = () => {
                       <div className="product_details">
                         <h3 className="product_name">{product?.productName}</h3>
                         <div className="price">
-                          <span>${product?.discountPrice}</span>
-                          <span className="discount">${product?.price}</span>
+                          <span>৳{product?.discountPrice}</span>
+                          <span className="discount">৳{product?.price}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
+
+                {filteredProducts?.length === 0 ? (
+                  <h4 style={{ textAlign: "center" }}>No Products Found!</h4>
+                ) : (
+                  <></>
+                )}
               </main>
 
               {/* <!-- Pagination --> */}
-              <div className="product_pagination">
-                <a href="#" className="link">
-                  <FaAnglesLeft />
-                </a>
-                <a href="#" className="active link">
-                  1
-                </a>
-                <a href="#" className="link">
-                  2
-                </a>
-                <a href="#" className="link">
-                  3
-                </a>
-                <a href="#" className="link">
-                  4
-                </a>
-                <a href="#" className="link">
-                  5
-                </a>
-                <a href="#" className="link">
-                  <FaAnglesRight />
-                </a>
-              </div>
+              {pages.length > 1 ? (
+                <div className="product_pagination">
+                  <button
+                    className="link"
+                    disabled={page <= 1}
+                    onClick={handlePrevPage}
+                  >
+                    <FaAnglesLeft />
+                  </button>
+                  {pages?.map((p) => (
+                    <button
+                      key={p}
+                      className={`link ${p === page ? "active" : ""}`}
+                      onClick={() => setPage(p)}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  <button
+                    className="link"
+                    onClick={handleNextPage}
+                    disabled={page >= pages?.length}
+                  >
+                    <FaAnglesRight />
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>

@@ -839,7 +839,7 @@ Reset Default CSS End
   padding-top: 40px;
 }
 
-.product_pagination a {
+.product_pagination button {
   border: 1px solid var(--border-color);
   padding: 5px 15px;
   display: flex;
@@ -850,6 +850,8 @@ Reset Default CSS End
   font-weight: bold;
   border-radius: 6px;
   transition: 0.5s;
+  cursor: pointer;
+  background-color: transparent;
 }
 
 .product_pagination .link {
@@ -861,10 +863,21 @@ Reset Default CSS End
   font-size: 30px;
 }
 
-.product_pagination a:hover {
+.product_pagination button:hover {
   background: var(--secondary-color);
   color: var(--white);
   border-color: var(--secondary-color);
+}
+
+.product_pagination button:disabled:hover {
+  background: var(--accent);
+  color: var(--white);
+}
+
+.product_pagination button:disabled {
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--border-color);
 }
 
 .product_pagination .active {

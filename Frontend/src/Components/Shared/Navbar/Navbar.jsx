@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import logo from "@/assets/img/navbar-logo.png";
+import logo from "@/assets/img/main_logo_abc.svg";
 import { FaAngleRight, FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import cartImg2 from "@/assets/img/cart-product-img2.webp";

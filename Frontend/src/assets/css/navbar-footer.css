@@ -140,7 +140,7 @@ body {
 }
 
 #navbar_header .header_logo {
-  width: 70px;
+  width: 240px;
 }
 
 #navbar_header .header_logo img {
@@ -152,7 +152,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 0 10px;
+  padding: 12px 0 2px;
   gap: 30px;
 }
 

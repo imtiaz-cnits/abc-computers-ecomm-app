@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/navigation";
+import { Autoplay } from "swiper/modules";
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
@@ -19,6 +22,8 @@ const Brands = () => {
 
     fetchBrands();
   }, []);
+
+  if (brands.length === 0) return null;
 
   return (
     <div className="brand">
@@ -38,10 +43,16 @@ const Brands = () => {
                 600: { slidesPerView: 3 },
                 1000: { slidesPerView: 5 },
               }}
+              loop={true}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay]}
             >
               {brands?.slice(0, 12)?.map((brand, idx) => (
-                <SwiperSlide>
-                  <div key={idx} className="item">
+                <SwiperSlide key={idx}>
+                  <div className="item">
                     <img
                       src={`http://localhost:5070${brand.brandImg}`}
                       alt=""

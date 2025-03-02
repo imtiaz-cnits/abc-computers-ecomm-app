@@ -5,6 +5,7 @@ import Hero from "@/Components/Home/Hero/Hero";
 import PopularProducts from "@/Components/Home/PopularProducts/PopularProducts";
 import Specials from "@/Components/Home/Specials/Specials";
 import Features from "@/Components/Shared/Features/Features";
+import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 import React from "react";
 
 const Home = () => {
@@ -16,6 +17,7 @@ const Home = () => {
       <PopularProducts />
       <Discount />
       <Specials />
+      <ProductQuickModal />
       <Brands />
     </>
   );

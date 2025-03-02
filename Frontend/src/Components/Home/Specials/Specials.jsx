@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import sliderImg1 from "@/assets/img/home/special-slider-img1.webp";
 import axios from "axios";
@@ -7,11 +7,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
 import ProgressBar from "@ramonak/react-progress-bar";
+import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 
 const Specials = () => {
   const [products, setProducts] = useState([]);
   const prevBtnRef = useRef(null);
   const nextBtnRef = useRef(null);
+  const { setProduct } = useContext(QuickViewContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,6 +28,8 @@ const Specials = () => {
 
     fetchProducts();
   }, []);
+
+  if (products?.length === 0) return null;
 
   return (
     <>
@@ -73,6 +77,9 @@ const Specials = () => {
                             id="quick_view"
                             data-bs-toggle="modal"
                             data-bs-target="#quickViewModal"
+                            onClick={() => {
+                              setProduct(product);
+                            }}
                           >
                             <svg
                               width="39"
@@ -203,54 +210,6 @@ const Specials = () => {
           </div>
         </div>
       </div>
-
-      <section
-        className="modal fade"
-        id="quickViewModal"
-        tabIndex="-1"
-        aria-labelledby="quickViewModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal_header">
-              <h5 className="modal_title" id="quickViewModalLabel">
-                DJI Osmo Mobile 6
-              </h5>
-            </div>
-            <div className="modal_body">
-              <div className="product">
-                <img
-                  src={sliderImg1.src}
-                  alt="DJI Osmo Mobile 6"
-                  className="img-fluid"
-                />
-              </div>
-              <p>
-                The DJI Osmo Mobile 6 is an intelligent gimbal packed with
-                creative features. Capture smooth video and dynamic footage
-                effortlessly.
-              </p>
-              <div className="price">
-                <span className="price1">৳149.99</span>
-                <span className="price2 text-muted">৳169.99</span>
-              </div>
-            </div>
-            <div className="modal_footer">
-              <button
-                type="button"
-                className="btn close_btn"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <a href="./product-single.html" className="btn details_btn">
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 };

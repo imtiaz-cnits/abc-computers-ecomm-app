@@ -15,6 +15,7 @@ const Navbar = () => {
   const [categories, setCategories] = useState([]);
   const menuUlRef = useRef(null);
   const [searchValue, setSearchValue] = useState("");
+  const [searchResult, setSearchResult] = useState(false);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -63,6 +64,10 @@ const Navbar = () => {
 
     setFilteredProducts(searchedProducts);
   }, [products, searchValue]);
+
+  useEffect(() => {
+    setSearchResult(false);
+  }, [path]);
 
   useEffect(() => {
     document.addEventListener("click", function (event) {
@@ -264,12 +269,15 @@ const Navbar = () => {
                 placeholder="Search"
                 value={searchValue}
                 onInput={handleSearchValue}
+                onClick={() => setSearchResult(true)}
               />
               <button type="submit" className="src_btn">
                 <FaSearch className="icon" />
               </button>
 
-              {searchValue !== "" && filteredProducts.length !== 0 ? (
+              {searchValue !== "" &&
+              filteredProducts.length !== 0 &&
+              searchResult ? (
                 <div className={`search-result`}>
                   {filteredProducts?.slice(0, 4)?.map((product) => (
                     <Link href={`/products/${product?._id}`} key={product?._id}>
@@ -391,7 +399,12 @@ const Navbar = () => {
       {/* // <!-- Search Tooltip --> */}
       <div className={`tooltip-a ${search ? "active" : ""}`}>
         <form>
-          <input type="text" placeholder="Search here..." value={searchValue} onInput={handleSearchValue} />
+          <input
+            type="text"
+            placeholder="Search here..."
+            value={searchValue}
+            onInput={handleSearchValue}
+          />
           <button type="submit" className="src_btn">
             <FaSearch className="icon" />
           </button>

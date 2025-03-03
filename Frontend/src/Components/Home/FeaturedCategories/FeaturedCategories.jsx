@@ -37,6 +37,7 @@ const FeaturedCategories = () => {
               >
                 <Link
                   href={`/categories/${category?._id}`}
+                  target="_blank"
                   className="categories_card"
                 >
                   <div className="categories_title">

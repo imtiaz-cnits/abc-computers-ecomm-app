@@ -108,7 +108,7 @@ const Products = () => {
           <div className="invoice-btn">
             <h1>PRODUCT/ SERVICES</h1>
             <div className="table-btn-item">
-              <Link href={"/dashboard/products/add-product"}>
+              <Link href={"/dashboard/products/add-product"} target="_blank">
                 <button type="submit" className="view-more-btn">
                   <svg
                     width="32"

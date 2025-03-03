@@ -24,7 +24,9 @@ const MenuItem = ({ category, handleSubOpen }) => {
     <>
       <li className={`megamenu`} ref={submenuRef}>
         <span>
-          <Link href="/">{category?.categoryName}</Link>
+          <Link href={`/categories/${category?._id}`}>
+            {category?.categoryName}
+          </Link>
           <span
             className={`${category?.subCategories?.length ? "navtrigger" : ""}`}
             onClick={() => {

@@ -14,6 +14,9 @@ const Navbar = () => {
   const [search, setSearch] = useState(false);
   const [categories, setCategories] = useState([]);
   const menuUlRef = useRef(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const path = usePathname();
 
@@ -38,6 +41,28 @@ const Navbar = () => {
 
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await axios.get(
+        "http://localhost:5070/api/v1/product-list"
+      );
+
+      if (response?.data?.status === "success") {
+        setProducts(response?.data?.data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const searchedProducts = products?.filter((product) =>
+      product?.productName?.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    setFilteredProducts(searchedProducts);
+  }, [products, searchValue]);
 
   useEffect(() => {
     document.addEventListener("click", function (event) {
@@ -211,6 +236,11 @@ const Navbar = () => {
     li.classList.add("sub-open");
   };
 
+  const handleSearchValue = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+  };
+
   return (
     <>
       <header id="navbar_header">
@@ -228,10 +258,48 @@ const Navbar = () => {
               <a href="/" className="header_logo mobile_view_logo">
                 <img src={logo.src} alt="" />
               </a>
-              <input className="search_icon" type="text" placeholder="Search" />
+              <input
+                className="search_icon"
+                type="text"
+                placeholder="Search"
+                value={searchValue}
+                onInput={handleSearchValue}
+              />
               <button type="submit" className="src_btn">
                 <FaSearch className="icon" />
               </button>
+
+              {searchValue !== "" && filteredProducts.length !== 0 ? (
+                <div className={`search-result`}>
+                  {filteredProducts?.slice(0, 4)?.map((product) => (
+                    <Link href={`/products/${product?._id}`} key={product?._id}>
+                      <div className="search_product_card">
+                        <div className="product">
+                          <img
+                            alt=""
+                            src={`http://localhost:5070${product?.productImg}`}
+                          />
+                        </div>
+                        <div className="product_details">
+                          <h3 className="product_name">
+                            {product?.productName}
+                          </h3>
+                          <div className="price">
+                            <span className="main-price">
+                              ৳{product?.discountPrice}
+                            </span>
+                            <span className="discount text-muted">
+                              <del>৳{product?.price}</del>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="header_item_wrapper">
               <div className="others">
@@ -323,11 +391,41 @@ const Navbar = () => {
       {/* // <!-- Search Tooltip --> */}
       <div className={`tooltip-a ${search ? "active" : ""}`}>
         <form>
-          <input type="text" placeholder="Search here..." />
+          <input type="text" placeholder="Search here..." value={searchValue} onInput={handleSearchValue} />
           <button type="submit" className="src_btn">
             <FaSearch className="icon" />
           </button>
         </form>
+
+        {searchValue !== "" && filteredProducts.length !== 0 ? (
+          <div className={`search-result`}>
+            {filteredProducts?.slice(0, 4)?.map((product) => (
+              <Link href={`/products/${product?._id}`} key={product?._id}>
+                <div className="search_product_card">
+                  <div className="product">
+                    <img
+                      alt=""
+                      src={`http://localhost:5070${product?.productImg}`}
+                    />
+                  </div>
+                  <div className="product_details">
+                    <h3 className="product_name">{product?.productName}</h3>
+                    <div className="price">
+                      <span className="main-price">
+                        ৳{product?.discountPrice}
+                      </span>
+                      <span className="discount text-muted">
+                        <del>৳{product?.price}</del>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       {/* <!-- Header --> */}
 

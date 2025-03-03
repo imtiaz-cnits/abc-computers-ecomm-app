@@ -7,6 +7,8 @@ import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 import "../../../assets/css/product.css";
+import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
+import { usePathname } from "next/navigation";
 
 const AllProducts = ({ catId }) => {
   const [filterPrice, setFilterPrice] = useState(0);
@@ -18,6 +20,8 @@ const AllProducts = ({ catId }) => {
   const [pages, setPages] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(12);
+  const [singleCategory, setSingleCategory] = useState({});
+  const path = usePathname();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,6 +65,11 @@ const AllProducts = ({ catId }) => {
     setPages(totalPages);
     setFilteredProducts(paginatedProducts);
   }, [categoryId, products, page, limit]);
+
+  useEffect(() => {
+    const singleCat = categories.find((c) => c._id === categoryId);
+    setSingleCategory(singleCat);
+  }, [categories, categoryId]);
 
   useEffect(() => {
     // Sidebar Phone View Toggle......
@@ -137,8 +146,6 @@ const AllProducts = ({ catId }) => {
   }, []);
 
   const updatePrice = (value) => {
-    console.log(value);
-
     document.getElementById("priceValue").innerText = value;
     setFilterPrice(value);
 
@@ -167,6 +174,9 @@ const AllProducts = ({ catId }) => {
 
   return (
     <>
+      {!path?.startsWith("/products") && (
+        <Breadcrumb pageTitle={singleCategory?.categoryName} />
+      )}
       <div id="all_products">
         <div className="container">
           <div className="product_page_main">
@@ -677,13 +687,12 @@ const AllProducts = ({ catId }) => {
                     </div>
                   </div>
                 ))}
-
-                {filteredProducts?.length === 0 ? (
-                  <h4 style={{ textAlign: "center" }}>No Products Found!</h4>
-                ) : (
-                  <></>
-                )}
               </main>
+              {filteredProducts?.length === 0 ? (
+                <h5 style={{ textAlign: "center" }}>No Products Found!</h5>
+              ) : (
+                <></>
+              )}
 
               {/* <!-- Pagination --> */}
               {pages.length > 1 ? (

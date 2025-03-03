@@ -457,9 +457,11 @@ body {
 
 .single_product .select_color_custom {
   display: flex;
-  align-items: center;
+  gap: 5px;
+  align-items: flex-start;
   margin: 16px 0;
   font-weight: 600;
+  flex-direction: column;
 }
 
 .single_product .select_color_custom label {
@@ -469,18 +471,27 @@ body {
   font-weight: bold !important;
 }
 
-.single_product .color_btn {
-  border: none;
-  padding: 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-left: 10px;
-  border: 2px solid transparent;
+.single_product .color_btn_container {
+  display: flex;
+  width: 100%;
+  gap: 10px;
 }
 
-.select_color_custom .color_btn:focus {
-  border: 2px solid var(--secondary-color);
-  outline: none;
+.single_product .color_btn {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #fff;
+  transition: 0.3s all ease;
+}
+
+.single_product .color_btn:hover,
+.single_product .color_btn.active {
+  background-color: var(--accent-2);
 }
 
 .single_product .quantity_wrapper {

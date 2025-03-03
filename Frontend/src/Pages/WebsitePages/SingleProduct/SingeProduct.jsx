@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
 import "./SingleProduct.css";
@@ -16,6 +16,7 @@ import recentImg3 from "@/assets/img/product/recent-shopping-img3.webp";
 import recentImg4 from "@/assets/img/product/recent-shopping-img4.webp";
 
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { LiaTimesSolid } from "react-icons/lia";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -25,6 +26,7 @@ import axios from "axios";
 const SingleProduct = ({ id }) => {
   const [productDetails, setProductDetails] = useState({});
   const product = productDetails?.productID;
+  const [selectedColor, setSelectedColor] = useState("");
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
@@ -101,9 +103,7 @@ const SingleProduct = ({ id }) => {
                   className="mySwiper"
                 >
                   {productDetails?.productImgs?.map((img, idx) => (
-                    <SwiperSlide
-                      key={idx}
-                    >
+                    <SwiperSlide key={idx}>
                       <img src={`http://localhost:5070${img}`} alt="" />
                     </SwiperSlide>
                   ))}
@@ -146,15 +146,27 @@ const SingleProduct = ({ id }) => {
                   </div>
 
                   <div className="select_color_custom">
-                    <label>Select Color</label>:
-                    <button
-                      className="color_btn"
-                      style={{ backgroundColor: "#333" }}
-                    ></button>
-                    <button
-                      className="color_btn"
-                      style={{ backgroundColor: "#999" }}
-                    ></button>
+                    <label>Select Color: {selectedColor}</label>
+                    <div className="color_btn_container">
+                      {product?.color?.map((color, idx) => (
+                        <button
+                          onClick={() => setSelectedColor(color)}
+                          key={idx}
+                          className={`color_btn ${
+                            selectedColor === color ? "active" : ""
+                          }`}
+                        >
+                          {color}
+                        </button>
+                      ))}
+
+                      <button
+                        onClick={() => setSelectedColor("")}
+                        className={`color_btn`}
+                      >
+                        <LiaTimesSolid />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="action_buttons_custom">

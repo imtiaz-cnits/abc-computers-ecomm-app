@@ -11,7 +11,7 @@ import { FaXmark } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-import("froala-editor/js/plugins.pkgd.min.js");
+// import("froala-editor/js/plugins.pkgd.min.js");
 
 const UpdateProduct = ({ id }) => {
   const BrandModalCloseBtn = useRef(null);

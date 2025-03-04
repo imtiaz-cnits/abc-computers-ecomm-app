@@ -51,13 +51,14 @@ const PopularProducts = () => {
                   key={product?._id}
                   className="col-lg-3 col-6 d-flex align-item-stretch"
                 >
-                  <Link href={`/products/${product?._id}`} target="_blank">
                     <div className="populer_product_card">
+                        <Link href={`/products/${product?._id}`} target="_blank">
                       <div className="product">
                         <img
                           src={`http://localhost:5070${product.productImg}`}
                           alt=""
                         />
+
                         <span className="product_status">New</span>
 
                         <div className="product_icon">
@@ -152,6 +153,7 @@ const PopularProducts = () => {
                           </a>
                         </div>
                       </div>
+                      </Link>
                       <div className="product_details">
                         <h3 className="product_name">{product?.productName}</h3>
                         <div className="price">
@@ -160,7 +162,6 @@ const PopularProducts = () => {
                         </div>
                       </div>
                     </div>
-                  </Link>
                 </div>
               ))}
             </div>

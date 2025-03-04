@@ -13,6 +13,10 @@ import { FaXmark } from "react-icons/fa6";
 const Category = () => {
   const tableRef = useRef(null);
   const fileInputRef = useRef(null);
+  const addCategoryCloseBtn = useRef(null)
+  const updateCategoryCloseBtn = useRef(null)
+
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
 
   const [categoryName, setCategoryName] = useState("");
   const [categoryImg, setCategoryImg] = useState(null);
@@ -197,7 +201,7 @@ const Category = () => {
       setSelectedCategory(null);
 
       // Close the modal programmatically
-      document.querySelector("#addCategory .close").click();
+      addCategoryCloseBtn.current.click();
     } catch (error) {
       console.error("Error:", error);
       toast.error(
@@ -247,7 +251,7 @@ const Category = () => {
         toast.success("Category updated successfully!");
 
         // Close the modal after the update
-        document.querySelector("#updateCategory .close").click();
+        updateCategoryCloseBtn.current.click();
       } else {
         toast.error("Category update failed. Please try again.");
       }
@@ -413,6 +417,7 @@ const Category = () => {
                   className="close-btn close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  ref={addCategoryCloseBtn}
                 >
                   <FaXmark />
                 </button>
@@ -505,6 +510,7 @@ const Category = () => {
                   className="close-btn close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  ref={updateCategoryCloseBtn}
                 >
                   <FaXmark />
                 </button>

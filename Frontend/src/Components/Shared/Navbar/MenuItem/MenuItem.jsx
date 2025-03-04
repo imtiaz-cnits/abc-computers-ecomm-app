@@ -37,7 +37,7 @@ const MenuItem = ({ category, handleSubOpen }) => {
         <ul className="submenu" ref={submenuRef}>
           {category?.subCategories?.map((sub, idx) => (
             <li key={idx}>
-              <Link href="/">{sub?.subCategoryName}</Link>
+              <Link href={`/sub-categories/${sub?._id}`}>{sub?.subCategoryName}</Link>
             </li>
           ))}
         </ul>

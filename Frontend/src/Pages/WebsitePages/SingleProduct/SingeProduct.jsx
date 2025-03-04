@@ -29,6 +29,7 @@ const SingleProduct = ({ id }) => {
   const [selectedColor, setSelectedColor] = useState("");
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [quantity, setQuantity] = useState(1)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -51,19 +52,14 @@ const SingleProduct = ({ id }) => {
 
   // Slider Product Quantity Start..................
   const decreaseQuantity = () => {
-    const quantityInput = document.getElementById("quantity");
-    let currentValue = parseInt(quantityInput.value) || 1;
-    if (currentValue > 1) {
-      quantityInput.value = currentValue - 1;
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
     }
   };
 
   const increaseQuantity = () => {
-    const quantityInput = document.getElementById("quantity");
-    let currentValue = parseInt(quantityInput.value) || 1;
-    quantityInput.value = currentValue + 1;
+    setQuantity(quantity + 1)
   };
-  // Slider Product Quantity End..................
 
   return (
     <>
@@ -183,7 +179,8 @@ const SingleProduct = ({ id }) => {
                           type="number"
                           id="quantity"
                           min="1"
-                          defaultValue="1"
+                          value={quantity}
+                          onChange={(e)=>setQuantity(e.target.value)}
                         />
                         <button
                           type="button"

@@ -147,16 +147,7 @@ const AllProducts = ({ catId }) => {
   }, []);
 
   const updatePrice = (value) => {
-    document.getElementById("priceValue").innerText = value;
     setFilterPrice(value);
-
-    // Calculate the percentage based on the value
-    var percentage = (value / 999) * 100;
-
-    // Update the background gradient to reflect the exact color #e31736
-    document.getElementById(
-      "priceRange"
-    ).style.background = `linear-gradient(to right, #e31736 ${percentage}%, #ddd ${percentage}%)`;
   };
 
   const handleNextPage = () => {
@@ -212,9 +203,12 @@ const AllProducts = ({ catId }) => {
                     value={filterPrice}
                     step="1"
                     onInput={(e) => updatePrice(e.target.value)}
+                    style={{
+                      background: `linear-gradient(to right, #e31736 ${(filterPrice / 999) * 100}%, #ddd ${(filterPrice / 999) * 100}%)`
+                    }}
                   />
                   <p>
-                    Price: ৳<span id="priceValue">0</span> - ৳1000
+                    Price: ৳<span id="priceValue">{filterPrice}</span> - ৳1000
                   </p>
                 </div>
               </div>
@@ -578,13 +572,14 @@ const AllProducts = ({ catId }) => {
                     data-category={product?.categoryID?._id}
                     key={product?._id}
                   >
-                    <Link href={`/products/${product?._id}`} target="_blank">
                       <div className="special_product_card">
+                          <Link href={`/products/${product?._id}`} target="_blank">
                         <div className="product">
-                          <img
-                            src={`http://localhost:5070${product?.productImg}`}
-                            alt=""
-                          />
+                            <img
+                              src={`http://localhost:5070${product?.productImg}`}
+                              alt=""
+                            />
+                          
                           <span className="product_status">New</span>
 
                           <div className="product_icon">
@@ -679,6 +674,7 @@ const AllProducts = ({ catId }) => {
                             </a>
                           </div>
                         </div>
+                        </Link>
                         <div className="product_details">
                           <h3 className="product_name">
                             {product?.productName}
@@ -689,7 +685,6 @@ const AllProducts = ({ catId }) => {
                           </div>
                         </div>
                       </div>
-                    </Link>
                   </div>
                 ))}
               </main>

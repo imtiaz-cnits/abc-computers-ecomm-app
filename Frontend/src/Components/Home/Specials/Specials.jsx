@@ -64,12 +64,14 @@ const Specials = () => {
                 <SwiperSlide key={product?._id}>
                   <div className="item">
                     <div className="populer_product_card">
-                      <Link href={`/products/${product?._id}`} target="_blank">
+                    <Link href={`/products/${product?._id}`} target="_blank">
                         <div className="product">
-                          <img
-                            src={`http://localhost:5070${product?.productImg}`}
-                            alt=""
-                          />
+                          
+                            <img
+                              src={`http://localhost:5070${product?.productImg}`}
+                              alt=""
+                            />
+                        
                           <span className="product_status">70%</span>
 
                           <div className="product_icon">
@@ -163,6 +165,7 @@ const Specials = () => {
                             </a>
                           </div>
                         </div>
+                        </Link>
                         <div className="product_details">
                           <h3 className="product_name">
                             {product?.productName}
@@ -197,7 +200,6 @@ const Specials = () => {
                             </div>
                           </div>
                         </div>
-                      </Link>
                     </div>
                   </div>
                 </SwiperSlide>

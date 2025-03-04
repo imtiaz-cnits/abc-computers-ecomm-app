@@ -13,6 +13,14 @@ const DashboardSidebar = () => {
   const router = useRouter();
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false);
 
+
+
+  useEffect(() => {
+    // Ensure code runs only in the browser
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+  }, []);
+
+
   // Function to handle logout
   const handleLogout = async () => {
     try {
@@ -52,38 +60,39 @@ const DashboardSidebar = () => {
 
   // Function to toggle the sidebar
   const toggleSidebar = () => {
+    if (typeof document === "undefined" || typeof window === "undefined") return;
+  
     const currentSize = document.body.getAttribute("data-sidebar-size");
-
+  
     document.body.classList.toggle("sidebar-enable");
-
+  
     if (window.innerWidth >= 992) {
       document.body.setAttribute(
         "data-sidebar-size",
         currentSize === "sm" ? "lg" : "sm"
       );
     }
-
-    // Toggle the state to track whether the sidebar is open or not
+  
     setIsSidebarEnabled((prevState) => !prevState);
   };
 
-  const handleSubmenuToggle = (item) => {
-    const currentActive = item?.classList?.contains("active");
 
+  const handleSubmenuToggle = (item) => {
+    if (typeof document === "undefined") return;
+  
+    const currentActive = item?.classList?.contains("active");
+  
     if (currentActive) {
       item?.classList?.remove("active");
-      console.log(currentActive);
       return;
     }
-
-    const activeSubmenu = document.querySelector(
-      ".vertical-menu .submenu-active.active"
-    );
-
+  
+    const activeSubmenu = document.querySelector(".vertical-menu .submenu-active.active");
+  
     if (activeSubmenu) {
       activeSubmenu?.classList?.remove("active");
     }
-
+  
     item?.classList?.add("active");
   };
 

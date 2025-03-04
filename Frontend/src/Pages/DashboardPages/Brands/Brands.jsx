@@ -207,7 +207,7 @@ const Brands = () => {
         toast.success("Brand updated successfully!");
 
         // Close the modal after the update
-        document.querySelector("#updateBrand .close").click();
+        updateModalCloseBtn.current.click();
       } else {
         toast.error("Brand update failed. Please try again.");
       }

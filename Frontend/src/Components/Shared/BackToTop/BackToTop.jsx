@@ -6,17 +6,17 @@ import { FaArrowUp } from "react-icons/fa6";
 const BackToTop = () => {
   const path = usePathname();
 
+  
   if (path.startsWith("/dashboard")) {
     return;
   }
 
+
   useEffect(() => {
-    // Back to top button Start....................
+    // Function to update the progress bar
     function updateProgressBar() {
       const progressBar = document.querySelector(".progress_bar");
-      const progressBarContainer = document.querySelector(
-        ".progress_bar_container"
-      );
+      const progressBarContainer = document.querySelector(".progress_bar_container");
       const totalHeight = document.body.scrollHeight - window.innerHeight;
       const progress = (window.pageYOffset / totalHeight) * 100;
 
@@ -30,12 +30,15 @@ const BackToTop = () => {
     }
 
     // Function to update the progress circle
-    function updateProgressCircle() {
+    const updateProgressCircle = () => {
+      if (typeof window === "undefined") return;
+
       const progressElement = document.querySelector(".progress_circle_bar");
       const scrollToTopElement = document.querySelector(".scroll_to_top");
-      const progressCircleContainer = document.querySelector(
-        ".progress_circle_container"
-      );
+      const progressCircleContainer = document.querySelector(".progress_circle_container");
+
+      if (!progressElement || !scrollToTopElement || !progressCircleContainer) return; // Avoid errors if elements are missing
+
       const totalHeight = document.body.scrollHeight - window.innerHeight;
       let progress = (window.pageYOffset / totalHeight) * 283;
       progress = Math.min(progress, 283);
@@ -44,42 +47,45 @@ const BackToTop = () => {
       // Show or hide the progress circle container based on scroll position
       if (window.pageYOffset > 100) {
         progressCircleContainer.classList.add("visible");
-      } else {
-        progressCircleContainer.classList.remove("visible");
-      }
-
-      // Show or hide the "Back to Top" button
-      if (window.pageYOffset > 100) {
         scrollToTopElement.style.display = "flex";
       } else {
+        progressCircleContainer.classList.remove("visible");
         scrollToTopElement.style.display = "none";
       }
-    }
+    };
 
     // Function to scroll to the top of the page
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    const scrollToTop = () => {
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
 
     // Select the "Back to Top" button element
     const scrollToTopElement = document.querySelector(".scroll_to_top");
     scrollToTopElement.addEventListener("click", scrollToTop);
 
+    // Update progress initially
     updateProgressBar();
     updateProgressCircle();
 
-    // Add event listeners for scroll and resize
+    // Attach event listeners
     window.addEventListener("scroll", () => {
       updateProgressBar();
       updateProgressCircle();
     });
+
     window.addEventListener("resize", () => {
       updateProgressBar();
       updateProgressCircle();
     });
 
-    // Back to top button End.........
-  }, [])
+    // Cleanup function to remove event listeners
+    return () => {
+      window.removeEventListener("scroll", updateProgressCircle);
+      window.removeEventListener("resize", updateProgressBar);
+    };
+  }, []);
 
   return (
     <>

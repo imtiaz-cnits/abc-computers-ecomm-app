@@ -13,6 +13,8 @@ import { FaXmark } from "react-icons/fa6";
 
 const SubCategory = () => {
   const tableRef = useRef(null);
+  const addSubCategoryCloseBtn = useRef(null)
+  const updateSubCategoryCloseBtn = useRef(null)
 
   const [subCategoryName, setSubCategoryName] = useState("");
   const [status, setStatus] = useState("");
@@ -228,7 +230,7 @@ const SubCategory = () => {
       setSelectedSubCategory({ subCategoryName: "", status: "", _id: "" });
 
       // Close the modal programmatically
-      document.querySelector("#addSubCategory .close").click();
+      addSubCategoryCloseBtn.current.click();
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
       toast.error(
@@ -275,7 +277,7 @@ const SubCategory = () => {
         toast.success("Sub Category updated successfully!");
 
         // Close the modal after the update
-        document.querySelector("#updateSubCategory .close").click();
+        updateSubCategoryCloseBtn.click();
 
         // Reset the selected subcategory
         setSelectedSubCategory({ subCategoryName: "", status: "", _id: "" });
@@ -560,6 +562,7 @@ const SubCategory = () => {
                   className="close-btn close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  ref={addSubCategoryCloseBtn}
                 >
                   <FaXmark />
                 </button>
@@ -647,6 +650,7 @@ const SubCategory = () => {
                   className="close-btn close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
+                  ref={updateSubCategoryCloseBtn}
                 >
                   <FaXmark />
                 </button>

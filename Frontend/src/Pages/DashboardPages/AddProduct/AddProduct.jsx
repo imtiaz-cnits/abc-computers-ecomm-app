@@ -13,7 +13,7 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { FaXmark } from "react-icons/fa6";
 
-import("froala-editor/js/plugins.pkgd.min.js");
+// import("froala-editor/js/plugins.pkgd.min.js");
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
@@ -265,11 +265,9 @@ const AddProduct = () => {
     }
 
     // Close modal or form (adjust according to your UI)
-    document
-      .querySelector(
-        `#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`
-      )
-      ?.click();
+      document
+        .querySelector(`#add${type.charAt(0).toUpperCase() + type.slice(1)} .close`)
+        ?.click();
 
     try {
       // console.log("Sending request to:", url);

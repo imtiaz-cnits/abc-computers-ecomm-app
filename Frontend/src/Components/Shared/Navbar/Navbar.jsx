@@ -25,12 +25,6 @@ const Navbar = () => {
     return;
   }
 
-  const resetDropdowns = () => {
-    document.querySelectorAll("li.megamenu").forEach((item) => {
-      item.classList.remove("sub-open");
-    });
-  };
-
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await axios.get("http://localhost:5070/api/v1/category");
@@ -70,6 +64,18 @@ const Navbar = () => {
   }, [path]);
 
   useEffect(() => {
+
+
+
+    const resetDropdowns = () => {
+      document.querySelectorAll("li.megamenu").forEach((item) => {
+        item.classList.remove("sub-open");
+      });
+    };
+
+
+
+
     document.addEventListener("click", function (event) {
       if (!event.target.closest(".tooltip-a, .toggle-tooltip")) {
         document.querySelectorAll(".tooltip-a").forEach(function (tooltip) {
@@ -191,6 +197,7 @@ const Navbar = () => {
   }, [path, categories]);
 
   // Navbar header Add to Cart Sidebar Js Start...................
+
   const toggleCart = () => {
     const cartSidebar = document.getElementById("cartSidebar");
     const overlay = document.getElementById("overlay_cart");
@@ -198,6 +205,7 @@ const Navbar = () => {
     overlay.classList.toggle("active");
   };
   // Navbar header Add to Cart Sidebar Js End...................
+
 
   const toggleMobileMenu = (e) => {
     const mobileMenu = document.querySelector(".mobile-menu");

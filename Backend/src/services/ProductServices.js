@@ -39,15 +39,9 @@ const upload = multer({
 // Brand CRUD Services
 const BrandAddService = async (req) => {
   try {
-    console.log("Received brand data:", req.body);
 
     const { brandName, brandStatus } = req.body;
     const brandImg = req.file ? `/uploads/${req.file.filename}` : null;
-
-    console.log("File uploaded:", req.file);
-    console.log("Brand Name:", brandName);
-    console.log("Status:", brandStatus);
-    console.log("Brand Image Path:", brandImg);
 
     // Validate required fields
     if (!brandName) {
@@ -57,7 +51,6 @@ const BrandAddService = async (req) => {
     // Check if the brand already exists
     const existingBrand = await BrandModel.findOne({ brandName });
     if (existingBrand) {
-      console.log("Brand already exists");
       return { status: "fail", message: "Brand already exists" };
     }
 
@@ -65,7 +58,6 @@ const BrandAddService = async (req) => {
     const newBrand = new BrandModel({ brandName, brandImg, brandStatus });
     await newBrand.save();
 
-    console.log("New brand added:", newBrand);
     return {
       status: "success",
       message: "Brand added successfully",
@@ -247,8 +239,6 @@ const CategoryDeleteService = async (categoryId) => {
 const SubCategoryAddService = async (req) => {
   try {
     const { subCategoryName, subCategoryStatus, categoryId } = req.body;
-
-    console.log(subCategoryName, subCategoryStatus, categoryId);
 
     if (!subCategoryName || !subCategoryStatus || !categoryId) {
       return {

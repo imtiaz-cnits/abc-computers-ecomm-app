@@ -49,7 +49,6 @@ const Category = () => {
 
         setCategories(response.data.data || []);
 
-        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching Categories:", error);
         toast.error("Failed to fetch categories");
@@ -269,8 +268,6 @@ const Category = () => {
       toast.error("No category selected!");
       return;
     }
-
-    console.log("Deleting category with ID:", categoryId);
 
     try {
       const response = await axios.delete(

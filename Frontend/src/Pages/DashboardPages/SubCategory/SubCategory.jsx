@@ -81,27 +81,27 @@ const SubCategory = () => {
     setTotalPages(Math.ceil(subCategories.length / limit));
   }, [subCategories, limit]);
 
-  useEffect(() => {
-    // Check if selectedSubCategory exists and contains a categoryId
-    if (selectedSubCategory && selectedSubCategory.categoryId) {
-      // Find the category based on categoryId
-      const category = categories.find(
-        (cat) => cat._id === selectedSubCategory.categoryId
-      );
+  // useEffect(() => {
+  //   // Check if selectedSubCategory exists and contains a categoryId
+  //   if (selectedSubCategory && selectedSubCategory.categoryId) {
+  //     // Find the category based on categoryId
+  //     const category = categories.find(
+  //       (cat) => cat._id === selectedSubCategory?.categoryId?._id
+  //     );
 
-      if (category) {
-        console.log("Category is correctly bound with subcategory:", category);
-        // Update the selected category state
-        setSelectedCategory(category);
-      } else {
-        console.log("No matching category found for the subcategory.");
-        setSelectedCategory(null); // Reset the selected category if no match is found
-      }
-    } else {
-      // Reset selectedCategory if no categoryId exists
-      setSelectedCategory(null);
-    }
-  }, [selectedSubCategory, categories]); // Run when selectedSubCategory or categories change
+  //     if (category) {
+  //       console.log("Category is correctly bound with subcategory:", category);
+  //       // Update the selected category state
+  //       setSelectedCategory(category);
+  //     } else {
+  //       console.log("No matching category found for the subcategory.");
+  //       setSelectedCategory(null); // Reset the selected category if no match is found
+  //     }
+  //   } else {
+  //     // Reset selectedCategory if no categoryId exists
+  //     setSelectedCategory(null);
+  //   }
+  // }, [selectedSubCategory, categories]); // Run when selectedSubCategory or categories change
 
   useEffect(() => {
     // ..............Table searchbar filter Start.......................//
@@ -158,8 +158,9 @@ const SubCategory = () => {
 
     // Find the category based on the subcategory's categoryId
     const category = categories.find(
-      (category) => category._id === subCategory.categoryId
+      (category) => category._id === subCategory.categoryId?._id
     );
+
     setSelectedCategory(category || null);
   };
   const handleDeleteClick = (subCategoryId) => {
@@ -298,8 +299,6 @@ const SubCategory = () => {
       toast.error("No sub category selected!");
       return;
     }
-
-    console.log("Deleting sub category with ID:", subCategoryId);
 
     try {
       const response = await axios.delete(
@@ -574,27 +573,30 @@ const SubCategory = () => {
                     <div className="form-row">
                       <label htmlFor="">SELECT CATEGORY</label>
                       <Select
-                        className="select-search"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="categories"
-                        options={categories?.map((category) => ({
-                          label: category.categoryName,
-                          value: category._id,
-                          ...category,
-                        }))}
-                        placeholder="Select Categories"
-                        onChange={handleCategoryChange}
-                        value={
-                          selectedCategory
-                            ? {
-                                label: selectedCategory.categoryName,
-                                value: selectedCategory._id,
-                              }
-                            : null
-                        } // Ensure this is correctly bound
-                      />
+                      className="select-search"
+                      classNamePrefix="select"
+                      isClearable={true}
+                      isSearchable={true}
+                      name="categories"
+                      options={
+                        categories?.length
+                          ? categories.map((category) => ({
+                              label: category.categoryName,
+                              value: category._id,
+                            }))
+                          : [{ label: "No categories available", value: "" }]
+                      }
+                      placeholder="Select Category..."
+                      onChange={handleCategoryChange} // Ensure this is correctly handled
+                      value={
+                        selectedCategory
+                          ? {
+                              label: selectedCategory?.categoryName,
+                              value: selectedCategory?._id,
+                            }
+                          : null
+                      } // Ensure value is null when no category is selected
+                    />
                     </div>
                     <div className="form-row">
                       <label htmlFor="">SUB CATEGORY NAME</label>

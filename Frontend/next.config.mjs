@@ -16,10 +16,10 @@ const nextConfig = {
         return [
             {
                 source: '/dashboard',
-                destination: '/src/Pages/DashboardPages/Dashboard/Dashboard', // Custom file path
+                destination: '/src/Pages/DashboardPages/Dashboard/Dashboard',
             },
         ];
     },
 };
 
-export default nextConfig;
+export default nextConfig; // ✅ ES Modules syntax

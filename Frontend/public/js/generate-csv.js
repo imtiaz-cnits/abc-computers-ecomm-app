@@ -2,8 +2,6 @@ const generateCSV = (table) => {
   let csv = [];
   const rows = table.querySelectorAll("tr");
 
-  console.log(rows);
-
   rows.forEach((row) => {
     const cols = row.querySelectorAll("td, th");
     let rowData = [];

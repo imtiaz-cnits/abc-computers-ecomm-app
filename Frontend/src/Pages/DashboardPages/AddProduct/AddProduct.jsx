@@ -270,20 +270,13 @@ const AddProduct = () => {
         ?.click();
 
     try {
-      // console.log("Sending request to:", url);
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
-
-      console.log("Request data:", requestData);
 
       const response = isFormData
         ? await axios.post(url, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           })
         : await axios.post(url, requestData);
-
-      console.log("API response:", response.data);
+        
       toast.success(successMessage);
 
       if (updateState) {

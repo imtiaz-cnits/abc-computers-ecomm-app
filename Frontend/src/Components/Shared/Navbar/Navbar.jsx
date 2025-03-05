@@ -210,8 +210,6 @@ const Navbar = () => {
   const toggleMobileMenu = (e) => {
     const mobileMenu = document.querySelector(".mobile-menu");
 
-    console.log(e);
-
     if (mobileMenu && getComputedStyle(mobileMenu).left === "0px") {
       mobileMenu.style.left = "-100%"; // Close menu
       document

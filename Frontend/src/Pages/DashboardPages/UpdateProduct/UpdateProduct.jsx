@@ -506,10 +506,10 @@ const UpdateProduct = ({ id }) => {
                       value={
                         selectedCategory
                           ? {
-                              label: selectedCategory.categoryName,
-                              value: selectedCategory._id,
+                              label: selectedCategory?.categoryName,
+                              value: selectedCategory?._id,
                             }
-                          : null
+                          : {}
                       } // Ensure value is null when no category is selected
                     />
                     <button
@@ -751,7 +751,7 @@ const UpdateProduct = ({ id }) => {
                   <label htmlFor="">Colors*</label>
                   <ReactTags
                     ref={reactColors}
-                    tags={color.map((c) => ({
+                    tags={color?.map((c) => ({
                       name: c,
                     }))}
                     onDelete={onDeleteColors}

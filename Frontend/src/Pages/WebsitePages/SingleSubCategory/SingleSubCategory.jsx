@@ -7,24 +7,18 @@ import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 import "../../../assets/css/product.css";
-import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-const SingleSubCategory = ({subId}) => {
+const SingleSubCategory = ({id: subCategoryId}) => {
 
     const [filterPrice, setFilterPrice] = useState(0);
     const [products, setProducts] = useState([]);
-    const [subCategories, setSubCategories] = useState([]);
     const { setProduct } = useContext(QuickViewContext);
-    const [subCategoryId, setSubCategoryId] = useState(subId || null);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [pages, setPages] = useState([]);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(12);
-    const [singleCategory, setSingleCategory] = useState({});
     const [categories, setCategories] = useState([])
-    const path = usePathname();
   
     useEffect(() => {
       const fetchProducts = async () => {
@@ -37,18 +31,7 @@ const SingleSubCategory = ({subId}) => {
   
       fetchProducts();
     }, []);
-  
-    useEffect(() => {
-      const fetchSubCategories = async () => {
-        const response = await axios.get("http://localhost:5070/api/v1/sub-category");
-  
-        if (response?.data?.status === "success") {
-          setSubCategories(response?.data?.data);
-        }
-      };
-  
-      fetchSubCategories();
-    }, []);
+
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -80,11 +63,6 @@ const SingleSubCategory = ({subId}) => {
       setPages(totalPages);
       setFilteredProducts(paginatedProducts);
     }, [subCategoryId, products, page, limit]);
-  
-    useEffect(() => {
-      const singleCat = subCategories.find((c) => c._id === subCategoryId);
-      setSingleCategory(singleCat);
-    }, [subCategories, subCategoryId]);
   
     useEffect(() => {
       // Sidebar Phone View Toggle......
@@ -173,16 +151,11 @@ const SingleSubCategory = ({subId}) => {
     const handlePrevPage = () => {
       if (page <= 1) return;
   
-      console.log("hehe");
-  
       setPage(page - 1);
     };
 
     return (
         <>
-        {!path?.startsWith("/products") && (
-          <Breadcrumb pageTitle={singleCategory?.categoryName} />
-        )}
         <div id="all_products">
           <div className="container">
             <div className="product_page_main">
@@ -587,13 +560,13 @@ const SingleSubCategory = ({subId}) => {
                       key={product?._id}
                     >
                         <div className="special_product_card">
-                      <Link href={`/products/${product?._id}`} target="_blank">
                           <div className="product">
-                            <img
-                              src={`http://localhost:5070${product?.productImg}`}
-                              alt=""
-                            />
-                            
+                            <Link href={`/products/${product?._id}`}>
+                              <img
+                                src={`http://localhost:5070${product?.productImg}`}
+                                alt=""
+                              />
+                            </Link>
                             <span className="product_status">New</span>
   
                             <div className="product_icon">
@@ -688,7 +661,6 @@ const SingleSubCategory = ({subId}) => {
                               </a>
                             </div>
                           </div>
-                          </Link>
                           <div className="product_details">
                             <h3 className="product_name">
                               {product?.productName}

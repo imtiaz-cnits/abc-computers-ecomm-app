@@ -21,15 +21,11 @@ DataSchema.pre("save", async function (next) {
 
     // Check if the password is already hashed
     if (this.password.startsWith("$2b$") || this.password.startsWith("$2a$")) {
-        console.log("✅ Password is already hashed. Skipping hash.");
         return next();
     }
 
-    console.log("🔹 Hashing Password: ", this.password); // Debugging
-
     try {
         this.password = await bcrypt.hash(this.password, 10);
-        console.log("✅ Hashed Password: ", this.password);
         next();
     } catch (err) {
         console.error("❌ Error hashing password:", err.message);

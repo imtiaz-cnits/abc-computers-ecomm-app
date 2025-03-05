@@ -42,10 +42,6 @@ const JavascriptClient = () => {
         src="/js/website/recent-shopping-slider.js"
         strategy="afterInteractive"
       />
-      <Script
-        src="froala-editor/js/plugins/align.min.js"
-        strategy="afterInteractive"
-      />
     </>
   );
 };

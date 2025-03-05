@@ -159,8 +159,6 @@ const AllProducts = ({ catId }) => {
   const handlePrevPage = () => {
     if (page <= 1) return;
 
-    console.log("hehe");
-
     setPage(page - 1);
   };
 
@@ -573,13 +571,14 @@ const AllProducts = ({ catId }) => {
                     key={product?._id}
                   >
                       <div className="special_product_card">
-                          <Link href={`/products/${product?._id}`} target="_blank">
                         <div className="product">
+                          <Link href={`/products/${product?._id}`}>
                             <img
                               src={`http://localhost:5070${product?.productImg}`}
                               alt=""
                             />
                           
+                          </Link>
                           <span className="product_status">New</span>
 
                           <div className="product_icon">
@@ -674,7 +673,6 @@ const AllProducts = ({ catId }) => {
                             </a>
                           </div>
                         </div>
-                        </Link>
                         <div className="product_details">
                           <h3 className="product_name">
                             {product?.productName}

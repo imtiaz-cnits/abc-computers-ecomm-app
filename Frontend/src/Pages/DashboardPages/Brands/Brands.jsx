@@ -139,7 +139,6 @@ const Brands = () => {
       });
 
       const result = await response.json();
-      console.log("Add Brand Response:", result);
 
       if (response.ok) {
         toast.success("Brand added successfully!");
@@ -226,7 +225,6 @@ const Brands = () => {
       return;
     }
 
-    console.log("Deleting brand with ID:", brandId);
 
     try {
       const response = await axios.delete(
@@ -400,7 +398,6 @@ const Brands = () => {
                                 href="#"
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  console.log("Clicked brand:", brand); // Debugging
                                   handleDeleteClick(brand?._id);
                                 }}
                               >

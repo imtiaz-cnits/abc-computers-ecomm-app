@@ -3,7 +3,6 @@ const { SignUpService, LoginService } = require("../services/UserServices");
 
 exports.SignUP = async (req, res) => {
   try {
-    console.log("Request Body:", req.body); // Log the request body
 
     const result = await SignUpService(req.body);
 

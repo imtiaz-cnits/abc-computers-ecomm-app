@@ -69,7 +69,6 @@ exports.ProductBrandDelete = async (req, res) => {
 // ====================== Category All Controller ====================== //
 exports.AddCategory = async (req, res) => {
   try {
-    console.log(req.body);
     const result = await CategoryAddService(req); // Call the service to handle the logic
     return res.status(200).json(result); // Send the response to the client
   } catch (error) {
@@ -118,7 +117,6 @@ exports.CategoryDelete = async (req, res) => {
 // ====================== Sub Category All Controller ====================== //
 exports.AddSubCategory = async (req, res) => {
   try {
-    console.log("Request Body:", req.body); // Add this line to log the incoming request
     const result = await SubCategoryAddService(req);
     if (result.status === "success") {
       return res.status(200).json(result);
@@ -144,7 +142,6 @@ exports.SubCategoryList = async (req, res) => {
 
 exports.SubCategoryUpdate = async (req, res) => {
   try {
-    console.log("Request Body:", req.body); // Log request body to verify data
     const result = await SubCategoryUpdateService(req);
 
     if (result.status === "success") {
@@ -171,7 +168,6 @@ exports.SubCategoryDelete = async (req, res) => {
 // ====================== Add Product All Controller ====================== //
 exports.AddProduct = async (req, res) => {
   try {
-    console.log("Request Body:", req.body);
     const result = await ProductAddService(req);
     if (result.status === "success") {
       return res.status(200).json(result);
@@ -208,7 +204,6 @@ exports.ProductDetails = async (req, res) => {
 
 exports.ProductUpdate = async (req, res) => {
   try {
-    console.log("Request Body:", req.body); // Log the incoming request to verify data
 
     // Make sure the 'id' parameter is extracted from the URL correctly
     const result = await ProductUpdateService(req);

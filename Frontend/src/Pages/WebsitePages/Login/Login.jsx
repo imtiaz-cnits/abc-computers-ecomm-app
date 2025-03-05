@@ -47,8 +47,6 @@ const Login = () => {
 
       const result = await response?.data;
 
-      console.log(result);
-
       if (result?.status === "success" && result?.token) {
         // ✅ Ensure success & token exists
         toast.success("🎉 Hurray! User Registration Successful.");

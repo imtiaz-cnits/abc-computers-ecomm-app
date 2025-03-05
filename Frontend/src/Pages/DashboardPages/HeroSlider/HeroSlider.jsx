@@ -235,8 +235,6 @@ const HeroSlider = () => {
       return;
     }
 
-    console.log("Deleting slide with ID:", slideId);
-
     try {
       const response = await axios.delete(
         `http://localhost:5070/api/v1/hero-slider/${slideId}`,
@@ -418,7 +416,6 @@ const HeroSlider = () => {
                                   href="#"
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    console.log("Clicked slide:", slide); // Debugging
                                     handleDeleteClick(slide?._id);
                                   }}
                                 >

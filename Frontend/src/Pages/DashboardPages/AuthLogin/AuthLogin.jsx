@@ -23,7 +23,6 @@ const AuthLogin = () => {
     email: "",
     password: "",
   });
-  // console.log("Login form data:", loginFormData);
 
   const [loading, setLoading] = useState(false); // Loading state
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
@@ -130,9 +129,7 @@ const AuthLogin = () => {
 
       const result = await response.json();
 
-      if (response.ok) {
-        console.log("Protected data fetched:", result);
-      } else {
+      if (!response.ok) {
         console.error(result.message || "Failed to fetch protected data");
       }
     } catch (error) {

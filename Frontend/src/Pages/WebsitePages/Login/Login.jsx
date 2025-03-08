@@ -41,7 +41,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5070/api/v1/SignUP",
+        "https://api.abcpabnabd.com/api/v1/SignUP",
         formData
       );
 
@@ -89,7 +89,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5070/api/v1/Login",
+        "https://api.abcpabnabd.com/api/v1/Login",
         loginFormData
       );
 

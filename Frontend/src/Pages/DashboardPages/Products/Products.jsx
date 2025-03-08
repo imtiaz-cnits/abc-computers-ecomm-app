@@ -18,7 +18,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5070/api/v1/product-list"
+          "https://api.abcpabnabd.com/api/v1/product-list"
         );
 
         setProducts(response.data.data || []);
@@ -75,7 +75,7 @@ const Products = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
-            `http://localhost:5070/api/v1/remove-product/${id}`
+            `https://api.abcpabnabd.com/api/v1/remove-product/${id}`
           );
 
           if (response?.data?.status === "success") {
@@ -174,7 +174,7 @@ const Products = () => {
                           <td>
                             {product?.productImg ? (
                               <img
-                                src={`http://localhost:5070${product.productImg}`}
+                                src={`https://api.abcpabnabd.com${product.productImg}`}
                                 alt={product?.productName || "Product"}
                                 style={{
                                   width: "50px",

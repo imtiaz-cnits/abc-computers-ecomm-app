@@ -58,13 +58,12 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(express.static("/client/dist"));
 
-//Add React Frontend Routing
-// app.get("*", function (req, res) {
-//  res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
-// });
+app.get("*", function (req, res) {
+ res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+});
 
-// app.get("/", async(req, res)=>{
-//   res.send({})
-// })
+app.get("/", async(req, res)=>{
+  res.send({})
+})
 
 module.exports = app;

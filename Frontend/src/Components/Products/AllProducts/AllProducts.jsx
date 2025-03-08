@@ -27,7 +27,7 @@ const AllProducts = ({ catId }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get(
-        "http://localhost:5070/api/v1/product-list"
+        "https://api.abcpabnabd.com/api/v1/product-list"
       );
 
       setProducts(response?.data?.data);
@@ -38,7 +38,7 @@ const AllProducts = ({ catId }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await axios.get("http://localhost:5070/api/v1/category");
+      const response = await axios.get("https://api.abcpabnabd.com/api/v1/category");
 
       if (response?.data?.status === "success") {
         setCategories(response?.data?.data);
@@ -574,7 +574,7 @@ const AllProducts = ({ catId }) => {
                         <div className="product">
                           <Link href={`/products/${product?._id}`}>
                             <img
-                              src={`http://localhost:5070${product?.productImg}`}
+                              src={`https://api.abcpabnabd.com${product?.productImg}`}
                               alt=""
                             />
                           

@@ -35,7 +35,7 @@ const Brands = () => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/brands");
+        const response = await axios.get("https://api.abcpabnabd.com/api/v1/brands");
 
         setBrands(response.data.data || []);
         setTotalItems(response?.data?.data.length);
@@ -133,7 +133,7 @@ const Brands = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5070/api/v1/brands", {
+      const response = await fetch("https://api.abcpabnabd.com/api/v1/brands", {
         method: "POST",
         body: formData,
       });
@@ -184,7 +184,7 @@ const Brands = () => {
     try {
       // Send PUT request to update the brand
       const { data } = await axios.put(
-        `http://localhost:5070/api/v1/brands/${selectedBrand._id}`,
+        `https://api.abcpabnabd.com/api/v1/brands/${selectedBrand._id}`,
         formData,
         {
           headers: {
@@ -228,7 +228,7 @@ const Brands = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5070/api/v1/brands/${brandId}`,
+        `https://api.abcpabnabd.com/api/v1/brands/${brandId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -336,7 +336,7 @@ const Brands = () => {
                           <td>
                             {brand?.brandImg ? (
                               <img
-                                src={`http://localhost:5070${brand.brandImg}`}
+                                src={`https://api.abcpabnabd.com${brand.brandImg}`}
                                 alt={brand?.brandName || "Brand"}
                                 style={{
                                   width: "50px",
@@ -509,7 +509,7 @@ const Brands = () => {
                           <div className="img-box">
                             {selectedBrand?.brandImg && (
                               <img
-                                src={`http://localhost:5070${selectedBrand.brandImg}`}
+                                src={`https://api.abcpabnabd.com${selectedBrand.brandImg}`}
                                 alt="Brand"
                                 width="100"
                               />
@@ -612,7 +612,7 @@ const Brands = () => {
                           <div className="img-box">
                             {selectedBrand?.brandImg && (
                               <img
-                                src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                                src={`https://api.abcpabnabd.com/${selectedBrand.brandImg}`}
                                 alt="Brand"
                                 width="100"
                               />

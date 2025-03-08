@@ -268,3 +268,21 @@
 .select__menu > * {
   max-height: 200px !important;
 }
+
+
+.colors {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.colors span{
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 3px 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}

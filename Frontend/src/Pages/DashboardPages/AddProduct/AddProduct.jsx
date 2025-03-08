@@ -5,7 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import "./AddProduct.css";
 import uploadImg from "@/assets/icons/upload-img.svg";
-import ReactTags from "react-tag-autocomplete";
+// import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
@@ -59,25 +59,13 @@ const AddProduct = () => {
   const [productImg, setProductImg] = useState("");
   const [productImgFiles, setProductImgFiles] = useState([]);
   const [stock, setStock] = useState("");
+  const [colorInput, setColorInput] = useState("")
   const [color, setColor] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({
     productName: "",
     productStatus: "",
     productImg: null,
   });
-  const reactColors = useRef();
-  const onDeleteColors = useCallback(
-    (colorIndex) => {
-      setColor(color.filter((_, i) => i !== colorIndex));
-    },
-    [color]
-  );
-  const onAdditionColors = useCallback(
-    (newColor) => {
-      setColor([...color, newColor?.name]);
-    },
-    [color]
-  );
 
   // ======= Add Product Handles ======= //
   const handleProductCodeChange = (e) => setProductCode(e.target.value);
@@ -90,14 +78,13 @@ const AddProduct = () => {
     setSpecification(e.target.value);
   const handleProductDescriptionChange = (e) => setDescription(e.target.value);
   const handleProductStockChange = (e) => setStock(e.target.value);
-  const handleProductColorChange = (e) => setColor(e.target.value);
   // ======= Add Product Handles ======= //
 
   // Fetch brands when the component mounts
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await axios.get("http://localhost:5070/api/v1/brands");
+        const response = await axios.get("https://api.abcpabnabd.com/api/v1/brands");
         setBrands(response.data.data);
       } catch (error) {
         console.error("Error fetching brands:", error);
@@ -112,7 +99,7 @@ const AddProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5070/api/v1/category"
+          "https://api.abcpabnabd.com/api/v1/category"
         );
         setCategories(response.data.data); // Assuming categories are returned in `data.data`
       } catch (error) {
@@ -128,7 +115,7 @@ const AddProduct = () => {
     const fetchSubCategory = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5070/api/v1/sub-category"
+          "https://api.abcpabnabd.com/api/v1/sub-category"
         );
         setSubCategories(response.data.data);
       } catch (error) {
@@ -161,7 +148,7 @@ const AddProduct = () => {
         formData.status = brandStatus;
         if (brandImg) formData.brandImg = brandImg;
 
-        url = "http://localhost:5070/api/v1/brands";
+        url = "https://api.abcpabnabd.com/api/v1/brands";
         successMessage = "Brand added successfully!";
         updateState = setBrands;
 
@@ -180,7 +167,7 @@ const AddProduct = () => {
         formData.status = categoryStatus;
         if (categoryImg) formData.categoryImg = categoryImg;
 
-        url = "http://localhost:5070/api/v1/category";
+        url = "https://api.abcpabnabd.com/api/v1/category";
         successMessage = "Category added successfully!";
         updateState = setCategories;
 
@@ -200,7 +187,7 @@ const AddProduct = () => {
         requestData = { subCategoryName, subCategoryStatus, categoryId };
         isFormData = false; // Use JSON for sub-category
 
-        url = "http://localhost:5070/api/v1/sub-category";
+        url = "https://api.abcpabnabd.com/api/v1/sub-category";
         successMessage = "Sub Category added successfully!";
         updateState = setSubCategories;
 
@@ -254,7 +241,7 @@ const AddProduct = () => {
         if (stock) formData.append("stock", stock);
         if (color.length > 0) formData.append("color", JSON.stringify(color));
 
-        url = "http://localhost:5070/api/v1/add-product";
+        url = "https://api.abcpabnabd.com/api/v1/add-product";
         successMessage = "Product added successfully!";
         updateState = setProduct;
         break;
@@ -414,6 +401,22 @@ const AddProduct = () => {
   const handleSubCategoryStatusChange = (e) =>
     setSubCategoryStatus(e.target.value);
   // ======= Add Sub Category Handles ======= //
+
+  
+  const handleColorInput = (e) => {
+
+    setColorInput(e.target.value)
+  }
+
+  const addColor = (color) =>{
+    setColor(prev=> [...prev, color])
+    setColorInput("")
+  }
+
+  const deleteColor =(removedColor)=>{
+    const newColor = color.filter(c=> c !== removedColor)
+    setColor(newColor)
+  }
 
   return (
     <>
@@ -738,20 +741,23 @@ const AddProduct = () => {
               <div className="row">
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Colors*</label>
-                  <ReactTags
-                    ref={reactColors}
-                    tags={color.map((c) => ({
-                      name: c,
-                    }))}
-                    onDelete={onDeleteColors}
-                    onAddition={onAdditionColors}
-                    suggestions={[]}
-                    allowNew
-                    removeButtonText="Click to remove color"
-                    placeholderText="Add new color"
-                    value={color}
-                    onChange={handleProductColorChange}
+                  <input
+                    type="text"
+                    placeholder="Add new color"
+                    value={colorInput}
+                    onChange={handleColorInput}
+                    onKeyDown={(e)=>{
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addColor(colorInput)
+                    }}}
                   />
+
+                  <div className="colors">
+                    {
+                      color?.map((c, idx)=><span onClick={()=>deleteColor(c)} key={idx}>{c}</span>)
+                    }
+                  </div>
                 </div>
               </div>
 
@@ -824,7 +830,7 @@ const AddProduct = () => {
                         <div className="img-box">
                           {selectedBrand?.brandImg && (
                             <img
-                              src={`http://localhost:5070/${selectedBrand.brandImg}`}
+                              src={`https://api.abcpabnabd.com/${selectedBrand.brandImg}`}
                               alt="Brand"
                               width="100"
                             />
@@ -916,7 +922,7 @@ const AddProduct = () => {
                         <div className="img-box">
                           {selectedCategory?.categoryImg && (
                             <img
-                              src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                              src={`https://api.abcpabnabd.com/${selectedCategory.categoryImg}`}
                               alt="Category"
                               width="100"
                             />

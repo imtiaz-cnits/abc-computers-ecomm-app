@@ -34,7 +34,7 @@ const SingleProduct = ({ id }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await axios.get(
-        `http://localhost:5070/api/v1/product-details/${id}`,
+        `https://api.abcpabnabd.com/api/v1/product-details/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,7 +84,7 @@ const SingleProduct = ({ id }) => {
                 >
                   {productDetails?.productImgs?.map((img, idx) => (
                     <SwiperSlide key={idx}>
-                      <img src={`http://localhost:5070${img}`} alt="" />
+                      <img src={`https://api.abcpabnabd.com${img}`} alt="" />
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -100,7 +100,7 @@ const SingleProduct = ({ id }) => {
                 >
                   {productDetails?.productImgs?.map((img, idx) => (
                     <SwiperSlide key={idx}>
-                      <img src={`http://localhost:5070${img}`} alt="" />
+                      <img src={`https://api.abcpabnabd.com${img}`} alt="" />
                     </SwiperSlide>
                   ))}
                 </Swiper>

@@ -25,7 +25,7 @@ const DashboardSidebar = () => {
   const handleLogout = async () => {
     try {
       // Make a POST request to the logout endpoint
-      const response = await fetch("http://localhost:5070/api/v1/Logout", {
+      const response = await fetch("https://api.abcpabnabd.com/api/v1/Logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

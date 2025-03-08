@@ -4,16 +4,12 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./AddProduct.css";
-import uploadImg from "@/assets/icons/upload-img.svg";
-// import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { FaXmark } from "react-icons/fa6";
-
-// import("froala-editor/js/plugins.pkgd.min.js");
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
@@ -563,7 +559,7 @@ const AddProduct = () => {
                               label: selectedSubCategory.subCategoryName,
                               value: selectedSubCategory._id,
                             }
-                          : null
+                          : {}
                       } // Ensure value is null when no subcategory is selected
                       onChange={(selectedOption) => {
                         if (selectedOption) {

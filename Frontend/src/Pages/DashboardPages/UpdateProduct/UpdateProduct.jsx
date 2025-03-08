@@ -1,8 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./UpdateProduct.css";
-import uploadImg from "@/assets/icons/upload-img.svg";
-// import ReactTags from "react-tag-autocomplete";
 import Select from "react-select";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
@@ -10,8 +8,6 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import { FaXmark } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-// import("froala-editor/js/plugins.pkgd.min.js");
 
 const UpdateProduct = ({ id }) => {
   const BrandModalCloseBtn = useRef(null);
@@ -33,7 +29,8 @@ const UpdateProduct = ({ id }) => {
   const [productImgFiles, setProductImgFiles] = useState([]);
   const [productImgFile, setProductImgFile] = useState(null);
   const [stock, setStock] = useState("");
-  // const [color, setColor] = useState([]);
+  const [colorInput, setColorInput] = useState("")
+  const [color, setColor] = useState([]);
 
   // Set Brand Infos for Brand Selection
   const [brandName, setBrandName] = useState("");
@@ -59,22 +56,7 @@ const UpdateProduct = ({ id }) => {
     subCategoryImg: null,
   });
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
-
-  // const reactColors = useRef();
-  // const onDeleteColors = useCallback(
-  //   (colorIndex) => {
-  //     setColor(color.filter((_, i) => i !== colorIndex));
-  //   },
-  //   [color]
-  // );
-
-  // const onAdditionColors = useCallback(
-  //   (newColor) => {
-  //     setColor([...color, newColor?.name]);
-  //   },
-  //   [color]
-  // );
-
+  
   // ======= Update Product Handles ======= //
   const handleProductCodeChange = (e) => setProductCode(e.target.value);
   const handleProductNameChange = (e) => setProductName(e.target.value);
@@ -86,7 +68,7 @@ const UpdateProduct = ({ id }) => {
     setSpecification(e.target.value);
   const handleProductDescriptionChange = (e) => setDescription(e.target.value);
   const handleProductStockChange = (e) => setStock(e.target.value);
-  // const handleProductColorChange = (e) => setColor(e.target.value);
+
   // ======= Update Product Handles ======= //
 
   const handleBrandNameChange = (e) => setBrandName(e.target.value);
@@ -424,6 +406,22 @@ const UpdateProduct = ({ id }) => {
     }
   };
 
+
+  const handleColorInput = (e) => {
+
+    setColorInput(e.target.value)
+  }
+
+  const addColor = (color) =>{
+    setColor(prev=> [...prev, color])
+    setColorInput("")
+  }
+
+  const deleteColor =(removedColor)=>{
+    const newColor = color.filter(c=> c !== removedColor)
+    setColor(newColor)
+  }
+
   return (
     <>
       <div className="main-content">
@@ -450,7 +448,7 @@ const UpdateProduct = ({ id }) => {
                       }))}
                       placeholder="Select Brands..."
                       onChange={handleBrandChange}
-                      value={
+                      defaultValue={
                         selectedBrand?._id
                           ? {
                               label: selectedBrand.brandName,
@@ -503,7 +501,7 @@ const UpdateProduct = ({ id }) => {
                       }
                       placeholder="Select Category..."
                       onChange={handleCategoryChange} // Ensure this is correctly handled
-                      value={
+                      defaultValue={
                         selectedCategory
                           ? {
                               label: selectedCategory?.categoryName,
@@ -558,13 +556,13 @@ const UpdateProduct = ({ id }) => {
                           : []
                       } // Ensure options are only populated when category is selected
                       placeholder="Select Sub Category..."
-                      value={
+                      defaultValue={
                         selectedSubCategory
                           ? {
                               label: selectedSubCategory.subCategoryName,
                               value: selectedSubCategory._id,
                             }
-                          : null
+                          : {}
                       } // Ensure value is null when no subcategory is selected
                       onChange={(selectedOption) => {
                         if (selectedOption) {
@@ -608,7 +606,7 @@ const UpdateProduct = ({ id }) => {
                   <input
                     type="text"
                     placeholder="Product Code"
-                    value={productCode}
+                    defaultValue={productCode}
                     onChange={handleProductCodeChange}
                   />
                 </div>
@@ -620,14 +618,14 @@ const UpdateProduct = ({ id }) => {
                   <input
                     type="text"
                     placeholder="Product Name"
-                    value={productName}
+                    defaultValue={productName}
                     onChange={handleProductNameChange}
                   />
                 </div>
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Status</label>
                   <select
-                    value={productStatus}
+                    defaultValue={productStatus}
                     onChange={handleProductStatusChange}
                   >
                     <option value="">Select Status</option>
@@ -644,7 +642,7 @@ const UpdateProduct = ({ id }) => {
                     type="number"
                     placeholder="Product Price"
                     min={0}
-                    value={price}
+                    defaultValue={price}
                     onChange={handleProductPriceChange}
                   />
                 </div>
@@ -654,7 +652,7 @@ const UpdateProduct = ({ id }) => {
                     type="number"
                     placeholder="Discount Price"
                     min={0}
-                    value={discountPrice}
+                    defaultValue={discountPrice}
                     onChange={handleProductDiscountChange}
                   />
                 </div>
@@ -740,7 +738,7 @@ const UpdateProduct = ({ id }) => {
                     type="number"
                     placeholder="Stock"
                     min={0}
-                    value={stock}
+                    defaultValue={stock}
                     onChange={handleProductStockChange}
                   />
                 </div>
@@ -749,20 +747,23 @@ const UpdateProduct = ({ id }) => {
               <div className="row">
                 <div className="form-row col-lg-6">
                   <label htmlFor="">Colors*</label>
-                  {/* <ReactTags
-                    ref={reactColors}
-                    tags={color?.map((c) => ({
-                      name: c,
-                    }))}
-                    onDelete={onDeleteColors}
-                    onAddition={onAdditionColors}
-                    suggestions={[]}
-                    allowNew
-                    removeButtonText="Click to remove color"
-                    placeholderText="Add new color"
-                    value={color}
-                    onChange={handleProductColorChange}
-                  /> */}
+                  <input
+                    type="text"
+                    placeholder="Add new color"
+                    defaultValue={colorInput}
+                    onChange={handleColorInput}
+                    onKeyDown={(e)=>{
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addColor(colorInput)
+                    }}}
+                  />
+
+                  <div className="colors">
+                    {
+                      color?.map((c, idx)=><span onClick={()=>deleteColor(c)} key={idx}>{c}</span>)
+                    }
+                  </div>
                 </div>
               </div>
 
@@ -808,7 +809,7 @@ const UpdateProduct = ({ id }) => {
                     <input
                       type="text"
                       placeholder="Type here.."
-                      value={brandName}
+                      defaultValue={brandName}
                       onChange={handleBrandNameChange}
                     />
                   </div>
@@ -818,7 +819,7 @@ const UpdateProduct = ({ id }) => {
                     <select
                       id="select-status"
                       className="select-status"
-                      value={brandStatus}
+                      defaultValue={brandStatus}
                       onChange={handleBrandStatusChange}
                     >
                       <option value="">Select Status</option>
@@ -902,7 +903,7 @@ const UpdateProduct = ({ id }) => {
                     <input
                       type="text"
                       placeholder="Type here.."
-                      value={categoryName || ""} // Ensure default empty string when no value
+                      defaultValue={categoryName || ""} // Ensure default empty string when no value
                       onChange={handleCategoryNameChange}
                     />
                   </div>
@@ -912,7 +913,7 @@ const UpdateProduct = ({ id }) => {
                     <select
                       id="select-status"
                       className="select-status"
-                      value={categoryStatus}
+                      defaultValue={categoryStatus}
                       onChange={handleCategoryStatusChange}
                     >
                       <option value="">Select Status</option>
@@ -1007,7 +1008,7 @@ const UpdateProduct = ({ id }) => {
                       }))}
                       placeholder="Select Categories"
                       onChange={handleCategoryChange} // Ensure this is correctly wired
-                      value={
+                      defaultValue={
                         selectedCategory
                           ? {
                               label: selectedCategory.categoryName,
@@ -1022,7 +1023,7 @@ const UpdateProduct = ({ id }) => {
                     <input
                       type="text"
                       placeholder="Type here.."
-                      value={subCategoryName || ""} // Ensure default empty string
+                      defaultValue={subCategoryName || ""} // Ensure default empty string
                       onChange={handleSubCategoryNameChange}
                     />
                   </div>
@@ -1032,7 +1033,7 @@ const UpdateProduct = ({ id }) => {
                     <select
                       id="select-status"
                       className="select-status"
-                      value={subCategoryStatus || ""} // Default empty string when no value
+                      defaultValue={subCategoryStatus || ""} // Default empty string when no value
                       onChange={handleSubCategoryStatusChange}
                     >
                       <option value="">Select Status</option>

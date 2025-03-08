@@ -13,7 +13,7 @@ const Brands = () => {
 
   useEffect(() => {
     const fetchBrands = async () => {
-      const response = await axios.get("http://localhost:5070/api/v1/brands");
+      const response = await axios.get("https://api.abcpabnabd.com/api/v1/brands");
 
       if (response?.data?.status === "success") {
         setBrands(response?.data?.data);
@@ -54,7 +54,7 @@ const Brands = () => {
                 <SwiperSlide key={idx}>
                   <div className="item">
                     <img
-                      src={`http://localhost:5070${brand.brandImg}`}
+                      src={`https://api.abcpabnabd.com${brand.brandImg}`}
                       alt=""
                     />
                   </div>

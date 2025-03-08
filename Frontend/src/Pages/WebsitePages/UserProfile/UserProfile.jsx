@@ -58,7 +58,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const result = await axios.get(
-        `http://localhost:5070/api/v1/profile-details/${existingUserID}`
+        `https://api.abcpabnabd.com/api/v1/profile-details/${existingUserID}`
       );
 
       if (result?.data?.status === "success") {
@@ -97,7 +97,7 @@ const UserProfile = () => {
     try {
       // Make a POST request to the logout endpoint
       const response = await axios.post(
-        "http://localhost:5070/api/v1/Logout",
+        "https://api.abcpabnabd.com/api/v1/Logout",
         {},
         {
           headers: {
@@ -145,7 +145,7 @@ const UserProfile = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5070/api/v1/profile/${existingUserID}`,
+        `https://api.abcpabnabd.com/api/v1/profile/${existingUserID}`,
         updatedProfile,
         {
           headers: {
@@ -715,7 +715,7 @@ const UserProfile = () => {
                             />
                           ) : profile?.userID?.img_url ? (
                             <img
-                              src={`http://localhost:5070${profile?.userID?.img_url}`}
+                              src={`https://api.abcpabnabd.com${profile?.userID?.img_url}`}
                               alt="profile"
                               width="120"
                             />

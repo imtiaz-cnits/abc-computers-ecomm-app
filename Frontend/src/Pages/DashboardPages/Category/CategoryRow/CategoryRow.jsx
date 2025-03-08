@@ -7,7 +7,7 @@ const CategoryRow = ({ category, index, handleEditClick, handleDeleteClick }) =>
             <td>
                 {category?.categoryImg ? (
                     <img
-                        src={`http://localhost:5070${category.categoryImg}`}
+                        src={`https://api.abcpabnabd.com${category.categoryImg}`}
                         alt={category?.categoryName || "Category"}
                         style={{
                             width: "50px",

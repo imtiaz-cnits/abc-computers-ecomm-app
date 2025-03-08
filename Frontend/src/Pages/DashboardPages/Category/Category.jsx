@@ -44,7 +44,7 @@ const Category = () => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5070/api/v1/category"
+          "https://api.abcpabnabd.com/api/v1/category"
         );
 
         setCategories(response.data.data || []);
@@ -156,7 +156,7 @@ const Category = () => {
       if (isEditing && selectedCategory) {
         // Update existing category
         response = await axios.put(
-          `http://localhost:5070/api/v1/category/${selectedCategory._id}`,
+          `https://api.abcpabnabd.com/api/v1/category/${selectedCategory._id}`,
           formData,
           {
             headers: {
@@ -168,7 +168,7 @@ const Category = () => {
       } else {
         // Add new category
         response = await axios.post(
-          "http://localhost:5070/api/v1/category",
+          "https://api.abcpabnabd.com/api/v1/category",
           formData,
           {
             headers: {
@@ -228,7 +228,7 @@ const Category = () => {
     try {
       // Send PUT request to update the category
       const { data } = await axios.put(
-        `http://localhost:5070/api/v1/category/${selectedCategory._id}`,
+        `https://api.abcpabnabd.com/api/v1/category/${selectedCategory._id}`,
         formData,
         {
           headers: {
@@ -271,7 +271,7 @@ const Category = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5070/api/v1/category/${categoryId}`,
+        `https://api.abcpabnabd.com/api/v1/category/${categoryId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -456,7 +456,7 @@ const Category = () => {
                           <div className="img-box">
                             {selectedCategory?.categoryImg && (
                               <img
-                                src={`http://localhost:5070${selectedCategory.categoryImg}`}
+                                src={`https://api.abcpabnabd.com${selectedCategory.categoryImg}`}
                                 alt="Category"
                                 width="100"
                               />
@@ -560,7 +560,7 @@ const Category = () => {
                           <div className="img-box">
                             {selectedCategory?.categoryImg && (
                               <img
-                                src={`http://localhost:5070/${selectedCategory.categoryImg}`}
+                                src={`https://api.abcpabnabd.com/${selectedCategory.categoryImg}`}
                                 alt="Category"
                                 width="100"
                               />

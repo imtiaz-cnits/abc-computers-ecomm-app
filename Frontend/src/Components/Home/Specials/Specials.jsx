@@ -19,7 +19,7 @@ const Specials = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get(
-        "http://localhost:5070/api/v1/product-list"
+        "https://api.abcpabnabd.com/api/v1/product-list"
       );
 
       if (response?.data?.status === "success") {
@@ -68,7 +68,7 @@ const Specials = () => {
                     <Link href={`/products/${product?._id}`}>
                           
                             <img
-                              src={`http://localhost:5070${product?.productImg}`}
+                              src={`https://api.abcpabnabd.com${product?.productImg}`}
                               alt=""
                             />
                                                 </Link>

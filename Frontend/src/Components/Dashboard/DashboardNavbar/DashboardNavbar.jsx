@@ -9,17 +9,19 @@ const DashboardNavbar = () => {
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false)
   const path = usePathname();
 
-  if (path.startsWith("/dashboard/login")) {
-    return;
-  }
-
   useEffect(()=>{
+
+    if (!path.startsWith("/dashboard")) {
+      return;
+    }
+
+
     // Sidebar Close on Outside Click
     document.addEventListener("click", function (event) {
       const sidebar = document.querySelector(".vertical-menu");
       const toggleButton = document.querySelector(".vertical-menu-btn");
 
-      if (!sidebar.contains(event.target) && !toggleButton.contains(event.target)) {
+      if (!sidebar?.contains(event.target) && !toggleButton?.contains(event.target)) {
         document.body.classList.remove("sidebar-enable");
       }
     });
@@ -41,6 +43,10 @@ const DashboardNavbar = () => {
   
     setIsSidebarEnabled((prevState) => !prevState);
   };
+
+  if (path.startsWith("/dashboard/login")) {
+    return;
+  }
 
   return (
     <nav id="page-topbar" className="isvertical-topbar">
@@ -128,6 +134,13 @@ const DashboardNavbar = () => {
         </div>
 
         <div className="d-flex align-items-center">
+
+          <Link href={'/'}>
+            <button type="submit" className="website-btn">
+              Go To Website
+            </button>
+          </Link>
+
           <div className="dropdown d-inline-block">
             <button
               type="button"

@@ -32,13 +32,13 @@ export default function RootLayout({ children }) {
       <body>
         <UserContextProvider>
           <QuickViewContextProvider>
-            <Preloader />
             <Navbar />
             {children}
             <Footer />
             <BackToTop />
             <JavascriptClient />
             <Toaster />
+            <Preloader />
           </QuickViewContextProvider>
         </UserContextProvider>
       </body>

@@ -6,13 +6,13 @@ import { FaArrowUp } from "react-icons/fa6";
 const BackToTop = () => {
   const path = usePathname();
 
-  
-  if (path.startsWith("/dashboard")) {
-    return;
-  }
-
 
   useEffect(() => {
+
+    if (path.startsWith("/dashboard")) {
+      return;
+    }
+
     // Function to update the progress bar
     function updateProgressBar() {
       const progressBar = document.querySelector(".progress_bar");
@@ -86,6 +86,10 @@ const BackToTop = () => {
       window.removeEventListener("resize", updateProgressBar);
     };
   }, []);
+
+  if (path.startsWith("/dashboard")) {
+    return;
+  }
 
   return (
     <>

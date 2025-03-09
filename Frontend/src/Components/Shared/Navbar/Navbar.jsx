@@ -21,10 +21,6 @@ const Navbar = () => {
 
   const path = usePathname();
 
-  if (path.startsWith("/dashboard")) {
-    return;
-  }
-
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await axios.get("https://api.abcpabnabd.com/api/v1/category");
@@ -65,6 +61,9 @@ const Navbar = () => {
 
   useEffect(() => {
 
+    if (path.startsWith("/dashboard")) {
+      return;
+    }
 
 
     const resetDropdowns = () => {
@@ -251,6 +250,10 @@ const Navbar = () => {
     const value = e.target.value;
     setSearchValue(value);
   };
+
+  if (path.startsWith("/dashboard")) {
+    return;
+  }
 
   return (
     <>

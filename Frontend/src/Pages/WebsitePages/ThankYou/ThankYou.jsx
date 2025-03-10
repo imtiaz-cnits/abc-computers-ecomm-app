@@ -42,7 +42,7 @@ const ThankYou = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g clip-path="url(#clip0_1393_411)">
+                  <g clipPath="url(#clip0_1393_411)">
                     <path
                       fill-rule="evenodd"
                       clip-rule="evenodd"

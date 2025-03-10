@@ -11,6 +11,9 @@ import axios from "axios";
 import MenuItem from "./MenuItem/MenuItem";
 
 const Navbar = () => {
+
+  const searchRef = useRef(null)
+
   const [search, setSearch] = useState(false);
   const [categories, setCategories] = useState([]);
   const menuUlRef = useRef(null);
@@ -57,6 +60,19 @@ const Navbar = () => {
 
   useEffect(() => {
     setSearchResult(false);
+
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchResult(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+
+
   }, [path]);
 
   useEffect(() => {
@@ -247,6 +263,9 @@ const Navbar = () => {
   };
 
   const handleSearchValue = (e) => {
+
+    setSearchResult(true)
+
     const value = e.target.value;
     setSearchValue(value);
   };
@@ -287,7 +306,7 @@ const Navbar = () => {
               {searchValue !== "" &&
               filteredProducts.length !== 0 &&
               searchResult ? (
-                <div className={`search-result`}>
+                <div className={`search-result`} ref={searchRef}>
                   {filteredProducts?.slice(0, 4)?.map((product) => (
                     <Link href={`/products/${product?._id}`} key={product?._id}>
                       <div className="search_product_card">

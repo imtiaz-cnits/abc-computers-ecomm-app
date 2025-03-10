@@ -20,7 +20,7 @@ const Preloader = () => {
 
     // Prevent Preloader from rendering on /dashboard and /dashboard/login
     if (path.startsWith("/dashboard")) {
-      return null;
+      return;
     }
 
   return (

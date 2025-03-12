@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 
 const FeaturedCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -35,7 +34,7 @@ const FeaturedCategories = () => {
                 key={category?._id}
                 className="col-lg-2 col-6 col-sm-4 d-flex align-item-stretch"
               >
-                <Link
+                <a
                   href={`/categories/${category?._id}`}
                   className="categories_card"
                 >
@@ -48,7 +47,7 @@ const FeaturedCategories = () => {
                       alt=""
                     />
                   </div>
-                </Link>
+                </a>
               </div>
             ))}
           </div>

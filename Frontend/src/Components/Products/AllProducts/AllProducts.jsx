@@ -9,7 +9,6 @@ import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuic
 import "../../../assets/css/product.css";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 
 const AllProducts = ({ catId }) => {
   const [filterPrice, setFilterPrice] = useState(0);
@@ -572,13 +571,13 @@ const AllProducts = ({ catId }) => {
                   >
                       <div className="special_product_card">
                         <div className="product">
-                          <Link href={`/products/${product?._id}`}>
+                          <a href={`/products/${product?._id}`}>
                             <img
                               src={`https://api.abcpabnabd.com${product?.productImg}`}
                               alt=""
                             />
                           
-                          </Link>
+                          </a>
                           <span className="product_status">New</span>
 
                           <div className="product_icon">

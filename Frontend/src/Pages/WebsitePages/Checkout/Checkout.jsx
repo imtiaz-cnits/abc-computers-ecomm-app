@@ -6,7 +6,6 @@ import cartImg3 from "@/assets/img/cart-product-img3.webp";
 import { FaAngleDown } from "react-icons/fa6";
 import countries from "../../../../public/js/website/countries";
 import states from "../../../../public/js/website/states";
-import Link from "next/link";
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
 
 
@@ -158,7 +157,7 @@ const Checkout = () => {
       <div className="billing_details">
         <div className="container">
           <div className="breadcrumb">
-            <Link href="/cart">Shopping Cart </Link>
+            <a href="/cart">Shopping Cart </a>
             <div className="icon">
               <svg
                 width="32"
@@ -436,7 +435,7 @@ const Checkout = () => {
                 <div className="sign_up">
                   <p>New Customer?</p>
                   <p>
-                    <Link href="/login">Sign Up</Link> to get better offer.
+                    <a href="/login">Sign Up</a> to get better offer.
                   </p>
                 </div>
 
@@ -620,9 +619,9 @@ const Checkout = () => {
                                 />
                                 <label htmlFor="checkbox" className="checkbox">
                                   I accept the{" "}
-                                  <Link href={"#"} className="policy">
+                                  <a href={"#"} className="policy">
                                     Privacy Policy.
-                                  </Link>
+                                  </a>
                                 </label>
                               </div>
 

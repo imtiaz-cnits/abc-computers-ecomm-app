@@ -7,7 +7,7 @@ const Breadcrumb = ({ pageTitle }) => {
             <div className="bredcrumb_wrapper">
                 <div className="container">
                     <div className="breadcrumd">
-                        <Link href="/">Home </Link>
+                        <a href="/">Home </a>
                         <div className="icon">
                             <svg
                                 width="39"

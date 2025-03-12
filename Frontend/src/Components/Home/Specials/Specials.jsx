@@ -8,7 +8,6 @@ import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
-import Link from "next/link";
 
 const Specials = () => {
   const [products, setProducts] = useState([]);
@@ -65,13 +64,13 @@ const Specials = () => {
                   <div className="item">
                     <div className="populer_product_card">
                         <div className="product">
-                    <Link href={`/products/${product?._id}`}>
+                    <a href={`/products/${product?._id}`}>
                           
                             <img
                               src={`https://api.abcpabnabd.com${product?.productImg}`}
                               alt=""
                             />
-                                                </Link>
+                                                </a>
                           <span className="product_status">70%</span>
 
                           <div className="product_icon">

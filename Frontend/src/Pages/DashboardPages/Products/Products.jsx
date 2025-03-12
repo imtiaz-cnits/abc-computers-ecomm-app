@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
@@ -104,7 +103,7 @@ const Products = () => {
           <div className="invoice-btn">
             <h1>PRODUCT/ SERVICES</h1>
             <div className="table-btn-item">
-              <Link href={"/dashboard/products/add-product"}>
+              <a href={"/dashboard/products/add-product"}>
                 <button type="submit" className="view-more-btn">
                   <svg
                     width="32"
@@ -123,7 +122,7 @@ const Products = () => {
                   </svg>
                   ADD PRODUCT/ SERVICES
                 </button>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -198,7 +197,7 @@ const Products = () => {
                           <td>{product?.color?.join(", ")}</td>
                           <td>
                             <div id="action_btn">
-                              <Link
+                              <a
                                 href={`/dashboard/products/update-product/${product._id}`}
                               >
                                 <svg
@@ -222,7 +221,7 @@ const Products = () => {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                              </Link>
+                              </a>
 
                               <a
                                 href="#"

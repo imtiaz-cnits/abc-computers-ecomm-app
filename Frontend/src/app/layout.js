@@ -14,6 +14,7 @@ import BackToTop from "@/Components/Shared/BackToTop/BackToTop";
 import { Toaster } from "react-hot-toast"; // Import Toaster
 import UserContextProvider from "@/Utilities/Contexts/UserContextProvider";
 import QuickViewContextProvider from "@/Utilities/Contexts/QuickViewContextProvider";
+import CartContextProvider from "@/Utilities/Contexts/CartContextProvider";
 
 export const metadata = {
   title: "Home | ABC Computers",
@@ -31,15 +32,17 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <UserContextProvider>
-          <QuickViewContextProvider>
-            <Navbar />
-            {children}
-            <Footer />
-            <BackToTop />
-            <JavascriptClient />
-            <Toaster />
-            <Preloader />
-          </QuickViewContextProvider>
+          <CartContextProvider>
+            <QuickViewContextProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <BackToTop />
+              <JavascriptClient />
+              <Toaster />
+              <Preloader />
+            </QuickViewContextProvider>
+          </CartContextProvider>
         </UserContextProvider>
       </body>
     </html>

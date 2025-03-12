@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import React from "react";
 
 import cardImg1 from "@/assets/img/credit-card1.webp";
@@ -20,7 +20,7 @@ const Payment = () => {
       <div className="billing_details">
         <div className="container">
           <div className="breadcrumb">
-            <Link href="/cart">Shopping Cart</Link>
+            <a href="/cart">Shopping Cart</a>
             <div className="icon">
               <svg
                 width="32"
@@ -39,7 +39,7 @@ const Payment = () => {
                 />
               </svg>
             </div>
-            <Link href="/checkout">Checkout </Link>
+            <a href="/checkout">Checkout </a>
             <div className="icon">
               <svg
                 width="32"
@@ -252,9 +252,9 @@ const Payment = () => {
                     <span className="grand">Grand Total</span>
                     <span className="grand_price">$371.48</span>
                   </p>
-                  <Link href="/thank-you" className="checkout_btn">
+                  <a href="/thank-you" className="checkout_btn">
                     Checkout Now
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import React, { useEffect, useRef, useState } from "react";
 
 const MenuItem = ({ category, handleSubOpen }) => {
@@ -24,9 +24,9 @@ const MenuItem = ({ category, handleSubOpen }) => {
     <>
       <li className={`megamenu`} ref={submenuRef}>
         <span>
-          <Link href={`/categories/${category?._id}`}>
+          <a href={`/categories/${category?._id}`}>
             {category?.categoryName}
-          </Link>
+          </a>
           <span
             className={`${category?.subCategories?.length ? "navtrigger" : ""}`}
             onClick={() => {
@@ -37,7 +37,7 @@ const MenuItem = ({ category, handleSubOpen }) => {
         <ul className="submenu" ref={submenuRef}>
           {category?.subCategories?.map((sub, idx) => (
             <li key={idx}>
-              <Link href={`/sub-categories/${sub?._id}`}>{sub?.subCategoryName}</Link>
+              <a href={`/sub-categories/${sub?._id}`}>{sub?.subCategoryName}</a>
             </li>
           ))}
         </ul>

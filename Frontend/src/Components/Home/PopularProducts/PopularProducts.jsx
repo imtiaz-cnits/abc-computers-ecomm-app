@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 
 const PopularProducts = () => {
@@ -53,12 +52,12 @@ const PopularProducts = () => {
                 >
                     <div className="populer_product_card">
                       `  <div className="product">
-                      <Link href={`/products/${product?._id}`}>
+                      <a href={`/products/${product?._id}`}>
                           <img 
                             src={`https://api.abcpabnabd.com${product.productImg}`}
                             alt=""
                           />
-                      </Link>
+                      </a>
                           <span className="product_status">New</span>
 
                           <div className="product_icon">
@@ -97,7 +96,7 @@ const PopularProducts = () => {
                                 />
                               </svg>
                             </a>
-                            <Link
+                            <a
                               href={`/products/${product?._id}`}
                               className="icon"
                             >
@@ -136,7 +135,7 @@ const PopularProducts = () => {
                                   </clipPath>
                                 </defs>
                               </svg>
-                            </Link>
+                            </a>
                             <a href="./product-single.html" className="icon">
                               <svg
                                 width="36"

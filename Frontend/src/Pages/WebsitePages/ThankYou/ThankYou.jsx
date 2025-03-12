@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import React from "react";
 import productImg1 from "@/assets/img/cart-product-img1.webp";
 import productImg2 from "@/assets/img/cart-product-img2.webp";
@@ -29,7 +29,7 @@ const ThankYou = () => {
                 />
               </svg>
             </div>
-            <Link href="/">Back To Home</Link>
+            <a href="/">Back To Home</a>
           </div>
 
           <div className="thank_you_summery">

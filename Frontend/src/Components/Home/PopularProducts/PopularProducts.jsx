@@ -51,7 +51,7 @@ const PopularProducts = () => {
                   className="col-lg-3 col-6 d-flex align-item-stretch"
                 >
                     <div className="populer_product_card">
-                      `  <div className="product">
+                      <div className="product">
                       <a href={`/products/${product?._id}`}>
                           <img 
                             src={`https://api.abcpabnabd.com${product.productImg}`}
@@ -151,7 +151,7 @@ const PopularProducts = () => {
                               </svg>
                             </a>
                           </div>
-                        </div>`
+                        </div>
 
                       <div className="product_details">
                         <h3 className="product_name">{product?.productName}</h3>

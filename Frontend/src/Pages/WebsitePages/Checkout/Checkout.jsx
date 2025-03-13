@@ -15,8 +15,12 @@ import { Modal } from "react-bootstrap";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Checkout = () => {
+
+  const {cart, subTotal} = useContext(CartContext)
+
   const { setUserID } = useContext(UserContext);
   const [stateOptions, setStateOptions] = useState([]);
   const [paymentOption, setPaymentOption] = useState("bkash")
@@ -367,60 +371,28 @@ const Checkout = () => {
                     <h2>Your Order</h2>
                   </div>
                   <ul className="cart_items">
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg1.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">DJI Osmo Mobile 6</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Gimbal<span>1×</span>
-                            </h2>
+                    {
+                      cart?.map((item, idx)=>(
+                        <li key={idx}>
+                          <div className="product_details_wrapper">
+                            <div className="product_item">
+                              <img src={`https://api.abcpabnabd.com${item?.productImg}`} alt="" />
+                            </div>
+                            <div className="item">
+                              <span className="title">{item?.productName.slice(0, 15)}...</span>
+                              <div className="type_wrap_container">
+                                <h2 className="type_wrap">
+                                  {item?.subCategory}<span>{item?.quantity}×</span>
+                                </h2>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price"> $149.99 </span>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg2.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">MSI- Gaming Case</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Gaming Case<span>1×</span>
-                            </h2>
+                          <div>
+                            <span className="price"> ${item?.price} </span>
                           </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price"> $139.99 </span>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg3.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">CAUGAR- Gaming Head</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Headphone<span>1×</span>
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price">$54.00</span>
-                      </div>
-                    </li>
+                        </li>
+                      ))
+                    }
                   </ul>
                 </div>
 
@@ -442,7 +414,7 @@ const Checkout = () => {
                 <div className="order_summary">
                   <p className="summary_item">
                     <span>Sub-Total</span>{" "}
-                    <span className="price1">$343.98</span>
+                    <span className="price1">${subTotal}</span>
                   </p>
                   <p className="summary_item">
                     <span>Taxes</span> <span className="price">-$5.00</span>

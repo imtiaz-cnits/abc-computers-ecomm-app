@@ -149,17 +149,24 @@ const SingleProduct = ({ id }) => {
 
                   <div className="product_all_details">
                     <div className="availability_custom">
-                      <span className="available">Available</span>
-                      <p
-                        className={`in_stock ${
-                          product?.stock <= 0 ? "text-danger" : ""
-                        }`}
-                      >
-                        :{" "}
-                        <span>
-                          {product?.stock > 0 ? "In Stock" : "Out of Stock"}
+                      <div className="product_stock">
+                        <span className="available">Available</span>
+                        <p
+                            className={`in_stock ${
+                                product?.stock <= 0 ? "text-danger" :""
+                            }`}
+                        >
+                          : {" "}
+                          <span>
+                           {product?.stock > 0 ? "In Stock" : "Out of Stock"}
                         </span>
-                      </p>
+                        </p>
+                      </div>
+
+                      <div className="product_code">
+                        <p>Product Code: {product?.productCode}</p>
+                      </div>
+
                     </div>
 
                     <div className="key_feature">

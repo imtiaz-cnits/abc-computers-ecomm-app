@@ -3,7 +3,7 @@ import "@/assets/css/vendor/owl.carousel.min.css";
 import "@/assets/css/vendor/owl.theme.default.min.css";
 import "./globals.css";
 import "@/assets/css/app.css";
-import favicon from "@/assets/img/abc-logo-icon.svg";
+import favicon from "../../public/abc-logo-icon.svg";
 import JavascriptClient from "@/Components/JavascriptClient/JavascriptClient";
 import "@/assets/css/vendor/swiper-bundle.min.css";
 import Navbar from "@/Components/Shared/Navbar/Navbar";
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="shortcut icon" href={favicon.src} type="image/x-icon" />
+        <link rel="shortcut icon" href={favicon.src} type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>

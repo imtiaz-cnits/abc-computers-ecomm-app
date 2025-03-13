@@ -117,7 +117,7 @@ const UpdateProduct = ({ id }) => {
       setSpecification(productDetails?.specification);
       setDescription(productDetails?.description);
       setStock(product?.stock);
-      // setColor(product?.color);
+      setColor(product?.color);
       setProductImg(product?.productImg);
 
       // Set filtered sub categories
@@ -381,7 +381,7 @@ const UpdateProduct = ({ id }) => {
     formData.append("keyFeature", keyFeature);
     formData.append("specification", specification);
     formData.append("description", description);
-    // formData.append("color", JSON.stringify(color));
+    formData.append("color", JSON.stringify(color));
     formData.append("brandID", selectedBrand?._id);
     formData.append("categoryID", selectedCategory?._id);
     formData.append("subCategoryID", selectedSubCategory?._id);

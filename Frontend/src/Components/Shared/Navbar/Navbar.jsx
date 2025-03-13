@@ -1,16 +1,18 @@
 "use client";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import logo from "@/assets/img/main_logo_abc.svg";
 import { FaAngleRight, FaBars, FaSearch, FaTimes } from "react-icons/fa";
-import cartImg1 from "@/assets/img/cart-product-img1.webp";
-import cartImg2 from "@/assets/img/cart-product-img2.webp";
-import cartImg3 from "@/assets/img/cart-product-img3.webp";
-import Link from "next/link";
 import axios from "axios";
 import MenuItem from "./MenuItem/MenuItem";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Navbar = () => {
+
+  const searchRef = useRef(null)
+
+  const {cart, removeFromCart, increaseQuantity, decreaseQuantity, subTotal} = useContext(CartContext)
+
   const [search, setSearch] = useState(false);
   const [categories, setCategories] = useState([]);
   const menuUlRef = useRef(null);
@@ -20,10 +22,6 @@ const Navbar = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const path = usePathname();
-
-  if (path.startsWith("/dashboard")) {
-    return;
-  }
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -61,10 +59,30 @@ const Navbar = () => {
 
   useEffect(() => {
     setSearchResult(false);
+
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchResult(false);
+      }
+    };
+
+
+    setSearchValue("")
+    setSearch(false)
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+
+
   }, [path]);
 
   useEffect(() => {
 
+    if (path.startsWith("/dashboard")) {
+      return;
+    }
 
 
     const resetDropdowns = () => {
@@ -72,9 +90,6 @@ const Navbar = () => {
         item.classList.remove("sub-open");
       });
     };
-
-
-
 
     document.addEventListener("click", function (event) {
       if (!event.target.closest(".tooltip-a, .toggle-tooltip")) {
@@ -248,9 +263,16 @@ const Navbar = () => {
   };
 
   const handleSearchValue = (e) => {
+
+    setSearchResult(true)
+
     const value = e.target.value;
     setSearchValue(value);
   };
+
+  if (path.startsWith("/dashboard")) {
+    return;
+  }
 
   return (
     <>
@@ -284,9 +306,9 @@ const Navbar = () => {
               {searchValue !== "" &&
               filteredProducts.length !== 0 &&
               searchResult ? (
-                <div className={`search-result`}>
+                <div className={`search-result`} ref={searchRef}>
                   {filteredProducts?.slice(0, 4)?.map((product) => (
-                    <Link href={`/products/${product?._id}`} key={product?._id}>
+                    <a href={`/products/${product?._id}`} key={product?._id}>
                       <div className="search_product_card">
                         <div className="product">
                           <img
@@ -308,7 +330,7 @@ const Navbar = () => {
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               ) : (
@@ -373,9 +395,9 @@ const Navbar = () => {
                       </clipPath>
                     </defs>
                   </svg>
-                  <span>3</span>
+                  <span>{cart?.length}</span>
                 </a>
-                <Link href={"/user-profile"} className="icon">
+                <a href={"/user-profile"} className="icon">
                   <svg
                     width="32"
                     height="32"
@@ -395,7 +417,7 @@ const Navbar = () => {
                       </clipPath>
                     </defs>
                   </svg>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -419,7 +441,7 @@ const Navbar = () => {
         {searchValue !== "" && filteredProducts.length !== 0 ? (
           <div className={`search-result`}>
             {filteredProducts?.slice(0, 4)?.map((product) => (
-              <Link href={`/products/${product?._id}`} key={product?._id}>
+              <a href={`/products/${product?._id}`} key={product?._id}>
                 <div className="search_product_card">
                   <div className="product">
                     <img
@@ -439,7 +461,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         ) : (
@@ -464,324 +486,79 @@ const Navbar = () => {
           </div>
 
           <ul className="cart_items">
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg1} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">DJI Osmo Mobile 6</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳149.99 × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
-                        />
-                        <button className="btn-increase">+</button>
+            {
+              cart?.map((item, idx)=>(
+                <li key={idx}>
+                  <div className="product_details_wrapper">
+                    <div className="product_item">
+                      <img src={`https://api.abcpabnabd.com${item?.productImg}`} alt="" />
+                    </div>
+                    <div className="item">
+                      <span className="title">{item?.productName}</span>
+                      <div className="price_container">
+                        <span className="price">
+                          ৳{item?.price} × <span className="quantity">{item?.quantity}</span>
+                        </span>
+                        <div className="quantity_wrapper">
+                          <div className="wrap">
+                            <button className="btn-decrease" onClick={()=>decreaseQuantity(item?.productID)}>-</button>
+                            <input
+                              type="text"
+                              className="quantity-input"
+                              value={item?.quantity}
+                              readOnly
+                            />
+                            <button className="btn-increase" onClick={()=> increaseQuantity(item?.productID)}>+</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg1.src} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">DJI Osmo Mobile 6</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳149.99 × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
+                  <div className="action">
+                    <button className="dlt_btn" onClick={()=> removeFromCart(item?.productID)}>
+                      <svg
+                        width="36"
+                        height="36"
+                        viewBox="0 0 36 36"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="0.500977"
+                          y="0.5"
+                          width="35"
+                          height="35"
+                          rx="6.07143"
+                          stroke="#E31736"
                         />
-                        <button className="btn-increase">+</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg1.src} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">DJI Osmo Mobile 6</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳149.99 × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
+                        <path
+                          d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
+                          fill="#E31736"
                         />
-                        <button className="btn-increase">+</button>
-                      </div>
-                    </div>
+                      </svg>
+                    </button>
                   </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg1.src} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">DJI Osmo Mobile 6</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳149.99 × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
-                        />
-                        <button className="btn-increase">+</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
-            s
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg2.src} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">MSI- Gaming Case</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳139.99 × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
-                        />
-                        <button className="btn-increase">+</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
-            <li>
-              <div className="product_details_wrapper">
-                <div className="product_item">
-                  <img src={cartImg3.src} alt="" />
-                </div>
-                <div className="item">
-                  <span className="title">CAUGAR- Gaming Head</span>
-                  <div className="price_container">
-                    <span className="price">
-                      ৳54.00  × <span className="quantity">1</span>
-                    </span>
-                    <div className="quantity_wrapper">
-                      <div className="wrap">
-                        <button className="btn-decrease">-</button>
-                        <input
-                          type="text"
-                          className="quantity-input"
-                          defaultValue={1}
-                        />
-                        <button className="btn-increase">+</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="action">
-                <button className="dlt_btn">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 36 36"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="0.500977"
-                      y="0.5"
-                      width="35"
-                      height="35"
-                      rx="6.07143"
-                      stroke="#E31736"
-                    />
-                    <path
-                      d="M28.1478 9.6031H24.1286L22.4698 6.89544C22.0054 6.20729 21.2882 5.78613 20.4685 5.78613H15.5312C14.7115 5.78613 13.9504 6.20729 13.5309 6.89544L11.8711 9.6031H7.8519C7.41891 9.6031 7.07129 9.94328 7.07129 10.3665V11.1299C7.07129 11.5545 7.41891 11.8933 7.8519 11.8933H8.63251V27.1611C8.63251 28.8478 10.0303 30.2147 11.755 30.2147H24.2448C25.9694 30.2147 27.3672 28.8478 27.3672 27.1611V11.8933H28.1478C28.582 11.8933 28.9284 11.5545 28.9284 11.1299V10.3665C28.9284 9.94328 28.582 9.6031 28.1478 9.6031ZM15.458 8.21372C15.5068 8.13023 15.6044 8.07631 15.7068 8.07631H20.2929C20.3966 8.07631 20.4942 8.12999 20.5429 8.21348L21.3955 9.6031H14.6042L15.458 8.21372ZM24.2448 27.9245H11.755C11.3238 27.9245 10.9744 27.5828 10.9744 27.1611V11.8933H25.0254V27.1611C25.0254 27.581 24.6741 27.9245 24.2448 27.9245ZM17.9999 25.6343C18.4313 25.6343 18.7805 25.2929 18.7805 24.871V14.9468C18.7805 14.5249 18.4313 14.1835 17.9999 14.1835C17.5684 14.1835 17.2192 14.527 17.2192 14.9468V24.871C17.2192 25.2908 17.5705 25.6343 17.9999 25.6343ZM14.0968 25.6343C14.5261 25.6343 14.8774 25.2908 14.8774 24.871V14.9468C14.8774 14.5249 14.5283 14.1835 14.0968 14.1835C13.6653 14.1835 13.3162 14.527 13.3162 14.9468V24.871C13.3162 25.2908 13.6675 25.6343 14.0968 25.6343ZM21.9029 25.6343C22.3344 25.6343 22.6835 25.2929 22.6835 24.871V14.9468C22.6835 14.5249 22.3344 14.1835 21.9029 14.1835C21.4714 14.1835 21.1223 14.527 21.1223 14.9468V24.871C21.1223 25.2908 21.4736 25.6343 21.9029 25.6343Z"
-                      fill="#E31736"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </li>
+                </li>
+                )
+              )
+            }
           </ul>
           <div className="cart_footer">
             <p>
               <span>Sub-Total</span>
-              <span id="subtotal">৳343.98</span>
+              <span id="subtotal">৳{subTotal}</span>
             </p>
             <p className="grand_total">
               <span>Grand Total</span>
               <span id="grandtotal">৳343.98</span>
             </p>
             <div className="cart_buttons">
-              <Link href={"/cart"}>
+              <a href={"/cart"}>
                 <button className="view_cart">View Cart</button>
-              </Link>
-              <Link href={"/checkout"}>
+              </a>
+              <a href={"/checkout"}>
                 <button className="checkout">Checkout Now</button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

@@ -1,31 +1,52 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import userImg from "@/assets/img/navbar-profile-logo.png";
 import Link from "next/link";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 
 const DashboardNavbar = () => {
+  const [isSidebarEnabled, setIsSidebarEnabled] = useState(false)
   const path = usePathname();
 
-  if (path.startsWith("/dashboard/login")) {
-    return;
-  }
+  useEffect(()=>{
 
-  useEffect(() => {
+    if (!path.startsWith("/dashboard")) {
+      return;
+    }
+
+
     // Sidebar Close on Outside Click
     document.addEventListener("click", function (event) {
       const sidebar = document.querySelector(".vertical-menu");
       const toggleButton = document.querySelector(".vertical-menu-btn");
 
-      if (
-        !sidebar?.contains(event.target) &&
-        !toggleButton?.contains(event.target)
-      ) {
+      if (!sidebar?.contains(event.target) && !toggleButton?.contains(event.target)) {
         document.body.classList.remove("sidebar-enable");
       }
     });
-  }, []);
+  }, [])
+
+  const toggleSidebar = () => {
+    if (typeof document === "undefined" || typeof window === "undefined") return;
+  
+    const currentSize = document.body.getAttribute("data-sidebar-size");
+  
+    document.body.classList.toggle("sidebar-enable");
+  
+    if (window.innerWidth >= 992) {
+      document.body.setAttribute(
+        "data-sidebar-size",
+        currentSize === "sm" ? "lg" : "sm"
+      );
+    }
+  
+    setIsSidebarEnabled((prevState) => !prevState);
+  };
+
+  if (path.startsWith("/dashboard/login")) {
+    return;
+  }
 
   return (
     <nav id="page-topbar" className="isvertical-topbar">
@@ -105,6 +126,7 @@ const DashboardNavbar = () => {
           <button
             type="button"
             className="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn"
+            onClick={() => toggleSidebar(!isSidebarEnabled)}
           >
             <i className="fa-solid fa-bars-staggered"></i>
             <FaBarsStaggered />
@@ -112,6 +134,13 @@ const DashboardNavbar = () => {
         </div>
 
         <div className="d-flex align-items-center">
+
+          <Link href={'/'}>
+            <button type="submit" className="website-btn">
+              Go To Website
+            </button>
+          </Link>
+
           <div className="dropdown d-inline-block">
             <button
               type="button"

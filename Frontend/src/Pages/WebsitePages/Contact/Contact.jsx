@@ -1,6 +1,5 @@
 import React from "react";
 import heroBg from "@/assets/img/about/hero-bg-image.webp";
-import Link from "next/link";
 
 const Contact = () => {
   return (
@@ -18,7 +17,7 @@ const Contact = () => {
             <div className="hero_contant">
               <h2>Contact US</h2>
               <div className="breadcrumd">
-                <Link href="/">Home </Link>
+                <a href="/">Home </a>
                 <div className="icon">
                   <svg
                     width="39"

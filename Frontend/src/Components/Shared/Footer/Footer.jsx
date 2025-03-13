@@ -5,7 +5,6 @@ import { FaFacebookF, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import paymentImg from "@/assets/img/payment.png"
-import Link from "next/link";
 
 const Footer = () => {
   const path = usePathname();
@@ -39,10 +38,10 @@ const Footer = () => {
                 <div className="footer_content_menu mt-2">
                   <ul>
                     <li>
-                      <Link href="/about">About Us</Link>
+                      <a href="/about">About Us</a>
                     </li>
                     <li>
-                      <Link href="/contact">Contact Us</Link>
+                      <a href="/contact">Contact Us</a>
                     </li>
                     <li>
                       <a href="#">Terms and Conditions</a>
@@ -62,7 +61,7 @@ const Footer = () => {
                 <div className="footer_content_menu mt-2">
                   <ul>
                     <li>
-                      <Link href="/user-profile">My Account</Link>
+                      <a href="/user-profile">My Account</a>
                     </li>
                     <li>
                       <a href="#">Order History</a>

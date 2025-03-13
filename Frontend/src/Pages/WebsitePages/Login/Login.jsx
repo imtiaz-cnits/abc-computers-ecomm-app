@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -278,9 +277,9 @@ const Login = () => {
                 />
                 <label htmlFor="checkbox" className="checkbox">
                   I accept the{" "}
-                  <Link href={"#"} className="policy">
+                  <a href={"#"} className="policy">
                     Privacy Policy.
-                  </Link>
+                  </a>
                 </label>
               </div>
 

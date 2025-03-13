@@ -7,7 +7,6 @@ import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 import "../../../assets/css/product.css";
-import Link from "next/link";
 
 const SingleSubCategory = ({id: subCategoryId}) => {
 
@@ -561,12 +560,12 @@ const SingleSubCategory = ({id: subCategoryId}) => {
                     >
                         <div className="special_product_card">
                           <div className="product">
-                            <Link href={`/products/${product?._id}`}>
+                            <a href={`/products/${product?._id}`}>
                               <img
                                 src={`https://api.abcpabnabd.com${product?.productImg}`}
                                 alt=""
                               />
-                            </Link>
+                            </a>
                             <span className="product_status">New</span>
   
                             <div className="product_icon">

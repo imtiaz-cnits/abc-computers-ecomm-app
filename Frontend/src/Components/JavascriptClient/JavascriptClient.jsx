@@ -20,7 +20,6 @@ const JavascriptClient = () => {
         src="/js/website/vendor/swiper-bundle.min.js"
         strategy="beforeInteractive"
       />
-      <Script src="/js/website/navbar.js" strategy="afterInteractive" />
       <Script
         src="/js/website/popular-product-tab.js"
         strategy="afterInteractive"

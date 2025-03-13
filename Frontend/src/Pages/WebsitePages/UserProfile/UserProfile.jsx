@@ -56,10 +56,15 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
+
+    console.log(existingUserID);
+
     const fetchProfile = async () => {
       const result = await axios.get(
         `https://api.abcpabnabd.com/api/v1/profile-details/${existingUserID}`
       );
+
+      console.log(result);
 
       if (result?.data?.status === "success") {
         setProfile(result?.data?.data);
@@ -67,30 +72,33 @@ const UserProfile = () => {
     };
 
     fetchProfile();
-  }, [userID]);
+  }, [userID, existingUserID]);
 
   useEffect(() => {
-    const {
-      cus_name,
-      cus_country,
-      cus_state,
-      cus_city,
-      cus_postcode,
-      cus_address,
-      userID: userInfo,
-    } = profile;
 
-    setFormData({
-      cus_name,
-      cus_country,
-      cus_state,
-      cus_city,
-      cus_postcode,
-      cus_address,
-      cus_email: userInfo?.email,
-      cus_phone: userInfo?.mobile,
-      img_url: userInfo?.img_url,
-    });
+      if(profile){
+        const {
+          cus_name,
+          cus_country,
+          cus_state,
+          cus_city,
+          cus_postcode,
+          cus_address,
+          userID: userInfo,
+        } = profile;
+
+        setFormData({
+          cus_name,
+          cus_country,
+          cus_state,
+          cus_city,
+          cus_postcode,
+          cus_address,
+          cus_email: userInfo?.email,
+          cus_phone: userInfo?.mobile,
+          img_url: userInfo?.img_url,
+        });
+      }
   }, [profile]);
 
   const handleLogout = async () => {
@@ -631,7 +639,6 @@ const UserProfile = () => {
                       defaultValue={profile?.userID?.email}
                       onChange={handleChange}
                       readOnly
-                      required
                     />
                   </div>
                   <div className="edit_profile_details">
@@ -646,7 +653,6 @@ const UserProfile = () => {
                         defaultValue={profile?.userID?.mobile}
                         onChange={handleChange}
                         readOnly
-                        required
                       />
                     </div>
                     <div className="edit_profile_input_box">

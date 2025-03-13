@@ -1,15 +1,54 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import cartImg2 from "@/assets/img/cart-product-img2.webp";
 import cartImg3 from "@/assets/img/cart-product-img3.webp";
 import { FaAngleDown } from "react-icons/fa6";
 import countries from "../../../../public/js/website/countries";
 import states from "../../../../public/js/website/states";
-import Link from "next/link";
+import passwordEye from "@/assets/icons/password-eye-icon.svg";
+
+
+import bkashImg from "@/assets/img/payment-bkash.png"
+import nagadImg from "@/assets/img/payment-nagad.png"
+import { Modal } from "react-bootstrap";
+import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Checkout = () => {
+
+  const {cart, subTotal} = useContext(CartContext)
+
+  const { setUserID } = useContext(UserContext);
   const [stateOptions, setStateOptions] = useState([]);
+  const [paymentOption, setPaymentOption] = useState("bkash")
+  const [loginModal, setLoginModal] = useState(false)
+  const [login, setLogin] = useState(true)
+  const [showPassword, setShowPassword] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+  });
+
+  const [loginFormData, setLoginFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // Handle Signup Form Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
 
   const handleCountryChange = (e) => {
     const selectedCountryIndex = e.target.value;
@@ -22,13 +61,107 @@ const Checkout = () => {
     setStateOptions(newStates);
   };
 
+  // Handle Signup Form Submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://api.abcpabnabd.com/api/v1/SignUP",
+        formData
+      );
+
+      const result = await response?.data;
+
+      if (result?.status === "success" && result?.token) {
+        // ✅ Ensure success & token exists
+        toast.success("🎉 Hurray! User Registration Successful.");
+
+        // ✅ Store token securely in localStorage
+        localStorage.setItem("token", result?.token);
+        // router.push("/login");  // Redirect to login page after successful signup
+
+        const _id = result?.result?._id;
+
+        setUserID(_id);
+
+        e.target.reset();
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          password: "",
+        });
+      }
+    } catch (error) {
+      console.error("❌ Signup Error:", error);
+      toast.error(
+        error?.response?.data?.message || "❌ Signup failed! Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Login Form Change
+  const handleLoginChange = (e) => {
+    setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value });
+  };
+
+  // Handle Login Form Submission
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    console.log(loginFormData);
+
+    try {
+      const response = await axios.post(
+        "https://api.abcpabnabd.com/api/v1/Login",
+        loginFormData
+      );
+
+      const result = await response?.data;
+
+      if (result?.status !== "success") {
+        throw new Error(result.message || "Invalid email or password.");
+      }
+
+      // ✅ If login is successful
+      if (result?.status === "success" && result?.token) {
+        localStorage.setItem("token", result?.token);
+        toast.success("Login successful!");
+        // router.push("/"); // Redirect to dashboard
+
+        const _id = result?.user?._id;
+
+        setUserID(_id);
+
+        e.target.reset();
+        setLoginFormData({
+          email: "",
+          password: "",
+        });
+      }
+    } catch (error) {
+      console.error("❌ Login Error:", error);
+      toast.error(
+        error?.response?.data?.message ||
+          "Login failed! Please check your credentials."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {/* <!-- Billing Details Start --> */}
       <div className="billing_details">
         <div className="container">
           <div className="breadcrumb">
-            <Link href="/cart">Shopping Cart </Link>
+            <a href="/cart">Shopping Cart </a>
             <div className="icon">
               <svg
                 width="32"
@@ -178,31 +311,56 @@ const Checkout = () => {
               </div>
 
               <div className="shipping_section">
-                <h2>Shipping Method</h2>
-                <div className="shipping_option">
-                  <input
-                    type="radio"
-                    name="shipping"
-                    id="regular"
-                    defaultChecked
-                  />
-                  <label htmlFor="regular">
-                    <span className="details">
-                      <strong>Regular Shipping</strong>
-                      <span>$9.50</span>
-                    </span>
-                    <span>5-7 days</span>
-                  </label>
+                <h2>Payment Method</h2>
+                <div className="payment_option">
+                  <div className="radio-container">
+                    <input
+                      type="radio"
+                      name="payment"
+                      id="bkash"
+                      checked={paymentOption === "bkash"}
+                      onChange={(e)=>setPaymentOption(e.target.value)}
+                      value={"bkash"}
+                    />
+                    <label htmlFor="bkash">
+                      <span className="details">
+                        <strong>Bkash</strong>
+                        <img src={bkashImg?.src} className="payment-img" alt="" />
+                      </span>
+                    </label>
+                  </div>
+                    {
+                      paymentOption === "bkash" ?
+                      <input
+                        type="text"
+                        id="bkash_transaction"
+                        placeholder="Transaction ID"
+                        className="transaction"
+                      /> : 
+                      <></>
+                    }
                 </div>
-                <div className="shipping_option">
-                  <input type="radio" name="shipping" id="express" />
-                  <label htmlFor="express">
-                    <span className="details">
-                      <strong>Express Shipping</strong>
-                      <span>$22.50</span>
-                    </span>
-                    <span>1-3 days</span>
-                  </label>
+                <div className="payment_option">
+                  <div className="radio-container">
+                    <input type="radio" name="payment" id="nagad" checked={paymentOption === "nagad"} onChange={(e)=>setPaymentOption(e.target.value)} value={"nagad"}/>
+                    <label htmlFor="nagad">
+                      <span className="details">
+                        <strong>Nagad</strong>
+                        <img src={nagadImg?.src} className="payment-img" alt="" />
+                      </span>
+                    </label>
+                  </div>
+                    {
+                      paymentOption === "nagad" ?
+                      <input
+                        type="text"
+                        id="nagad_transaction"
+                        placeholder="Transaction ID"
+                        className="transaction"
+                      />
+                      : 
+                      <></>
+                    }
                 </div>
               </div>
             </div>
@@ -213,60 +371,28 @@ const Checkout = () => {
                     <h2>Your Order</h2>
                   </div>
                   <ul className="cart_items">
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg1.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">DJI Osmo Mobile 6</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Gimbal<span>1×</span>
-                            </h2>
+                    {
+                      cart?.map((item, idx)=>(
+                        <li key={idx}>
+                          <div className="product_details_wrapper">
+                            <div className="product_item">
+                              <img src={`https://api.abcpabnabd.com${item?.productImg}`} alt="" />
+                            </div>
+                            <div className="item">
+                              <span className="title">{item?.productName.slice(0, 15)}...</span>
+                              <div className="type_wrap_container">
+                                <h2 className="type_wrap">
+                                  {item?.subCategory}<span>{item?.quantity}×</span>
+                                </h2>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price"> $149.99 </span>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg2.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">MSI- Gaming Case</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Gaming Case<span>1×</span>
-                            </h2>
+                          <div>
+                            <span className="price"> ${item?.price} </span>
                           </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price"> $139.99 </span>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="product_details_wrapper">
-                        <div className="product_item">
-                          <img src={cartImg3.src} alt="" />
-                        </div>
-                        <div className="item">
-                          <span className="title">CAUGAR- Gaming Head</span>
-                          <div className="type_wrap_container">
-                            <h2 className="type_wrap">
-                              Headphone<span>1×</span>
-                            </h2>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <span className="price">$54.00</span>
-                      </div>
-                    </li>
+                        </li>
+                      ))
+                    }
                   </ul>
                 </div>
 
@@ -281,14 +407,14 @@ const Checkout = () => {
                 <div className="sign_up">
                   <p>New Customer?</p>
                   <p>
-                    <Link href="/login">Sign Up</Link> to get better offer.
+                    <a href="/login">Sign Up</a> to get better offer.
                   </p>
                 </div>
 
                 <div className="order_summary">
                   <p className="summary_item">
                     <span>Sub-Total</span>{" "}
-                    <span className="price1">$343.98</span>
+                    <span className="price1">${subTotal}</span>
                   </p>
                   <p className="summary_item">
                     <span>Taxes</span> <span className="price">-$5.00</span>
@@ -304,9 +430,196 @@ const Checkout = () => {
                     <span className="grand">Grand Total</span>
                     <span className="grand_price">$374.48</span>
                   </p>
-                  <Link href="/payment" className="continue_btn">
-                    Continue
-                  </Link>
+                  <button className="continue_btn" onClick={() => setLoginModal(true)}>
+                    Checkout Now
+                  </button>
+                  <>
+
+                    <Modal
+                      show={loginModal}
+                      onHide={() => setLoginModal(false)}
+                      size="md"
+                      aria-labelledby="contained-modal-title-vcenter"
+                      centered
+                    >
+                      <Modal.Body>
+                      <div className="container sign-in-signup-container">
+                        {/* <!-- Sign in Form Start --> */}
+                        <div
+                          className="login"
+                          style={{ display: `${login ? "block" : "none"}` }}
+                        >
+                          <div>
+                            <h2>Account Login</h2>
+                            <form className="login-form" onSubmit={handleLoginSubmit}>
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="loginEmail">Email</label>
+                                  <input
+                                    type="email"
+                                    id="loginEmail"
+                                    name="email"
+                                    placeholder="Enter a email"
+                                    onChange={handleLoginChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="loginPassword">
+                                    Password
+                                    <input
+                                      type={showPassword ? "text" : "password"} // Toggle password visibility
+                                      id="loginPassword"
+                                      name="password"
+                                      placeholder="Enter password"
+                                      onChange={handleLoginChange}
+                                      required
+                                      className="mt-1"
+                                    />
+                                    <a onClick={() => setShowPassword(!showPassword)}>
+                                      <img
+                                        className="hide-icon"
+                                        src={passwordEye.src}
+                                        alt="Toggle Password"
+                                      />
+                                    </a>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <button className="sign-in-btn" type="submit">
+                                  SIGN IN
+                                </button>
+                              </div>
+                            </form>
+                            <div className="switch">
+                              <div>
+                                <span>Don't have an account?</span>
+                                <span className="switch-btn" onClick={() => setLogin(false)}>
+                                  Register Now
+                                </span>
+                              </div>
+                              <span className="forgot">Forgot Password?</span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* <!-- Sign in Form End --> */}
+
+                        {/* <!-- Registration Form Start --> */}
+                        <div
+                          className="register"
+                          style={{ display: `${login ? "none" : "block"}` }}
+                        >
+                          <div>
+                            <h2>Register Account</h2>
+                            <form className="register-form" onSubmit={handleSubmit}>
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="name">Name</label>
+                                  <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Name"
+                                    onChange={handleChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="email">Email</label>
+                                  <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter a email"
+                                    onChange={handleChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="number">Phone Number</label>
+                                  <input
+                                    type="number"
+                                    id="number"
+                                    name="mobile"
+                                    placeholder="Phone number"
+                                    onChange={handleChange}
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <div className="input-field">
+                                  <label htmlFor="password">
+                                    Password
+                                    <input
+                                      type={showPassword ? "text" : "password"} // Toggle password visibility
+                                      id="password"
+                                      name="password"
+                                      placeholder="Enter password"
+                                      onChange={handleChange}
+                                      required
+                                      className="mt-1"
+                                    />
+                                    <a onClick={() => setShowPassword(!showPassword)}>
+                                      <img
+                                        className="hide-icon"
+                                        src={passwordEye.src}
+                                        alt="Toggle Password"
+                                      />
+                                    </a>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div className="input-row">
+                                <input
+                                  type="checkbox"
+                                  id="checkbox"
+                                  onChange={() => setAcceptedTerms(!acceptedTerms)}
+                                />
+                                <label htmlFor="checkbox" className="checkbox">
+                                  I accept the{" "}
+                                  <a href={"#"} className="policy">
+                                    Privacy Policy.
+                                  </a>
+                                </label>
+                              </div>
+
+                              <div className="input-row">
+                                <button
+                                  className="sign-up-btn"
+                                  type="submit"
+                                  disabled={!acceptedTerms}
+                                >
+                                  SIGN UP
+                                </button>
+                              </div>
+                            </form>
+                            <div className="switch">
+                              <span>Already have an account?</span>
+                              <span className="switch-btn" onClick={() => setLogin(true)}>
+                                Login Now
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* <!-- Registration Form End --> */}
+                      </div>
+                      </Modal.Body>
+                    </Modal>
+                  </>
                 </div>
               </div>
             </div>

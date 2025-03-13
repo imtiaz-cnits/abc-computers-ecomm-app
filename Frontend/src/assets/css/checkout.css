@@ -225,7 +225,8 @@ body {
 
 .billing_details .form_group input,
 .billing_details .form_group select,
-.billing_details .form_group textarea {
+.billing_details .form_group textarea,
+.billing_details .payment_option input.transaction {
   width: 100%;
   padding: 10px;
   border: none;
@@ -234,6 +235,12 @@ body {
   outline: none;
   font-size: 16px;
   font-weight: 500;
+}
+
+.billing_details .payment_option input.transaction{
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
 }
 
 .billing_details .form_group textarea {
@@ -278,35 +285,46 @@ body {
   font-weight: 800 !important;
 }
 
-.billing_details .shipping_option {
+.billing_details .payment_option {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   margin-bottom: 16px;
-  padding: 0 20px;
+  padding: 20px 20px;
   border: 1px solid #eeeff3;
   border-radius: 16px;
 }
 
-.billing_details .shipping_option:nth-last-child(1) {
+.billing_details .payment_option .payment-img{
+  width: 30px;
+  height: 30px;
+}
+
+.billing_details .payment_option .radio-container{
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.billing_details .payment_option:nth-last-child(1) {
   margin-bottom: 0px !important;
 }
 
-.billing_details .shipping_option .details {
+.billing_details .payment_option .details {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
 }
 
-.billing_details .shipping_option .regular span {
+.billing_details .payment_option span {
   font-size: 16px;
   color: var(--accent);
   font-weight: 500;
 }
 
-.billing_details .shipping_option .details strong,
-.billing_details .shipping_option .details span {
+.billing_details .payment_option .details strong,
+.billing_details .payment_option .details span {
   display: block;
   font-size: 18px;
   font-weight: bold;
@@ -314,30 +332,28 @@ body {
   margin: 0;
 }
 
-.billing_details .shipping_option input {
+.billing_details .payment_option input[type="radio"] {
   width: 29px;
   height: 21px;
-  margin-top: 20px;
   cursor: pointer;
 }
 
-.billing_details .shipping_option label {
+.billing_details .payment_option label {
   width: 100%;
-  padding: 20px 0;
   cursor: pointer;
   position: relative;
   margin-left: 10px;
 }
 
-.billing_details .shipping_option input[type="radio"] {
+.billing_details .payment_option input[type="radio"] {
   opacity: 0;
   pointer-events: none;
 }
 
-.billing_details .shipping_option label::before {
+.billing_details .payment_option label::before {
   content: "";
   position: absolute;
-  top: 34%;
+  top: 50%;
   left: -32px;
   transform: translateY(-50%);
   width: 16px;
@@ -349,7 +365,7 @@ body {
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.billing_details .shipping_option input[type="radio"]:checked + label::before {
+.billing_details .payment_option input[type="radio"]:checked + label::before {
   background-color: var(--secondary-color);
   box-shadow: 0 0 0 2px transparent, 0 0 0 2px var(--white),
     0 0 0 4px var(--secondary-color);
@@ -370,12 +386,12 @@ body {
     padding: 14px;
   }
 
-  .billing_details .shipping_option {
-    padding: 0px 10px;
+  .billing_details .payment_option {
+    padding: 10px;
   }
 
-  .billing_details .shipping_option .details h2,
-  .billing_details .shipping_option .details h1 {
+  .billing_details .payment_option .details h2,
+  .billing_details .payment_option .details h1 {
     font-size: 16px;
   }
 
@@ -653,3 +669,143 @@ body {
 }
 
 /* Billing Details End */
+
+
+
+/* Login Modal Start */
+
+.sign-in-signup-container h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.sign-in-signup-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.sign-in-signup-container form .input-row {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.sign-in-signup-container form .input-row .input-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.sign-in-signup-container form .input-row .input-field input {
+  width: 100%;
+  font-size: 14px;
+  height: 42px;
+  padding: 5px 15px;
+  background: #fff;
+  outline: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.sign-in-signup-container form .input-row .input-field input:focus {
+  border: 1px solid #aaa;
+}
+
+.sign-in-signup-container form label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  display: block;
+  text-decoration: capitalize;
+  color: var(--primary-color);
+  width: 100%;
+  position: relative;
+}
+
+.sign-in-signup-container form label .hide-icon {
+  width: 25px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.sign-in-signup-container form button {
+  margin-top: 10px;
+  width: 100%;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+}
+
+.sign-in-signup-container form button:hover {
+  background-color: var(--secondary-color);
+}
+
+.sign-in-signup-container form button:disabled {
+  background-color: darkgray;
+}
+
+.sign-in-signup-container .switch {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sign-in-signup-container .switch div {
+  display: flex;
+  gap: 5px;
+}
+
+.sign-in-signup-container .switch span {
+  font-size: 14px;
+  color: var(--primary-color);
+  line-height: 26px;
+  font-weight: 500;
+}
+
+.sign-in-signup-container .switch .switch-btn {
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+
+.sign-in-signup-container .switch .switch-btn:hover {
+  text-decoration: underline;
+}
+
+.sign-in-signup-container .switch .forgot {
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+
+.sign-in-signup-container .switch .forgot:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+  .sign-in-signup-container .switch div {
+    justify-content: space-between;
+  }
+
+  .sign-in-signup-container .switch {
+    flex-direction: column;
+  }
+}
+
+
+
+/* Login Modal End */

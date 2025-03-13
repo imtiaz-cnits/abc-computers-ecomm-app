@@ -507,6 +507,9 @@ const ProductDetailsService = async (id) => {
 };
 
 const ProductUpdateService = async (req) => {
+
+  console.log(req?.body);
+
   try {
     // Destructure the necessary data from the request body
     const {
@@ -524,7 +527,9 @@ const ProductUpdateService = async (req) => {
       subCategoryID,
     } = req.body;
 
+    console.log(color);
     const parsedColor = JSON.parse(color);
+
 
     // Ensure all required fields are present
     if (!productCode || !productName || !price || !stock) {

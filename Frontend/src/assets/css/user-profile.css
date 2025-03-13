@@ -546,6 +546,7 @@ body {
   padding-left: 15px;
   font-size: 16px;
   transition: all 0.3s ease;
+  border-color: var(--secondary-color) !important;
 }
 
 #edit_profile_all_item .edit_profile_input_box input:focus,

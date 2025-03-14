@@ -3,7 +3,24 @@
   flex-direction: column;
 }
 
-.product_des .table_wrapper table thead th,
-.product_des .table_wrapper table tbody td:nth-child(1) {
-  width: 30px !important;
+.single_product li {
+  cursor: default !important;
+}
+
+@media (max-width: 576px){
+  .product_des .table_wrapper table tbody tr td {
+    font-size: 16px !important;
+  }
+
+  .product_des .table_wrapper table tbody tr td:nth-child(2) {
+    font-weight: 600 !important;
+  }
+
+  .product_des .table_wrapper table tbody tr {
+    display: inline-block !important;
+  }
+
+  .product_des .table_wrapper table tbody td {
+    border-bottom: none !important;
+  }
 }

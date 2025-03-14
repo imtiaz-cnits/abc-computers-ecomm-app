@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const DataSchema = mongoose.Schema(
   {
     userID: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-      cus_name: { type: String },
-      cus_address: { type: String },
-      cus_city: { type: String },
+    cus_name: { type: String },
+    cus_address: { type: String },
+    cus_city: { type: String },
     // ship_address: { type: String },
     // ship_city: { type: String },
     // ship_name: { type: String },

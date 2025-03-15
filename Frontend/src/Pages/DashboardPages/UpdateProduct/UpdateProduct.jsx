@@ -448,7 +448,7 @@ const UpdateProduct = ({ id }) => {
                       }))}
                       placeholder="Select Brands..."
                       onChange={handleBrandChange}
-                      defaultValue={
+                      value={
                         selectedBrand?._id
                           ? {
                               label: selectedBrand.brandName,
@@ -501,13 +501,13 @@ const UpdateProduct = ({ id }) => {
                       }
                       placeholder="Select Category..."
                       onChange={handleCategoryChange} // Ensure this is correctly handled
-                      defaultValue={
-                        selectedCategory
+                      value={
+                        selectedCategory?._id
                           ? {
                               label: selectedCategory?.categoryName,
                               value: selectedCategory?._id,
                             }
-                          : {}
+                          : null
                       } // Ensure value is null when no category is selected
                     />
                     <button
@@ -556,13 +556,13 @@ const UpdateProduct = ({ id }) => {
                           : []
                       } // Ensure options are only populated when category is selected
                       placeholder="Select Sub Category..."
-                      defaultValue={
-                        selectedSubCategory
+                      value={
+                        selectedSubCategory?._id
                           ? {
                               label: selectedSubCategory.subCategoryName,
                               value: selectedSubCategory._id,
                             }
-                          : {}
+                          : null
                       } // Ensure value is null when no subcategory is selected
                       onChange={(selectedOption) => {
                         if (selectedOption) {

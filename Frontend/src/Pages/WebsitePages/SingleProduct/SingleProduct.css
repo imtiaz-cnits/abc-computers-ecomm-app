@@ -1,4 +1,4 @@
-.key_feature div ul{
+.key_feature div ul {
   display: flex;
   flex-direction: column;
 }
@@ -7,7 +7,7 @@
   cursor: default !important;
 }
 
-@media (max-width: 576px){
+@media (max-width: 576px) {
   .product_des .table_wrapper table tbody tr td {
     font-size: 16px !important;
   }

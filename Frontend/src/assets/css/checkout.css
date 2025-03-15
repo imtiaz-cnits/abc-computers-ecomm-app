@@ -251,6 +251,12 @@ body {
   padding: 12px 10px;
 }
 
+.billing_details .error-message, .shipping_section .error-message{
+  font-size: 12px !important;
+  color: rgb(184, 0, 0) !important;
+  font-weight: 400 !important;
+}
+
 .billing_details textarea {
   height: 80px;
 }
@@ -795,6 +801,7 @@ body {
 .sign-in-signup-container .switch .forgot:hover {
   text-decoration: underline;
 }
+
 
 @media (max-width: 576px) {
   .sign-in-signup-container .switch div {

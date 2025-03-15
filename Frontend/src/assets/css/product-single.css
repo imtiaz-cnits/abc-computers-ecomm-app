@@ -418,7 +418,7 @@ body {
   font-size: 18px;
   color: var(--primary-color);
   font-weight: 600;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
 }
 
 .single_product .product_info_custom {

@@ -152,8 +152,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0 2px;
-  gap: 30px;
+  padding: 16px 2px;
 }
 
 .header_item_wrapper {
@@ -300,7 +299,7 @@ body {
 /* Header Mobile view Toggle Searchbar Show */
 .tooltip-a {
   position: sticky;
-  margin-top: -84px;
+  margin-top: -94px;
   top: 0px;
   right: 0%;
   width: 100%;
@@ -476,7 +475,10 @@ body {
 
   #navbar_header .mobile_view_logo {
     display: block;
-    width: 100px;
+  }
+
+  #navbar_header .mobile_view_logo img{
+    width: 150px;
   }
 
   #navbar_header .search_icon {
@@ -641,11 +643,12 @@ body {
 
   #navbar .menu li .submenu li a {
     color: var(--white);
-    padding: 10px 20px;
+    padding: 6px 20px;
     margin: 0px 0px !important;
     border: none;
     background: var(--primary-color);
     display: block;
+    text-transform: capitalize;
   }
 
   #navbar .menu li .submenu li a:before {

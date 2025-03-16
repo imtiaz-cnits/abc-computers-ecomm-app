@@ -167,7 +167,7 @@ const PopularProducts = () => {
           </div>
 
           <div className="view_all_products">
-            <a href="./product.html" className="view_all_btn">
+            <a href="/products" className="view_all_btn">
               View All Products
             </a>
           </div>

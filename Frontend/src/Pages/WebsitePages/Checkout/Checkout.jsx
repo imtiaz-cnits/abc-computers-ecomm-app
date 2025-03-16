@@ -1,16 +1,11 @@
 "use client";
 import React, { useContext, useState } from "react";
-import cartImg1 from "@/assets/img/cart-product-img1.webp";
-import cartImg2 from "@/assets/img/cart-product-img2.webp";
-import cartImg3 from "@/assets/img/cart-product-img3.webp";
-import { FaAngleDown } from "react-icons/fa6";
-import countries from "../../../../public/js/website/countries";
-import states from "../../../../public/js/website/states";
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
-
+import paymentImg from "@/assets/img/payment.png"
 
 import bkashImg from "@/assets/img/payment-bkash.png"
 import nagadImg from "@/assets/img/payment-nagad.png"
+import bankImg from "@/assets/img/payment-bank.png"
 import { Modal } from "react-bootstrap";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 import toast from "react-hot-toast";
@@ -19,7 +14,9 @@ import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Checkout = () => {
 
-  const {cart, subTotal} = useContext(CartContext)
+  const {existingUserID} = useContext(UserContext)
+
+  const {cart, subTotal, deliveryCharge, grandTotal} = useContext(CartContext)
 
   const { setUserID } = useContext(UserContext);
   const [stateOptions, setStateOptions] = useState([]);
@@ -29,6 +26,17 @@ const Checkout = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  // Form values
+
+  const [name, setName] = useState("")
+  const [address, setAddress] = useState("")
+  const [city, SetCity] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [notes, setNotes] = useState("")
+  const [tranID, setTranID] = useState("")
+
+  const [error, setError] = useState({})
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,16 +58,16 @@ const Checkout = () => {
   };
   
 
-  const handleCountryChange = (e) => {
-    const selectedCountryIndex = e.target.value;
+  // const handleCountryChange = (e) => {
+  //   const selectedCountryIndex = e.target.value;
 
-    if (selectedCountryIndex == 0) {
-      return setStateOptions([]);
-    }
+  //   if (selectedCountryIndex == 0) {
+  //     return setStateOptions([]);
+  //   }
 
-    const newStates = states[selectedCountryIndex]?.split("|");
-    setStateOptions(newStates);
-  };
+  //   const newStates = states[selectedCountryIndex]?.split("|");
+  //   setStateOptions(newStates);
+  // };
 
   // Handle Signup Form Submission
   const handleSubmit = async (e) => {
@@ -155,6 +163,52 @@ const Checkout = () => {
     }
   };
 
+
+  const handleCheckout = (e) =>{
+
+    setError({})
+
+    if(name === ""){
+      return setError({id: "name", error: "Full Name is required!"})
+    }
+
+    if(address === ""){
+      return setError({id: "address", error: "Address is required!"})
+    }
+
+    if(city === ""){
+      return setError({id: "city", error: "City is required!"})
+    }
+
+    if(phone === ""){
+      return setError({id: "phone", error: "Phone Number is required!"})
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (email === "") {
+      return setError({ id: "email", error: "Email address is required!" });
+    } else if (!emailRegex.test(email)) {
+      return setError({ id: "email", error: "Invalid email address!" });
+    }
+
+
+
+
+    setName("")
+    setAddress("")
+    SetCity("")
+    setPhone("")
+    setEmail("")
+    setNotes("")
+    setTranID("")
+    setError({})
+
+
+
+
+  }
+
   return (
     <>
       {/* <!-- Billing Details Start --> */}
@@ -184,101 +238,45 @@ const Checkout = () => {
           </div>
 
           <div className="row">
-            <div className="col-lg-8">
+            <div className="col-lg-4">
               <div className="billing_section">
-                <h1 className="heading">Billing Details</h1>
+                <h2 className="heading">Billing Details</h2>
                 <form>
-                  <div className="form_group_wrapper">
-                    <div className="form_group">
-                      <label htmlFor="first-name">
-                        First Name<span>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="first-name"
-                        placeholder="First name"
-                      />
-                    </div>
-                    <div className="form_group">
-                      <label htmlFor="last-name">
-                        Last Name<span>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="last-name"
-                        placeholder="Last name"
-                      />
-                    </div>
-                  </div>
                   <div className="form_group">
-                    <label htmlFor="company">Company Name (Optional)</label>
+                    <label htmlFor="first-name">
+                      Full Name<span>*</span>
+                    </label>
                     <input
                       type="text"
-                      id="company"
-                      placeholder="Company name..."
+                      id="name"
+                      placeholder="Full name"
+                      value={name}
+                      onChange={(e)=>setName(e.target.value)}
                     />
-                  </div>
-                  <div className="form_group">
-                    <label>
-                      Country<span>*</span>
-                    </label>
-                    <div className="select_option">
-                      <select
-                        id="country"
-                        name="country"
-                        className="form-control"
-                        onChange={(e) => handleCountryChange(e)}
-                      >
-                        {countries?.map((country, idx) => (
-                          <option value={idx} key={idx}>
-                            {country}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="icon">
-                        <FaAngleDown />
-                      </div>
-                    </div>
+                    {
+                      error?.id === "name" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
                   </div>
                   <div className="form_group">
                     <label htmlFor="address">
-                      Street Address<span>*</span>
+                      Address<span>*</span>
                     </label>
                     <input
                       type="text"
                       id="address"
-                      placeholder="House name and street address..."
+                      placeholder="House name and address..."
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                     />
-                  </div>
-                  <div className="form_group">
-                    <label htmlFor="city">
-                      Town / City<span>*</span>
-                    </label>
-                    <input type="text" id="city" placeholder="Town/City" />
-                  </div>
-                  <div className="form_group">
-                    <label>
-                      State<span>*</span>
-                    </label>
-                    <div className="select_option">
-                      <select name="state" id="state" className="form-control">
-                        <option defaultValue="">Select your state</option>
-                        {stateOptions?.map((option, idx) => (
-                          <option value={option} key={idx}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="icon">
-                        <FaAngleDown />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="form_group">
-                    <label htmlFor="zip">
-                      ZIP Code<span>*</span>
-                    </label>
-                    <input type="text" id="zip" placeholder="Enter ZIP code" />
+                                        {
+                      error?.id === "address" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
                   </div>
                   <div className="form_group">
                     <label htmlFor="phone">
@@ -288,7 +286,15 @@ const Checkout = () => {
                       type="number"
                       id="phone"
                       placeholder="Phone number"
+                      value={phone}
+                      onChange={(e)=> setPhone(e.target.value)}
                     />
+                                        {
+                      error?.id === "phone" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
                   </div>
                   <div className="form_group">
                     <label htmlFor="email">
@@ -298,20 +304,43 @@ const Checkout = () => {
                       type="email"
                       id="email"
                       placeholder="example@gmail.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
+                                        {
+                      error?.id === "email" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
+                  </div>
+                  <div className="form_group">
+                    <label htmlFor="city">
+                      Town / City<span>*</span>
+                    </label>
+                    <input type="text" id="city" placeholder="Town/City" value={city} onChange={(e)=> SetCity(e.target.value)} />
+                    {
+                      error?.id === "city" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
                   </div>
                   <div className="form_group">
                     <label htmlFor="order-notes">Order Notes (Optional)</label>
                     <textarea
                       id="order-notes"
                       placeholder="Notes about your order, e.g. special notes for delivery"
+                      value={notes}
+                      onChange={(e)=> setNotes(e.target.value)}
                     ></textarea>
                   </div>
                 </form>
               </div>
-
+            </div>
+            <div className="col-lg-4">
               <div className="shipping_section">
-                <h2>Payment Method</h2>
+                <h2 className="heading">Payment Method</h2>
                 <div className="payment_option">
                   <div className="radio-container">
                     <input
@@ -329,16 +358,26 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {
+                    {/* {
                       paymentOption === "bkash" ?
+                      <>
                       <input
                         type="text"
                         id="bkash_transaction"
                         placeholder="Transaction ID"
                         className="transaction"
-                      /> : 
+                        value={tranID}
+                        onChange={(e)=> setTranID(e.target.value)}
+                      />
+                      {
+                        error?.id === "tranID" ? 
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
+                      }
+                      </> : 
                       <></>
-                    }
+                    } */}
                 </div>
                 <div className="payment_option">
                   <div className="radio-container">
@@ -350,25 +389,48 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {
+                    {/* {
                       paymentOption === "nagad" ?
-                      <input
+                      <><input
                         type="text"
                         id="nagad_transaction"
                         placeholder="Transaction ID"
                         className="transaction"
+                        value={tranID}
+                        onChange={(e)=> setTranID(e.target.value)}
                       />
+
+                      {
+                        error?.id === "tranID" ? 
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
+                      }
+
+                      </>
                       : 
                       <></>
-                    }
+                    } */}
                 </div>
+                <div className="payment_option">
+                  <div className="radio-container">
+                    <input type="radio" name="payment" id="bank" checked={paymentOption === "bank"} onChange={(e)=>setPaymentOption(e.target.value)} value={"bank"}/>
+                    <label htmlFor="bank">
+                      <span className="details">
+                        <strong>Bank</strong>
+                        <img src={bankImg?.src} className="payment-img" alt="" />
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <img src={paymentImg?.src} className="payment-methods-img" />
               </div>
             </div>
             <div className="col-lg-4">
               <div className="order_summery_wrapper">
                 <div className="order_items">
                   <div className="cart_header">
-                    <h2>Your Order</h2>
+                    <h2 className="heading">Your Order</h2>
                   </div>
                   <ul className="cart_items">
                     {
@@ -382,13 +444,13 @@ const Checkout = () => {
                               <span className="title">{item?.productName.slice(0, 15)}...</span>
                               <div className="type_wrap_container">
                                 <h2 className="type_wrap">
-                                  {item?.subCategory}<span>{item?.quantity}×</span>
+                                  {item?.subCategory}<span>x{item?.quantity}</span>
                                 </h2>
                               </div>
                             </div>
                           </div>
                           <div>
-                            <span className="price"> ${item?.price} </span>
+                            <span className="price"> ৳{item?.price?.toLocaleString(2)} </span>
                           </div>
                         </li>
                       ))
@@ -404,33 +466,23 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                <div className="sign_up">
-                  <p>New Customer?</p>
-                  <p>
-                    <a href="/login">Sign Up</a> to get better offer.
-                  </p>
-                </div>
-
                 <div className="order_summary">
                   <p className="summary_item">
                     <span>Sub-Total</span>{" "}
-                    <span className="price1">${subTotal}</span>
+                    <span className="price1">৳{subTotal}</span>
                   </p>
                   <p className="summary_item">
-                    <span>Taxes</span> <span className="price">-$5.00</span>
+                    <span>Discount</span> <span className="price">-৳0</span>
                   </p>
                   <p className="summary_item">
-                    <span>Discount</span> <span className="price">-$0</span>
-                  </p>
-                  <p className="summary_item">
-                    <span>Shipment Cost</span>{" "}
-                    <span className="price">$22.50</span>
+                    <span>Delivery Cost</span>{" "}
+                    <span className="price">৳{deliveryCharge}</span>
                   </p>
                   <p className="summary_item">
                     <span className="grand">Grand Total</span>
-                    <span className="grand_price">$374.48</span>
+                    <span className="grand_price">৳{grandTotal}</span>
                   </p>
-                  <button className="continue_btn" onClick={() => setLoginModal(true)}>
+                  <button className="continue_btn" onClick={handleCheckout}>
                     Checkout Now
                   </button>
                   <>

@@ -84,7 +84,7 @@ const Cart = () => {
                         </div>
                       </td>
                       <td className="product_price">
-                        <h3>${item?.price}</h3>
+                        <h3>${item?.price?.toLocaleString(2)}</h3>
                       </td>
                     </tr>)
                     )
@@ -99,13 +99,6 @@ const Cart = () => {
                 <p className="summary_item">
                   <span>Sub Total:</span>{" "}
                   <span className="price1">${subTotal}</span>
-                </p>
-                <p className="summary_item">
-                  <span>Discount:</span> <span className="price">$0</span>
-                </p>
-                <p className="summary_item">
-                  <span>Grand Total:</span>{" "}
-                  <span className="grand_price">$374.48</span>
                 </p>
                 <a href="/checkout" className="checkout_btn">
                   Checkout Now

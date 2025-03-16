@@ -10,17 +10,24 @@ const UserContextProvider = ({ children }) => {
   const [existingUserID, setExistingUserID] = useState(null);
 
   useEffect(() => {
+    setExistingUserID(localStorage.getItem("userID"));
+    setIsLoading(false);
+
     if (userID === null) {
       localStorage.removeItem("userID");
+      setExistingUserID(null)
       setIsLoading(false);
     } else if (userID !== "" && userID !== null) {
       localStorage.setItem("userID", userID);
-      setIsLoading(false);
-    } else {
-      setExistingUserID(localStorage.getItem("userID"));
+      setExistingUserID(userID)
       setIsLoading(false);
     }
   }, [userID]);
+
+  useEffect(()=>{
+    console.log(existingUserID);
+  }, [existingUserID])
+
 
   if (isLoading) {
     return <></>;
@@ -28,7 +35,7 @@ const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ userEmail, setUserEmail, userID, setUserID, existingUserID }}
+      value={{ userEmail, setUserEmail, userID, setUserID, existingUserID, isLoading }}
     >
       {children}
     </UserContext.Provider>

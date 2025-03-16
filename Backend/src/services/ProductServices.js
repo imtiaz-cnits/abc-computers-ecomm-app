@@ -252,12 +252,12 @@ const SubCategoryAddService = async (req) => {
       return { status: "fail", message: "Category not found" };
     }
 
-    const existingSubCategory = await SubCategoryModel.findOne({
-      subCategoryName,
-    });
-    if (existingSubCategory) {
-      return { status: "fail", message: "Sub Category already exists" };
-    }
+    // const existingSubCategory = await SubCategoryModel.findOne({
+    //   subCategoryName,
+    // });
+    // if (existingSubCategory) {
+    //   return { status: "fail", message: "Sub Category already exists" };
+    // }
 
     const newSubCategory = new SubCategoryModel({
       subCategoryName,

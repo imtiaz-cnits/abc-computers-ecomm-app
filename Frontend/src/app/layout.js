@@ -19,7 +19,7 @@ import "alloyeditor/dist/alloy-editor/assets/alloy-editor-ocean.css";
 
 
 export const metadata = {
-  title: "Home | ABC Computers",
+  title: "ABC Computers",
 };
 
 export default function RootLayout({ children }) {

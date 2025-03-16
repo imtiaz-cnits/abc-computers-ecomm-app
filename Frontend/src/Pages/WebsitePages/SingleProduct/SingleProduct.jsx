@@ -2,7 +2,7 @@
 import "@/assets/css/product-single.css";
 import "@/assets/css/vendor/lightslider.css";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./SingleProduct.css";
 
 import moreProduct1 from "@/assets/img/product/more-product-img1.webp";
@@ -22,11 +22,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import axios from "axios";
 import "swiper/css";
 import { FreeMode, Thumbs } from "swiper/modules";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
+import toast from "react-hot-toast";
 
 const SingleProduct = ({ id }) => {
   const [productDetails, setProductDetails] = useState({});
   const product = productDetails?.productID;
   const [selectedColor, setSelectedColor] = useState("");
+  const [colorSelected, setColorSelected] = useState(true)
+
+  const {cart, setCart, addToCart} = useContext(CartContext)
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [quantity, setQuantity] = useState(1)
@@ -60,6 +65,30 @@ const SingleProduct = ({ id }) => {
   const increaseQuantity = () => {
     setQuantity(quantity + 1)
   };
+
+
+  const handleAddToCart = () =>{
+    if((selectedColor === "") && (product?.color?.length)){
+      setColorSelected(false)
+      return
+    }
+
+    setColorSelected(true)
+
+    const cartItem = {
+      productID: productDetails?.productID?._id,
+      productName: productDetails?.productID?.productName,
+      price: productDetails?.productID?.discountPrice || productDetails?.productID?.price,
+      productImg: productDetails?.productID?.productImg,
+      subCategory: productDetails?.productID?.subCategoryID?.subCategoryName,
+      quantity: quantity,
+      color: selectedColor
+    }
+
+    addToCart(cartItem)
+
+    toast.success("Added to cart!");
+  }
 
   return (
     <>
@@ -148,29 +177,38 @@ const SingleProduct = ({ id }) => {
                     </div>
                   </div>
 
-                  <div className="select_color_custom">
-                    <label>Select Color: {selectedColor}</label>
-                    <div className="color_btn_container">
-                      {product?.color?.map((color, idx) => (
-                        <button
-                          onClick={() => setSelectedColor(color)}
-                          key={idx}
-                          className={`color_btn ${
-                            selectedColor === color ? "active" : ""
-                          }`}
-                        >
-                          {color}
-                        </button>
-                      ))}
-
-                      <button
-                        onClick={() => setSelectedColor("")}
-                        className={`color_btn`}
-                      >
-                        <LiaTimesSolid />
-                      </button>
-                    </div>
-                  </div>
+                  {
+                     product?.color?.length ? (
+                     <>
+                       <div className="select_color_custom">
+                         <label>Select Color: {selectedColor}</label>
+                         <div className="color_btn_container">
+                           {product?.color?.map((color, idx) => (
+                             <button
+                               onClick={() => setSelectedColor(color)}
+                               key={idx}
+                               className={`color_btn ${
+                                 selectedColor === color ? "active" : ""
+                               }`}
+                             >
+                               {color}
+                             </button>
+                           ))}
+ 
+                           <button
+                             onClick={() => setSelectedColor("")}
+                             className={`color_btn`}
+                           >
+                             <LiaTimesSolid />
+                           </button>
+                         </div>
+                         {
+                           !colorSelected ? <span className="text-danger">*Select color first!</span> : <></>
+                         }
+                       </div>
+                     </>
+                     ) : <></>
+                   }
 
                   <div className="action_buttons_custom">
                     <div className="quantity_wrapper">
@@ -200,13 +238,13 @@ const SingleProduct = ({ id }) => {
                     </div>
 
                     <div className="button_wrapper">
-                      <a href="./shopping-cart.html" className="add_to_cart">
-                        Add to Cart
-                      </a>
-                      <a href="./shopping-cart.html" className="buy_now">
-                        Buy Now
-                      </a>
-                    </div>
+                       <button className="add_to_cart" onClick={handleAddToCart}>
+                         Add to Cart
+                       </button>
+                       <button className="buy_now">
+                         Buy Now
+                       </button>
+                     </div>
                   </div>
 
                   <div className="gift_receipt_custom">

@@ -1,4 +1,4 @@
-import SingleProduct from "@/Pages/WebsitePages/SingleProduct/SingeProduct";
+import SingleProduct from "@/Pages/WebsitePages/SingleProduct/SingleProduct";
 import React from "react";
 
 export const metadata = {

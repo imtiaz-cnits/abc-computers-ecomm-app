@@ -1257,6 +1257,10 @@ body {
   color: var(--text-color);
 }
 
+.footer_wrapper .payment-img{
+  max-width: 100%;
+}
+
 .footer_content_heading h2 {
   font-size: 22px;
   font-weight: 800;

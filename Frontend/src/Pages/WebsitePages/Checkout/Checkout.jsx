@@ -1,16 +1,11 @@
 "use client";
 import React, { useContext, useState } from "react";
-import cartImg1 from "@/assets/img/cart-product-img1.webp";
-import cartImg2 from "@/assets/img/cart-product-img2.webp";
-import cartImg3 from "@/assets/img/cart-product-img3.webp";
-import { FaAngleDown } from "react-icons/fa6";
-import countries from "../../../../public/js/website/countries";
-import states from "../../../../public/js/website/states";
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
-
+import paymentImg from "@/assets/img/payment.png"
 
 import bkashImg from "@/assets/img/payment-bkash.png"
 import nagadImg from "@/assets/img/payment-nagad.png"
+import bankImg from "@/assets/img/payment-bank.png"
 import { Modal } from "react-bootstrap";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 import toast from "react-hot-toast";
@@ -21,7 +16,7 @@ const Checkout = () => {
 
   const {existingUserID} = useContext(UserContext)
 
-  const {cart, subTotal} = useContext(CartContext)
+  const {cart, subTotal, deliveryCharge, grandTotal} = useContext(CartContext)
 
   const { setUserID } = useContext(UserContext);
   const [stateOptions, setStateOptions] = useState([]);
@@ -197,18 +192,6 @@ const Checkout = () => {
       return setError({ id: "email", error: "Invalid email address!" });
     }
 
-    if(tranID === ""){
-      return setError({id: "tranID", error: "Transaction ID is required!"})
-    }
-
-
-    console.log(existingUserID);
-
-
-    if(!existingUserID){
-      return setLoginModal(true)
-    }
-
 
 
 
@@ -255,9 +238,9 @@ const Checkout = () => {
           </div>
 
           <div className="row">
-            <div className="col-lg-8">
+            <div className="col-lg-4">
               <div className="billing_section">
-                <h1 className="heading">Billing Details</h1>
+                <h2 className="heading">Billing Details</h2>
                 <form>
                   <div className="form_group">
                     <label htmlFor="first-name">
@@ -290,18 +273,6 @@ const Checkout = () => {
                     />
                                         {
                       error?.id === "address" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
-                    }
-                  </div>
-                  <div className="form_group">
-                    <label htmlFor="city">
-                      Town / City<span>*</span>
-                    </label>
-                    <input type="text" id="city" placeholder="Town/City" value={city} onChange={(e)=> SetCity(e.target.value)} />
-                    {
-                      error?.id === "city" ? 
                       <span className="error-message">* {error?.error}</span>
                       :
                       <></>
@@ -344,6 +315,18 @@ const Checkout = () => {
                     }
                   </div>
                   <div className="form_group">
+                    <label htmlFor="city">
+                      Town / City<span>*</span>
+                    </label>
+                    <input type="text" id="city" placeholder="Town/City" value={city} onChange={(e)=> SetCity(e.target.value)} />
+                    {
+                      error?.id === "city" ? 
+                      <span className="error-message">* {error?.error}</span>
+                      :
+                      <></>
+                    }
+                  </div>
+                  <div className="form_group">
                     <label htmlFor="order-notes">Order Notes (Optional)</label>
                     <textarea
                       id="order-notes"
@@ -354,9 +337,10 @@ const Checkout = () => {
                   </div>
                 </form>
               </div>
-
+            </div>
+            <div className="col-lg-4">
               <div className="shipping_section">
-                <h2>Payment Method</h2>
+                <h2 className="heading">Payment Method</h2>
                 <div className="payment_option">
                   <div className="radio-container">
                     <input
@@ -374,7 +358,7 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {
+                    {/* {
                       paymentOption === "bkash" ?
                       <>
                       <input
@@ -393,7 +377,7 @@ const Checkout = () => {
                       }
                       </> : 
                       <></>
-                    }
+                    } */}
                 </div>
                 <div className="payment_option">
                   <div className="radio-container">
@@ -405,7 +389,7 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {
+                    {/* {
                       paymentOption === "nagad" ?
                       <><input
                         type="text"
@@ -426,15 +410,27 @@ const Checkout = () => {
                       </>
                       : 
                       <></>
-                    }
+                    } */}
                 </div>
+                <div className="payment_option">
+                  <div className="radio-container">
+                    <input type="radio" name="payment" id="bank" checked={paymentOption === "bank"} onChange={(e)=>setPaymentOption(e.target.value)} value={"bank"}/>
+                    <label htmlFor="bank">
+                      <span className="details">
+                        <strong>Bank</strong>
+                        <img src={bankImg?.src} className="payment-img" alt="" />
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <img src={paymentImg?.src} className="payment-methods-img" />
               </div>
             </div>
             <div className="col-lg-4">
               <div className="order_summery_wrapper">
                 <div className="order_items">
                   <div className="cart_header">
-                    <h2>Your Order</h2>
+                    <h2 className="heading">Your Order</h2>
                   </div>
                   <ul className="cart_items">
                     {
@@ -454,7 +450,7 @@ const Checkout = () => {
                             </div>
                           </div>
                           <div>
-                            <span className="price"> ${item?.price} </span>
+                            <span className="price"> ৳{item?.price?.toLocaleString(2)} </span>
                           </div>
                         </li>
                       ))
@@ -470,31 +466,21 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                <div className="sign_up">
-                  <p>New Customer?</p>
-                  <p>
-                    <a href="/login">Sign Up</a> to get better offer.
-                  </p>
-                </div>
-
                 <div className="order_summary">
                   <p className="summary_item">
                     <span>Sub-Total</span>{" "}
-                    <span className="price1">${subTotal}</span>
+                    <span className="price1">৳{subTotal}</span>
                   </p>
                   <p className="summary_item">
-                    <span>Taxes</span> <span className="price">-$5.00</span>
+                    <span>Discount</span> <span className="price">-৳0</span>
                   </p>
                   <p className="summary_item">
-                    <span>Discount</span> <span className="price">-$0</span>
-                  </p>
-                  <p className="summary_item">
-                    <span>Shipment Cost</span>{" "}
-                    <span className="price">$22.50</span>
+                    <span>Delivery Cost</span>{" "}
+                    <span className="price">৳{deliveryCharge}</span>
                   </p>
                   <p className="summary_item">
                     <span className="grand">Grand Total</span>
-                    <span className="grand_price">$374.48</span>
+                    <span className="grand_price">৳{grandTotal}</span>
                   </p>
                   <button className="continue_btn" onClick={handleCheckout}>
                     Checkout Now

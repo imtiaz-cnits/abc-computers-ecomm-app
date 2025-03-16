@@ -167,6 +167,17 @@ body {
   border-radius: 16px;
 }
 
+h2.heading{
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: var(--primary-color);
+  font-weight: 800 !important;
+}
+
+.shipping_section .payment-methods-img{
+  width: 100%;
+}
+
 .billing_section h1 {
   margin-bottom: 20px;
   font-size: 28px;
@@ -280,17 +291,6 @@ body {
   display: flex;
 }
 
-.billing_details .shipping_section {
-  margin-top: 30px;
-}
-
-.billing_details .shipping_section h2 {
-  margin-bottom: 20px;
-  font-size: 28px;
-  color: var(--primary-color);
-  font-weight: 800 !important;
-}
-
 .billing_details .payment_option {
   width: 100%;
   display: flex;
@@ -381,15 +381,15 @@ body {
   .billing_details .breadcrumb {
     margin: 30px 0;
   }
-  .billing_details .shipping_section h2,
-  .billing_section h1 {
-    font-size: 24px;
+  h2.heading {
+    font-size: 20px;
   }
 
   .billing_details .billing_section,
   .billing_details .summary_section,
   .billing_details .shipping_section {
     padding: 14px;
+    margin-top: 30px;
   }
 
   .billing_details .payment_option {
@@ -563,13 +563,6 @@ body {
 .billing_details .order_summary .checkout_btn:hover,
 .billing_details .order_summary .continue_btn:hover {
   background: var(--primary-color);
-}
-
-.billing_details .cart_header h2 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: var(--primary-color);
-  font-weight: bold;
 }
 
 .billing_details .cart_items {

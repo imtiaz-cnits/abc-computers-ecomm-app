@@ -1,6 +1,5 @@
 "use client";
 import React, { useContext, useEffect } from "react";
-import cartImg1 from "@/assets/img/cart-product-img1.webp";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Cart = () => {

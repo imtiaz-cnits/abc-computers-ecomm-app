@@ -9,64 +9,71 @@
   font-weight: 100;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-UltraLight.ttf") format("truetype");
   font-weight: 200;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-ExtraBold.ttf") format("truetype");
   font-weight: 800;
   font-style: normal;
 }
+
 @font-face {
   font-family: "Gilroy, sans-serif";
   src: url("../fonts/gilroy/Gilroy-Black.ttf") format("truetype");
   font-weight: 900;
 }
+
 /* Gilroy Font */
 
 :root {
   --primary-font: "Gilroy, sans-serif";
   --primary-color: #09090b;
   --secondary-color: #e31736;
-  --gardiant: linear-gradient(
-    180deg,
-    rgba(170, 170, 170, 0.1) 0%,
-    #cfcfcf 100%
-  );
+  --gardiant: linear-gradient(180deg,
+      rgba(170, 170, 170, 0.1) 0%,
+      #cfcfcf 100%);
   --accent: #929292;
   --accent-2: #e2e2e2;
   --white: #ffffff;
@@ -134,6 +141,7 @@ Reset Default CSS End
   width: 40%;
   transition: 0.4s;
 }
+
 .sidebar .close_btn {
   width: 30px;
   height: 30px;
@@ -147,6 +155,7 @@ Reset Default CSS End
   top: 20px;
   right: 20px;
 }
+
 .sidebar .close_btn i {
   font-size: 20px;
   margin-top: 3px;
@@ -162,6 +171,7 @@ Reset Default CSS End
   cursor: pointer;
   transition: 0.4s;
 }
+
 .product_item_main .toggle-sidebar .icon {
   background: none;
   display: flex;
@@ -514,6 +524,7 @@ Reset Default CSS End
     font-size: 10px;
   }
 }
+
 /* ............. */
 
 /* Sidebar Big Discount Start */
@@ -567,6 +578,7 @@ Reset Default CSS End
   background: var(--white);
   color: var(--secondary-color);
 }
+
 /* Sidebar Big Discount End */
 
 /* Sidebar special Products Start */
@@ -597,10 +609,12 @@ Reset Default CSS End
   border: 1px solid transparent;
   border-radius: 12px;
   transition: 0.4s;
+  box-shadow: rgba(99, 99, 99, 0.11) 0px 2px 8px 0px;
 }
 
 .special_product_card:hover {
   border: 1px solid var(--border-color3);
+  box-shadow: none;
 }
 
 .special_product_card .product {
@@ -613,7 +627,7 @@ Reset Default CSS End
   align-items: center;
   justify-content: center;
   border-radius: 12px 12px 0px 0px;
-  background: var(--gardiant);
+  background: #fff;
   overflow: hidden;
 }
 
@@ -673,16 +687,12 @@ Reset Default CSS End
   content: "";
   width: 50%;
   height: 100%;
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.432) 100%
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.432) 100%
-  );
+  background: -webkit-linear-gradient(left,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.432) 100%);
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.432) 100%);
   -webkit-transform: skewX(-25deg);
   transform: skewX(-25deg);
 }
@@ -691,16 +701,19 @@ Reset Default CSS End
   -webkit-animation: shine 2s;
   animation: shine 2s;
 }
+
 @-webkit-keyframes shine {
   100% {
     left: 125%;
   }
 }
+
 @keyframes shine {
   100% {
     left: 125%;
   }
 }
+
 /* shine effect */
 
 .special_product_card .product_icon {
@@ -760,10 +773,18 @@ Reset Default CSS End
   display: block;
   line-height: 20px;
   overflow: hidden;
-  font-size: 17px;
+  font-size: 18px;
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin: 6px 0;
   font-weight: 600;
+  display: -webkit-box;
+  max-width: 100%;
+  height: 39px !important;
+  line-height: 20px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .special_product_card .product_details .price {
@@ -807,9 +828,11 @@ Reset Default CSS End
   color: var(--primary-color);
   margin: 20px 0;
 }
+
 .ce_ixelgen_progress_bar .item_value {
   font-weight: 400;
 }
+
 .ce_ixelgen_progress_bar .item_bar {
   position: relative;
   height: 12px;
@@ -817,6 +840,7 @@ Reset Default CSS End
   background: var(--accent-2);
   border-radius: 26px;
 }
+
 .ce_ixelgen_progress_bar .item_bar .progress {
   position: absolute;
   left: 0;
@@ -829,6 +853,7 @@ Reset Default CSS End
   border-radius: 26px;
   transition: width 100ms ease;
 }
+
 /* progressbar */
 
 .product_pagination {
@@ -969,6 +994,7 @@ Reset Default CSS End
     width: 26px;
     height: 26px;
   }
+
   .special_product_card .product .sold_out,
   .special_product_card .product .special_product_status,
   .special_product_card .product .product_status {
@@ -1022,6 +1048,7 @@ Reset Default CSS End
   .special_product_card .product_details span:nth-last-child(1) {
     font-size: 20px;
   }
+
   .special_product_card .product_details .price {
     gap: 5px;
   }
@@ -1149,9 +1176,11 @@ Reset Default CSS End
     font-size: 22px;
     font-weight: 700;
   }
+
   .product_item_main .header .product_showing {
     display: none !important;
   }
+
   .search_desktop_view {
     display: none;
   }

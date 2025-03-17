@@ -15,7 +15,7 @@ const CartContextProvider = ({children}) => {
 
     const subTotal = cart?.reduce((accumulator, cartItem) => accumulator + (cartItem?.price * cartItem?.quantity), 0)
 
-    const grandTotal = subTotal - deliveryCharge
+    const grandTotal = subTotal + deliveryCharge
 
 
     const addToCart = (item) =>{

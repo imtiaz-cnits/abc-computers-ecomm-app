@@ -34,7 +34,7 @@ const Cart = () => {
                             <img src={`https://api.abcpabnabd.com${item?.productImg}`} alt="" />
                           </div>
                           <div>
-                            <p className="product_name">{item?.productName}</p>
+                            <a href={`/products/${item?.productID}`} className="product_name">{item?.productName.slice(0, 15)}...</a>
                             <p className="product_type">{item?.subCategory}</p>
                           </div>
                         </div>

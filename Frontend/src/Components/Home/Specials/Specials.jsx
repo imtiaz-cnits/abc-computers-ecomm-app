@@ -170,8 +170,8 @@ const Specials = () => {
                             {product?.productName}
                           </h3>
                           <div className="price">
-                            <span>৳{product?.discountPrice}</span>
-                            <span>৳{product?.price}</span>
+                            <span>৳{product?.discountPrice?.toLocaleString(2)}</span>
+                            <span>৳{product?.price?.toLocaleString(2)}</span>
                           </div>
                           {/* <!-- Progress --> */}
                           <div className="ce_ixelgen_progress_bar block">

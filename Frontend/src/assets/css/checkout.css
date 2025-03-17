@@ -262,7 +262,7 @@ h2.heading{
   padding: 12px 10px;
 }
 
-.billing_details .error-message, .shipping_section .error-message{
+.error-message{
   font-size: 12px !important;
   color: rgb(184, 0, 0) !important;
   font-weight: 400 !important;
@@ -297,7 +297,7 @@ h2.heading{
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 16px;
-  padding: 20px 20px;
+  padding: 10px 20px;
   border: 1px solid #eeeff3;
   border-radius: 16px;
 }
@@ -809,3 +809,209 @@ h2.heading{
 
 
 /* Login Modal End */
+
+
+/* Payment Modal Start */
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  transform: scale(0.9);
+  transition: transform 0.5s ease;
+}
+.modal-content .qr-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.modal-content .qr-code .qr-img {
+  width: 100px;
+  height: 100px;
+}
+.modal-content .qr-code .qr-img img {
+  width: 100%;
+}
+.modal-content .modal-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0px 0px 0px;
+  margin-top: -60px;
+}
+.modal-content .logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.modal-content .logo img {
+  width: 100%;
+  object-fit: contain;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 6px;
+}
+
+/* Show the modal content */
+.modal.show .modal-content {
+  transform: scale(1);
+}
+
+/* The Close Button */
+.close {
+  position: absolute;
+  color: #aaa;
+  float: right;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Tab */
+
+.tabs {
+  margin-top: 20px;
+}
+
+.tabs h1 {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--primary-font);
+}
+
+.tabs h2 {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--primary-font);
+  margin-top: 10px;
+}
+
+.tabs p {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--secondary-font);
+  margin: 6px 0;
+}
+
+.tab-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.tab-button {
+  flex: 1;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.tab-button .payment-img {
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: contain;
+}
+
+.tab-buttons .payment-img img {
+  height: 50px;
+}
+
+.tab-button.active {
+  background: #ddd;
+  font-weight: bold;
+}
+
+.tab-content .account-info{
+  border: 1px solid rgba(139, 139, 139, 0.438);
+  margin: 20px 0;
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tab-content .account-info p span{
+  color: var(--secondary-color);
+}
+
+.tab-content .account-info button.copy{
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  margin-left: 4px;
+  background-color: #fff;
+}
+
+.transaction {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 139, 139, 0.438);
+  transition: 0.3s;
+  font-size: 18px;
+  font-family: var(--secondary-font);
+}
+
+.transaction:focus {
+  border: 1px solid var(--primary-color);
+}
+.modal-content .pay-now {
+  display: block;
+  padding: 10px;
+  font-size: 18px;
+  font-family: var(--primary-font);
+  font-weight: 600;
+  color: var(--white);
+  background: var(--primary-color);
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: 0.3s all ease;
+}
+
+.modal-content .pay-now:hover{
+  background: var(--secondary-color);
+}
+
+@media screen and (max-width: 1200px) {
+  .modal-content {
+    width: 48%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .modal-content {
+    width: 58%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: 78%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .modal-content {
+    width: 96%;
+    margin: 60px auto;
+  }
+}
+
+
+/* Payment Modal End */

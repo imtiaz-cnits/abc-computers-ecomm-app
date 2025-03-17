@@ -266,7 +266,7 @@
 }
 
 .fr-wrapper > div a{
-  display: none;
+  display: none !important;
 }
 
 .select__menu > * {

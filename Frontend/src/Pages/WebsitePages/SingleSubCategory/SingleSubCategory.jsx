@@ -665,8 +665,8 @@ const SingleSubCategory = ({id: subCategoryId}) => {
                               {product?.productName}
                             </h3>
                             <div className="price">
-                              <span>৳{product?.discountPrice}</span>
-                              <span className="discount">৳{product?.price}</span>
+                              <span>৳{product?.discountPrice?.toLocaleString(2)}</span>
+                              <span className="discount">৳{product?.price?.toLocaleString(2)}</span>
                             </div>
                           </div>
                         </div>

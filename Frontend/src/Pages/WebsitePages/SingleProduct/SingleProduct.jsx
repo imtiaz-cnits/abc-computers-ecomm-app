@@ -82,7 +82,10 @@ const SingleProduct = ({ id }) => {
       productImg: productDetails?.productID?.productImg,
       subCategory: productDetails?.productID?.subCategoryID?.subCategoryName,
       quantity: quantity,
-      color: selectedColor
+    }
+
+    if(selectedColor !== ""){
+      cartItem.color = selectedColor
     }
 
     addToCart(cartItem)
@@ -140,9 +143,9 @@ const SingleProduct = ({ id }) => {
                   <h1>{product?.productName}</h1>
                   <div className="price">
                     <span className="discounted_price">
-                    ৳{product?.discountPrice}
+                    ৳{product?.discountPrice?.toLocaleString(2)}
                     </span>
-                    <span className="original_price">৳{product?.price}</span>
+                    <span className="original_price">৳{product?.price?.toLocaleString(2)}</span>
                   </div>
 
                   <div className="product_all_details">

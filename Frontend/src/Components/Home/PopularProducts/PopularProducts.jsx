@@ -156,8 +156,8 @@ const PopularProducts = () => {
                       <div className="product_details">
                         <h3 className="product_name">{product?.productName}</h3>
                         <div className="price">
-                          <span>৳ {product?.discountPrice}</span>
-                          <span>৳ {product?.price}</span>
+                          <span>৳ {product?.discountPrice?.toLocaleString(2)}</span>
+                          <span>৳ {product?.price?.toLocaleString(2)}</span>
                         </div>
                       </div>
                     </div>

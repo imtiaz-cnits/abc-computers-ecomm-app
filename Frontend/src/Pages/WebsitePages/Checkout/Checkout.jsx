@@ -6,22 +6,30 @@ import paymentImg from "@/assets/img/payment.png"
 import bkashImg from "@/assets/img/payment-bkash.png"
 import nagadImg from "@/assets/img/payment-nagad.png"
 import bankImg from "@/assets/img/payment-bank.png"
+
+import modalBkash from '@/assets/img/bkash.png';
+import bracBankimg from "@/assets/img/Bracbank.png"
+
 import { Modal } from "react-bootstrap";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
+import logo from "@/assets/img/abc-logo-icon.png"
+import { FaRegCopy } from "react-icons/fa";
 
 const Checkout = () => {
 
   const {existingUserID} = useContext(UserContext)
 
   const {cart, subTotal, deliveryCharge, grandTotal} = useContext(CartContext)
+  const bankAccount = 546746449874
 
   const { setUserID } = useContext(UserContext);
   const [stateOptions, setStateOptions] = useState([]);
   const [paymentOption, setPaymentOption] = useState("bkash")
   const [loginModal, setLoginModal] = useState(false)
+  const [paymentModal, setPaymentModal] = useState(false)
   const [login, setLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -35,6 +43,8 @@ const Checkout = () => {
   const [email, setEmail] = useState("")
   const [notes, setNotes] = useState("")
   const [tranID, setTranID] = useState("")
+  const [cusBankAccount, setCusBankAccount] = useState("")
+
 
   const [error, setError] = useState({})
 
@@ -193,6 +203,62 @@ const Checkout = () => {
     }
 
 
+    setPaymentModal(true)
+
+  }
+
+  const handlePayNow = () => {
+
+
+    setError({})
+
+
+    if(paymentOption !== "bank"){
+      if((tranID === "")){
+        return setError({id: "transaction", error: "Transaction ID is required!"})
+      }
+    } else if(paymentOption === "bank"){
+      if((cusBankAccount === "")){
+        return setError({id: "bankAccount", error: "Bank account is required!"})
+      }
+    }
+
+
+    const products = cart?.map(prod => {
+
+      const checkoutOrder = {
+        productID:  prod?.productID,
+        qty: prod?.quantity,
+      }
+
+      if(prod?.color){
+        checkoutOrder.color = prod?.color
+      }
+
+      return checkoutOrder
+    })
+
+    const orderDetails = {
+      cus_name: name,
+      cus_address: address,
+      cus_phone: phone,
+      cus_email: email,
+      cus_city: city,
+      order_notes: notes,
+      pay_method: paymentOption,
+      products,
+      subTotal,
+      grandTotal,
+    }
+
+    if(paymentOption !== "bank"){
+      orderDetails.tranID = tranID
+    } else if(paymentOption === "bank"){
+      orderDetails.cus_bank_account = cusBankAccount
+    }
+
+
+    console.log(orderDetails);
 
 
     setName("")
@@ -203,10 +269,19 @@ const Checkout = () => {
     setNotes("")
     setTranID("")
     setError({})
+    setCusBankAccount("")
+    setPaymentModal(false)
+
+  }
 
 
-
-
+  const copyBankAccount = async() => {
+      try {
+        await navigator.clipboard.writeText(bankAccount);
+        toast.success("Account Number Copied")
+      } catch (err) {
+        console.error("Failed to copy:", err);
+      }
   }
 
   return (
@@ -441,7 +516,7 @@ const Checkout = () => {
                               <img src={`https://api.abcpabnabd.com${item?.productImg}`} alt="" />
                             </div>
                             <div className="item">
-                              <span className="title">{item?.productName.slice(0, 15)}...</span>
+                              <a href={`/products/${item?.productID}`} className="title">{item?.productName.slice(0, 15)}...</a>
                               <div className="type_wrap_container">
                                 <h2 className="type_wrap">
                                   {item?.subCategory}<span>x{item?.quantity}</span>
@@ -487,6 +562,7 @@ const Checkout = () => {
                   </button>
                   <>
 
+                    {/* Sign in modal */}
                     <Modal
                       show={loginModal}
                       onHide={() => setLoginModal(false)}
@@ -670,6 +746,163 @@ const Checkout = () => {
                         {/* <!-- Registration Form End --> */}
                       </div>
                       </Modal.Body>
+                    </Modal>
+
+                    {/* Payment Modal */}
+                    <Modal
+                      show={paymentModal}
+                      onHide={() => setPaymentModal(false)}
+                      size="md"
+                      aria-labelledby="contained-modal-title-vcenter"
+                      centered
+                    >
+                      <span className="close" onClick={()=> setPaymentModal(false)}>&times;</span>
+                      <div className="modal-logo">
+                        <div className="logo">
+                          <img src={logo.src} alt="" />
+                        </div>
+                      </div>
+
+
+                      {
+                        paymentOption === "bkash" ? <>
+                        
+                        <div className="tabs">
+                          <div className="tab-buttons">
+                            <div className="payment-img">
+                              <img src={modalBkash?.src} alt="" />
+                            </div>
+                          </div>
+                          <div className="tab-content">
+                            <div>
+                              <h2>Instructions:</h2>
+                              <p>1. Open Bkash app or dial *247#</p>
+                              <p>2. Select Send Money/ Scan this QR Code</p>
+                              <div className="qr-code">
+                                <div className="qr-img">
+                                  <img src="./assets/img/qr-code.png" alt=""/>
+                                </div>
+                              </div>
+                              <p>
+                                3. Send 2000 BDT to this Number - 017 00 456 234
+                              </p>
+                              <p>4. Enter reference no - your name</p>
+                              <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <input
+                          className="transaction"
+                          type="text"
+                          placeholder="Enter your transaction ID"
+                          value={tranID}
+                          onChange={(e)=> setTranID(e.target.value)}
+                        />
+
+                        {
+                          error?.id === "transaction" ? 
+                          <span className="error-message">* {error?.error}</span>
+                          :
+                          <></>
+                        } 
+
+                        </> : <></>
+                      }
+
+                      {
+                        paymentOption === "nagad" ? <>
+                        
+                        <div className="tabs">
+                          <div className="tab-buttons">
+                            <div className="payment-img">
+                              <img src={nagadImg?.src} alt="" />
+                            </div>
+                          </div>
+                          <div className="tab-content">
+                            <div>
+                              <h2>Instructions:</h2>
+                              <p>1. Open Bkash app or dial *167#</p>
+                              <p>2. Select Send Money/ Scan this QR Code</p>
+                              <div className="qr-code">
+                                <div className="qr-img">
+                                  <img src="./assets/img/qr-code.png" alt=""/>
+                                </div>
+                              </div>
+                              <p>
+                                3. Send 2000 BDT to this Number - 017 00 456 234
+                              </p>
+                              <p>4. Enter reference no - your name</p>
+                              <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <input
+                          className="transaction"
+                          type="text"
+                          placeholder="Enter your transaction ID"
+                          value={tranID}
+                          onChange={(e)=> setTranID(e.target.value)}
+                        />
+
+                        {
+                          error?.id === "transaction" ? 
+                          <span className="error-message">* {error?.error}</span>
+                          :
+                          <></>
+                        } 
+
+                        </> : <></>
+                      }
+
+
+                      {
+                        paymentOption === "bank" ? <>
+                        
+                        <div className="tabs">
+                          <div className="tab-buttons">
+                            <div className="payment-img">
+                              <img src={bracBankimg?.src} alt="" />
+                            </div>
+                          </div>
+                          <div className="tab-content">
+                            <div>
+                              <h2>Instructions:</h2>
+                              <p>1. Transfer the payable amount on our BRAC bank account and input your account number</p>
+                              <div className="account-info">
+                                <p>
+                                  Account Holder Name: <span>ABC Computers</span>
+                                </p>
+                                <p>
+                                  Account Number: <span>{bankAccount}</span> <button className="copy" onClick={copyBankAccount}><FaRegCopy /></button>
+                                </p>
+                                <p>
+                                  Branch: <span>Pabna Branch</span>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <input
+                          className="transaction"
+                          type="text"
+                          placeholder="Enter Your Account Number"
+                          value={cusBankAccount}
+                          onChange={(e)=> setCusBankAccount(e.target.value)}
+                        />
+
+                        {
+                          error?.id === "bankAccount" ? 
+                          <span className="error-message">* {error?.error}</span>
+                          :
+                          <></>
+                        } 
+
+                        </> : <></>
+                      }
+                      <button className="pay-now" onClick={handlePayNow}>PAY NOW</button>
                     </Modal>
                   </>
                 </div>

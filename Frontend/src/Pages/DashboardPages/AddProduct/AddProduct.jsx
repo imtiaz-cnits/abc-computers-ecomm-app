@@ -10,6 +10,7 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { FaXmark } from "react-icons/fa6";
+import QuillEditor from "@/Components/Shared/QuillEditor/QuillEditor";
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);

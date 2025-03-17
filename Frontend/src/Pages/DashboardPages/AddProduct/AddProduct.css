@@ -265,6 +265,10 @@
   border-radius: 0 0 10px 10px;
 }
 
+.fr-wrapper > div a{
+  display: none;
+}
+
 .select__menu > * {
   max-height: 200px !important;
 }

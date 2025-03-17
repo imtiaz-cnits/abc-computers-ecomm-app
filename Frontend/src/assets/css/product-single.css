@@ -200,6 +200,10 @@ body {
   font-weight: 500;
 }
 
+p[data-f-id="pbf"]{
+  display: none;
+}
+
 /* Product Slider Start */
 
 .swiper {
@@ -226,7 +230,7 @@ body {
 }
 
 .mySwiper2 {
-  height: 80%;
+  height: 66%;
   width: 100%;
 }
 
@@ -418,7 +422,7 @@ body {
   font-size: 18px;
   color: var(--primary-color);
   font-weight: 600;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
 }
 
 .single_product .product_info_custom {
@@ -569,6 +573,7 @@ body {
 .single_product .action_buttons_custom {
   display: flex;
   align-items: center;
+  margin-top: 20px;
 }
 
 .single_product .action_buttons_custom .add_to_cart,
@@ -576,7 +581,7 @@ body {
   font-size: 18px;
   font-weight: 600;
   border-radius: 30px;
-  padding: 5px 30px;
+  padding: 10px 30px;
   margin-right: 10px;
   transition: 0.3s;
 }

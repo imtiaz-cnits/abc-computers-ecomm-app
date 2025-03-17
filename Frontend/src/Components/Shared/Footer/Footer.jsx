@@ -28,7 +28,7 @@ const Footer = () => {
                   by the readable content of a page when looking at its layout.
                 </p>
               </div>
-              <img src={paymentImg?.src} className="mt-md-5" />
+              <img src={paymentImg?.src} className="mt-md-5 payment-img" />
             </div>
             <div className="footer_wrapper_item col-lg-2 col-md-4">
               <div className="footer_content">

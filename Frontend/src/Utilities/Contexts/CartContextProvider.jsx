@@ -1,10 +1,11 @@
 "use client"
 import React, { createContext, useEffect, useState } from 'react';
-export const CartContext = createContext(null)
+export const CartContext = createContext({})
 
 const CartContextProvider = ({children}) => {
 
     const [cart, setCart] = useState([])
+    const deliveryCharge = 60
 
     useEffect(()=>{
         const cartItems = JSON.parse(localStorage.getItem("cart"))
@@ -13,6 +14,8 @@ const CartContextProvider = ({children}) => {
     },[])
 
     const subTotal = cart?.reduce((accumulator, cartItem) => accumulator + (cartItem?.price * cartItem?.quantity), 0)
+
+    const grandTotal = subTotal - deliveryCharge
 
 
     const addToCart = (item) =>{
@@ -81,7 +84,9 @@ const CartContextProvider = ({children}) => {
         removeFromCart,
         increaseQuantity,
         decreaseQuantity,
-        subTotal
+        subTotal: subTotal.toLocaleString(2),
+        deliveryCharge,
+        grandTotal: grandTotal.toLocaleString(2)
     }
 
     return (

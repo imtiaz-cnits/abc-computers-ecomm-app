@@ -3,6 +3,10 @@ import { usePathname } from "next/navigation";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import logo from "@/assets/img/main_logo_abc.svg";
 import { FaAngleRight, FaBars, FaSearch, FaTimes } from "react-icons/fa";
+import cartImg1 from "@/assets/img/cart-product-img1.webp";
+import cartImg2 from "@/assets/img/cart-product-img2.webp";
+import cartImg3 from "@/assets/img/cart-product-img3.webp";
+import Link from "next/link";
 import axios from "axios";
 import MenuItem from "./MenuItem/MenuItem";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
@@ -84,7 +88,6 @@ const Navbar = () => {
       return;
     }
 
-
     const resetDropdowns = () => {
       document.querySelectorAll("li.megamenu").forEach((item) => {
         item.classList.remove("sub-open");
@@ -129,7 +132,7 @@ const Navbar = () => {
 
             Object.assign(mobileMenu.style, {
               position: "fixed",
-              top: "84.57px",
+              top: "65px",
               left: "-100%",
               height: "100%",
               width: "300px",
@@ -181,7 +184,7 @@ const Navbar = () => {
             trigger.classList.remove("menuopen");
           });
 
-        resetDropdowns(); // Reset dropdowns to default state
+        resetDropdowns();
         event.preventDefault();
       }
     });
@@ -223,6 +226,11 @@ const Navbar = () => {
 
 
   const toggleMobileMenu = (e) => {
+
+
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+
+
     const mobileMenu = document.querySelector(".mobile-menu");
 
     if (mobileMenu && getComputedStyle(mobileMenu).left === "0px") {
@@ -232,7 +240,11 @@ const Navbar = () => {
         .forEach((trigger) => {
           trigger.classList.remove("menuopen");
         });
-      resetDropdowns(); // Reset dropdowns to default state
+
+
+        document.querySelectorAll("li.megamenu").forEach((item) => {
+          item.classList.remove("sub-open");
+        });
     } else {
       if (mobileMenu) {
         mobileMenu.style.left = "0"; // Open menu
@@ -263,9 +275,6 @@ const Navbar = () => {
   };
 
   const handleSearchValue = (e) => {
-
-    setSearchResult(true)
-
     const value = e.target.value;
     setSearchValue(value);
   };
@@ -284,13 +293,13 @@ const Navbar = () => {
                 <FaBars className="icon" />
               </a>
             </div>
+            <a href="/" className="header_logo mobile_view_logo">
+              <img src={logo.src} alt="" />
+            </a>
             <a href="/" className="header_logo desktop_view">
               <img src={logo.src} alt="" />
             </a>
             <div className="search">
-              <a href="/" className="header_logo mobile_view_logo">
-                <img src={logo.src} alt="" />
-              </a>
               <input
                 className="search_icon"
                 type="text"
@@ -397,7 +406,7 @@ const Navbar = () => {
                   </svg>
                   <span>{cart?.length}</span>
                 </a>
-                <a href={"/user-profile"} className="icon">
+                <Link href={"/user-profile"} className="icon">
                   <svg
                     width="32"
                     height="32"
@@ -417,7 +426,7 @@ const Navbar = () => {
                       </clipPath>
                     </defs>
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -441,7 +450,7 @@ const Navbar = () => {
         {searchValue !== "" && filteredProducts.length !== 0 ? (
           <div className={`search-result`}>
             {filteredProducts?.slice(0, 4)?.map((product) => (
-              <a href={`/products/${product?._id}`} key={product?._id}>
+              <Link href={`/products/${product?._id}`} key={product?._id}>
                 <div className="search_product_card">
                   <div className="product">
                     <img
@@ -461,7 +470,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         ) : (
@@ -548,17 +557,17 @@ const Navbar = () => {
               <span>Sub-Total</span>
               <span id="subtotal">৳{subTotal}</span>
             </p>
-            <p className="grand_total">
+            {/* <p className="grand_total">
               <span>Grand Total</span>
               <span id="grandtotal">৳343.98</span>
-            </p>
+            </p> */}
             <div className="cart_buttons">
-              <a href={"/cart"}>
+              <Link href={"/cart"}>
                 <button className="view_cart">View Cart</button>
-              </a>
-              <a href={"/checkout"}>
+              </Link>
+              <Link href={"/checkout"}>
                 <button className="checkout">Checkout Now</button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

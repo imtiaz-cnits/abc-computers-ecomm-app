@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import Swal from "sweetalert2";
 import "./AddProduct.css";
 import Select from "react-select";
 import "froala-editor/css/froala_style.min.css";
@@ -10,7 +9,6 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { FaXmark } from "react-icons/fa6";
-import QuillEditor from "@/Components/Shared/QuillEditor/QuillEditor";
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);

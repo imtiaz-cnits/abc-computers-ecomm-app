@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const searchRef = useRef(null)
 
-  const {cart, removeFromCart, increaseQuantity, decreaseQuantity, subTotal} = useContext(CartContext)
+  const { cart, removeFromCart, increaseQuantity, decreaseQuantity, subTotal } = useContext(CartContext)
 
   const [search, setSearch] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -242,9 +242,9 @@ const Navbar = () => {
         });
 
 
-        document.querySelectorAll("li.megamenu").forEach((item) => {
-          item.classList.remove("sub-open");
-        });
+      document.querySelectorAll("li.megamenu").forEach((item) => {
+        item.classList.remove("sub-open");
+      });
     } else {
       if (mobileMenu) {
         mobileMenu.style.left = "0"; // Open menu
@@ -313,8 +313,8 @@ const Navbar = () => {
               </button>
 
               {searchValue !== "" &&
-              filteredProducts.length !== 0 &&
-              searchResult ? (
+                filteredProducts.length !== 0 &&
+                searchResult ? (
                 <div className={`search-result`} ref={searchRef}>
                   {filteredProducts?.slice(0, 4)?.map((product) => (
                     <a href={`/products/${product?._id}`} key={product?._id}>
@@ -326,9 +326,7 @@ const Navbar = () => {
                           />
                         </div>
                         <div className="product_details">
-                          <a href={`/products/${product?._id}`}>
-                            <h3 className="product_name">{product?.productName}</h3>
-                          </a>
+                          <h3 className="product_name">{product?.productName}</h3>
                           <div className="price">
                             <span className="main-price">
                               ৳{product?.discountPrice}
@@ -498,7 +496,7 @@ const Navbar = () => {
 
           <ul className="cart_items">
             {
-              cart?.map((item, idx)=>(
+              cart?.map((item, idx) => (
                 <li key={idx}>
                   <div className="product_details_wrapper">
                     <div className="product_item">
@@ -512,21 +510,21 @@ const Navbar = () => {
                         </span>
                         <div className="quantity_wrapper">
                           <div className="wrap">
-                            <button className="btn-decrease" onClick={()=>decreaseQuantity(item?.productID)}>-</button>
+                            <button className="btn-decrease" onClick={() => decreaseQuantity(item?.productID)}>-</button>
                             <input
                               type="text"
                               className="quantity-input"
                               value={item?.quantity}
                               readOnly
                             />
-                            <button className="btn-increase" onClick={()=> increaseQuantity(item?.productID)}>+</button>
+                            <button className="btn-increase" onClick={() => increaseQuantity(item?.productID)}>+</button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="action">
-                    <button className="dlt_btn" onClick={()=> removeFromCart(item?.productID)}>
+                    <button className="dlt_btn" onClick={() => removeFromCart(item?.productID)}>
                       <svg
                         width="36"
                         height="36"
@@ -550,7 +548,7 @@ const Navbar = () => {
                     </button>
                   </div>
                 </li>
-                )
+              )
               )
             }
           </ul>

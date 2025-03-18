@@ -14,7 +14,7 @@ const Specials = () => {
   const prevBtnRef = useRef(null);
   const nextBtnRef = useRef(null);
   const { setProduct } = useContext(QuickViewContext);
-  const {directAddToCart} = useContext(CartContext)
+  const { directAddToCart } = useContext(CartContext)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -54,8 +54,8 @@ const Specials = () => {
               spaceBetween={30}
               autoplay
               navigation={{
-                nextEl: nextBtnRef.current,
-                prevEl: prevBtnRef.current,
+                nextEl: ".next-btn",
+                prevEl: ".prev-btn",
               }}
               modules={[Navigation, Autoplay]}
               className="mySwiper"
@@ -112,7 +112,7 @@ const Specials = () => {
                           </a>
                           <button
                             className="icon"
-                            onClick={()=>directAddToCart(product?._id)}
+                            onClick={() => directAddToCart(product?._id)}
                           >
                             <svg
                               height="32"

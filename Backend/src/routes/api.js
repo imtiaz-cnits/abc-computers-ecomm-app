@@ -77,7 +77,8 @@ router.put("/hero-slider/:id", upload.single("slideImg"), SliderController.HeroS
 router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
 
 // Order Invoice APIs
-router.post("/create-invoice", OrderController.placeOrder);
+router.post("/create-invoice", OrderController.PlaceOrder);
+router.get("/order-list", OrderController.OrderList)
 
 
 module.exports = router;

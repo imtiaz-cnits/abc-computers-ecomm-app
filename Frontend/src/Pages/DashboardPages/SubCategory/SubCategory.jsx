@@ -60,7 +60,7 @@ const SubCategory = () => {
     const fetchSubCategory = async () => {
       try {
         const response = await axios.get(
-          "https://api.abcpabnabd.com/api/v1/sub-category"
+          "http://localhost:5070/api/v1/sub-category"
         );
 
         setSubCategories(response.data.data || []);

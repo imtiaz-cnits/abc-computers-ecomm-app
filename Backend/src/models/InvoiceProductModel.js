@@ -5,7 +5,7 @@ const DataSchema = mongoose.Schema(
     billingDetailID: { type: mongoose.Schema.Types.ObjectId, required: true },
     orderID: {type: String, required: true },
     qty: { type: String, required: true },
-    color: { type: String, required: true },
+    color: { type: String },
   },
   { timestamps: true, versionKey: false }
 );

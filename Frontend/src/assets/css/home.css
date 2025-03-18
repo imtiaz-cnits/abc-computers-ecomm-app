@@ -1316,7 +1316,7 @@ body {
   gap: 10px;
   background: #fff;
   transition: 0.4s;
-  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+  border: 1px solid var(--border-color3);
 }
 
 #categories .catagories_image {
@@ -1417,12 +1417,7 @@ body {
   border: 1px solid transparent;
   border-radius: 12px;
   transition: 0.4s;
-  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
-}
-
-.populer_product_card:hover {
   border: 1px solid var(--border-color3);
-  box-shadow: none;
 }
 
 .populer_product_card .product {

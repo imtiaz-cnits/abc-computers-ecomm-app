@@ -21,9 +21,7 @@ import discount from "@/Components/Home/Discount/Discount";
 
 const Checkout = () => {
 
-  const {existingUserID} = useContext(UserContext)
-
-  const {cart, subTotal, deliveryCharge, grandTotal} = useContext(CartContext)
+  const {cart, subTotal, deliveryCharge, grandTotal, removeCart} = useContext(CartContext)
   const bankAccount = 546746449874
 
   const { setUserID } = useContext(UserContext);
@@ -263,11 +261,17 @@ const Checkout = () => {
 
     console.log(orderData);
 
+    // TODO: fix api dynamic
     const response = await axios.post("http://localhost:5070/api/v1/create-invoice",
         orderData
     );
 
     console.log(response);
+
+    if(response?.data?.success){
+      removeCart()
+      toast.success("Order placed successfully!")
+    }
 
     setName("")
     setAddress("")

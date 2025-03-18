@@ -7,6 +7,7 @@ import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
 import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuickModal";
 import "../../../assets/css/product.css";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const SingleSubCategory = ({id: subCategoryId}) => {
 
@@ -18,6 +19,7 @@ const SingleSubCategory = ({id: subCategoryId}) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(12);
     const [categories, setCategories] = useState([])
+    const {directAddToCart} = useContext(CartContext)
   
     useEffect(() => {
       const fetchProducts = async () => {
@@ -604,9 +606,9 @@ const SingleSubCategory = ({id: subCategoryId}) => {
                                   />
                                 </svg>
                               </a>
-                              <a
-                                href={`/products/${product?._id}`}
+                              <button
                                 className="icon"
+                                onClick={()=> directAddToCart(product?._id)}
                               >
                                 <svg
                                   width="32"
@@ -643,7 +645,7 @@ const SingleSubCategory = ({id: subCategoryId}) => {
                                     </clipPath>
                                   </defs>
                                 </svg>
-                              </a>
+                              </button>
                               <a href="#" className="icon">
                                 <svg
                                   width="36"
@@ -661,9 +663,9 @@ const SingleSubCategory = ({id: subCategoryId}) => {
                             </div>
                           </div>
                           <div className="product_details">
-                          <a href={`/products/${product?._id}`}>
-                            <h3 className="product_name">{product?.productName}</h3>
-                          </a>
+                            <a href={`/products/${product?._id}`}>
+                              <h3 className="product_name">{product?.productName}</h3>
+                            </a>
                             <div className="price">
                               <span>৳{product?.discountPrice?.toLocaleString(2)}</span>
                               <span className="discount">৳{product?.price?.toLocaleString(2)}</span>

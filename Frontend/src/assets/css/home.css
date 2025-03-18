@@ -71,11 +71,9 @@
   --primary-font: "Gilroy, sans-serif";
   --primary-color: #09090b;
   --secondary-color: #e31736;
-  --gardiant: linear-gradient(
-    180deg,
-    rgba(170, 170, 170, 0.1) 0%,
-    #cfcfcf 100%
-  );
+  --gardiant: linear-gradient(180deg,
+      rgba(170, 170, 170, 0.1) 0%,
+      #cfcfcf 100%);
   --accent: #929292;
   --accent-2: #e2e2e2;
   --white: #ffffff;
@@ -528,6 +526,7 @@ body {
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -544,12 +543,10 @@ body {
   font-weight: 600;
   padding: 10px 30px;
   border-radius: 36px;
-  background: linear-gradient(
-    90deg,
-    rgba(85, 85, 85, 0.3) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(85, 85, 85, 0.3) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(85, 85, 85, 0.3) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(85, 85, 85, 0.3) 100%);
   border: 1px solid var(--white);
   color: var(--white);
   margin-top: 20px;
@@ -662,6 +659,7 @@ body {
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -783,7 +781,7 @@ body {
 }
 
 /* Pagination alignment */
-#hero .swiper-horizontal > .swiper-pagination-bullets,
+#hero .swiper-horizontal>.swiper-pagination-bullets,
 #hero .swiper-pagination-bullets.swiper-pagination-horizontal {
   bottom: 9px !important;
   left: 0;
@@ -830,6 +828,10 @@ body {
   font-weight: bold;
 }
 
+#specials .mySwiper{
+  padding: 4px 0px !important;
+}
+
 @media screen and (max-width: 1400px) {
   .hero_content3 .product-image svg {
     left: 20px;
@@ -872,13 +874,11 @@ body {
     width: 100%;
     height: 100%;
     background-repeat: inherit;
-    background-image: linear-gradient(
-      to bottom,
-      #000000,
-      #292929,
-      #000000,
-      #3d3c3c
-    );
+    background-image: linear-gradient(to bottom,
+        #000000,
+        #292929,
+        #000000,
+        #3d3c3c);
   }
 }
 
@@ -939,13 +939,11 @@ body {
     width: 100%;
     height: 100%;
     background-repeat: inherit;
-    background-image: linear-gradient(
-      to bottom,
-      #000000,
-      #292929,
-      #000000,
-      #3d3c3c
-    );
+    background-image: linear-gradient(to bottom,
+        #000000,
+        #292929,
+        #000000,
+        #3d3c3c);
   }
 
   .hero_content2 .product-image {
@@ -1233,7 +1231,7 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  #hero .swiper-pagination-bullet{
+  #hero .swiper-pagination-bullet {
     width: 12px;
     height: 12px;
   }
@@ -1316,8 +1314,9 @@ body {
   border-radius: 12px;
   padding: 16px;
   gap: 10px;
-  background: var(--gardiant);
+  background: #fff;
   transition: 0.4s;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
 
 #categories .catagories_image {
@@ -1418,10 +1417,12 @@ body {
   border: 1px solid transparent;
   border-radius: 12px;
   transition: 0.4s;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
 
 .populer_product_card:hover {
   border: 1px solid var(--border-color3);
+  box-shadow: none;
 }
 
 .populer_product_card .product {
@@ -1434,7 +1435,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 12px 12px 0px 0px;
-  background: var(--gardiant);
+  background: #fff;
   overflow: hidden;
 }
 
@@ -1474,16 +1475,12 @@ body {
   content: "";
   width: 50%;
   height: 100%;
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.432) 100%
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.432) 100%
-  );
+  background: -webkit-linear-gradient(left,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.432) 100%);
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.432) 100%);
   -webkit-transform: skewX(-25deg);
   transform: skewX(-25deg);
 }

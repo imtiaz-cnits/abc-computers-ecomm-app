@@ -165,9 +165,9 @@ const Specials = () => {
                       </div>
 
                       <div className="product_details">
-                        <h3 className="product_name">
-                          {product?.productName}
-                        </h3>
+                        <a href={`/products/${product?._id}`}>
+                          <h3 className="product_name">{product?.productName}</h3>
+                        </a>
                         <div className="price">
                           <span>৳{product?.discountPrice?.toLocaleString(2)}</span>
                           <span>৳{product?.price?.toLocaleString(2)}</span>

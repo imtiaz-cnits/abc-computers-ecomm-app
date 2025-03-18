@@ -828,6 +828,10 @@ body {
   font-weight: bold;
 }
 
+#specials .mySwiper{
+  padding: 4px 0px !important;
+}
+
 @media screen and (max-width: 1400px) {
   .hero_content3 .product-image svg {
     left: 20px;
@@ -1312,7 +1316,7 @@ body {
   gap: 10px;
   background: #fff;
   transition: 0.4s;
-  box-shadow: rgba(99, 99, 99, 0.11) 0px 2px 8px 0px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
 
 #categories .catagories_image {
@@ -1413,7 +1417,7 @@ body {
   border: 1px solid transparent;
   border-radius: 12px;
   transition: 0.4s;
-  box-shadow: rgba(99, 99, 99, 0.11) 0px 2px 8px 0px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
 
 .populer_product_card:hover {

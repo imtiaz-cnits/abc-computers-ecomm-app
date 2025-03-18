@@ -326,9 +326,9 @@ const Navbar = () => {
                           />
                         </div>
                         <div className="product_details">
-                          <h3 className="product_name">
-                            {product?.productName}
-                          </h3>
+                          <a href={`/products/${product?._id}`}>
+                            <h3 className="product_name">{product?.productName}</h3>
+                          </a>
                           <div className="price">
                             <span className="main-price">
                               ৳{product?.discountPrice}

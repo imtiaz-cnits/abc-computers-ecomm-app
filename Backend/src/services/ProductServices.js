@@ -71,7 +71,7 @@ const BrandAddService = async (req) => {
 
 const BrandListService = async () => {
   try {
-    let data = await BrandModel.find();
+    let data = await BrandModel.find().sort({ createdAt: -1 }); // Sort by newest first
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
     return { status: "Fail", data: e.toString() }; // Ensure JSON error response
@@ -174,7 +174,7 @@ const CategoryAddService = async (req) => {
 
 const CategoryListService = async () => {
   try {
-    let data = await CategoryModel.find().populate("subCategories"); // Ensure subcategories are populated
+    let data = await CategoryModel.find().populate("subCategories").sort({ createdAt: -1 }); // Ensure subcategories are populated
 
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
@@ -288,7 +288,7 @@ const SubCategoryAddService = async (req) => {
 
 const SubCategoryListService = async () => {
   try {
-    let data = await SubCategoryModel.find().populate("categoryId"); // Ensure category is populated
+    let data = await SubCategoryModel.find().populate("categoryId").sort({ createdAt: -1 }); // Ensure category is populated
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
     return { status: "Fail", data: e.toString() }; // Ensure JSON error response
@@ -483,7 +483,7 @@ const ProductListService = async () => {
   try {
     let data = await ProductModel.find().populate(
       "brandID categoryID subCategoryID"
-    );
+    ).sort({ createdAt: -1 });
     return { status: "success", data: data }; // Ensure JSON response
   } catch (e) {
     return { status: "Fail", data: e.toString() }; // Ensure JSON error response

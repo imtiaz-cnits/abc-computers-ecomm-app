@@ -17,6 +17,7 @@ import axios from "axios";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 import logo from "@/assets/img/abc-logo-icon.png"
 import { FaRegCopy } from "react-icons/fa";
+import discount from "@/Components/Home/Discount/Discount";
 
 const Checkout = () => {
 
@@ -207,7 +208,7 @@ const Checkout = () => {
 
   }
 
-  const handlePayNow = () => {
+  const handlePayNow = async () => {
 
 
     setError({})
@@ -238,28 +239,35 @@ const Checkout = () => {
       return checkoutOrder
     })
 
-    const orderDetails = {
-      cus_name: name,
-      cus_address: address,
-      cus_phone: phone,
-      cus_email: email,
-      cus_city: city,
-      order_notes: notes,
-      pay_method: paymentOption,
-      products,
-      subTotal,
-      grandTotal,
+    const discount = 0;
+
+    const orderData = {
+      billingDetails: {
+        cus_name: name,
+        cus_address: address,
+        cus_phone: phone,
+        cus_email: email,
+        cus_city: city,
+        order_notes: notes,
+      },
+      cartItems: [...products],
+      paymentDetails: {
+        subTotal: subTotal,
+        discount: discount,
+        grandTotal: grandTotal,
+        pay_method: paymentOption,
+        tran_id: tranID,
+        acc_number: cusBankAccount,
+      }
     }
 
-    if(paymentOption !== "bank"){
-      orderDetails.tranID = tranID
-    } else if(paymentOption === "bank"){
-      orderDetails.cus_bank_account = cusBankAccount
-    }
+    console.log(orderData);
 
+    const response = await axios.post("http://localhost:5070/api/v1/create-invoice",
+        orderData
+    );
 
-    console.log(orderDetails);
-
+    console.log(response);
 
     setName("")
     setAddress("")

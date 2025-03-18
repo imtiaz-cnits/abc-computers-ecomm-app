@@ -1,0 +1,113 @@
+public function storeCheckout(Request $request)
+    {
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'mobile' => 'required|string|max:15',
+            'email' => 'required|string|email|max:255',
+            'transaction_id' => 'nullable|string|max:255',
+            'reference_name' => 'nullable|string|max:255',
+            'payment_method' => 'required|string',
+            'totalamount' => 'required|numeric',
+            'delivery_charge' => 'required|numeric'
+        ]);
+
+        // Create BillingDetails
+        $billingDetails = BillingDetails::create([
+            'first_name' => $validatedData['first_name'],
+            'address' => $validatedData['address'],
+            'country' => $validatedData['country'],
+            'city' => $validatedData['city'],
+            'mobile' => $validatedData['mobile'],
+            'email' => $validatedData['email'],
+            'order_note' => $request->input('order_note'),
+        ]);
+
+        // Generate a new order_id
+        $lastOrder = OrderDetails::latest()->first();
+        $newOrderIdNumber = $lastOrder ? intval(substr($lastOrder->order_id, 3)) + 1 : 1;
+        $newOrderId = '#CA' . str_pad($newOrderIdNumber, 4, '0', STR_PAD_LEFT);
+
+        $cartItems = session()->get('cart', []);
+
+        $orderItems = [];
+        foreach ($cartItems as $item) {
+            $selectedCurrency = $request->input('country'); // This assumes the currency is based on the country
+
+            if ($selectedCurrency === 'bdt') {
+                $price = $item['bd_price'];
+                $priceFormatted = '৳' . number_format($price, 2);
+            } elseif ($selectedCurrency === 'usd') {
+                $price = $item['usd_price'];
+                $priceFormatted = '$' . number_format($price, 2);
+            } else {
+                $price = 0;
+                $priceFormatted = 'Price not available';
+            }
+
+            $totalProductAmount = $price * $item['quantity'];
+            $totalWithDelivery = $totalProductAmount;
+
+            OrderDetails::create([
+                'order_id' => $newOrderId,
+                'product_id' => $item['product_id'],
+                'billing_id' => $billingDetails->id,
+                'transaction_id' => $validatedData['transaction_id'],
+                'reference_name' => $validatedData['reference_name'],
+                'quantity' => $item['quantity'],
+                'delivery_charge' => $validatedData['delivery_charge'],
+                'totalamount' => $totalWithDelivery,
+                'payment' => $validatedData['payment_method'],
+            ]);
+
+            // Update product stock
+            $product = Product::find($item['product_id']);
+            if ($product) {
+                $product->stock -= $item['quantity'];
+                $product->save();
+            }
+
+            $orderItems[] = [
+                'product_name' => $item['product_name'],
+                'quantity' => $item['quantity'],
+                'price' => $priceFormatted,
+            ];
+        }
+
+        $data = [
+            'first_name' => $request->first_name,
+            'transaction_id' => $request->transaction_id,
+            'reference_name' => $request->reference_name,
+            'delivery_charge' => $request->delivery_charge,
+            'address' => $request->address,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'payment_method' => $request->payment_method,
+            'totalamount' => $request->totalamount,
+            'order_note' => $request->order_note,
+        ];
+
+        $orderDetails = [
+            'order_id' => $newOrderId,
+            'first_name' => $validatedData['first_name'],
+            'transaction_id' => $validatedData['transaction_id'],
+            'reference_name' => $validatedData['reference_name'],
+            'delivery_charge' => $validatedData['delivery_charge'],
+            'email' => $validatedData['email'],
+            'payment_method' => $validatedData['payment_method'],
+            'totalamount' => $validatedData['totalamount'],
+            'items' => $orderItems,
+        ];
+
+        // Send email to admin
+        Mail::to('robi.cnits@gmail.com')->send(new AdminOrderConfirmation($data));
+
+        // Send email to the user
+        Mail::to($validatedData['email'])->send(new OrderConfirmation($orderDetails));
+
+        session()->forget('cart');
+
+        return redirect()->route('thanks.you');
+    }

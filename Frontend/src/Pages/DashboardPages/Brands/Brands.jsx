@@ -35,7 +35,7 @@ const Brands = () => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await axios.get("https://api.abcpabnabd.com/api/v1/brands");
+        const response = await axios.get("http://localhost:5070/api/v1/brands");
 
         setBrands(response.data.data || []);
         setTotalItems(response?.data?.data.length);

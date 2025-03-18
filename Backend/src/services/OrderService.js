@@ -6,6 +6,7 @@ const ObjectID = mongoose.Types.ObjectId;
 const FormData = require("form-data");
 const axios = require("axios");
 
+const CreateInvoiceService = async (orderData) => {
 // Function to generate a unique order ID dynamically
 const generateOrderID = async () => {
     try {
@@ -23,8 +24,6 @@ const generateOrderID = async () => {
         throw new Error("Failed to generate order ID: " + error.message);
     }
 };
-
-const createInvoiceService = async (orderData) => {
     const { billingDetails, cartItems, paymentDetails } = orderData;
 
     try {
@@ -66,4 +65,20 @@ const createInvoiceService = async (orderData) => {
     }
 };
 
-module.exports = createInvoiceService;
+
+const OrderListService = async () => {
+    try {
+        let data = await PaymentModel.find().populate({
+            path: "invoiceID",
+            populate: [
+                { path: "billingDetailID", },
+                { path: "productID" },
+            ],
+        });
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+}
+
+module.exports = { CreateInvoiceService, OrderListService };

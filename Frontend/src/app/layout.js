@@ -15,7 +15,6 @@ import UserContextProvider from "@/Utilities/Contexts/UserContextProvider";
 import { Toaster } from "react-hot-toast"; // Import Toaster
 import "./globals.css";
 import CartContextProvider from "@/Utilities/Contexts/CartContextProvider";
-import "alloyeditor/dist/alloy-editor/assets/alloy-editor-ocean.css";
 
 
 export const metadata = {

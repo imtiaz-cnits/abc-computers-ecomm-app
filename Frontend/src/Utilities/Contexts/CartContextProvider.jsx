@@ -1,5 +1,7 @@
 "use client"
+import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 export const CartContext = createContext({})
 
 const CartContextProvider = ({children}) => {
@@ -27,11 +29,15 @@ const CartContextProvider = ({children}) => {
 
             localStorage.setItem("cart", JSON.stringify([...newCart, item]))
             setCart([item,...newCart])
+
+            toast?.error("Product already added")
             return
         }
 
         localStorage.setItem("cart", JSON.stringify([...cart, item]))
         setCart([item, ...cart])
+
+        toast?.success("Product added to cart")
     }
 
     const removeFromCart = (id) =>{
@@ -77,6 +83,40 @@ const CartContextProvider = ({children}) => {
         }
     }
 
+    const removeCart = () =>{
+        localStorage.removeItem("cart")
+        setCart([])
+    }
+
+    const directAddToCart = async(productID) =>{
+        const response = await axios.get(`https://api.abcpabnabd.com/api/v1/product-details/${productID}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        )
+
+        const product = response?.data?.data
+
+        const cartItem = {
+            productID: productID,
+            productName: product?.productID?.productName,
+            price: product?.productID?.discountPrice || product?.productID?.price,
+            productImg: product?.productID?.productImg,
+            subCategory: product?.productID?.subCategoryID?.subCategoryName,
+            quantity: 1,
+          }
+      
+          if(product?.color?.length){
+            cartItem.color = product?.color[0]
+          }
+      
+          addToCart(cartItem)
+
+    }
+
+
     const value = {
         cart,
         setCart,
@@ -86,7 +126,9 @@ const CartContextProvider = ({children}) => {
         decreaseQuantity,
         subTotal: subTotal.toLocaleString(2),
         deliveryCharge,
-        grandTotal: grandTotal.toLocaleString(2)
+        grandTotal: grandTotal.toLocaleString(2),
+        removeCart,
+        directAddToCart
     }
 
     return (

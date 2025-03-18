@@ -7,12 +7,14 @@ import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const Specials = () => {
   const [products, setProducts] = useState([]);
   const prevBtnRef = useRef(null);
   const nextBtnRef = useRef(null);
   const { setProduct } = useContext(QuickViewContext);
+  const {directAddToCart} = useContext(CartContext)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -108,9 +110,9 @@ const Specials = () => {
                               />
                             </svg>
                           </a>
-                          <a
-                            href={`/products/${product?._id}`}
+                          <button
                             className="icon"
+                            onClick={()=>directAddToCart(product?._id)}
                           >
                             <svg
                               height="32"
@@ -146,7 +148,7 @@ const Specials = () => {
                                 </clipPath>
                               </defs>
                             </svg>
-                          </a>
+                          </button>
                           <a href="./product-single.html" className="icon">
                             <svg
                               width="36"

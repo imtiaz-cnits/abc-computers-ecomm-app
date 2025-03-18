@@ -9,6 +9,7 @@ import ProductQuickModal from "@/Components/Shared/ProductQuickModal/ProductQuic
 import "../../../assets/css/product.css";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import { usePathname } from "next/navigation";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const AllProducts = ({ catId }) => {
   const [filterPrice, setFilterPrice] = useState(0);
@@ -22,6 +23,7 @@ const AllProducts = ({ catId }) => {
   const [limit, setLimit] = useState(12);
   const [singleCategory, setSingleCategory] = useState({});
   const path = usePathname();
+  const {directAddToCart} = useContext(CartContext)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -616,9 +618,9 @@ const AllProducts = ({ catId }) => {
                                 />
                               </svg>
                             </a>
-                            <a
-                              href={`/products/${product?._id}`}
+                            <button
                               className="icon"
+                              onClick={()=> directAddToCart(product?._id)}
                             >
                               <svg
                                 width="32"
@@ -655,7 +657,7 @@ const AllProducts = ({ catId }) => {
                                   </clipPath>
                                 </defs>
                               </svg>
-                            </a>
+                            </button>
                             <a href="#" className="icon">
                               <svg
                                 width="36"
@@ -673,9 +675,11 @@ const AllProducts = ({ catId }) => {
                           </div>
                         </div>
                         <div className="product_details">
-                          <h3 className="product_name">
-                            {product?.productName}
-                          </h3>
+                          <a href={`/products/${product?._id}`}>
+                            <h3 className="product_name">
+                              {product?.productName}
+                            </h3>
+                          </a>
                           <div className="price">
                             <span>৳{product?.discountPrice?.toLocaleString(2)}</span>
                             <span className="discount">৳{product?.price?.toLocaleString(2)}</span>

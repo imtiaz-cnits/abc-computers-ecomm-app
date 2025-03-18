@@ -3,11 +3,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { QuickViewContext } from "@/Utilities/Contexts/QuickViewContextProvider";
+import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 
 const PopularProducts = () => {
   const [products, setProducts] = useState([]);
   const { setProduct } = useContext(QuickViewContext);
-
+  const {directAddToCart} = useContext(CartContext)
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get(
@@ -96,9 +97,9 @@ const PopularProducts = () => {
                                 />
                               </svg>
                             </a>
-                            <a
-                              href={`/products/${product?._id}`}
+                            <button
                               className="icon"
+                              onClick={()=> directAddToCart(product?._id)}
                             >
                               <svg
                                 width="32"
@@ -135,7 +136,7 @@ const PopularProducts = () => {
                                   </clipPath>
                                 </defs>
                               </svg>
-                            </a>
+                            </button>
                             <a href="./product-single.html" className="icon">
                               <svg
                                 width="36"

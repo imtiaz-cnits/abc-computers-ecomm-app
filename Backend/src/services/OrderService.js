@@ -11,7 +11,7 @@ const CreateInvoiceService = async (orderData) => {
 const generateOrderID = async () => {
     try {
         // Fetch the last order from InvoiceProductModel
-        const latestOrder = await InvoiceProductModel.findOne().sort({ createdAt: -1 });
+        const latestOrder = await PaymentModel.findOne().sort({ createdAt: -1 });
 
         // Extract the last order number or start from 0
         const lastNumber = latestOrder ? parseInt(latestOrder.orderID.split("-")[2]) : 0;
@@ -47,7 +47,8 @@ const generateOrderID = async () => {
 
         // Step 4: Save payment details
         const newPayment = new PaymentModel({
-            invoiceID: savedBilling._id,
+            orderID,
+            billingDetailID: savedBilling._id,
             subTotal: paymentDetails.subTotal,
             discount: paymentDetails.discount,
             grandTotal: paymentDetails.grandTotal,
@@ -68,17 +69,55 @@ const generateOrderID = async () => {
 
 const OrderListService = async () => {
     try {
-        let data = await PaymentModel.find().populate({
-            path: "invoiceID",
-            populate: [
-                { path: "billingDetailID", },
-                { path: "productID" },
-            ],
-        });
+        const data = await PaymentModel.aggregate([
+            {
+              $lookup: {
+                from: "invoiceproducts", // Collection name
+                localField: "orderID", 
+                foreignField: "orderID",
+                as: "invoiceProducts",
+              },
+            },
+            {
+            $lookup: {
+                from: "billingdetails", // Collection name
+                localField: "billingDetailID",
+                foreignField: "_id",
+                as: "billingDetails",
+            },
+            },
+            {
+            $unwind: { path: "$billingDetails", preserveNullAndEmptyArrays: true }, // Flatten billing details
+            },
+          ])
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
         return { status: "Fail", data: e.toString() }; // Ensure JSON error response
     }
 }
 
-module.exports = { CreateInvoiceService, OrderListService };
+
+const OrderDeleteService = async(billingDetailID) =>{
+    try {
+        // Step 1: Delete Payment
+        const payment = await PaymentModel.findOne({billingDetailID})
+        if (!payment) {
+          return { status: "fail", message: "Payment not found" };
+        }
+    
+        await PaymentModel.deleteOne({billingDetailID})
+
+
+        // Step 2: Delete Invoice Products
+        await InvoiceProductModel.deleteMany({billingDetailID})
+
+        // Step 3: Delete Billing Details
+        await BillingDetailModel.findByIdAndDelete(billingDetailID)
+
+        return { status: "success" }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+}
+
+module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService };

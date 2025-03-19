@@ -988,24 +988,6 @@ h2.heading{
   background: var(--secondary-color);
 }
 
-@media screen and (max-width: 1200px) {
-  .modal-content {
-    width: 48%;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .modal-content {
-    width: 58%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .modal-content {
-    width: 78%;
-  }
-}
-
 @media screen and (max-width: 576px) {
   .modal-content {
     width: 96%;

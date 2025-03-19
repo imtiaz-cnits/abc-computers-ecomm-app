@@ -7,7 +7,7 @@ export const CartContext = createContext({})
 const CartContextProvider = ({children}) => {
 
     const [cart, setCart] = useState([])
-    const deliveryCharge = 60
+    const [discount, setDiscount] = useState(0)
 
     useEffect(()=>{
         const cartItems = JSON.parse(localStorage.getItem("cart"))
@@ -17,7 +17,7 @@ const CartContextProvider = ({children}) => {
 
     const subTotal = cart?.reduce((accumulator, cartItem) => accumulator + (cartItem?.price * cartItem?.quantity), 0)
 
-    const grandTotal = subTotal + deliveryCharge
+    const grandTotal = subTotal - discount
 
 
     const addToCart = (item) =>{
@@ -125,10 +125,10 @@ const CartContextProvider = ({children}) => {
         increaseQuantity,
         decreaseQuantity,
         subTotal: subTotal.toLocaleString(2),
-        deliveryCharge,
         grandTotal: grandTotal.toLocaleString(2),
         removeCart,
-        directAddToCart
+        directAddToCart,
+        discount
     }
 
     return (

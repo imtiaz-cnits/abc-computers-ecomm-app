@@ -1021,6 +1021,10 @@ Reset Default CSS End
   align-items: center;
 }
 
+#updateBrand .upload-profile .item .img-box img{
+  width: 100%;
+}
+
 #updateBrand .profile-wrapper {
   width: 100%;
 }

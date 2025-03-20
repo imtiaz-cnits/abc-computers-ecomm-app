@@ -355,6 +355,23 @@ body {
   margin-bottom: 10px;
 }
 
+.home-btn{
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 10px 30px;
+  transition: 0.3s;
+  background: var(--secondary-color);
+  color: var(--white);
+  border: none;
+  margin: 20px auto 0;
+  display: inline-block;
+}
+
+.home-btn:hover{
+  background: var(--primary-color)
+}
+
 @media screen and (max-width: 992px) {
   .thank_you {
     margin-bottom: 50px;

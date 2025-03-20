@@ -59,11 +59,15 @@ const ThankYou = () => {
                   </defs>
                 </svg>
               </div>
-              <h2>Thank you for your order!</h2>
+              <h2>Thanks for your order!</h2>
               <p>The order confirmation has been sent to example@gmail.com</p>
             </div>
 
             <div className="payment_details">
+              <div className="details">
+                <h2 className="title">Order/ Invoice ID</h2>
+                <p>#ABC-2025-000006</p>
+              </div>
               <div className="details">
                 <h2 className="title">Transaction Date</h2>
                 <p>Friday, November 01, 2024 - 10:56 am</p>
@@ -71,10 +75,6 @@ const ThankYou = () => {
               <div className="details">
                 <h2 className="title">Payment Method</h2>
                 <p>Mastercard: 1xx xxxx xxxxxx</p>
-              </div>
-              <div className="details">
-                <h2 className="title">Shipping Method</h2>
-                <p>Express - 1-3 days</p>
               </div>
             </div>
 
@@ -145,13 +145,7 @@ const ThankYou = () => {
                 <span>Sub-Total</span> <span className="price1">৳343.98</span>
               </p>
               <p className="summary_item">
-                <span>Taxes</span> <span className="price">-৳5.00</span>
-              </p>
-              <p className="summary_item">
                 <span>Discount</span> <span className="price">-৳0</span>
-              </p>
-              <p className="summary_item">
-                <span>Shipment Cost</span> <span className="price">৳22.50</span>
               </p>
               <p className="summary_item">
                 <span className="grand">Grand Total</span>
@@ -159,6 +153,8 @@ const ThankYou = () => {
               </p>
             </div>
           </div>
+
+          <a href="/" className="home-btn">Back To Home</a>
         </div>
       </div>
       {/* <!-- Billing Details End --> */}

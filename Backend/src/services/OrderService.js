@@ -7,23 +7,23 @@ const FormData = require("form-data");
 const axios = require("axios");
 
 const CreateInvoiceService = async (orderData) => {
-// Function to generate a unique order ID dynamically
-const generateOrderID = async () => {
-    try {
-        // Fetch the last order from InvoiceProductModel
-        const latestOrder = await PaymentModel.findOne().sort({ createdAt: -1 });
+    // Function to generate a unique order ID dynamically
+    const generateOrderID = async () => {
+        try {
+            // Fetch the last order from InvoiceProductModel
+            const latestOrder = await PaymentModel.findOne().sort({ createdAt: -1 });
 
-        // Extract the last order number or start from 0
-        const lastNumber = latestOrder ? parseInt(latestOrder.orderID.split("-")[2]) : 0;
+            // Extract the last order number or start from 0
+            const lastNumber = latestOrder ? parseInt(latestOrder.orderID.split("-")[2]) : 0;
 
-        // Increment the order number and format it as 6-digit
-        const orderNumber = (lastNumber + 1).toString().padStart(6, "0");
+            // Increment the order number and format it as 6-digit
+            const orderNumber = (lastNumber + 1).toString().padStart(6, "0");
 
-        return `#ABC-2025-${orderNumber}`;
-    } catch (error) {
-        throw new Error("Failed to generate order ID: " + error.message);
-    }
-};
+            return `#ABC-2025-${orderNumber}`;
+        } catch (error) {
+            throw new Error("Failed to generate order ID: " + error.message);
+        }
+    };
     const { billingDetails, cartItems, paymentDetails } = orderData;
 
     try {
@@ -60,7 +60,14 @@ const generateOrderID = async () => {
 
         const savedPayment = await newPayment.save();
 
-        return { orderID, billing: savedBilling, invoiceProducts: savedInvoiceProducts, payment: savedPayment };
+        const newInvoiceProducts = await InvoiceProductModel.find({ orderID }).populate({
+            path: "productID",
+            populate: [
+                { path: "subCategoryID" }
+            ]
+        })
+
+        return { orderID, billing: savedBilling, invoiceProducts: newInvoiceProducts, payment: savedPayment };
     } catch (error) {
         throw new Error("Order processing failed: " + error.message);
     }
@@ -73,7 +80,7 @@ const OrderListService = async () => {
             {
                 $lookup: {
                     from: "invoiceproducts", // Collection name
-                    localField: "orderID", 
+                    localField: "orderID",
                     foreignField: "orderID",
                     as: "invoiceProducts",
                 },
@@ -121,7 +128,7 @@ const OrderListService = async () => {
                     invoiceProducts: { $push: "$invoiceProducts" },
                 },
             }
-          ])
+        ])
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
         return { status: "Fail", data: e.toString() }; // Ensure JSON error response
@@ -135,8 +142,8 @@ const OrderStatusUpdateService = async (req) => {
         const status = req.body.status
 
         const existingPayment = await PaymentModel.findById(id)
-        
-        if(!existingPayment) {
+
+        if (!existingPayment) {
             return { status: "fail", message: "Payment not found" };
         }
 
@@ -148,30 +155,30 @@ const OrderStatusUpdateService = async (req) => {
             status: "success",
             message: "Payment Status updated successfully",
             data: existingPayment,
-          };
+        };
     } catch (error) {
         console.error("Error in OrderStatusUpdateService:", error.message);
         return {
-          status: "fail",
-          message: "Error updating payment status. Please try again.",
+            status: "fail",
+            message: "Error updating payment status. Please try again.",
         };
     }
 }
 
 
-const OrderDeleteService = async(billingDetailID) => {
+const OrderDeleteService = async (billingDetailID) => {
     try {
         // Step 1: Delete Payment
-        const payment = await PaymentModel.findOne({billingDetailID})
+        const payment = await PaymentModel.findOne({ billingDetailID })
         if (!payment) {
-          return { status: "fail", message: "Payment not found" };
+            return { status: "fail", message: "Payment not found" };
         }
-    
-        await PaymentModel.deleteOne({billingDetailID})
+
+        await PaymentModel.deleteOne({ billingDetailID })
 
 
         // Step 2: Delete Invoice Products
-        await InvoiceProductModel.deleteMany({billingDetailID})
+        await InvoiceProductModel.deleteMany({ billingDetailID })
 
         // Step 3: Delete Billing Details
         await BillingDetailModel.findByIdAndDelete(billingDetailID)
@@ -182,4 +189,4 @@ const OrderDeleteService = async(billingDetailID) => {
     }
 }
 
-module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService};
+module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService };

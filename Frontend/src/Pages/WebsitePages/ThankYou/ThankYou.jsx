@@ -1,11 +1,28 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import productImg1 from "@/assets/img/cart-product-img1.webp";
 import productImg2 from "@/assets/img/cart-product-img2.webp";
 import productImg3 from "@/assets/img/cart-product-img3.webp";
+import { PlaceOrderContext } from "@/Utilities/Contexts/PlaceOrderContextProvider";
+import { useRouter } from "next/navigation";
+import moment from "moment";
 
 const ThankYou = () => {
+
+  const { order, removeOrder, loading } = useContext(PlaceOrderContext)
+  const router = useRouter()
+
+  if (!order && !loading) {
+    return router.push("/")
+  }
+
+  const formattedDate = moment(order?.payment?.updatedAt).utcOffset(6).format("dddd, MMMM DD, YYYY - hh:mm a");
+
+  const handleBackToHome = () => {
+    removeOrder()
+    return router.push("/")
+  }
 
   return (
     <>
@@ -31,7 +48,7 @@ const ThankYou = () => {
                 />
               </svg>
             </div>
-            <a href="/">Back To Home</a>
+            <a href="#" onClick={handleBackToHome}>Back To Home</a>
           </div>
 
           <div className="thank_you_summery">
@@ -60,21 +77,21 @@ const ThankYou = () => {
                 </svg>
               </div>
               <h2>Thanks for your order!</h2>
-              <p>The order confirmation has been sent to example@gmail.com</p>
+              <p>The order confirmation has been sent to {order?.billing?.cus_email}</p>
             </div>
 
             <div className="payment_details">
               <div className="details">
                 <h2 className="title">Order/ Invoice ID</h2>
-                <p>#ABC-2025-000006</p>
+                <p>{order?.orderID}</p>
               </div>
               <div className="details">
                 <h2 className="title">Transaction Date</h2>
-                <p>Friday, November 01, 2024 - 10:56 am</p>
+                <p>{formattedDate}</p>
               </div>
               <div className="details">
                 <h2 className="title">Payment Method</h2>
-                <p>Mastercard: 1xx xxxx xxxxxx</p>
+                <p>{order?.payment?.pay_method}: {order?.payment?.tran_id} {order?.payment?.acc_number}</p>
               </div>
             </div>
 
@@ -83,78 +100,47 @@ const ThankYou = () => {
                 <h2>Your Order</h2>
               </div>
               <ul className="cart_items">
-                <li>
-                  <div className="product_details_wrapper">
-                    <div className="product_item">
-                      <img src={productImg1.src} alt="" />
-                    </div>
-                    <div className="item">
-                      <span className="title">DJI Osmo Mobile 6</span>
-                      <div className="type_wrap_container">
-                        <h2 className="type_wrap">
-                          Gimbal<span>1×</span>
-                        </h2>
+                {
+                  order?.invoiceProducts?.map((product, idx) => (
+                    <li key={idx}>
+                      <div className="product_details_wrapper">
+                        <div className="product_item">
+                          <img src={`https://api.abcpabnabd.com${product?.productID?.productImg}`} alt="" />
+                        </div>
+                        <div className="item">
+                          <span className="title">{product?.productID?.productName}</span>
+                          <div className="type_wrap_container">
+                            <h2 className="type_wrap">
+                              {product?.productID?.subCategoryID?.subCategoryName}<span>x{product?.qty}</span>
+                            </h2>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="price"> ৳149.99 </span>
-                  </div>
-                </li>
-                <li>
-                  <div className="product_details_wrapper">
-                    <div className="product_item">
-                      <img src={productImg2.src} alt="" />
-                    </div>
-                    <div className="item">
-                      <span className="title">MSI- Gaming Case</span>
-                      <div className="type_wrap_container">
-                        <h2 className="type_wrap">
-                          Gaming Case<span>1×</span>
-                        </h2>
+                      <div>
+                        <span className="price"> ৳{(product?.productID?.discountPrice || product?.productID?.price).toLocaleString(2)} </span>
                       </div>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="price"> ৳139.99 </span>
-                  </div>
-                </li>
-                <li>
-                  <div className="product_details_wrapper">
-                    <div className="product_item">
-                      <img src={productImg3.src} alt="" />
-                    </div>
-                    <div className="item">
-                      <span className="title">CAUGAR- Gaming Headphone</span>
-                      <div className="type_wrap_container">
-                        <h2 className="type_wrap">
-                          Headphone<span>1×</span>
-                        </h2>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="price">৳54.00</span>
-                  </div>
-                </li>
+                    </li>))
+                }
               </ul>
             </div>
 
             <div className="order_summary mt-4">
               <p className="summary_item">
-                <span>Sub-Total</span> <span className="price1">৳343.98</span>
+                <span>Sub-Total</span> <span className="price1">৳{order?.payment?.subTotal}</span>
               </p>
               <p className="summary_item">
-                <span>Discount</span> <span className="price">-৳0</span>
+                <span>Discount</span> <span className="price">-৳{order?.payment?.discount}</span>
               </p>
               <p className="summary_item">
                 <span className="grand">Grand Total</span>
-                <span className="grand_price">৳371.48</span>
+                <span className="grand_price">৳{order?.payment?.grandTotal}</span>
               </p>
             </div>
           </div>
 
-          <a href="/" className="home-btn">Back To Home</a>
+          <div className="text-center">
+            <a href="#" className="home-btn" onClick={handleBackToHome}>Back To Home</a>
+          </div>
         </div>
       </div>
       {/* <!-- Billing Details End --> */}

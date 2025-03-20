@@ -79,6 +79,7 @@ router.delete("/hero-slider/:id", SliderController.HeroSliderDelete);
 // Order Invoice APIs
 router.post("/create-invoice", OrderController.PlaceOrder);
 router.get("/order-list", OrderController.OrderList)
+router.patch("/order-update/:id", OrderController.OrderStatusUpdate)
 router.delete("/order-delete/:id", OrderController.OrderDelete)
 
 

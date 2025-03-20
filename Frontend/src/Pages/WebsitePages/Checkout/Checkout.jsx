@@ -6,6 +6,7 @@ import paymentImg from "@/assets/img/payment.png"
 import bkashImg from "@/assets/img/payment-bkash.png"
 import nagadImg from "@/assets/img/payment-nagad.png"
 import bankImg from "@/assets/img/payment-bank.png"
+import QRImg from "@/assets/img/QR.png"
 
 import modalBkash from '@/assets/img/bkash.png';
 import bracBankimg from "@/assets/img/Bracbank.png"
@@ -17,11 +18,10 @@ import axios from "axios";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 import logo from "@/assets/img/abc-logo-icon.png"
 import { FaRegCopy } from "react-icons/fa";
-import discount from "@/Components/Home/Discount/Discount";
 
 const Checkout = () => {
 
-  const {cart, subTotal, deliveryCharge, grandTotal, removeCart} = useContext(CartContext)
+  const {cart, subTotal, grandTotal, removeCart, discount} = useContext(CartContext)
   const bankAccount = 546746449874
 
   const { setUserID } = useContext(UserContext);
@@ -177,16 +177,16 @@ const Checkout = () => {
 
     setError({})
 
+    if(!cart.length){
+      return alert("Cart is empty! Add product first.")
+    }
+
     if(name === ""){
       return setError({id: "name", error: "Full Name is required!"})
     }
 
     if(address === ""){
       return setError({id: "address", error: "Address is required!"})
-    }
-
-    if(city === ""){
-      return setError({id: "city", error: "City is required!"})
     }
 
     if(phone === ""){
@@ -199,6 +199,10 @@ const Checkout = () => {
       return setError({ id: "email", error: "Email address is required!" });
     } else if (!emailRegex.test(email)) {
       return setError({ id: "email", error: "Invalid email address!" });
+    }
+
+    if(city === ""){
+      return setError({id: "city", error: "City is required!"})
     }
 
 
@@ -559,11 +563,7 @@ const Checkout = () => {
                     <span className="price1">৳{subTotal}</span>
                   </p>
                   <p className="summary_item">
-                    <span>Discount</span> <span className="price">-৳0</span>
-                  </p>
-                  <p className="summary_item">
-                    <span>Delivery Cost</span>{" "}
-                    <span className="price">৳{deliveryCharge}</span>
+                    <span>Discount</span> <span className="price">-৳{discount}</span>
                   </p>
                   <p className="summary_item">
                     <span className="grand">Grand Total</span>
@@ -792,11 +792,11 @@ const Checkout = () => {
                               <p>2. Select Send Money/ Scan this QR Code</p>
                               <div className="qr-code">
                                 <div className="qr-img">
-                                  <img src="./assets/img/qr-code.png" alt=""/>
+                                  <img src={QRImg.src} alt=""/>
                                 </div>
                               </div>
                               <p>
-                                3. Send 2000 BDT to this Number - 017 00 456 234
+                                3. Send {grandTotal} BDT to this Number - 017 00 456 234
                               </p>
                               <p>4. Enter reference no - your name</p>
                               <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
@@ -834,15 +834,15 @@ const Checkout = () => {
                           <div className="tab-content">
                             <div>
                               <h2>Instructions:</h2>
-                              <p>1. Open Bkash app or dial *167#</p>
+                              <p>1. Open Nagad app or dial *167#</p>
                               <p>2. Select Send Money/ Scan this QR Code</p>
                               <div className="qr-code">
                                 <div className="qr-img">
-                                  <img src="./assets/img/qr-code.png" alt=""/>
+                                  <img src={QRImg.src} alt=""/>
                                 </div>
                               </div>
                               <p>
-                                3. Send 2000 BDT to this Number - 017 00 456 234
+                                3. Send {grandTotal} BDT to this Number - 017 00 456 234
                               </p>
                               <p>4. Enter reference no - your name</p>
                               <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>

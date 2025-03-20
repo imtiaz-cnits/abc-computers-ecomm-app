@@ -24,14 +24,18 @@ import "swiper/css";
 import { FreeMode, Thumbs } from "swiper/modules";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const SingleProduct = ({ id }) => {
+
+  const router = useRouter()
+
   const [productDetails, setProductDetails] = useState({});
   const product = productDetails?.productID;
   const [selectedColor, setSelectedColor] = useState("");
   const [colorSelected, setColorSelected] = useState(true)
 
-  const {cart, setCart, addToCart} = useContext(CartContext)
+  const {addToCart} = useContext(CartContext)
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [quantity, setQuantity] = useState(1)
@@ -89,8 +93,32 @@ const SingleProduct = ({ id }) => {
     }
 
     addToCart(cartItem)
+  }
 
-    toast.success("Added to cart!");
+  const handleBuyNow = () =>{
+    if((selectedColor === "") && (product?.color?.length)){
+      setColorSelected(false)
+      return
+    }
+
+    setColorSelected(true)
+
+    const cartItem = {
+      productID: productDetails?.productID?._id,
+      productName: productDetails?.productID?.productName,
+      price: productDetails?.productID?.discountPrice || productDetails?.productID?.price,
+      productImg: productDetails?.productID?.productImg,
+      subCategory: productDetails?.productID?.subCategoryID?.subCategoryName,
+      quantity: quantity,
+    }
+
+    if(selectedColor !== ""){
+      cartItem.color = selectedColor
+    }
+
+    addToCart(cartItem)
+
+    router.push("/cart")
   }
 
   return (
@@ -244,7 +272,7 @@ const SingleProduct = ({ id }) => {
                        <button className="add_to_cart" onClick={handleAddToCart}>
                          Add to Cart
                        </button>
-                       <button className="buy_now">
+                       <button className="buy_now" onClick={handleBuyNow}>
                          Buy Now
                        </button>
                      </div>

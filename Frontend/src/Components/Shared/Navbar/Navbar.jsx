@@ -313,9 +313,9 @@ const Navbar = () => {
               </button>
 
               {searchValue !== "" &&
-                filteredProducts.length !== 0 &&
                 searchResult ? (
-                <div className={`search-result`} ref={searchRef}>
+                filteredProducts.length ? (
+                  <div className={`search-result`} ref={searchRef}>
                   {filteredProducts?.slice(0, 4)?.map((product) => (
                     <a href={`/products/${product?._id}`} key={product?._id}>
                       <div className="search_product_card">
@@ -340,6 +340,15 @@ const Navbar = () => {
                     </a>
                   ))}
                 </div>
+                )
+                : 
+                (
+                  <>
+                    <div className={`search-result`} ref={searchRef}>
+                      <p className="text-center mt-3">No Products found!</p>
+                    </div>
+                  </>
+                )
               ) : (
                 <></>
               )}
@@ -445,8 +454,9 @@ const Navbar = () => {
           </button>
         </form>
 
-        {searchValue !== "" && filteredProducts.length !== 0 ? (
-          <div className={`search-result`}>
+        {searchValue !== "" ? (
+          filteredProducts?.length ? (
+            <div className={`search-result`}>
             {filteredProducts?.slice(0, 4)?.map((product) => (
               <Link href={`/products/${product?._id}`} key={product?._id}>
                 <div className="search_product_card">
@@ -457,9 +467,7 @@ const Navbar = () => {
                     />
                   </div>
                   <div className="product_details">
-                    <a href={`/products/${product?._id}`}>
-                      <h3 className="product_name">{product?.productName}</h3>
-                    </a>
+                    <h3 className="product_name">{product?.productName}</h3>
                     <div className="price">
                       <span className="main-price">
                         ৳{product?.discountPrice}
@@ -473,6 +481,15 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
+          )
+          :
+          (
+            <>
+              <div className={`search-result`} ref={searchRef}>
+                <p className="text-center mt-3">No Products found!</p>
+              </div>
+            </>
+          )
         ) : (
           <></>
         )}

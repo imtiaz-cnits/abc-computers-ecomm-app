@@ -91,7 +91,7 @@ const BrandUpdateService = async (req) => {
 
     // Update the brand fields
     existingBrand.brandName = brandName || existingBrand.brandName;
-    existingBrand.status = status || existingBrand.status;
+    existingBrand.brandStatus = status || existingBrand.status;
     if (brandImg) existingBrand.brandImg = brandImg;
 
     // Save updated brand

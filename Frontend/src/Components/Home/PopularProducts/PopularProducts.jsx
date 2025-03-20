@@ -32,19 +32,8 @@ const PopularProducts = () => {
               <h2>Popular Products</h2>
             </div>
           </div>
-          <div className="tab-buttons">
-            <button className="tab-btn active" data-tab="newproduct">
-              New
-            </button>
-            <button className="tab-btn" data-tab="featureproduct">
-              Featured
-            </button>
-            <button className="tab-btn" data-tab="sellerproduct">
-              Best Seller
-            </button>
-          </div>
 
-          <div id="newproduct" className="tab-content active">
+          <div id="newproduct">
             <div className="row g-3 g-md-4">
               {products?.slice(0, 8)?.map((product) => (
                 <div

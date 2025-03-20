@@ -1362,13 +1362,13 @@ body {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   font-size: 40px;
   color: var(--primary-color);
   font-weight: 800;
 }
 
-.tab-buttons {
+/* .tab-buttons {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
@@ -1402,7 +1402,7 @@ body {
   opacity: 1;
   height: auto;
   overflow: visible;
-}
+} */
 
 .populer_product .menu-item {
   display: flex;

@@ -71,24 +71,56 @@ const OrderListService = async () => {
     try {
         const data = await PaymentModel.aggregate([
             {
-              $lookup: {
-                from: "invoiceproducts", // Collection name
-                localField: "orderID", 
-                foreignField: "orderID",
-                as: "invoiceProducts",
-              },
+                $lookup: {
+                    from: "invoiceproducts", // Collection name
+                    localField: "orderID", 
+                    foreignField: "orderID",
+                    as: "invoiceProducts",
+                },
             },
             {
-            $lookup: {
-                from: "billingdetails", // Collection name
-                localField: "billingDetailID",
-                foreignField: "_id",
-                as: "billingDetails",
-            },
+                $unwind: { path: "$invoiceProducts", preserveNullAndEmptyArrays: true }, // Flatten invoiceProducts
             },
             {
-            $unwind: { path: "$billingDetails", preserveNullAndEmptyArrays: true }, // Flatten billing details
+                $lookup: {
+                    from: "billingdetails", // Collection name
+                    localField: "billingDetailID",
+                    foreignField: "_id",
+                    as: "billingDetails",
+                },
             },
+            {
+                $unwind: { path: "$billingDetails", preserveNullAndEmptyArrays: true }, // Flatten billing details
+            },
+            {
+                $lookup: {
+                    from: "products", // Collection name
+                    localField: "invoiceProducts.productID",
+                    foreignField: "_id",
+                    as: "invoiceProducts.productDetails",
+                },
+            },
+            {
+                $unwind: { path: "$invoiceProducts.productDetails", preserveNullAndEmptyArrays: true }, // Flatten productDetails
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    acc_number: { $first: "$acc_number" },
+                    billingDetailID: { $first: "$billingDetailID" },
+                    billingDetails: { $first: "$billingDetails" },
+                    createdAt: { $first: "$createdAt" },
+                    discount: { $first: "$discount" },
+                    grandTotal: { $first: "$grandTotal" },
+                    orderID: { $first: "$orderID" },
+                    pay_method: { $first: "$pay_method" },
+                    payment_status: { $first: "$payment_status" },
+                    subTotal: { $first: "$subTotal" },
+                    tran_id: { $first: "$tran_id" },
+                    updatedAt: { $first: "$updatedAt" },
+                    invoiceProducts: { $push: "$invoiceProducts" },
+                },
+            }
           ])
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
@@ -97,7 +129,37 @@ const OrderListService = async () => {
 }
 
 
-const OrderDeleteService = async(billingDetailID) =>{
+const OrderStatusUpdateService = async (req) => {
+    try {
+        const id = req.params.id
+        const status = req.body.status
+
+        const existingPayment = await PaymentModel.findById(id)
+        
+        if(!existingPayment) {
+            return { status: "fail", message: "Payment not found" };
+        }
+
+        existingPayment.payment_status = status
+
+        await existingPayment.save()
+
+        return {
+            status: "success",
+            message: "Payment Status updated successfully",
+            data: existingPayment,
+          };
+    } catch (error) {
+        console.error("Error in OrderStatusUpdateService:", error.message);
+        return {
+          status: "fail",
+          message: "Error updating payment status. Please try again.",
+        };
+    }
+}
+
+
+const OrderDeleteService = async(billingDetailID) => {
     try {
         // Step 1: Delete Payment
         const payment = await PaymentModel.findOne({billingDetailID})
@@ -120,4 +182,4 @@ const OrderDeleteService = async(billingDetailID) =>{
     }
 }
 
-module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService };
+module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService};

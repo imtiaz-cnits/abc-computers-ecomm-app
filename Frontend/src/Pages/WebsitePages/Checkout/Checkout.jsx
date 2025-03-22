@@ -18,14 +18,19 @@ import axios from "axios";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 import logo from "@/assets/img/abc-logo-icon.png"
 import { FaRegCopy } from "react-icons/fa";
+import { PlaceOrderContext } from "@/Utilities/Contexts/PlaceOrderContextProvider";
+import { useRouter } from "next/navigation";
 
 const Checkout = () => {
 
-  const {cart, subTotal, grandTotal, removeCart, discount} = useContext(CartContext)
+  const router = useRouter()
+
+  const { placeOrder } = useContext(PlaceOrderContext)
+
+  const { cart, subTotal, grandTotal, removeCart, discount } = useContext(CartContext)
   const bankAccount = 546746449874
 
   const { setUserID } = useContext(UserContext);
-  const [stateOptions, setStateOptions] = useState([]);
   const [paymentOption, setPaymentOption] = useState("bkash")
   const [loginModal, setLoginModal] = useState(false)
   const [paymentModal, setPaymentModal] = useState(false)
@@ -65,7 +70,7 @@ const Checkout = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
+
 
   // const handleCountryChange = (e) => {
   //   const selectedCountryIndex = e.target.value;
@@ -165,7 +170,7 @@ const Checkout = () => {
       console.error("❌ Login Error:", error);
       toast.error(
         error?.response?.data?.message ||
-          "Login failed! Please check your credentials."
+        "Login failed! Please check your credentials."
       );
     } finally {
       setLoading(false);
@@ -173,24 +178,24 @@ const Checkout = () => {
   };
 
 
-  const handleCheckout = (e) =>{
+  const handleCheckout = (e) => {
 
     setError({})
 
-    if(!cart.length){
+    if (!cart.length) {
       return alert("Cart is empty! Add product first.")
     }
 
-    if(name === ""){
-      return setError({id: "name", error: "Full Name is required!"})
+    if (name === "") {
+      return setError({ id: "name", error: "Full Name is required!" })
     }
 
-    if(address === ""){
-      return setError({id: "address", error: "Address is required!"})
+    if (address === "") {
+      return setError({ id: "address", error: "Address is required!" })
     }
 
-    if(phone === ""){
-      return setError({id: "phone", error: "Phone Number is required!"})
+    if (phone === "") {
+      return setError({ id: "phone", error: "Phone Number is required!" })
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -201,8 +206,8 @@ const Checkout = () => {
       return setError({ id: "email", error: "Invalid email address!" });
     }
 
-    if(city === ""){
-      return setError({id: "city", error: "City is required!"})
+    if (city === "") {
+      return setError({ id: "city", error: "City is required!" })
     }
 
 
@@ -216,13 +221,13 @@ const Checkout = () => {
     setError({})
 
 
-    if(paymentOption !== "bank"){
-      if((tranID === "")){
-        return setError({id: "transaction", error: "Transaction ID is required!"})
+    if (paymentOption !== "bank") {
+      if ((tranID === "")) {
+        return setError({ id: "transaction", error: "Transaction ID is required!" })
       }
-    } else if(paymentOption === "bank"){
-      if((cusBankAccount === "")){
-        return setError({id: "bankAccount", error: "Bank account is required!"})
+    } else if (paymentOption === "bank") {
+      if ((cusBankAccount === "")) {
+        return setError({ id: "bankAccount", error: "Bank account is required!" })
       }
     }
 
@@ -230,11 +235,11 @@ const Checkout = () => {
     const products = cart?.map(prod => {
 
       const checkoutOrder = {
-        productID:  prod?.productID,
+        productID: prod?.productID,
         qty: prod?.quantity,
       }
 
-      if(prod?.color){
+      if (prod?.color) {
         checkoutOrder.color = prod?.color
       }
 
@@ -267,37 +272,37 @@ const Checkout = () => {
 
     // TODO: fix api dynamic
     const response = await axios.post("http://localhost:5070/api/v1/create-invoice",
-        orderData
+      orderData
     );
 
-    console.log(response);
-
-    if(response?.data?.success){
+    if (response?.data?.success) {
+      placeOrder(response.data.data)
       removeCart()
       toast.success("Order placed successfully!")
-    }
+      router.push('/thank-you')
 
-    setName("")
-    setAddress("")
-    SetCity("")
-    setPhone("")
-    setEmail("")
-    setNotes("")
-    setTranID("")
-    setError({})
-    setCusBankAccount("")
-    setPaymentModal(false)
+      setName("")
+      setAddress("")
+      SetCity("")
+      setPhone("")
+      setEmail("")
+      setNotes("")
+      setTranID("")
+      setError({})
+      setCusBankAccount("")
+      setPaymentModal(false)
+    }
 
   }
 
 
-  const copyBankAccount = async() => {
-      try {
-        await navigator.clipboard.writeText(bankAccount);
-        toast.success("Account Number Copied")
-      } catch (err) {
-        console.error("Failed to copy:", err);
-      }
+  const copyBankAccount = async () => {
+    try {
+      await navigator.clipboard.writeText(bankAccount);
+      toast.success("Account Number Copied")
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   }
 
   return (
@@ -342,13 +347,13 @@ const Checkout = () => {
                       id="name"
                       placeholder="Full name"
                       value={name}
-                      onChange={(e)=>setName(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
                     />
                     {
-                      error?.id === "name" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
+                      error?.id === "name" ?
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
                     }
                   </div>
                   <div className="form_group">
@@ -362,11 +367,11 @@ const Checkout = () => {
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                     />
-                                        {
-                      error?.id === "address" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
+                    {
+                      error?.id === "address" ?
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
                     }
                   </div>
                   <div className="form_group">
@@ -378,13 +383,13 @@ const Checkout = () => {
                       id="phone"
                       placeholder="Phone number"
                       value={phone}
-                      onChange={(e)=> setPhone(e.target.value)}
+                      onChange={(e) => setPhone(e.target.value)}
                     />
-                                        {
-                      error?.id === "phone" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
+                    {
+                      error?.id === "phone" ?
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
                     }
                   </div>
                   <div className="form_group">
@@ -398,23 +403,23 @@ const Checkout = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                                        {
-                      error?.id === "email" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
+                    {
+                      error?.id === "email" ?
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
                     }
                   </div>
                   <div className="form_group">
                     <label htmlFor="city">
                       Town / City<span>*</span>
                     </label>
-                    <input type="text" id="city" placeholder="Town/City" value={city} onChange={(e)=> SetCity(e.target.value)} />
+                    <input type="text" id="city" placeholder="Town/City" value={city} onChange={(e) => SetCity(e.target.value)} />
                     {
-                      error?.id === "city" ? 
-                      <span className="error-message">* {error?.error}</span>
-                      :
-                      <></>
+                      error?.id === "city" ?
+                        <span className="error-message">* {error?.error}</span>
+                        :
+                        <></>
                     }
                   </div>
                   <div className="form_group">
@@ -423,7 +428,7 @@ const Checkout = () => {
                       id="order-notes"
                       placeholder="Notes about your order, e.g. special notes for delivery"
                       value={notes}
-                      onChange={(e)=> setNotes(e.target.value)}
+                      onChange={(e) => setNotes(e.target.value)}
                     ></textarea>
                   </div>
                 </form>
@@ -439,7 +444,7 @@ const Checkout = () => {
                       name="payment"
                       id="bkash"
                       checked={paymentOption === "bkash"}
-                      onChange={(e)=>setPaymentOption(e.target.value)}
+                      onChange={(e) => setPaymentOption(e.target.value)}
                       value={"bkash"}
                     />
                     <label htmlFor="bkash">
@@ -449,7 +454,7 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {/* {
+                  {/* {
                       paymentOption === "bkash" ?
                       <>
                       <input
@@ -472,7 +477,7 @@ const Checkout = () => {
                 </div>
                 <div className="payment_option">
                   <div className="radio-container">
-                    <input type="radio" name="payment" id="nagad" checked={paymentOption === "nagad"} onChange={(e)=>setPaymentOption(e.target.value)} value={"nagad"}/>
+                    <input type="radio" name="payment" id="nagad" checked={paymentOption === "nagad"} onChange={(e) => setPaymentOption(e.target.value)} value={"nagad"} />
                     <label htmlFor="nagad">
                       <span className="details">
                         <strong>Nagad</strong>
@@ -480,7 +485,7 @@ const Checkout = () => {
                       </span>
                     </label>
                   </div>
-                    {/* {
+                  {/* {
                       paymentOption === "nagad" ?
                       <><input
                         type="text"
@@ -505,7 +510,7 @@ const Checkout = () => {
                 </div>
                 <div className="payment_option">
                   <div className="radio-container">
-                    <input type="radio" name="payment" id="bank" checked={paymentOption === "bank"} onChange={(e)=>setPaymentOption(e.target.value)} value={"bank"}/>
+                    <input type="radio" name="payment" id="bank" checked={paymentOption === "bank"} onChange={(e) => setPaymentOption(e.target.value)} value={"bank"} />
                     <label htmlFor="bank">
                       <span className="details">
                         <strong>Bank</strong>
@@ -525,7 +530,7 @@ const Checkout = () => {
                   </div>
                   <ul className="cart_items">
                     {
-                      cart?.map((item, idx)=>(
+                      cart?.map((item, idx) => (
                         <li key={idx}>
                           <div className="product_details_wrapper">
                             <div className="product_item">
@@ -583,180 +588,180 @@ const Checkout = () => {
                       centered
                     >
                       <Modal.Body>
-                      <div className="container sign-in-signup-container">
-                        {/* <!-- Sign in Form Start --> */}
-                        <div
-                          className="login"
-                          style={{ display: `${login ? "block" : "none"}` }}
-                        >
-                          <div>
-                            <h2>Account Login</h2>
-                            <form className="login-form" onSubmit={handleLoginSubmit}>
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="loginEmail">Email</label>
-                                  <input
-                                    type="email"
-                                    id="loginEmail"
-                                    name="email"
-                                    placeholder="Enter a email"
-                                    onChange={handleLoginChange}
-                                    required
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="loginPassword">
-                                    Password
+                        <div className="container sign-in-signup-container">
+                          {/* <!-- Sign in Form Start --> */}
+                          <div
+                            className="login"
+                            style={{ display: `${login ? "block" : "none"}` }}
+                          >
+                            <div>
+                              <h2>Account Login</h2>
+                              <form className="login-form" onSubmit={handleLoginSubmit}>
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="loginEmail">Email</label>
                                     <input
-                                      type={showPassword ? "text" : "password"} // Toggle password visibility
-                                      id="loginPassword"
-                                      name="password"
-                                      placeholder="Enter password"
+                                      type="email"
+                                      id="loginEmail"
+                                      name="email"
+                                      placeholder="Enter a email"
                                       onChange={handleLoginChange}
                                       required
-                                      className="mt-1"
                                     />
-                                    <a onClick={() => setShowPassword(!showPassword)}>
-                                      <img
-                                        className="hide-icon"
-                                        src={passwordEye.src}
-                                        alt="Toggle Password"
-                                      />
-                                    </a>
-                                  </label>
+                                  </div>
                                 </div>
-                              </div>
 
-                              <div className="input-row">
-                                <button className="sign-in-btn" type="submit">
-                                  SIGN IN
-                                </button>
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="loginPassword">
+                                      Password
+                                      <input
+                                        type={showPassword ? "text" : "password"} // Toggle password visibility
+                                        id="loginPassword"
+                                        name="password"
+                                        placeholder="Enter password"
+                                        onChange={handleLoginChange}
+                                        required
+                                        className="mt-1"
+                                      />
+                                      <a onClick={() => setShowPassword(!showPassword)}>
+                                        <img
+                                          className="hide-icon"
+                                          src={passwordEye.src}
+                                          alt="Toggle Password"
+                                        />
+                                      </a>
+                                    </label>
+                                  </div>
+                                </div>
+
+                                <div className="input-row">
+                                  <button className="sign-in-btn" type="submit">
+                                    SIGN IN
+                                  </button>
+                                </div>
+                              </form>
+                              <div className="switch">
+                                <div>
+                                  <span>Don't have an account?</span>
+                                  <span className="switch-btn" onClick={() => setLogin(false)}>
+                                    Register Now
+                                  </span>
+                                </div>
+                                <span className="forgot">Forgot Password?</span>
                               </div>
-                            </form>
-                            <div className="switch">
-                              <div>
-                                <span>Don't have an account?</span>
-                                <span className="switch-btn" onClick={() => setLogin(false)}>
-                                  Register Now
-                                </span>
-                              </div>
-                              <span className="forgot">Forgot Password?</span>
                             </div>
                           </div>
-                        </div>
-                        {/* <!-- Sign in Form End --> */}
+                          {/* <!-- Sign in Form End --> */}
 
-                        {/* <!-- Registration Form Start --> */}
-                        <div
-                          className="register"
-                          style={{ display: `${login ? "none" : "block"}` }}
-                        >
-                          <div>
-                            <h2>Register Account</h2>
-                            <form className="register-form" onSubmit={handleSubmit}>
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="name">Name</label>
-                                  <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Name"
-                                    onChange={handleChange}
-                                    required
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="email">Email</label>
-                                  <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder="Enter a email"
-                                    onChange={handleChange}
-                                    required
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="number">Phone Number</label>
-                                  <input
-                                    type="number"
-                                    id="number"
-                                    name="mobile"
-                                    placeholder="Phone number"
-                                    onChange={handleChange}
-                                    required
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="input-row">
-                                <div className="input-field">
-                                  <label htmlFor="password">
-                                    Password
+                          {/* <!-- Registration Form Start --> */}
+                          <div
+                            className="register"
+                            style={{ display: `${login ? "none" : "block"}` }}
+                          >
+                            <div>
+                              <h2>Register Account</h2>
+                              <form className="register-form" onSubmit={handleSubmit}>
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="name">Name</label>
                                     <input
-                                      type={showPassword ? "text" : "password"} // Toggle password visibility
-                                      id="password"
-                                      name="password"
-                                      placeholder="Enter password"
+                                      type="text"
+                                      id="name"
+                                      name="name"
+                                      placeholder="Name"
                                       onChange={handleChange}
                                       required
-                                      className="mt-1"
                                     />
-                                    <a onClick={() => setShowPassword(!showPassword)}>
-                                      <img
-                                        className="hide-icon"
-                                        src={passwordEye.src}
-                                        alt="Toggle Password"
+                                  </div>
+                                </div>
+
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="email">Email</label>
+                                    <input
+                                      type="email"
+                                      id="email"
+                                      name="email"
+                                      placeholder="Enter a email"
+                                      onChange={handleChange}
+                                      required
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="number">Phone Number</label>
+                                    <input
+                                      type="number"
+                                      id="number"
+                                      name="mobile"
+                                      placeholder="Phone number"
+                                      onChange={handleChange}
+                                      required
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="input-row">
+                                  <div className="input-field">
+                                    <label htmlFor="password">
+                                      Password
+                                      <input
+                                        type={showPassword ? "text" : "password"} // Toggle password visibility
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter password"
+                                        onChange={handleChange}
+                                        required
+                                        className="mt-1"
                                       />
+                                      <a onClick={() => setShowPassword(!showPassword)}>
+                                        <img
+                                          className="hide-icon"
+                                          src={passwordEye.src}
+                                          alt="Toggle Password"
+                                        />
+                                      </a>
+                                    </label>
+                                  </div>
+                                </div>
+
+                                <div className="input-row">
+                                  <input
+                                    type="checkbox"
+                                    id="checkbox"
+                                    onChange={() => setAcceptedTerms(!acceptedTerms)}
+                                  />
+                                  <label htmlFor="checkbox" className="checkbox">
+                                    I accept the{" "}
+                                    <a href={"#"} className="policy">
+                                      Privacy Policy.
                                     </a>
                                   </label>
                                 </div>
-                              </div>
 
-                              <div className="input-row">
-                                <input
-                                  type="checkbox"
-                                  id="checkbox"
-                                  onChange={() => setAcceptedTerms(!acceptedTerms)}
-                                />
-                                <label htmlFor="checkbox" className="checkbox">
-                                  I accept the{" "}
-                                  <a href={"#"} className="policy">
-                                    Privacy Policy.
-                                  </a>
-                                </label>
+                                <div className="input-row">
+                                  <button
+                                    className="sign-up-btn"
+                                    type="submit"
+                                    disabled={!acceptedTerms}
+                                  >
+                                    SIGN UP
+                                  </button>
+                                </div>
+                              </form>
+                              <div className="switch">
+                                <span>Already have an account?</span>
+                                <span className="switch-btn" onClick={() => setLogin(true)}>
+                                  Login Now
+                                </span>
                               </div>
-
-                              <div className="input-row">
-                                <button
-                                  className="sign-up-btn"
-                                  type="submit"
-                                  disabled={!acceptedTerms}
-                                >
-                                  SIGN UP
-                                </button>
-                              </div>
-                            </form>
-                            <div className="switch">
-                              <span>Already have an account?</span>
-                              <span className="switch-btn" onClick={() => setLogin(true)}>
-                                Login Now
-                              </span>
                             </div>
                           </div>
+                          {/* <!-- Registration Form End --> */}
                         </div>
-                        {/* <!-- Registration Form End --> */}
-                      </div>
                       </Modal.Body>
                     </Modal>
 
@@ -768,7 +773,7 @@ const Checkout = () => {
                       aria-labelledby="contained-modal-title-vcenter"
                       centered
                     >
-                      <span className="close" onClick={()=> setPaymentModal(false)}>&times;</span>
+                      <span className="close" onClick={() => setPaymentModal(false)}>&times;</span>
                       <div className="modal-logo">
                         <div className="logo">
                           <img src={logo.src} alt="" />
@@ -778,92 +783,92 @@ const Checkout = () => {
 
                       {
                         paymentOption === "bkash" ? <>
-                        
-                        <div className="tabs">
-                          <div className="tab-buttons">
-                            <div className="payment-img">
-                              <img src={modalBkash?.src} alt="" />
-                            </div>
-                          </div>
-                          <div className="tab-content">
-                            <div>
-                              <h2>Instructions:</h2>
-                              <p>1. Open Bkash app or dial *247#</p>
-                              <p>2. Select Send Money/ Scan this QR Code</p>
-                              <div className="qr-code">
-                                <div className="qr-img">
-                                  <img src={QRImg.src} alt=""/>
-                                </div>
+
+                          <div className="tabs">
+                            <div className="tab-buttons">
+                              <div className="payment-img">
+                                <img src={modalBkash?.src} alt="" />
                               </div>
-                              <p>
-                                3. Send {grandTotal} BDT to this Number - 017 00 456 234
-                              </p>
-                              <p>4. Enter reference no - your name</p>
-                              <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                            </div>
+                            <div className="tab-content">
+                              <div>
+                                <h2>Instructions:</h2>
+                                <p>1. Open Bkash app or dial *247#</p>
+                                <p>2. Select Send Money/ Scan this QR Code</p>
+                                <div className="qr-code">
+                                  <div className="qr-img">
+                                    <img src={QRImg.src} alt="" />
+                                  </div>
+                                </div>
+                                <p>
+                                  3. Send {grandTotal} BDT to this Number - 017 00 456 234
+                                </p>
+                                <p>4. Enter reference no - your name</p>
+                                <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <input
-                          className="transaction"
-                          type="text"
-                          placeholder="Enter your transaction ID"
-                          value={tranID}
-                          onChange={(e)=> setTranID(e.target.value)}
-                        />
+                          <input
+                            className="transaction"
+                            type="text"
+                            placeholder="Enter your transaction ID"
+                            value={tranID}
+                            onChange={(e) => setTranID(e.target.value)}
+                          />
 
-                        {
-                          error?.id === "transaction" ? 
-                          <span className="error-message">* {error?.error}</span>
-                          :
-                          <></>
-                        } 
+                          {
+                            error?.id === "transaction" ?
+                              <span className="error-message">* {error?.error}</span>
+                              :
+                              <></>
+                          }
 
                         </> : <></>
                       }
 
                       {
                         paymentOption === "nagad" ? <>
-                        
-                        <div className="tabs">
-                          <div className="tab-buttons">
-                            <div className="payment-img">
-                              <img src={nagadImg?.src} alt="" />
-                            </div>
-                          </div>
-                          <div className="tab-content">
-                            <div>
-                              <h2>Instructions:</h2>
-                              <p>1. Open Nagad app or dial *167#</p>
-                              <p>2. Select Send Money/ Scan this QR Code</p>
-                              <div className="qr-code">
-                                <div className="qr-img">
-                                  <img src={QRImg.src} alt=""/>
-                                </div>
+
+                          <div className="tabs">
+                            <div className="tab-buttons">
+                              <div className="payment-img">
+                                <img src={nagadImg?.src} alt="" />
                               </div>
-                              <p>
-                                3. Send {grandTotal} BDT to this Number - 017 00 456 234
-                              </p>
-                              <p>4. Enter reference no - your name</p>
-                              <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                            </div>
+                            <div className="tab-content">
+                              <div>
+                                <h2>Instructions:</h2>
+                                <p>1. Open Nagad app or dial *167#</p>
+                                <p>2. Select Send Money/ Scan this QR Code</p>
+                                <div className="qr-code">
+                                  <div className="qr-img">
+                                    <img src={QRImg.src} alt="" />
+                                  </div>
+                                </div>
+                                <p>
+                                  3. Send {grandTotal} BDT to this Number - 017 00 456 234
+                                </p>
+                                <p>4. Enter reference no - your name</p>
+                                <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <input
-                          className="transaction"
-                          type="text"
-                          placeholder="Enter your transaction ID"
-                          value={tranID}
-                          onChange={(e)=> setTranID(e.target.value)}
-                        />
+                          <input
+                            className="transaction"
+                            type="text"
+                            placeholder="Enter your transaction ID"
+                            value={tranID}
+                            onChange={(e) => setTranID(e.target.value)}
+                          />
 
-                        {
-                          error?.id === "transaction" ? 
-                          <span className="error-message">* {error?.error}</span>
-                          :
-                          <></>
-                        } 
+                          {
+                            error?.id === "transaction" ?
+                              <span className="error-message">* {error?.error}</span>
+                              :
+                              <></>
+                          }
 
                         </> : <></>
                       }
@@ -871,46 +876,46 @@ const Checkout = () => {
 
                       {
                         paymentOption === "bank" ? <>
-                        
-                        <div className="tabs">
-                          <div className="tab-buttons">
-                            <div className="payment-img">
-                              <img src={bracBankimg?.src} alt="" />
+
+                          <div className="tabs">
+                            <div className="tab-buttons">
+                              <div className="payment-img">
+                                <img src={bracBankimg?.src} alt="" />
+                              </div>
                             </div>
-                          </div>
-                          <div className="tab-content">
-                            <div>
-                              <h2>Instructions:</h2>
-                              <p>1. Transfer the payable amount on our BRAC bank account and input your account number</p>
-                              <div className="account-info">
-                                <p>
-                                  Account Holder Name: <span>ABC Computers</span>
-                                </p>
-                                <p>
-                                  Account Number: <span>{bankAccount}</span> <button className="copy" onClick={copyBankAccount}><FaRegCopy /></button>
-                                </p>
-                                <p>
-                                  Branch: <span>Pabna Branch</span>
-                                </p>
+                            <div className="tab-content">
+                              <div>
+                                <h2>Instructions:</h2>
+                                <p>1. Transfer the payable amount on our BRAC bank account and input your account number</p>
+                                <div className="account-info">
+                                  <p>
+                                    Account Holder Name: <span>ABC Computers</span>
+                                  </p>
+                                  <p>
+                                    Account Number: <span>{bankAccount}</span> <button className="copy" onClick={copyBankAccount}><FaRegCopy /></button>
+                                  </p>
+                                  <p>
+                                    Branch: <span>Pabna Branch</span>
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <input
-                          className="transaction"
-                          type="text"
-                          placeholder="Enter Your Account Number"
-                          value={cusBankAccount}
-                          onChange={(e)=> setCusBankAccount(e.target.value)}
-                        />
 
-                        {
-                          error?.id === "bankAccount" ? 
-                          <span className="error-message">* {error?.error}</span>
-                          :
-                          <></>
-                        } 
+                          <input
+                            className="transaction"
+                            type="text"
+                            placeholder="Enter Your Account Number"
+                            value={cusBankAccount}
+                            onChange={(e) => setCusBankAccount(e.target.value)}
+                          />
+
+                          {
+                            error?.id === "bankAccount" ?
+                              <span className="error-message">* {error?.error}</span>
+                              :
+                              <></>
+                          }
 
                         </> : <></>
                       }

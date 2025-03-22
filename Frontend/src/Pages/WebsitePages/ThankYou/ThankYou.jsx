@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import productImg1 from "@/assets/img/cart-product-img1.webp";
 import productImg2 from "@/assets/img/cart-product-img2.webp";
 import productImg3 from "@/assets/img/cart-product-img3.webp";
@@ -13,9 +13,11 @@ const ThankYou = () => {
   const { order, removeOrder, loading } = useContext(PlaceOrderContext)
   const router = useRouter()
 
-  if (!order && !loading) {
-    return router.push("/")
-  }
+  useEffect(() => {
+    if (!order && !loading) {
+      return router.push("/")
+    }
+  }, [order, loading, router])
 
   const formattedDate = moment(order?.payment?.updatedAt).utcOffset(6).format("dddd, MMMM DD, YYYY - hh:mm a");
 

@@ -5,15 +5,19 @@ import axios from "axios";
 import DashboardPagination from "@/Components/Dashboard/DashboardPagination/DashboardPagination";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import { FaRegEye } from "react-icons/fa";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Dropdown, Modal } from "react-bootstrap";
+import "./Orders.css"
 
 const Orders = () => {
 
+    const statuses = ["confirmed", "pending", "cancelled", "delivered", "processing"]
     const [modalShow, setModalShow] = useState(false)
+    const [updatedStatus, setUpdatedStatus] = useState(false)
 
     const tableRef = useRef(null);
     const [orders, setOrders] = useState([])
+    const [products, setProducts] = useState([])
+    const [grandTotal, setGrandTotal] = useState(0)
 
     // Pagination Start
     const [limit, setLimit] = useState(10);
@@ -48,7 +52,14 @@ const Orders = () => {
         };
 
         fetchOrders();
-    }, [limit]);
+
+        const dropdown = document?.querySelector(".dropdown-menu.show")
+
+        if(dropdown){
+            dropdown?.classList.remove("show")
+        }
+
+    }, [limit, updatedStatus]);
 
     useEffect(() => {
         // ..............Table searchbar filter Start.......................//
@@ -108,6 +119,16 @@ const Orders = () => {
         });
     };
 
+    const handleUpdateStatus = async(id, status) =>{
+        const response = await axios.patch(`http://localhost:5070/api/v1/order-update/${id}`,
+            {status: status}
+        )
+
+        if(response?.data?.status === "success"){
+            setUpdatedStatus(!updatedStatus)
+        }
+    }
+
     return (
         <>
             <div className="main-content">
@@ -156,7 +177,7 @@ const Orders = () => {
                                                 <th>Products</th>
                                                 <th>Customer Phone</th>
                                                 <th>Customer Email</th>
-                                                <th>payment Method</th>
+                                                <th>Payment Method</th>
                                                 <th>Tran. ID/Acc. No. </th>
                                                 <th>Status</th>
                                                 <th>Action</th>
@@ -170,7 +191,11 @@ const Orders = () => {
                                                             {order?.orderID}
                                                         </td>
                                                         <td>
-                                                            <button onClick={() => setModalShow(true)}>
+                                                            <button onClick={() => {
+                                                                setProducts(order?.invoiceProducts)
+                                                                setModalShow(true)
+                                                                setGrandTotal(order?.grandTotal)
+                                                            }}>
                                                                 View
                                                             </button>
                                                         </td>
@@ -186,10 +211,27 @@ const Orders = () => {
                                                         <td>
                                                             {order?.tran_id === "" ? order?.acc_number : order?.tran_id}
                                                         </td>
-                                                        <td>
-                                                            {order?.payment_status}
+                                                        <td className={`status ${order?.payment_status}`}>
+                                                            <Dropdown>
+                                                                <div className="d-flex gap-1">
+                                                                    <Button>
+                                                                        {order?.payment_status}
+                                                                    </Button>
+
+                                                                    <Dropdown.Toggle split variant="light" id="dropdown-split-basic" />
+                                                                </div>
+
+                                                                <Dropdown.Menu>
+                                                                    {
+                                                                        statuses?.map((status, idx)=> <Dropdown.ItemText key={idx} onClick={()=> handleUpdateStatus(order?._id, status)}>
+                                                                            {status}
+                                                                        </Dropdown.ItemText>)
+                                                                    }
+                                                                </Dropdown.Menu>
+                                                            </Dropdown>
                                                         </td>
-                                                        <td>
+                                                        <td className="d-flex align-items-center gap-2">
+
                                                             {/* Delete Brand Button */}
                                                             <a
                                                                 href="#"
@@ -259,16 +301,56 @@ const Orders = () => {
             >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                Modal heading
+                    Products Ordered
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h4>Centered Modal</h4>
-                <p>
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                consectetur ac, vestibulum at eros.
-                </p>
+                <div className="table_wrapper">
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        products?.map((product)=>(
+                        <tr key={product?.productID}>
+                        <td className="d-flex">
+                            <div className="product_profile">
+                                <div className="cart_img">
+                                    <img src={`https://api.abcpabnabd.com${product?.productDetails?.productImg}`} alt="" />
+                                </div>
+                                <div>
+                                    <a href={`/products/${product?.productID}`} className="product_name">{product?.productDetails?.productName}</a>
+                                    <div>
+                                        x{product?.qty}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td className="product_price">
+                            <h3>${product?.productDetails?.price?.toLocaleString(2)}</h3>
+                        </td>
+                        </tr>)
+                        )
+                    }
+                    <tr>
+                        <td>
+                            <div className="total">
+                                <h3>
+                                    Total
+                                </h3>
+                            </div>
+                        </td>
+                        <td className="product_price">
+                            <h3>${grandTotal.toLocaleString(2)}</h3>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
             </Modal.Body>
             </Modal>
         </>

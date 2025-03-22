@@ -539,10 +539,6 @@ html ::-webkit-scrollbar-thumb:hover {
   text-align: center;
 }
 
-.data-table .btn:hover {
-  background-color: var(--text-color2);
-}
-
 .data-table .btn:hover svg path {
   fill: var(--white);
 }

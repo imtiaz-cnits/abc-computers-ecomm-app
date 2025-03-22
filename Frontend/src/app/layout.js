@@ -16,6 +16,7 @@ import { Toaster } from "react-hot-toast"; // Import Toaster
 import "./globals.css";
 import CartContextProvider from "@/Utilities/Contexts/CartContextProvider";
 import PlaceOrderContextProvider from "@/Utilities/Contexts/PlaceOrderContextProvider";
+import FloatingCart from "@/Components/Shared/FloatingCart/FloatingCart";
 
 
 export const metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
                 <Navbar />
                 {children}
                 <Footer />
+                <FloatingCart/>
                 <BackToTop />
                 <JavascriptClient />
                 <Toaster />

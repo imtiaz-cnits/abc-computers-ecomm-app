@@ -337,6 +337,7 @@ const DashboardSidebar = () => {
                   handleSubmenuToggle={handleSubmenuToggle}
                   submenuItems={[
                     { title: "ORDERS", href: "/dashboard/orders" },
+                    { title: "INVOICES", href: "/dashboard/invoices" },
                   ]}
                   submenuTitle={"ORDERS"}
                   icon={

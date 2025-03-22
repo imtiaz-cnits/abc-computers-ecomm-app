@@ -128,7 +128,7 @@ const OrderListService = async () => {
                     invoiceProducts: { $push: "$invoiceProducts" },
                 },
             }
-        ])
+        ]).sort({ createdAt: -1 })
         return { status: "success", data: data }; // Ensure JSON response
     } catch (e) {
         return { status: "Fail", data: e.toString() }; // Ensure JSON error response

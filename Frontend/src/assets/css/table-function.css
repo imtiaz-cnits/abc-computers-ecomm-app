@@ -200,6 +200,12 @@ html ::-webkit-scrollbar-thumb:hover {
   margin-right: 6px;
 }
 
+.data-table .view-more-btn.invoice svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+}
+
 .data-table #searchInput:focus {
   box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.25);
 }
@@ -461,7 +467,7 @@ html ::-webkit-scrollbar-thumb:hover {
   margin-bottom: 0px;
 }
 
-.data-table .table tbody td button{
+.data-table .table tbody td button {
   font-size: 14px;
   padding: 4px 10px;
   background-color: var(--primary-color);
@@ -514,7 +520,7 @@ html ::-webkit-scrollbar-thumb:hover {
   color: var(--text-color);
 }
 
-.table-hover > tbody > tr:hover > * {
+.table-hover>tbody>tr:hover>* {
   background: var(--hover-color);
 }
 
@@ -658,6 +664,7 @@ html ::-webkit-scrollbar-thumb:hover {
 
 /* print.css */
 @media print {
+
   .navbar-header,
   .isvertical-topbar,
   .data-table .button-wrapper,

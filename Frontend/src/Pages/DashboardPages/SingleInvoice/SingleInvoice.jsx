@@ -1,13 +1,40 @@
-import React from 'react';
+"use client"
+
+import React, { useEffect, useRef } from 'react';
 import abcLogo from '@/assets/img/invoice-logo.png'
 import bcsLogo from "@/assets/img/bcs-logo.png"
 import "./SingleInvoice.css"
+import { FaPrint } from 'react-icons/fa';
+import { useReactToPrint } from 'react-to-print';
 
 const SingleInvoice = ({ id }) => {
+    const componentRef = useRef(null)
+
+    useEffect(() => {
+        console.log("Component Rendered:", componentRef.current);
+    }, []);
+
+
+    const handlePrint = () => {
+        window.print()
+    };
+
+
     return (
         <div className="main-content">
             <div className="page-content">
-                <div className="invoice">
+                <div className="data-table">
+                    <div className="invoice-btn">
+                        <div></div>
+                        <div className="table-btn-item">
+                            <button type="button" className="view-more-btn invoice" onClick={handlePrint}>
+                                <FaPrint style={{ fontSize: "12px" }} />
+                                PRINT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ref={componentRef} className="invoice" >
                     <div className="invoice-header">
                         <div className="logo">
                             <img src={abcLogo?.src} alt="" />
@@ -150,16 +177,12 @@ const SingleInvoice = ({ id }) => {
 
 
                                     <tr className='total-row'>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td colSpan="3"></td>
                                         <td>Grand Total</td>
                                         <td>1,00,000.00</td>
                                     </tr>
                                     <tr className='total-row'>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td colSpan="3"></td>
                                         <td>Total Paid</td>
                                         <td>1,00,000.00</td>
                                     </tr>
@@ -178,6 +201,10 @@ const SingleInvoice = ({ id }) => {
                             <p>
                                 *<b>For Any Warranty claim must show Invoice/Bill</b>
                             </p>
+                        </div>
+                        <div className='branding'>
+                            <p>Developed by</p>
+                            <p>CodeNext IT - <a href="www.codenextit.com">www.codenextit.com</a></p>
                         </div>
                     </div>
                 </div>

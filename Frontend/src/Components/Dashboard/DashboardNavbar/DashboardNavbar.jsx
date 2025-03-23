@@ -9,7 +9,7 @@ const DashboardNavbar = () => {
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false)
   const path = usePathname();
 
-  useEffect(()=>{
+  useEffect(() => {
 
     if (!path.startsWith("/dashboard")) {
       return;
@@ -29,18 +29,18 @@ const DashboardNavbar = () => {
 
   const toggleSidebar = () => {
     if (typeof document === "undefined" || typeof window === "undefined") return;
-  
+
     const currentSize = document.body.getAttribute("data-sidebar-size");
-  
+
     document.body.classList.toggle("sidebar-enable");
-  
+
     if (window.innerWidth >= 992) {
       document.body.setAttribute(
         "data-sidebar-size",
         currentSize === "sm" ? "lg" : "sm"
       );
     }
-  
+
     setIsSidebarEnabled((prevState) => !prevState);
   };
 
@@ -117,7 +117,7 @@ const DashboardNavbar = () => {
                       <stop offset="1" stopColor="#337836" />
                     </linearGradient>
                   </defs>
-                            
+
                 </svg>
               </span>
             </Link>
@@ -134,12 +134,6 @@ const DashboardNavbar = () => {
         </div>
 
         <div className="d-flex align-items-center">
-
-          <Link href={'/'}>
-            <button type="submit" className="website-btn">
-              Go To Website
-            </button>
-          </Link>
 
           <div className="dropdown d-inline-block">
             <button
@@ -288,65 +282,11 @@ const DashboardNavbar = () => {
               </div>
             </div>
           </div>
-
-          <div className="dropdown d-inline-block">
-            <button
-              type="button"
-              className="btn header-item user text-start d-flex align-items-center"
-              id="page-header-user-dropdown-v"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <img
-                className="rounded-circle header-profile-user"
-                src={userImg?.src}
-                alt="Header Avatar"
-              />
+          <Link href={'/'}>
+            <button type="submit" className="website-btn">
+              Go To Website
             </button>
-            <div
-              className={`dropdown-menu dropdown-menu-end pt-0 profile-dropdown`}
-              style={{
-                position: "absolute",
-                inset: "0px 0px auto auto",
-                margin: "0px",
-                transform: "translate(-0.1875px, 64px)",
-              }}
-            >
-              <div className="p-3 border-bottom">
-                <h6 className="mb-0">Martin Gurley</h6>
-                <a href="# " className="mb-0 font-size-11 text-muted">
-                  martin.gurley@email.com
-                </a>
-              </div>
-              <a className="dropdown-item" href="contacts-profile.html">
-                <i className="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle">Profile</span>
-              </a>
-              <a className="dropdown-item" href="apps-chat.html">
-                <i className="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle">Messages</span>
-              </a>
-              <a className="dropdown-item" href="pages-faqs.html">
-                <i className="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle">Help</span>
-              </a>
-              <a className="dropdown-item d-flex align-items-center" href="#">
-                <i className="mdi mdi-cog-outline text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle me-3">Settings</span>
-                <span className="badge badge-soft-success ms-auto">New</span>
-              </a>
-              <a className="dropdown-item" href="auth-lock-screen.html">
-                <i className="mdi mdi-lock text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle">Lock screen</span>
-              </a>
-              <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="auth-logout.html">
-                <i className="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i>
-                <span className="align-middle">Logout</span>
-              </a>
-            </div>
-          </div>
+          </Link>
         </div>
       </div>
     </nav>

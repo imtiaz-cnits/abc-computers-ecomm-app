@@ -43,7 +43,7 @@ const CreateInvoiceService = async (orderData) => {
             color: item.color
         }));
 
-        const savedInvoiceProducts = await InvoiceProductModel.insertMany(invoiceProducts);
+        await InvoiceProductModel.insertMany(invoiceProducts);
 
         // Step 4: Save payment details
         const newPayment = new PaymentModel({
@@ -136,6 +136,72 @@ const OrderListService = async () => {
 }
 
 
+const OrderDetailsService = async (id) => {
+
+    try {
+        const data = await PaymentModel.aggregate([
+            {
+                $match: { _id: new ObjectID(id) }
+            },
+            {
+                $lookup: {
+                    from: "invoiceproducts", // Collection name
+                    localField: "orderID",
+                    foreignField: "orderID",
+                    as: "invoiceProducts",
+                },
+            },
+            {
+                $unwind: { path: "$invoiceProducts", preserveNullAndEmptyArrays: true }, // Flatten invoiceProducts
+            },
+            {
+                $lookup: {
+                    from: "billingdetails", // Collection name
+                    localField: "billingDetailID",
+                    foreignField: "_id",
+                    as: "billingDetails",
+                },
+            },
+            {
+                $unwind: { path: "$billingDetails", preserveNullAndEmptyArrays: true }, // Flatten billing details
+            },
+            {
+                $lookup: {
+                    from: "products", // Collection name
+                    localField: "invoiceProducts.productID",
+                    foreignField: "_id",
+                    as: "invoiceProducts.productDetails",
+                },
+            },
+            {
+                $unwind: { path: "$invoiceProducts.productDetails", preserveNullAndEmptyArrays: true }, // Flatten productDetails
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    acc_number: { $first: "$acc_number" },
+                    billingDetailID: { $first: "$billingDetailID" },
+                    billingDetails: { $first: "$billingDetails" },
+                    createdAt: { $first: "$createdAt" },
+                    discount: { $first: "$discount" },
+                    grandTotal: { $first: "$grandTotal" },
+                    orderID: { $first: "$orderID" },
+                    pay_method: { $first: "$pay_method" },
+                    payment_status: { $first: "$payment_status" },
+                    subTotal: { $first: "$subTotal" },
+                    tran_id: { $first: "$tran_id" },
+                    updatedAt: { $first: "$updatedAt" },
+                    invoiceProducts: { $push: "$invoiceProducts" },
+                },
+            }
+        ])
+        return { status: "success", data: data }; // Ensure JSON response
+    } catch (e) {
+        return { status: "Fail", data: e.toString() }; // Ensure JSON error response
+    }
+}
+
+
 const OrderStatusUpdateService = async (req) => {
     try {
         const id = req.params.id
@@ -189,4 +255,4 @@ const OrderDeleteService = async (billingDetailID) => {
     }
 }
 
-module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService };
+module.exports = { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService, OrderDetailsService };

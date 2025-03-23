@@ -4,31 +4,31 @@ import React, { createContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 export const CartContext = createContext({})
 
-const CartContextProvider = ({children}) => {
+const CartContextProvider = ({ children }) => {
 
     const [cart, setCart] = useState([])
     const [discount, setDiscount] = useState(0)
 
-    useEffect(()=>{
+    useEffect(() => {
         const cartItems = JSON.parse(localStorage.getItem("cart"))
-    
+
         setCart(cartItems || [])
-    },[])
+    }, [])
 
     const subTotal = cart?.reduce((accumulator, cartItem) => accumulator + (cartItem?.price * cartItem?.quantity), 0)
 
     const grandTotal = subTotal - discount
 
 
-    const addToCart = (item) =>{
+    const addToCart = (item) => {
 
         const existingItem = cart.find(cartItem => cartItem?.productID === item?.productID)
 
-        if(existingItem){
+        if (existingItem) {
             const newCart = cart?.filter(cartItem => cartItem?.productID !== item?.productID)
 
             localStorage.setItem("cart", JSON.stringify([...newCart, item]))
-            setCart([item,...newCart])
+            setCart([item, ...newCart])
 
             toast?.error("Product already added")
             return
@@ -40,17 +40,17 @@ const CartContextProvider = ({children}) => {
         toast?.success("Product added to cart")
     }
 
-    const removeFromCart = (id) =>{
+    const removeFromCart = (id) => {
         const deletedCart = cart?.filter(item => item?.productID !== id)
 
         localStorage.setItem("cart", JSON.stringify(deletedCart))
         setCart(deletedCart)
     }
 
-    const increaseQuantity = (id) =>{
+    const increaseQuantity = (id) => {
         const existingItem = cart.find(cartItem => cartItem?.productID === id)
 
-        if(existingItem){
+        if (existingItem) {
             const index = cart.indexOf(existingItem)
             const newCart = [...cart]
 
@@ -64,14 +64,14 @@ const CartContextProvider = ({children}) => {
         }
     }
 
-    const decreaseQuantity = (id) =>{
+    const decreaseQuantity = (id) => {
         const existingItem = cart.find(cartItem => cartItem?.productID === id)
 
-        if(existingItem){
+        if (existingItem) {
             const index = cart.indexOf(existingItem)
             const newCart = [...cart]
 
-            if(existingItem.quantity > 1){
+            if (existingItem.quantity > 1) {
                 existingItem.quantity = existingItem?.quantity - 1
             }
 
@@ -83,12 +83,12 @@ const CartContextProvider = ({children}) => {
         }
     }
 
-    const removeCart = () =>{
+    const removeCart = () => {
         localStorage.removeItem("cart")
         setCart([])
     }
 
-    const directAddToCart = async(productID) =>{
+    const directAddToCart = async (productID) => {
         const response = await axios.get(`https://api.abcpabnabd.com/api/v1/product-details/${productID}`,
             {
                 headers: {
@@ -106,13 +106,13 @@ const CartContextProvider = ({children}) => {
             productImg: product?.productID?.productImg,
             subCategory: product?.productID?.subCategoryID?.subCategoryName,
             quantity: 1,
-          }
-      
-          if(product?.color?.length){
+        }
+
+        if (product?.color?.length) {
             cartItem.color = product?.color[0]
-          }
-      
-          addToCart(cartItem)
+        }
+
+        addToCart(cartItem)
 
     }
 
@@ -124,8 +124,8 @@ const CartContextProvider = ({children}) => {
         removeFromCart,
         increaseQuantity,
         decreaseQuantity,
-        subTotal: subTotal.toLocaleString(2),
-        grandTotal: grandTotal.toLocaleString(2),
+        subTotal: subTotal,
+        grandTotal: grandTotal,
         removeCart,
         directAddToCart,
         discount

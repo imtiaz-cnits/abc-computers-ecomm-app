@@ -1,23 +1,38 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import abcLogo from '@/assets/img/invoice-logo.png'
 import bcsLogo from "@/assets/img/bcs-logo.png"
 import "./SingleInvoice.css"
 import { FaPrint } from 'react-icons/fa';
 import { useReactToPrint } from 'react-to-print';
+import axios from 'axios';
+import moment from 'moment';
 
 const SingleInvoice = ({ id }) => {
     const componentRef = useRef(null)
+    const [order, setOrder] = useState({})
 
     useEffect(() => {
-        console.log("Component Rendered:", componentRef.current);
-    }, []);
+        const fetchOrderDetails = async () => {
+            const response = await axios.get(`http://localhost:5070/api/v1/order-details/${id}`)
+
+            if (response?.data?.status === "success") {
+                setOrder(response.data?.data[0])
+            }
+        }
+
+        fetchOrderDetails()
+    }, [id]);
 
 
     const handlePrint = () => {
         window.print()
     };
+
+    const formattedNumber = (number) => {
+        return new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number);
+    }
 
 
     return (
@@ -75,7 +90,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        Jubayer Hossain
+                                        {order?.billingDetails?.cus_name}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -84,7 +99,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        01788-428280
+                                        {order?.billingDetails?.cus_phone}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -93,7 +108,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        Radhanagar, Pabna, Bangladesh
+                                        {order?.billingDetails?.cus_address}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -102,7 +117,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        jubayerhossain111220@gmail.com
+                                        {order?.billingDetails?.cus_email}
                                     </p>
                                 </div>
                             </div>
@@ -113,7 +128,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        #ABC-2025-000012
+                                        {order?.orderID}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -122,7 +137,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        29-Feb-2024 01:00:14 PM
+                                        {moment(order?.updatedAt).format('DD-MMM-YYYY hh:mm:ss A')}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -130,8 +145,8 @@ const SingleInvoice = ({ id }) => {
                                         Status
                                     </p>
                                     :
-                                    <p className="right">
-                                        Approved
+                                    <p className="right" style={{ textTransform: "capitalize" }}>
+                                        {order?.payment_status}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -140,7 +155,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        Bank
+                                        {order?.pay_method}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -149,7 +164,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        SEFWXJILMEDV
+                                        {order?.tran_id} {order?.acc_number}
                                     </p>
                                 </div>
                             </div>
@@ -166,25 +181,30 @@ const SingleInvoice = ({ id }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            ASUS Vivobook 15 X1504ZA-NJ391 12th Gen Core i5-1235U 16GB RAM 512GB SSD 15.6-inch FHD Laptop</td>
-                                        <td>1.00 PCS</td>
-                                        <td>1,00,000.00</td>
-                                        <td>1,00,000.00</td>
-                                    </tr>
+                                    {
+                                        order?.invoiceProducts?.map((product, idx) => (
+                                            <tr key={product?._id}>
+                                                <td>{idx + 1}</td>
+                                                <td>
+                                                    {product?.productDetails?.productName}
+                                                </td>
+                                                <td>{formattedNumber(product?.qty)} PCS</td>
+                                                <td>{formattedNumber(product?.productDetails?.discountPrice || product?.productDetails?.price)}</td>
+                                                <td>{formattedNumber((product?.productDetails?.discountPrice || product?.productDetails?.price) * product?.qty)}</td>
+                                            </tr>
+                                        ))
+                                    }
 
 
                                     <tr className='total-row'>
                                         <td colSpan="3"></td>
                                         <td>Grand Total</td>
-                                        <td>1,00,000.00</td>
+                                        <td>{formattedNumber(order?.grandTotal)}</td>
                                     </tr>
                                     <tr className='total-row'>
                                         <td colSpan="3"></td>
                                         <td>Total Paid</td>
-                                        <td>1,00,000.00</td>
+                                        <td>{formattedNumber(order?.grandTotal)}</td>
                                     </tr>
                                 </tbody>
                             </table>

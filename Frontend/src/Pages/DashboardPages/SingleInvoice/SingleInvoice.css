@@ -11,7 +11,7 @@
 
 
 .invoice .invoice-header .logo img {
-    width: 150px;
+    width: 200px;
 }
 
 
@@ -54,7 +54,6 @@
     justify-content: center;
     align-items: center;
     padding: 5px;
-    background: rgb(194, 194, 194)
 }
 
 .invoice .invoice-body .heading h2 {
@@ -163,4 +162,15 @@
     font-size: 14px;
     color: #171717;
     margin-bottom: 0;
+}
+
+
+@media print {
+    .invoice-btn {
+        display: none !important;
+    }
+
+    .page-content {
+        padding: 0px !important;
+    }
 }

@@ -565,14 +565,14 @@ const Checkout = () => {
                 <div className="order_summary">
                   <p className="summary_item">
                     <span>Sub-Total</span>{" "}
-                    <span className="price1">৳{subTotal}</span>
+                    <span className="price1">৳{subTotal.toLocaleString()}</span>
                   </p>
                   <p className="summary_item">
-                    <span>Discount</span> <span className="price">-৳{discount}</span>
+                    <span>Discount</span> <span className="price">-৳{discount.toLocaleString()}</span>
                   </p>
                   <p className="summary_item">
                     <span className="grand">Grand Total</span>
-                    <span className="grand_price">৳{grandTotal}</span>
+                    <span className="grand_price">৳{grandTotal.toLocaleString()}</span>
                   </p>
                   <button className="continue_btn" onClick={handleCheckout}>
                     Checkout Now
@@ -801,7 +801,7 @@ const Checkout = () => {
                                   </div>
                                 </div>
                                 <p>
-                                  3. Send {grandTotal} BDT to this Number - 017 00 456 234
+                                  3. Send {grandTotal.toLocaleString()} BDT to this Number - 017 00 456 234
                                 </p>
                                 <p>4. Enter reference no - your name</p>
                                 <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>
@@ -847,7 +847,7 @@ const Checkout = () => {
                                   </div>
                                 </div>
                                 <p>
-                                  3. Send {grandTotal} BDT to this Number - 017 00 456 234
+                                  3. Send {grandTotal.toLocaleString()} BDT to this Number - 017 00 456 234
                                 </p>
                                 <p>4. Enter reference no - your name</p>
                                 <p>5. Get you Transaction ID and enter on below box then click PAY NOW</p>

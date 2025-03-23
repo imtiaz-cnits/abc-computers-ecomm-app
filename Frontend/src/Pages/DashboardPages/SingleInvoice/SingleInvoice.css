@@ -1,7 +1,6 @@
 .invoice {
     width: 100%;
     margin: auto;
-    padding: 100px 50px;
 }
 
 .invoice .invoice-header {
@@ -81,11 +80,11 @@
 .invoice .invoice-body .details-container div.info-row p.left {
     min-width: 120px;
     font-weight: 500;
-    color: var(--text-color)
+    color: #171717
 }
 
 .invoice .invoice-body .details-container div.info-row p.right {
-    color: var(--text-color2)
+    color: #888888
 }
 
 .invoice .invoice-body .details-container div.info-row p {
@@ -103,16 +102,16 @@
 
 .invoice .invoice-body .products-table table th {
     font-weight: 600;
-    color: var(--text-color)
+    color: #171717
 }
 
 .invoice .invoice-body .products-table table td {
-    color: var(--text-color2)
+    color: #888888
 }
 
 .invoice .invoice-body .products-table table th,
 .invoice .invoice-body .products-table table td {
-    border: 1px solid var(--border-color);
+    border: 1px solid #929292;
     padding: 4px;
     text-align: center;
     font-size: 14px;
@@ -125,21 +124,20 @@
     max-width: 200px;
 }
 
-.invoice .invoice-body .products-table table tr.total-row td:nth-child(1),
-.invoice .invoice-body .products-table table tr.total-row td:nth-child(2),
-.invoice .invoice-body .products-table table tr.total-row td:nth-child(3) {
+.invoice .invoice-body .products-table table tr.total-row td:nth-child(1) {
     border: none;
 }
 
-.invoice .invoice-body .products-table table tr.total-row td:nth-child(4) {
+.invoice .invoice-body .products-table table tr.total-row td:nth-child(2) {
     font-weight: 600;
-    color: var(--text-color)
+    color: #171717;
+    text-align: center;
 }
 
 .invoice .invoice-body .conditions {
     margin-top: 50px;
     width: 100%;
-    color: var(--text-color);
+    color: #171717;
     font-size: 14px;
 }
 
@@ -153,4 +151,16 @@
 
 .invoice .invoice-body .conditions p {
     margin-bottom: 0px;
+}
+
+.invoice .branding {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.invoice .branding p,
+.invoice .branding a {
+    font-size: 14px;
+    color: #171717;
+    margin-bottom: 0;
 }

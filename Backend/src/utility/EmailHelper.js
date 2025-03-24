@@ -4,8 +4,8 @@ const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
     try {
         let transporter = nodemailer.createTransport({
             host: "mail.abcpabnabd.com",
-            port: 465, // or 587 if TLS is required
-            secure: true, // Use true for port 465, false for 587
+            port: 587, // or 587 if TLS is required
+            secure: false, // Use true for port 465, false for 587
             auth: {
                 user: "order@abcpabnabd.com",
                 pass: 'a+a+.o6m(S0}', // ⚠️ Move this to a config file or env variable

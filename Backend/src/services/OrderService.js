@@ -47,6 +47,16 @@ const CreateInvoiceService = async (orderData) => {
 
         await InvoiceProductModel.insertMany(invoiceProducts);
 
+
+        // **Decrease product stock**
+        for (const item of cartItems) {
+            await ProductModel.findByIdAndUpdate(
+                item.productID,
+                { $inc: { stock: -item.qty } }, // Decrement stock
+                { new: true }
+            );
+        }
+
         // Step 4: Save payment details
         const newPayment = new PaymentModel({
             orderID,

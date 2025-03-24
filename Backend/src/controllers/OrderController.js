@@ -1,4 +1,9 @@
-const { CreateInvoiceService, OrderListService, OrderDeleteService, OrderStatusUpdateService, OrderDetailsService } = require("../services/OrderService");
+const {
+    CreateInvoiceService,
+    OrderListService,
+    OrderDeleteService,
+    OrderStatusUpdateService,
+    OrderDetailsService } = require("../services/OrderService");
 
 exports.PlaceOrder = async (req, res) => {
     try {
@@ -32,13 +37,12 @@ exports.OrderDetails = async (req, res) => {
     }
 }
 
-
 exports.OrderStatusUpdate = async (req, res) => {
     try {
         const result = await OrderStatusUpdateService(req)
         return res.status(200).json(result)
     } catch (error) {
-        return res.status(500).json({ status: "Fail", data: e.toString() });
+        return res.status(500).json({ status: "Fail", data: error.toString() });
     }
 }
 

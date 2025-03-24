@@ -5,6 +5,7 @@ const PaymentModel = require("../models/PaymentModel");
 const ObjectID = mongoose.Types.ObjectId;
 const FormData = require("form-data");
 const axios = require("axios");
+const nodemailer = require("../utility/EmailHelper");
 
 const CreateInvoiceService = async (orderData) => {
     // Function to generate a unique order ID dynamically
@@ -59,6 +60,31 @@ const CreateInvoiceService = async (orderData) => {
         });
 
         const savedPayment = await newPayment.save();
+
+        // Step 5: Send Email Confirmation
+        const emailTo = billingDetails.cus_email;
+        const emailSubject = `Order Confirmation - ${orderID}`;
+        const emailHtml = `
+            <p>Dear <b>${billingDetails.cus_name}</b>,</p>
+            <p>Thank you for your order! Your Order ID is: <b>${orderID}</b></p>
+            <h3>Order Details:</h3>
+            <ul>
+                <li>Subtotal: <b>$${paymentDetails.subTotal}</b></li>
+                <li>Discount: <b>$${paymentDetails.discount}</b></li>
+                <li>Grand Total: <b>$${paymentDetails.grandTotal}</b></li>
+                <li>Payment Method: <b>${paymentDetails.pay_method}</b></li>
+                <li>Payment Status: <b>Pending</b></li>
+            </ul>
+            <h3>Shipping Address:</h3>
+            <p>${billingDetails.cus_address}, ${billingDetails.cus_city}</p>
+            <h3>Contact Information:</h3>
+            <p>Phone: ${billingDetails.cus_phone} <br>Email: ${billingDetails.cus_email}</p>
+            <p>We will notify you once your order is confirmed.</p>
+            <p>Best Regards, <br> <b>ABC Computers Pabna</b></p>
+        `;
+
+        await nodemailer(emailTo, emailSubject, emailHtml); // Send Email
+
 
         const newInvoiceProducts = await InvoiceProductModel.find({ orderID }).populate({
             path: "productID",

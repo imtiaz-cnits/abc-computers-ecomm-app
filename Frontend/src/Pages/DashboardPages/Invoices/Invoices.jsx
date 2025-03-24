@@ -166,18 +166,20 @@ const Invoices = () => {
                                                                 {order?.payment_status}
                                                             </Button>
                                                         </td>
-                                                        <td className="d-flex align-items-center justify-content-end gap-2">
+                                                        <td>
 
-                                                            <button>
-                                                                <FaPrint />
-                                                            </button>
+                                                            <div className="d-flex gap-2 justify-content-end">
+                                                                {/* <button>
+                                                                    <FaPrint />
+                                                                </button> */}
 
-                                                            {/* Delete Brand Button */}
-                                                            <a href={`/dashboard/invoices/${order?._id}`}>
-                                                                <button>
-                                                                    <FaRegEye />
-                                                                </button>
-                                                            </a>
+                                                                {/* Delete Brand Button */}
+                                                                <a href={`/dashboard/invoices/${order?._id}`}>
+                                                                    <button>
+                                                                        <FaRegEye />
+                                                                    </button>
+                                                                </a>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))

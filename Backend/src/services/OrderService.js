@@ -6,6 +6,7 @@ const ObjectID = mongoose.Types.ObjectId;
 const FormData = require("form-data");
 const axios = require("axios");
 const nodemailer = require("../utility/EmailHelper");
+const ProductModel = require("../models/ProductModel");
 
 const CreateInvoiceService = async (orderData) => {
     // Function to generate a unique order ID dynamically
@@ -36,7 +37,7 @@ const CreateInvoiceService = async (orderData) => {
         const savedBilling = await newBilling.save();
 
         // Step 3: Save ordered products with the generated order ID
-        const invoiceProducts = cartItems.map(item => ({
+        const invoiceProducts = cartItems.map((item) => ({
             productID: item.productID,
             billingDetailID: savedBilling._id,
             orderID, // Assign dynamically generated order ID
@@ -84,7 +85,6 @@ const CreateInvoiceService = async (orderData) => {
         `;
 
         await nodemailer(emailTo, emailSubject, emailHtml); // Send Email
-
 
         const newInvoiceProducts = await InvoiceProductModel.find({ orderID }).populate({
             path: "productID",

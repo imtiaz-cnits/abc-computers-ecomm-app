@@ -826,7 +826,7 @@ Reset Default CSS End
   font-size: 16px;
   font-weight: 600;
   color: var(--primary-color);
-  margin: 20px 0;
+  margin: 10px 0 0px;
 }
 
 .ce_ixelgen_progress_bar .item_value {

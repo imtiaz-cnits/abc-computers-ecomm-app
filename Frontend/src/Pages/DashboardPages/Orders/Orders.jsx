@@ -230,7 +230,7 @@ const Orders = () => {
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
-                                                        <td className="d-flex align-items-center gap-2">
+                                                        <td>
 
                                                             {/* Delete Brand Button */}
                                                             <a

@@ -1,11 +1,10 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import abcLogo from '@/assets/img/invoice-logo.png'
+import abcLogo from '@/assets/img/invoice-logo.svg'
 import bcsLogo from "@/assets/img/bcs-logo.png"
 import "./SingleInvoice.css"
 import { FaPrint } from 'react-icons/fa';
-import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -83,7 +82,7 @@ const SingleInvoice = ({ id }) => {
                             <h2>Invoice</h2>
                         </div>
                         <div className='details-container'>
-                            <div>
+                            <div className='customer-details'>
                                 <div className='info-row'>
                                     <p className="left">
                                         Customer Name
@@ -121,7 +120,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                 </div>
                             </div>
-                            <div>
+                            <div className='billing-details'>
                                 <div className='info-row'>
                                     <p className="left">
                                         Invoice No.
@@ -176,8 +175,8 @@ const SingleInvoice = ({ id }) => {
                                         <th>#</th>
                                         <th>Product Name</th>
                                         <th>QTY</th>
-                                        <th>Price</th>
-                                        <th>Total</th>
+                                        <th>Price (BDT)</th>
+                                        <th>Total (BDT)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -188,7 +187,7 @@ const SingleInvoice = ({ id }) => {
                                                 <td>
                                                     {product?.productDetails?.productName}
                                                 </td>
-                                                <td>{formattedNumber(product?.qty)} PCS</td>
+                                                <td>{product?.qty}</td>
                                                 <td>{formattedNumber(product?.productDetails?.discountPrice || product?.productDetails?.price)}</td>
                                                 <td>{formattedNumber((product?.productDetails?.discountPrice || product?.productDetails?.price) * product?.qty)}</td>
                                             </tr>
@@ -203,6 +202,11 @@ const SingleInvoice = ({ id }) => {
                                     </tr>
                                     <tr className='total-row'>
                                         <td colSpan="3"></td>
+                                        <td>Discount</td>
+                                        <td>{formattedNumber(order?.discount)}</td>
+                                    </tr>
+                                    <tr className='total-row'>
+                                        <td colSpan="3"></td>
                                         <td>Total Paid</td>
                                         <td>{formattedNumber(order?.grandTotal)}</td>
                                     </tr>
@@ -210,8 +214,10 @@ const SingleInvoice = ({ id }) => {
                             </table>
                         </div>
                         <div className="conditions">
-                            <span>Services: 01969-666676</span>
-                            <span>Warranty: 01818-115081</span>
+                            <div>
+                                <span>Services: 01969-666676</span>
+                                <span>Warranty: 01818-115081</span>
+                            </div>
                             <p>
                                 *Good One Sold are not Refundable & Exchangeable. Warranty are not Applicable for Mouse & all kinds of Cable.
                             </p>
@@ -223,8 +229,7 @@ const SingleInvoice = ({ id }) => {
                             </p>
                         </div>
                         <div className='branding'>
-                            <p>Developed by</p>
-                            <p>CodeNext IT - <a href="www.codenextit.com">www.codenextit.com</a></p>
+                            <p>Developed by CodeNext IT - <a href="www.codenextit.com">www.codenextit.com</a></p>
                         </div>
                     </div>
                 </div>

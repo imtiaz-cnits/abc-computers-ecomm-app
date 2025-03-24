@@ -186,16 +186,6 @@ const Specials = () => {
                                   Available: {product?.stock}
                                 </h4>
                               </div>
-                              <div className="item_bar cell">
-                                <ProgressBar
-                                  completed={45}
-                                  bgColor="#e31736"
-                                  height="10px"
-                                  isLabelVisible={false}
-                                  baseBgColor="#e2e2e2"
-                                  animateOnRender
-                                />
-                              </div>
                             </div>
                           </div>
                         </div>

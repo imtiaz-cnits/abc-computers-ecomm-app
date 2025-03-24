@@ -362,9 +362,6 @@ const AllProducts = ({ catId }) => {
                               Available: 642
                             </h4>
                           </div>
-                          <div className="item_bar cell">
-                            <div className="progress" data-progress="20"></div>
-                          </div>
                         </div>
                       </div>
                     </div>

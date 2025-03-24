@@ -1838,7 +1838,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   color: var(--primary-color);
-  margin: 10px 0;
+  margin: 10px 0 0px;
 }
 
 .ce_ixelgen_progress_bar .item_value {
@@ -1942,7 +1942,7 @@ body {
 
   .ce_ixelgen_progress_bar .item_label,
   .ce_ixelgen_progress_bar .item_value {
-    margin: 10px 0;
+    margin: 10px 0 0px;
   }
 }
 

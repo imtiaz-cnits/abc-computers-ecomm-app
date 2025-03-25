@@ -2,4 +2,4 @@ SMTP Infos:
     Host: mail.abcpabnabd.com
     Port: 465
     Username: order@abcpabnabd.com
-    Password: a+a+.o6m(S0}
+    Password: i,cWRhyUdnBO

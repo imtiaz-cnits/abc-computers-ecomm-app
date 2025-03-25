@@ -5,7 +5,8 @@ const PaymentModel = require("../models/PaymentModel");
 const ObjectID = mongoose.Types.ObjectId;
 const FormData = require("form-data");
 const axios = require("axios");
-const nodemailer = require("../utility/EmailHelper");
+// const nodemailer = require("../utility/EmailHelper");
+const EmailSend = require("../utility/EmailHelper");
 const ProductModel = require("../models/ProductModel");
 
 const CreateInvoiceService = async (orderData) => {
@@ -94,7 +95,7 @@ const CreateInvoiceService = async (orderData) => {
             <p>Best Regards, <br> <b>ABC Computers Pabna</b></p>
         `;
 
-        await nodemailer(emailTo, emailSubject, emailHtml); // Send Email
+        await EmailSend(emailTo, emailSubject, emailHtml); // Send Email
 
         const newInvoiceProducts = await InvoiceProductModel.find({ orderID }).populate({
             path: "productID",

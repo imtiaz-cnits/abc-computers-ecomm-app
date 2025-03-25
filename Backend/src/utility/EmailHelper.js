@@ -1,14 +1,14 @@
 const nodemailer = require("nodemailer");
 
-const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
+const EmailSend = async (EmailTo, EmailHtml, EmailSubject) => {
     try {
         let transporter = nodemailer.createTransport({
             host: "mail.abcpabnabd.com",
-            port: 587, // or 587 if TLS is required
-            secure: false, // Use true for port 465, false for 587
+            port: 587, // or 465 for SSL
+            secure: false, // Set to true if using port 465
             auth: {
                 user: "order@abcpabnabd.com",
-                pass: 'a+a+.o6m(S0}', // ⚠️ Move this to a config file or env variable
+                pass: 'i,cWRhyUdnBO', // Move to environment variable!
             },
             tls: {
                 rejectUnauthorized: false, // Use only if facing SSL issues
@@ -19,14 +19,14 @@ const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
             from: '"ABC Computers Pabna" <order@abcpabnabd.com>',
             to: EmailTo,
             subject: EmailSubject,
-            text: EmailText,
+            html: EmailHtml, // Use 'html' instead of 'text' for HTML emails
         };
 
         let info = await transporter.sendMail(mailOptions);
-        console.log("Email sent successfully:", info.messageId);
+        console.log("✅ Email sent successfully:", info.messageId);
         return { success: true, messageId: info.messageId };
     } catch (error) {
-        console.error("Error sending email:", error);
+        console.error("❌ Error sending email:", error);
         return { success: false, error: error.message };
     }
 };

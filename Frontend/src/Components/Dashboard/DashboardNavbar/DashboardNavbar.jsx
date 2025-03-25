@@ -4,10 +4,12 @@ import userImg from "@/assets/img/navbar-profile-logo.png";
 import Link from "next/link";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
+import { Modal } from "react-bootstrap";
 
 const DashboardNavbar = () => {
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false)
   const path = usePathname();
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
 
@@ -140,9 +142,7 @@ const DashboardNavbar = () => {
               type="button"
               className="btn header-item noti-icon"
               id="page-header-notifications-dropdown-v"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              onClick={() => setShow(true)}
             >
               <svg
                 width="26"
@@ -161,126 +161,130 @@ const DashboardNavbar = () => {
 
               <span className="noti-dot">12</span>
             </button>
-            <div
+            <Modal show={show} onHide={() => setShow(false)}>
+              <Modal.Body>
+              <div
               className="dropdown-menu dropdown-menu-xl dropdown-menu-end p-0 page-header-notifications-dropdown-v"
               aria-labelledby="page-header-notifications-dropdown-v"
-            >
-              <div className="p-3">
-                <div className="row align-items-center">
-                  <div className="col">
-                    <h5 className="m-0 font-size-15">Notifications</h5>
-                  </div>
-                  <div className="col-auto">
-                    <a
-                      href="#!"
-                      className="small fw-semibold text-decoration-underline"
-                    >
-                      Mark all as read
-                    </a>
+              >
+                <div className="p-3">
+                  <div className="row align-items-center">
+                    <div className="col">
+                      <h5 className="m-0 font-size-15">Notifications</h5>
+                    </div>
+                    <div className="col-auto">
+                      <a
+                        href="#!"
+                        className="small fw-semibold text-decoration-underline"
+                      >
+                        Mark all as read
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div data-simplebar style={{ maxHeight: "250px" }}>
-                <a href="#!" className="text-reset notification-item">
-                  <div className="d-flex">
-                    <div className="flex-shrink-0 me-3">
-                      <img
-                        src={userImg?.src}
-                        className="rounded-circle avatar-sm"
-                        alt="user-pic"
-                      />
-                    </div>
-                    <div className="flex-grow-1">
-                      <p className="text-muted font-size-13 mb-0 float-end">
-                        1 hour ago
-                      </p>
-                      <h6 className="mb-1">James Lemire</h6>
-                      <div>
-                        <p className="mb-0">
-                          It will seem like simplified English.
+                <div data-simplebar style={{ maxHeight: "250px" }}>
+                  <a href="#!" className="text-reset notification-item">
+                    <div className="d-flex">
+                      <div className="flex-shrink-0 me-3">
+                        <img
+                          src={userImg?.src}
+                          className="rounded-circle avatar-sm"
+                          alt="user-pic"
+                        />
+                      </div>
+                      <div className="flex-grow-1">
+                        <p className="text-muted font-size-13 mb-0 float-end">
+                          1 hour ago
                         </p>
+                        <h6 className="mb-1">James Lemire</h6>
+                        <div>
+                          <p className="mb-0">
+                            It will seem like simplified English.
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-                <a href="#!" className="text-reset notification-item">
-                  <div className="d-flex">
-                    <div className="flex-shrink-0 avatar-sm me-3">
-                      <span className="avatar-title bg-primary rounded-circle font-size-18">
-                        <i className="fa-regular fa-user"></i>
-                      </span>
-                    </div>
-                    <div className="flex-grow-1">
-                      <p className="text-muted font-size-13 mb-0 float-end">
-                        3 min ago
-                      </p>
-                      <h6 className="mb-1">Your order is placed</h6>
-                      <div>
-                        <p className="mb-0">
-                          If several languages coalesce the grammar
+                  </a>
+                  <a href="#!" className="text-reset notification-item">
+                    <div className="d-flex">
+                      <div className="flex-shrink-0 avatar-sm me-3">
+                        <span className="avatar-title bg-primary rounded-circle font-size-18">
+                          <i className="fa-regular fa-user"></i>
+                        </span>
+                      </div>
+                      <div className="flex-grow-1">
+                        <p className="text-muted font-size-13 mb-0 float-end">
+                          3 min ago
                         </p>
+                        <h6 className="mb-1">Your order is placed</h6>
+                        <div>
+                          <p className="mb-0">
+                            If several languages coalesce the grammar
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-                <a href="#!" className="text-reset notification-item">
-                  <div className="d-flex">
-                    <div className="flex-shrink-0 avatar-sm me-3">
-                      <span className="avatar-title bg-success rounded-circle font-size-18">
-                        <i className="fa-regular fa-user"></i>
-                      </span>
-                    </div>
-                    <div className="flex-grow-1">
-                      <p className="text-muted font-size-13 mb-0 float-end">
-                        8 min ago
-                      </p>
-                      <h6 className="mb-1">Your item is shipped</h6>
-                      <div>
-                        <p className="mb-0">
-                          If several languages coalesce the grammar
+                  </a>
+                  <a href="#!" className="text-reset notification-item">
+                    <div className="d-flex">
+                      <div className="flex-shrink-0 avatar-sm me-3">
+                        <span className="avatar-title bg-success rounded-circle font-size-18">
+                          <i className="fa-regular fa-user"></i>
+                        </span>
+                      </div>
+                      <div className="flex-grow-1">
+                        <p className="text-muted font-size-13 mb-0 float-end">
+                          8 min ago
                         </p>
+                        <h6 className="mb-1">Your item is shipped</h6>
+                        <div>
+                          <p className="mb-0">
+                            If several languages coalesce the grammar
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
 
-                <a href="#!" className="text-reset notification-item">
-                  <div className="d-flex">
-                    <div className="flex-shrink-0 me-3">
-                      <img
-                        src={userImg?.src?.src}
-                        className="rounded-circle avatar-sm"
-                        alt="user-pic"
-                      />
-                    </div>
-                    <div className="flex-grow-1">
-                      <p className="text-muted font-size-13 mb-0 float-end">
-                        1 hour ago
-                      </p>
-                      <h6 className="mb-1">Salena Layfield</h6>
-                      <div>
-                        <p className="mb-1">
-                          As a skeptical Cambridge friend of mine occidental.
+                  <a href="#!" className="text-reset notification-item">
+                    <div className="d-flex">
+                      <div className="flex-shrink-0 me-3">
+                        <img
+                          src={userImg?.src?.src}
+                          className="rounded-circle avatar-sm"
+                          alt="user-pic"
+                        />
+                      </div>
+                      <div className="flex-grow-1">
+                        <p className="text-muted font-size-13 mb-0 float-end">
+                          1 hour ago
                         </p>
+                        <h6 className="mb-1">Salena Layfield</h6>
+                        <div>
+                          <p className="mb-1">
+                            As a skeptical Cambridge friend of mine occidental.
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
+                </div>
+                <div className="p-2 border-top d-grid">
+                  <a
+                    className="btn btn-link font-size-14 btn-block text-center"
+                    style={{
+                      display: "inline-block",
+                      cursor: "pointer",
+                      zIndex: "1",
+                    }}
+                  >
+                    <i className="uil-arrow-circle-right me-1"></i>
+                    <span>View More..</span>
+                  </a>
+                </div>
               </div>
-              <div className="p-2 border-top d-grid">
-                <a
-                  className="btn btn-link font-size-14 btn-block text-center"
-                  style={{
-                    display: "inline-block",
-                    cursor: "pointer",
-                    zIndex: "1",
-                  }}
-                >
-                  <i className="uil-arrow-circle-right me-1"></i>
-                  <span>View More..</span>
-                </a>
-              </div>
-            </div>
+              </Modal.Body>
+            </Modal>
           </div>
           <Link href={'/'}>
             <button type="submit" className="website-btn">

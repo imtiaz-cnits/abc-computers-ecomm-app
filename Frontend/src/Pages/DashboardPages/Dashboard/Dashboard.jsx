@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   const confirmedSales = orders?.filter(order => order?.payment_status === "confirmed")
   const pendingSales = orders?.filter(order => order?.payment_status === "pending")
-  const collections = orders?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
+  const collections = confirmedSales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
 
   useEffect(() => {
     const fetchProducts = async () => {

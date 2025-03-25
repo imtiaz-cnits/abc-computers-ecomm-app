@@ -1,22 +1,51 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import userImg from "@/assets/img/navbar-profile-logo.png";
 import Link from "next/link";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
-import { Modal } from "react-bootstrap";
+import axios from "axios";
+import moment from "moment";
 
 const DashboardNavbar = () => {
+  const notiRef = useRef(null)
   const [isSidebarEnabled, setIsSidebarEnabled] = useState(false)
   const path = usePathname();
   const [show, setShow] = useState(false)
+  const [orders, setOrders] = useState([])
+  const [limit, setLimit] = useState(4)
+
+  const pendingOrders = orders?.filter(order => order?.payment_status === "pending")
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+        try {
+            const response = await axios.get("http://localhost:5070/api/v1/order-list");
+
+            setOrders(response.data.data || []);
+            console.log(response.data.data);
+        } catch (error) {
+            // Improved error handling
+            if (error.response) {
+                console.error(
+                    `Error fetching Orders: ${error.response.status} - ${error.response.data}`
+                );
+            } else if (error.request) {
+                console.error("No response received from server:", error.request);
+            } else {
+                console.error("Error setting up request:", error.message);
+            }
+        }
+    };
+
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
 
     if (!path.startsWith("/dashboard")) {
       return;
     }
-
 
     // Sidebar Close on Outside Click
     document.addEventListener("click", function (event) {
@@ -28,6 +57,20 @@ const DashboardNavbar = () => {
       }
     });
   }, [])
+
+
+  useEffect(()=>{
+    const handleClickOutside = (event) => {
+      if (notiRef.current && !notiRef.current.contains(event.target)) {
+        setShow(false);
+      }
+    };    
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [path])
 
   const toggleSidebar = () => {
     if (typeof document === "undefined" || typeof window === "undefined") return;
@@ -159,132 +202,68 @@ const DashboardNavbar = () => {
                 />
               </svg>
 
-              <span className="noti-dot">12</span>
+              {
+                pendingOrders?.length ? <>
+                  <span className="noti-dot">{pendingOrders?.length}</span>
+                </> : <></>
+              }
             </button>
-            <Modal show={show} onHide={() => setShow(false)}>
-              <Modal.Body>
-              <div
-              className="dropdown-menu dropdown-menu-xl dropdown-menu-end p-0 page-header-notifications-dropdown-v"
+            <div
+              className={`dropdown-menu dropdown-menu-xl dropdown-menu-start p-0 page-header-notifications-dropdown-v ${show ? "show" : ""}`}
               aria-labelledby="page-header-notifications-dropdown-v"
-              >
-                <div className="p-3">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      <h5 className="m-0 font-size-15">Notifications</h5>
-                    </div>
-                    <div className="col-auto">
-                      <a
-                        href="#!"
-                        className="small fw-semibold text-decoration-underline"
-                      >
-                        Mark all as read
-                      </a>
-                    </div>
+              style={{right: "0px"}}
+              ref={notiRef}
+            >
+              <div className="p-3">
+                <div className="row align-items-center">
+                  <div className="col">
+                    <h5 className="m-0 font-size-15">Notifications</h5>
                   </div>
-                </div>
-                <div data-simplebar style={{ maxHeight: "250px" }}>
-                  <a href="#!" className="text-reset notification-item">
-                    <div className="d-flex">
-                      <div className="flex-shrink-0 me-3">
-                        <img
-                          src={userImg?.src}
-                          className="rounded-circle avatar-sm"
-                          alt="user-pic"
-                        />
-                      </div>
-                      <div className="flex-grow-1">
-                        <p className="text-muted font-size-13 mb-0 float-end">
-                          1 hour ago
-                        </p>
-                        <h6 className="mb-1">James Lemire</h6>
-                        <div>
-                          <p className="mb-0">
-                            It will seem like simplified English.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href="#!" className="text-reset notification-item">
-                    <div className="d-flex">
-                      <div className="flex-shrink-0 avatar-sm me-3">
-                        <span className="avatar-title bg-primary rounded-circle font-size-18">
-                          <i className="fa-regular fa-user"></i>
-                        </span>
-                      </div>
-                      <div className="flex-grow-1">
-                        <p className="text-muted font-size-13 mb-0 float-end">
-                          3 min ago
-                        </p>
-                        <h6 className="mb-1">Your order is placed</h6>
-                        <div>
-                          <p className="mb-0">
-                            If several languages coalesce the grammar
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href="#!" className="text-reset notification-item">
-                    <div className="d-flex">
-                      <div className="flex-shrink-0 avatar-sm me-3">
-                        <span className="avatar-title bg-success rounded-circle font-size-18">
-                          <i className="fa-regular fa-user"></i>
-                        </span>
-                      </div>
-                      <div className="flex-grow-1">
-                        <p className="text-muted font-size-13 mb-0 float-end">
-                          8 min ago
-                        </p>
-                        <h6 className="mb-1">Your item is shipped</h6>
-                        <div>
-                          <p className="mb-0">
-                            If several languages coalesce the grammar
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-
-                  <a href="#!" className="text-reset notification-item">
-                    <div className="d-flex">
-                      <div className="flex-shrink-0 me-3">
-                        <img
-                          src={userImg?.src?.src}
-                          className="rounded-circle avatar-sm"
-                          alt="user-pic"
-                        />
-                      </div>
-                      <div className="flex-grow-1">
-                        <p className="text-muted font-size-13 mb-0 float-end">
-                          1 hour ago
-                        </p>
-                        <h6 className="mb-1">Salena Layfield</h6>
-                        <div>
-                          <p className="mb-1">
-                            As a skeptical Cambridge friend of mine occidental.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <div className="p-2 border-top d-grid">
-                  <a
-                    className="btn btn-link font-size-14 btn-block text-center"
-                    style={{
-                      display: "inline-block",
-                      cursor: "pointer",
-                      zIndex: "1",
-                    }}
-                  >
-                    <i className="uil-arrow-circle-right me-1"></i>
-                    <span>View More..</span>
-                  </a>
+                  {/* <div className="col-auto">
+                    <a
+                      href="#!"
+                      className="small fw-semibold text-decoration-underline"
+                    >
+                      Mark all as read
+                    </a>
+                  </div> */}
                 </div>
               </div>
-              </Modal.Body>
-            </Modal>
+              <div data-simplebar style={{ maxHeight: "250px" }}>
+                {
+                  pendingOrders?.slice(0, limit)?.map((order, idx)=>(
+                    <a key={idx} href="#" className="text-reset notification-item">
+                      <div className="d-flex">
+                        <div className="flex-grow-1">
+                          <p className="text-muted font-size-13 mb-0 float-end">
+                            {moment(order?.updatedAt).fromNow()}
+                          </p>
+                          <h6 className="mb-1 noti-heading">{order?.billingDetails?.cus_name} Placed an order</h6>
+                          <div>
+                            <p className="mb-0">
+                              {order?.orderID}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  ))
+                }
+              </div>
+              <div className="p-2 border-top d-grid">
+                <a
+                  className="btn btn-link font-size-14 btn-block text-center"
+                  style={{
+                    display: "inline-block",
+                    cursor: "pointer",
+                    zIndex: "1",
+                  }}
+                >
+                  <i className="uil-arrow-circle-right me-1"></i>
+                  <span onClick={()=> setLimit(12)}>View More..</span>
+                </a>
+              </div>
+            </div>
           </div>
           <Link href={'/'}>
             <button type="submit" className="website-btn">

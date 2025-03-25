@@ -10,6 +10,7 @@ const EmailSend = async (EmailTo, EmailHtml, EmailSubject) => {
                 user: "order@abcpabnabd.com",
                 pass: 'i,cWRhyUdnBO', // Move to environment variable!
             },
+            pool: true,
             tls: {
                 rejectUnauthorized: false, // Use only if facing SSL issues
             }

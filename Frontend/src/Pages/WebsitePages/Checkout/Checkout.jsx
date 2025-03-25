@@ -268,14 +268,12 @@ const Checkout = () => {
       }
     }
 
-    console.log(orderData);
-
     // TODO: fix api dynamic
     const response = await axios.post("http://localhost:5070/api/v1/create-invoice",
       orderData
     );
 
-    if (response?.data?.success) {
+    if (response?.data?.data?.status === "success") {
       placeOrder(response.data.data)
       removeCart()
       toast.success("Order placed successfully!")
@@ -291,6 +289,12 @@ const Checkout = () => {
       setError({})
       setCusBankAccount("")
       setPaymentModal(false)
+    } else if (response?.data?.data?.status === "failed"){
+      toast.error("Out of stock!")
+      setPaymentModal(false)
+      setTranID("")
+      setError({})
+      setCusBankAccount("")
     }
 
   }

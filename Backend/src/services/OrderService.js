@@ -29,6 +29,20 @@ const CreateInvoiceService = async (orderData) => {
     };
     const { billingDetails, cartItems, paymentDetails } = orderData;
 
+
+    for (const item of cartItems) {
+        const product = await ProductModel.findById(item.productID);
+  
+        if (!product) {
+          return { status: "failed", data: { error: "Product not found" } };
+        }
+  
+        if (product.stock < item.qty) {
+          return { status: "failed", data: { error: "Out of stock" } };
+        }
+      }
+
+
     try {
         // Step 1: Generate custom order ID
         const orderID = await generateOrderID();
@@ -49,7 +63,8 @@ const CreateInvoiceService = async (orderData) => {
         await InvoiceProductModel.insertMany(invoiceProducts);
 
 
-        // **Decrease product stock**
+        // Decrease product stock
+        
         for (const item of cartItems) {
             await ProductModel.findByIdAndUpdate(
                 item.productID,
@@ -104,7 +119,7 @@ const CreateInvoiceService = async (orderData) => {
             ]
         })
 
-        return { orderID, billing: savedBilling, invoiceProducts: newInvoiceProducts, payment: savedPayment };
+        return {status: "success", orderID, billing: savedBilling, invoiceProducts: newInvoiceProducts, payment: savedPayment };
     } catch (error) {
         throw new Error("Order processing failed: " + error.message);
     }

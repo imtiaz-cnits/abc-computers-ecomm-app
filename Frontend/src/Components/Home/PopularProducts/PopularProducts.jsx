@@ -88,7 +88,7 @@ const PopularProducts = () => {
                             </a>
                             <button
                               className="icon"
-                              onClick={()=> directAddToCart(product?._id)}
+                              onClick={()=> directAddToCart(product?._id, product?.stock)}
                             >
                               <svg
                                 width="32"

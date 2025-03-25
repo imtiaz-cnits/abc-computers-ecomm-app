@@ -145,6 +145,7 @@ html ::-webkit-scrollbar-thumb {
   font-family: var(--primary-font);
   margin: 10px 0 !important;
   margin-bottom: 0px;
+  text-align: center;
 }
 
 #cards h5 {

@@ -88,7 +88,12 @@ const CartContextProvider = ({ children }) => {
         setCart([])
     }
 
-    const directAddToCart = async (productID) => {
+    const directAddToCart = async (productID, stock) => {
+
+        if(!stock){
+            return toast.error("Out of stock!")
+        }
+
         const response = await axios.get(`https://api.abcpabnabd.com/api/v1/product-details/${productID}`,
             {
                 headers: {

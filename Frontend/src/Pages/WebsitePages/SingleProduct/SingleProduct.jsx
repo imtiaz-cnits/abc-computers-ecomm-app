@@ -182,7 +182,7 @@ const SingleProduct = ({ id }) => {
                         <span className="available">Available</span>
                         <p
                             className={`in_stock ${
-                                product?.stock <= 0 ? "text-danger" :""
+                                product?.stock === 0 ? "text-danger" :""
                             }`}
                         >
                           : {" "}
@@ -208,82 +208,87 @@ const SingleProduct = ({ id }) => {
                     </div>
                   </div>
 
-                  {
-                     product?.color?.length ? (
-                     <>
-                       <div className="select_color_custom">
-                         <label>Select Color: {selectedColor}</label>
-                         <div className="color_btn_container">
-                           {product?.color?.map((color, idx) => (
-                             <button
-                               onClick={() => setSelectedColor(color)}
-                               key={idx}
-                               className={`color_btn ${
-                                 selectedColor === color ? "active" : ""
-                               }`}
-                             >
-                               {color}
-                             </button>
-                           ))}
- 
-                           <button
-                             onClick={() => setSelectedColor("")}
-                             className={`color_btn`}
-                           >
-                             <LiaTimesSolid />
-                           </button>
-                         </div>
-                         {
-                           !colorSelected ? <span className="text-danger">*Select color first!</span> : <></>
-                         }
-                       </div>
-                     </>
-                     ) : <></>
-                   }
 
-                  <div className="action_buttons_custom">
-                    <div className="quantity_wrapper">
-                      <div className="quantity_custom">
-                        <button
-                          type="button"
-                          className="btn-decrease"
-                          onClick={() => decreaseQuantity()}
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          id="quantity"
-                          min="1"
-                          value={quantity}
-                          onChange={(e)=>setQuantity(e.target.value)}
-                        />
-                        <button
-                          type="button"
-                          className="btn-increase"
-                          onClick={() => increaseQuantity()}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
+                    {
+                      product?.stock !== 0 ? <>
+                          {
+                          product?.color?.length ? (
+                          <>
+                            <div className="select_color_custom">
+                              <label>Select Color: {selectedColor}</label>
+                              <div className="color_btn_container">
+                                {product?.color?.map((color, idx) => (
+                                  <button
+                                    onClick={() => setSelectedColor(color)}
+                                    key={idx}
+                                    className={`color_btn ${
+                                      selectedColor === color ? "active" : ""
+                                    }`}
+                                  >
+                                    {color}
+                                  </button>
+                                ))}
+      
+                                <button
+                                  onClick={() => setSelectedColor("")}
+                                  className={`color_btn`}
+                                >
+                                  <LiaTimesSolid />
+                                </button>
+                              </div>
+                              {
+                                !colorSelected ? <span className="text-danger">*Select color first!</span> : <></>
+                              }
+                            </div>
+                          </>
+                          ) : <></>
+                        }
+                        <div className="action_buttons_custom">
+                          <div className="quantity_wrapper">
+                            <div className="quantity_custom">
+                              <button
+                                type="button"
+                                className="btn-decrease"
+                                onClick={() => decreaseQuantity()}
+                              >
+                                -
+                              </button>
+                              <input
+                                type="number"
+                                id="quantity"
+                                min="1"
+                                value={quantity}
+                                onChange={(e)=>setQuantity(e.target.value)}
+                              />
+                              <button
+                                type="button"
+                                className="btn-increase"
+                                onClick={() => increaseQuantity()}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="button_wrapper">
+                            <button className="add_to_cart" onClick={handleAddToCart}>
+                              Add to Cart
+                            </button>
+                            <button className="buy_now" onClick={handleBuyNow}>
+                              Buy Now
+                            </button>
+                          </div>
+                        </div>
 
-                    <div className="button_wrapper">
-                       <button className="add_to_cart" onClick={handleAddToCart}>
-                         Add to Cart
-                       </button>
-                       <button className="buy_now" onClick={handleBuyNow}>
-                         Buy Now
-                       </button>
-                     </div>
-                  </div>
-
-                  <div className="gift_receipt_custom">
-                    <label>
-                      <input type="checkbox" />
-                      <span>Add a gift receipt for easy returns</span>
-                    </label>
-                  </div>
+                        <div className="gift_receipt_custom">
+                          <label>
+                            <input type="checkbox" />
+                            <span>Add a gift receipt for easy returns</span>
+                          </label>
+                        </div>
+                      </> 
+                      : 
+                      <></>
+                    }
                 </div>
               </div>
             </div>

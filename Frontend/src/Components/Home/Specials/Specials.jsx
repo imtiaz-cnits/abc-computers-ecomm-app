@@ -112,7 +112,7 @@ const Specials = () => {
                           </a>
                           <button
                             className="icon"
-                            onClick={() => directAddToCart(product?._id)}
+                            onClick={() => directAddToCart(product?._id, product?.stock)}
                           >
                             <svg
                               height="32"

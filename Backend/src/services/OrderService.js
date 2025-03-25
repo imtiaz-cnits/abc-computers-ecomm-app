@@ -48,7 +48,8 @@ const CreateInvoiceService = async (orderData) => {
         await InvoiceProductModel.insertMany(invoiceProducts);
 
 
-        // **Decrease product stock**
+        // Decrease product stock
+        
         for (const item of cartItems) {
             await ProductModel.findByIdAndUpdate(
                 item.productID,

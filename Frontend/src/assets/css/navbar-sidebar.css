@@ -146,6 +146,10 @@ body[data-sidebar-size="sm"] .main-content {
   padding: 0px 10px;
 }
 
+.noti-heading{
+  font-size: 16px;
+}
+
 .isvertical-topbar .noti-icon svg,
 .isvertical-topbar #right-bar-toggle-v svg {
   display: flex;

@@ -110,7 +110,7 @@ const CreateInvoiceService = async (orderData) => {
             <p>Best Regards, <br> <b>ABC Computers Pabna</b></p>
         `;
 
-        await EmailSend(emailTo, emailSubject, emailHtml); // Send Email
+        await EmailSend(emailTo, emailHtml, emailSubject); // Send Email
 
         const newInvoiceProducts = await InvoiceProductModel.find({ orderID }).populate({
             path: "productID",

@@ -6,6 +6,7 @@ const SliderController = require("../controllers/SliderController");
 const ProfileController = require("../controllers/ProfileController");
 const OrderController = require("../controllers/OrderController");
 const UserModel = require("../models/UserModel");
+const StockController = require("../controllers/StockController")
 
 const AuthVerification = require("../middlewares/AuthVerification");
 const { FeaturesList } = require("../controllers/FeaturesController");
@@ -82,6 +83,9 @@ router.get("/order-list", OrderController.OrderList)
 router.get("/order-details/:id", OrderController.OrderDetails)
 router.patch("/order-update/:id", OrderController.OrderStatusUpdate)
 router.delete("/order-delete/:id", OrderController.OrderDelete)
+
+// Stock APIs
+router.post("/create-stock", StockController.AddStock)
 
 
 module.exports = router;

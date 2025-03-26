@@ -30,7 +30,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get("http://localhost:5070/api/v1/order-list");
+                const response = await axios.get("https://api.abcpabnabd.com/api/v1/order-list");
 
 
                 console.log(response.data.data);
@@ -86,7 +86,7 @@ const Orders = () => {
 
     const deleteOrder = async (billingDetailID) => {
         try {
-            const response = await axios.delete(`http://localhost:5070/api/v1/order-delete/${billingDetailID}`)
+            const response = await axios.delete(`https://api.abcpabnabd.com/api/v1/order-delete/${billingDetailID}`)
 
             if (response.data.status === "success") {
 
@@ -120,7 +120,7 @@ const Orders = () => {
     };
 
     const handleUpdateStatus = async (id, status) => {
-        const response = await axios.patch(`http://localhost:5070/api/v1/order-update/${id}`,
+        const response = await axios.patch(`https://api.abcpabnabd.com/api/v1/order-update/${id}`,
             { status: status }
         )
 

@@ -44,7 +44,7 @@ const Category = () => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5070/api/v1/category"
+          "https://api.abcpabnabd.com/api/v1/category"
         );
 
         setCategories(response.data.data || []);

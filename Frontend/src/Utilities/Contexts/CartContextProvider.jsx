@@ -10,10 +10,17 @@ const CartContextProvider = ({ children }) => {
     const [discount, setDiscount] = useState(0)
 
     useEffect(() => {
-        const cartItems = JSON.parse(localStorage.getItem("cart"))
-
-        setCart(cartItems || [])
-    }, [])
+        const updateCart = () => {
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            setCart(cartItems);
+        };
+    
+        updateCart(); // Initial load
+    
+        const interval = setInterval(updateCart, 1000); // Poll every second
+    
+        return () => clearInterval(interval);
+    }, []);
 
     const subTotal = cart?.reduce((accumulator, cartItem) => accumulator + (cartItem?.price * cartItem?.quantity), 0)
 

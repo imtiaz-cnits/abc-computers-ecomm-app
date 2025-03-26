@@ -27,7 +27,7 @@ const Invoices = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get("http://localhost:5070/api/v1/order-list");
+                const response = await axios.get("https://api.abcpabnabd.com/api/v1/order-list");
 
                 setOrders(response.data.data || []);
                 setTotalItems(response?.data?.data.length);

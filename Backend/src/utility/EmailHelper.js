@@ -3,16 +3,16 @@ const nodemailer = require("nodemailer");
 const EmailSend = async (EmailTo, EmailHtml, EmailSubject) => {
     try {
         let transporter = nodemailer.createTransport({
-            host: "mail.abcpabnabd.com",
-            port: 587, // or 465 for SSL
-            secure: false, // Set to true if using port 465
+            host: "160.191.80.34", // Directly use mail server IP
+            port: 587,
+            secure: false,
             auth: {
                 user: "order@abcpabnabd.com",
-                pass: 'i,cWRhyUdnBO', // Move to environment variable!
+                pass: "i,cWRhyUdnBO",
             },
             pool: true,
             tls: {
-                rejectUnauthorized: false, // Use only if facing SSL issues
+                rejectUnauthorized: false,
             }
         });
 
@@ -20,7 +20,7 @@ const EmailSend = async (EmailTo, EmailHtml, EmailSubject) => {
             from: '"ABC Computers Pabna" <order@abcpabnabd.com>',
             to: EmailTo,
             subject: EmailSubject,
-            html: EmailHtml, // Use 'html' instead of 'text' for HTML emails
+            html: EmailHtml,
         };
 
         let info = await transporter.sendMail(mailOptions);

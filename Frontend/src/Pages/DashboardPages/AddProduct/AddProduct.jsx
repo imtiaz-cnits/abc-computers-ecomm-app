@@ -239,7 +239,7 @@ const AddProduct = () => {
         if (stock) formData.append("stock", stock);
         if (color.length > 0) formData.append("color", JSON.stringify(color));
 
-        url = "http://localhost:5070/api/v1/add-product";
+        url = "https://api.abcpabnabd.com/api/v1/add-product";
         successMessage = "Product added successfully!";
         updateState = setProduct;
         break;

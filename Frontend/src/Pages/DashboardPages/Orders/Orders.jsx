@@ -126,6 +126,9 @@ const Orders = () => {
 
         if (response?.data?.status === "success") {
             setUpdatedStatus(!updatedStatus)
+            if (status === "confirmed") {
+                toast.success("Order confirmed successfully")
+            }
         }
     }
 

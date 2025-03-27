@@ -1,3 +1,8 @@
+.invoice-page .page-content {
+    margin-bottom: 70px 70px 0 70px;
+    padding: 90px 20px 70px 20px;
+}
+
 .invoice {
     width: 100%;
     margin: auto;
@@ -11,7 +16,7 @@
 
 
 .invoice .invoice-header .logo img {
-    width: 120px;
+    width: 190px;
 }
 
 
@@ -20,6 +25,13 @@
     justify-content: stretch;
     align-items: center;
     gap: 10px;
+}
+
+.invoice .invoice-header .info div:first-child *{
+    color: #226DAC;
+}
+.invoice .invoice-header .info div:nth-child(2) *{
+    color: #D461AD;
 }
 
 .invoice .invoice-header .info div h3 {
@@ -39,6 +51,10 @@
 .invoice .invoice-header .info div p {
     font-size: 12px;
     margin-bottom: 0px;
+}
+
+.invoice .invoice-header .info div.contact p span{
+    color: #226DAC;
 }
 
 .invoice .invoice-header .info div.contact p {
@@ -158,14 +174,25 @@
     width: 100%;
     color: #171717;
     font-size: 14px;
-    text-align: center;
 }
 
-.invoice .invoice-body .conditions div{
+.invoice .invoice-body .conditions div:first-child{
     display: flex;
     justify-content: center;
     width: 100%;
     margin-bottom: 10px;
+}
+
+.invoice .invoice-body .conditions div:nth-child(2){
+    margin: auto;
+    width: 650px;
+}
+
+.invoice .invoice-body .conditions div ul{
+    list-style-type: disc;
+    list-style-position: inside;
+    padding-left: 24px !important;
+    font-size: 12px;
 }
 
 .invoice .invoice-body .conditions div span {
@@ -174,10 +201,6 @@
     line-height: 14px;
 }
 
-.invoice .invoice-body .conditions div span:nth-child(1){
-    padding-right: 10px;
-    border-right: 1px solid black;
-}
 .invoice .invoice-body .conditions div span:nth-child(2){
     padding-left: 10px
 }

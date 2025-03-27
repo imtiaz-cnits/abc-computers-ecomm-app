@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from 'react';
-import abcLogo from '@/assets/img/invoice-logo.svg'
+import abcLogo from '@/assets/img/invoice-logo.png'
 import bcsLogo from "@/assets/img/bcs-logo.png"
 import "./SingleInvoice.css"
-import { FaPrint } from 'react-icons/fa';
+import { FaPrint, FaTools } from 'react-icons/fa';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -33,9 +33,8 @@ const SingleInvoice = ({ id }) => {
         return new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(number);
     }
 
-
     return (
-        <div className="main-content">
+        <div className="invoice-page main-content">
             <div className="page-content">
                 <div className="data-table">
                     <div className="invoice-btn">
@@ -71,11 +70,11 @@ const SingleInvoice = ({ id }) => {
                             <div className='contact'>
                                 <p>
                                     <b>
-                                        Contact: 02588843212, 01991-404004, 01839-971200, 01818-115081 E-mail: abc_pabna2007@gmail.com
+                                        Contact: 02588843212, 01991-404004, 01839-971200, 01818-115081 <span>E-mail: abc_pabna2007@gmail.com</span>
                                     </b>
                                 </p>
                             </div>
-                        </div>
+                        </div>   
                     </div>
                     <div className="invoice-body">
                         <div className="heading">
@@ -127,7 +126,7 @@ const SingleInvoice = ({ id }) => {
                                     </p>
                                     :
                                     <p className="right">
-                                        {order?.orderID}
+                                        {order?.invoiceID}
                                     </p>
                                 </div>
                                 <div className='info-row'>
@@ -216,17 +215,21 @@ const SingleInvoice = ({ id }) => {
                         <div className="conditions">
                             <div>
                                 <span>Services: 01969-666676</span>
-                                <span>Warranty: 01818-115081</span>
                             </div>
-                            <p>
-                                *Good One Sold are not Refundable & Exchangeable. Warranty are not Applicable for Mouse & all kinds of Cable.
-                            </p>
-                            <p>
-                                *Warranty Support will not cover any kind of physical damage, burn & liquid case and time expiration.
-                            </p>
-                            <p>
-                                *<b>For Any Warranty claim must show Invoice/Bill</b>
-                            </p>
+                            <div>
+                                <p>
+                                <FaTools style={{marginRight: "5px"}} />
+                                Good One Sold are not Refundable & Exchangeable. Warranty are not Applicable for all kinds of Cable.
+                                </p>
+                                <ul>
+                                    <li>
+                                        Warranty Support will not cover any kind of physical damage, burn & liquid case and time expiration.
+                                    </li>
+                                    <li>
+                                        For Any Warranty claim must show Invoice/Bill
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div className='branding'>
                             <p>Developed by CodeNext IT - <a href="www.codenextit.com">www.codenextit.com</a></p>

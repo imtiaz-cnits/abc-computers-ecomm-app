@@ -1166,6 +1166,7 @@ body {
 @media screen and (max-width: 576px) {
   .cart_sidebar {
     margin-left: 40px;
+    width: 330px;
   }
 
   .cart_sidebar .cart_items {
@@ -1322,13 +1323,13 @@ body {
 }
 
 .footer_content_address svg {
-  width: 35px;
-  height: 35px;
+  width: 24px;
+  height: 24px;
 }
 
 .footer_content_address .numbar {
   color: var(--secondary-color);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   padding-bottom: 10px;
   transition: 0.4s;
@@ -1342,10 +1343,10 @@ body {
   stroke: var(--primary-color);
 }
 
-.footer_content_address .numbar svg path {
+/* .footer_content_address .numbar svg path {
   stroke: var(--secondary-color);
   transition: 0.4s;
-}
+} */
 
 @media screen and (max-width: 1200px) {
   .footer_logo_text p {

@@ -395,8 +395,6 @@ const ProductAddService = async (req) => {
       color,
     } = req.body;
 
-    const parsedColor = JSON.parse(color);
-
     const productImgs = req.files
       ? req.files.map((file) => `/uploads/${file.filename}`)
       : [];
@@ -449,7 +447,7 @@ const ProductAddService = async (req) => {
       brandID,
       categoryID,
       subCategoryID,
-      color: parsedColor,
+      color: color ? JSON.parse(color) : [],
       productImg: productImgs[0],
     });
 

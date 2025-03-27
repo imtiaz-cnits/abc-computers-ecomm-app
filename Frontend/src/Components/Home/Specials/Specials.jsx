@@ -32,6 +32,10 @@ const Specials = () => {
 
   if (products?.length === 0) return null;
 
+  const offerFormate = (price, discountPrice) =>{
+    return (100 - Math.floor((discountPrice / price) * 100))
+  }
+
   return (
     <>
       <div id="specials">
@@ -72,7 +76,7 @@ const Specials = () => {
                             alt=""
                           />
                         </a>
-                        <span className="product_status">70%</span>
+                        <span className="product_status">{offerFormate(product?.price, product?.discountPrice)}%</span>
 
                         <div className="product_icon">
                           <a

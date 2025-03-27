@@ -218,6 +218,9 @@ const Checkout = () => {
   const handlePayNow = async () => {
 
 
+    setLoading(true)
+
+
     setError({})
 
 
@@ -268,7 +271,7 @@ const Checkout = () => {
       }
     }
 
-    const response = await axios.post("http://localhost:5070/api/v1/create-invoice",
+    const response = await axios.post("https://api.abcpabnabd.com/api/v1/create-invoice",
       orderData
     );
 
@@ -277,6 +280,8 @@ const Checkout = () => {
       removeCart()
       toast.success("Order placed successfully!")
       router.push('/thank-you')
+
+      setLoading(false)
 
       setName("")
       setAddress("")
@@ -922,7 +927,11 @@ const Checkout = () => {
 
                         </> : <></>
                       }
-                      <button className="pay-now" onClick={handlePayNow}>PAY NOW</button>
+                      <button disabled={loading} className="pay-now" onClick={handlePayNow}>
+                        {
+                          loading ? "Loading..." : "PAY NOW"
+                        }
+                      </button>
                     </Modal>
                   </>
                 </div>

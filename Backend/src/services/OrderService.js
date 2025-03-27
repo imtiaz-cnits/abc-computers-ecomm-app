@@ -11,22 +11,45 @@ const ProductModel = require("../models/ProductModel");
 
 const CreateInvoiceService = async (orderData) => {
     // Function to generate a unique order ID dynamically
+
+    const date = new Date();
+    let year = date.getFullYear();
+
     const generateOrderID = async () => {
         try {
             // Fetch the last order from InvoiceProductModel
             const latestOrder = await PaymentModel.findOne().sort({ createdAt: -1 });
 
             // Extract the last order number or start from 0
-            const lastNumber = latestOrder ? parseInt(latestOrder.orderID.split("-")[2]) : 0;
+            const lastNumber = latestOrder ? parseInt(latestOrder?.orderID?.split("-")[2]) : 0;
 
             // Increment the order number and format it as 6-digit
             const orderNumber = (lastNumber + 1).toString().padStart(6, "0");
 
-            return `#ABC-2025-${orderNumber}`;
+            return `#ABC-OD${year}-${orderNumber}`;
         } catch (error) {
             throw new Error("Failed to generate order ID: " + error.message);
         }
     };
+
+    // Function to generate a unique order ID dynamically
+    const generateInvoiceID = async () => {
+        try {
+            // Fetch the last order from InvoiceProductModel
+            const latestOrder = await PaymentModel.findOne().sort({ createdAt: -1 });
+
+            // Extract the last order number or start from 0
+            const lastNumber = latestOrder ? parseInt(latestOrder?.invoiceID?.split("-")[2]) : 0;
+
+            // Increment the order number and format it as 6-digit
+            const orderNumber = (lastNumber + 1).toString().padStart(6, "0");
+
+            return `#ABC-INV${year}-${orderNumber}`;
+        } catch (error) {
+            throw new Error("Failed to generate order ID: " + error.message);
+        }
+    };
+
     const { billingDetails, cartItems, paymentDetails } = orderData;
 
 
@@ -46,6 +69,9 @@ const CreateInvoiceService = async (orderData) => {
     try {
         // Step 1: Generate custom order ID
         const orderID = await generateOrderID();
+        const invoiceID = await generateInvoiceID()
+
+        console.log(invoiceID);
 
         // Step 2: Save billing details
         const newBilling = new BillingDetailModel(billingDetails);
@@ -56,6 +82,7 @@ const CreateInvoiceService = async (orderData) => {
             productID: item.productID,
             billingDetailID: savedBilling._id,
             orderID, // Assign dynamically generated order ID
+            invoiceID,
             qty: item.qty,
             color: item.color
         }));
@@ -76,6 +103,7 @@ const CreateInvoiceService = async (orderData) => {
         // Step 4: Save payment details
         const newPayment = new PaymentModel({
             orderID,
+            invoiceID,
             billingDetailID: savedBilling._id,
             subTotal: paymentDetails.subTotal,
             discount: paymentDetails.discount,
@@ -238,6 +266,7 @@ const OrderDetailsService = async (id) => {
                     discount: { $first: "$discount" },
                     grandTotal: { $first: "$grandTotal" },
                     orderID: { $first: "$orderID" },
+                    invoiceID: { $first: "$invoiceID" },
                     pay_method: { $first: "$pay_method" },
                     payment_status: { $first: "$payment_status" },
                     subTotal: { $first: "$subTotal" },
@@ -259,7 +288,7 @@ const OrderStatusUpdateService = async (req) => {
         const id = req.params.id
         const status = req.body.status
 
-        const existingPayment = await PaymentModel.findById(id)
+        const existingPayment = await PaymentModel.findById(id).populate("billingDetailID")
 
         if (!existingPayment) {
             return { status: "fail", message: "Payment not found" };
@@ -268,6 +297,31 @@ const OrderStatusUpdateService = async (req) => {
         existingPayment.payment_status = status
 
         await existingPayment.save()
+
+        if(status === "confirmed"){
+
+            const emailTo = existingPayment?.billingDetailID?.cus_email;
+            const emailSubject = `Order Confirmation - ${existingPayment?.orderID}`;
+            const emailHtml = `
+                <p>Dear <b>${existingPayment?.billingDetailID?.cus_name}</b>,</p>
+                <p>Your order is confirmed! Your Order ID is: <b>${existingPayment?.orderID}</b></p>
+                <h3>Order Details:</h3>
+                <ul>
+                    <li>Subtotal: <b>$${existingPayment.subTotal}</b></li>
+                    <li>Discount: <b>$${existingPayment.discount}</b></li>
+                    <li>Grand Total: <b>$${existingPayment.grandTotal}</b></li>
+                    <li>Payment Method: <b>${existingPayment.pay_method}</b></li>
+                    <li>Payment Status: <b>${existingPayment?.payment_status}</b></li>
+                </ul>
+                <h3>Shipping Address:</h3>
+                <p>${existingPayment?.billingDetailID?.cus_address}, ${existingPayment?.billingDetailID?.cus_city}</p>
+                <h3>Contact Information:</h3>
+                <p>Phone: ${existingPayment?.billingDetailID?.cus_phone} <br>Email: ${existingPayment?.billingDetailID?.cus_email}</p>
+                <p>Best Regards, <br> <b>ABC Computers Pabna</b></p>
+            `;
+
+            await EmailSend(emailTo, emailHtml, emailSubject); // Send Email
+        }
 
         return {
             status: "success",

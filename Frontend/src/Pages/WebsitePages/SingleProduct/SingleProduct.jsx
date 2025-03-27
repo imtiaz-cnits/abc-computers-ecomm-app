@@ -23,7 +23,6 @@ import axios from "axios";
 import "swiper/css";
 import { FreeMode, Thumbs } from "swiper/modules";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const SingleProduct = ({ id }) => {
@@ -58,6 +57,11 @@ const SingleProduct = ({ id }) => {
 
     fetchProduct();
   }, [id]);
+
+
+  useEffect(()=>{
+    console.log(productDetails);
+  }, [productDetails])
 
   // Slider Product Quantity Start..................
   const decreaseQuantity = () => {

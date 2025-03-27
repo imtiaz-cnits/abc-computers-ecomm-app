@@ -767,8 +767,8 @@ body {
 }
 
 #hero .swiper-pagination-bullet {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   margin: 0px 8px !important;
   background: transparent !important;
   border: 2px solid var(--secondary-color);
@@ -1232,8 +1232,8 @@ body {
 
 @media screen and (max-width: 768px) {
   #hero .swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
   }
 }
 

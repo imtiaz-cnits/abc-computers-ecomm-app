@@ -86,7 +86,7 @@ const Invoices = () => {
                     {/* <!-- Table --> */}
                     <div className="data-table">
                         <div className="invoice-btn">
-                            <h1>Orders</h1>
+                            <h1>INVOICES</h1>
                         </div>
 
                         {/* <!-- Action Buttons --> */}

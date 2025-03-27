@@ -9,9 +9,12 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 import { FaXmark } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
+
+  const router = useRouter()
 
   const brandFileInputRef = useRef(null);
   const categoryFileInputRef = useRef(null);
@@ -236,7 +239,7 @@ const AddProduct = () => {
         if (stock) formData.append("stock", stock);
         if (color.length > 0) formData.append("color", JSON.stringify(color));
 
-        url = "https://api.abcpabnabd.com/api/v1/add-product";
+        url = "http://localhost:5070/api/v1/add-product";
         successMessage = "Product added successfully!";
         updateState = setProduct;
         break;
@@ -263,6 +266,10 @@ const AddProduct = () => {
 
       if (updateState) {
         updateState((prevData) => [...prevData, response.data.data]);
+      }
+
+      if(type === "product"){
+        router.push("/dashboard/products")
       }
     } catch (error) {
       console.error("Error response:", error.response?.data || error.message);
@@ -553,12 +560,12 @@ const AddProduct = () => {
                       } // Ensure options are only populated when category is selected
                       placeholder="Select Sub Category..."
                       value={
-                        selectedSubCategory
+                        selectedSubCategory?._id
                           ? {
                               label: selectedSubCategory.subCategoryName,
                               value: selectedSubCategory._id,
                             }
-                          : {}
+                          : null
                       } // Ensure value is null when no subcategory is selected
                       onChange={(selectedOption) => {
                         if (selectedOption) {

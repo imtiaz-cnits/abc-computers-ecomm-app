@@ -914,7 +914,7 @@ body {
   position: fixed;
   top: 0;
   right: -120%;
-  width: 330px;
+  max-width: 380px;
   height: 100vh;
   background: var(--white);
   transition: right 0.5s ease;
@@ -1166,6 +1166,7 @@ body {
 @media screen and (max-width: 576px) {
   .cart_sidebar {
     margin-left: 40px;
+    width: 330px;
   }
 
   .cart_sidebar .cart_items {

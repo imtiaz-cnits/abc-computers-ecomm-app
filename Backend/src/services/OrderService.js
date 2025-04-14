@@ -55,15 +55,15 @@ const CreateInvoiceService = async (orderData) => {
 
     for (const item of cartItems) {
         const product = await ProductModel.findById(item.productID);
-  
+
         if (!product) {
-          return { status: "failed", data: { error: "Product not found" } };
+            return { status: "failed", data: { error: "Product not found" } };
         }
-  
+
         if (product.stock < item.qty) {
-          return { status: "failed", data: { error: "Out of stock" } };
+            return { status: "failed", data: { error: "Out of stock" } };
         }
-      }
+    }
 
 
     try {
@@ -91,7 +91,7 @@ const CreateInvoiceService = async (orderData) => {
 
 
         // Decrease product stock
-        
+
         for (const item of cartItems) {
             await ProductModel.findByIdAndUpdate(
                 item.productID,
@@ -118,7 +118,7 @@ const CreateInvoiceService = async (orderData) => {
 
         // Step 5: Send Email Confirmation
         const emailTo = billingDetails.cus_email;
-        const emailSubject = `Order Confirmation - ${orderID}`;
+        const emailSubject = `Order Placed - ${orderID}`;
         const emailHtml = `
             <p>Dear <b>${billingDetails.cus_name}</b>,</p>
             <p>Thank you for your order! Your Order ID is: <b>${orderID}</b></p>
@@ -147,7 +147,7 @@ const CreateInvoiceService = async (orderData) => {
             ]
         })
 
-        return {status: "success", orderID, billing: savedBilling, invoiceProducts: newInvoiceProducts, payment: savedPayment };
+        return { status: "success", orderID, billing: savedBilling, invoiceProducts: newInvoiceProducts, payment: savedPayment };
     } catch (error) {
         throw new Error("Order processing failed: " + error.message);
     }

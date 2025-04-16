@@ -134,7 +134,7 @@ const Orders = () => {
 
     return (
         <>
-            <div className="main-content">
+            <div className="main-content" id="ORDERS">
                 <div className="page-content">
                     {/* <!-- Table --> */}
                     <div className="data-table">

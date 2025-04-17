@@ -59,6 +59,7 @@ const Login = () => {
         setUserID(_id);
 
         e.target.reset();
+        router.push("/user-profile")
         setFormData({
           name: "",
           email: "",
@@ -102,13 +103,13 @@ const Login = () => {
       if (result?.status === "success" && result?.token) {
         localStorage.setItem("token", result?.token);
         toast.success("Login successful!");
-        // router.push("/"); // Redirect to dashboard
 
         const _id = result?.user?._id;
 
         setUserID(_id);
 
         e.target.reset();
+        router.push("/user-profile")
         setLoginFormData({
           email: "",
           password: "",

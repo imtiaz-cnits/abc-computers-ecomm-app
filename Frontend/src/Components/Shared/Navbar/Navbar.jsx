@@ -70,16 +70,13 @@ const Navbar = () => {
       }
     };
 
-
     setSearchValue("")
     setSearch(false)
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside, true);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside, true);
     };
-
-
   }, [path]);
 
   useEffect(() => {
@@ -523,7 +520,7 @@ const Navbar = () => {
                       <span className="title">{item?.productName}</span>
                       <div className="price_container">
                         <span className="price">
-                          ৳{item?.price} × <span className="quantity">{item?.quantity}</span>
+                          ৳{item?.price?.toLocaleString(2)} × <span className="quantity">{item?.quantity}</span>
                         </span>
                         <div className="quantity_wrapper">
                           <div className="wrap">
@@ -572,7 +569,7 @@ const Navbar = () => {
           <div className="cart_footer">
             <p>
               <span>Sub-Total</span>
-              <span id="subtotal">৳{subTotal}</span>
+              <span id="subtotal">৳{subTotal.toLocaleString(2)}</span>
             </p>
             {/* <p className="grand_total">
               <span>Grand Total</span>

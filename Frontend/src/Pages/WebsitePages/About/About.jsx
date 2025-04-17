@@ -13,6 +13,12 @@ import teamImg2 from "@/assets/img/about/team-img2.webp";
 import teamImg3 from "@/assets/img/about/team-img3.webp";
 import { FaFacebookF, FaInstagram, FaXTwitter } from "react-icons/fa6";
 const About = () => {
+
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 2005;
+  const yearsPassed = currentYear - startYear;
+
   useEffect(() => {
     // Video Modal JS Start.........................................
     const modalBtn = document.querySelectorAll(".openModalBtn");
@@ -151,7 +157,7 @@ const About = () => {
             <div className="row">
               <div className="col-lg-6">
                 <div className="about_details">
-                  <p className="our_journey">Our Journey Since at 1999</p>
+                  <p className="our_journey">Our Journey Since at 2005</p>
                   <div className="heading">
                     <div>
                       <h2>Welcome to ABC Computers</h2>
@@ -200,7 +206,7 @@ const About = () => {
                   <div className="row d-flex counter_container">
                     <div className="col-4 d-flex align-items-stretch">
                       <div className="counter_box">
-                        <h2 className="counter" data-target="20">
+                        <h2 className="counter" data-target={yearsPassed}>
                           0
                         </h2>
                         <p>Years of Experience</p>
@@ -335,7 +341,7 @@ const About = () => {
         <div className="container">
           <div className="heading">
             <div>
-              <h2>A Team Of Highly Skilled</h2>
+              <h2>Our Team</h2>
             </div>
           </div>
           <div className="row">
@@ -378,8 +384,8 @@ const About = () => {
                   </div>
                 </div>
                 <div className="details">
-                  <h2 className="name">Jan Ringo</h2>
-                  <h3 className="profession">CEO & Founder</h3>
+                  <h2 className="name">Aronno Sarker</h2>
+                  <h3 className="profession">Head of Service</h3>
                 </div>
               </div>
             </div>
@@ -400,8 +406,8 @@ const About = () => {
                   </div>
                 </div>
                 <div className="details">
-                  <h2 className="name">Tristin Chineze</h2>
-                  <h3 className="profession">Accountant</h3>
+                  <h2 className="name">Tanvir Rahul</h2>
+                  <h3 className="profession">Sales Manager</h3>
                 </div>
               </div>
             </div>

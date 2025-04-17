@@ -3,70 +3,79 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-const Dashboard = () => {
-  const tableRef = useRef(null);
+const Reports = () => {
 
-  const [products, setProducts] = useState([]);
-  // const filteredProducts = Array.isArray(products)
-  //     ? product.slice(skip, skip + limit)
-  //     : [];
 
-  const [orders, setOrders] = useState([])
+    const now = new Date();
 
-  const confirmedSales = orders?.filter(order => order?.payment_status === "confirmed")
-  const pendingSales = orders?.filter(order => order?.payment_status === "pending")
-  const collections = confirmedSales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-            "https://api.abcpabnabd.com/api/v1/product-list"
-        );
-
-        setProducts(response.data.data || []);
-        // setTotalItems(response?.data?.data.length);
-      } catch (error) {
-        if (error.response) {
-          console.error(
-              `Error fetching brands: ${error.response.status} - ${error.response.data}`
-          );
-        } else if (error.request) {
-          console.error("No response received from server:", error.request);
-        } else {
-          console.error("Error setting up request:", error.message);
-        }
-      }
+    // Helper functions
+    const isSameDay = (date) => {
+    const d = new Date(date);
+    return d.toDateString() === now.toDateString();
     };
 
-    fetchProducts();
+    const isThisWeek = (date) => {
+        const d = new Date(date);
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        return d >= sevenDaysAgo && d <= now;
+      };
+
+    const isThisMonth = (date) => {
+        const d = new Date(date);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        return d >= thirtyDaysAgo && d <= new Date();
+    };
+
+    const [products, setProducts] = useState([]);
+    // const filteredProducts = Array.isArray(products)
+    //     ? product.slice(skip, skip + limit)
+    //     : [];
+  
+    const [orders, setOrders] = useState([])
+  
+    const confirmedSales = orders?.filter(order => order?.payment_status === "confirmed")
+    const pendingSales = orders?.filter(order => order?.payment_status === "pending")
+
+    const dailySales = confirmedSales?.filter(sale => isSameDay(sale?.updatedAt))
+    const weeklySales = confirmedSales?.filter(sale => isThisWeek(sale?.updatedAt))
+    const monthlySales = confirmedSales?.filter(sale => isThisMonth(sale?.updatedAt))
+
+    const dailyCollections = dailySales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
+    const weeklyCollections = weeklySales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
+    const monthlyCollections = monthlySales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
+    const collections = confirmedSales?.reduce((acc, order) => acc + parseFloat(order?.grandTotal), 0)
+  
+    useEffect(() => {
+      const fetchOrders = async () => {
+          try {
+              const response = await axios.get("https://api.abcpabnabd.com/api/v1/order-list");
+  
+              setOrders(response.data.data || []);
+          } catch (error) {
+              // Improved error handling
+              if (error.response) {
+                  console.error(
+                      `Error fetching Orders: ${error.response.status} - ${error.response.data}`
+                  );
+              } else if (error.request) {
+                  console.error("No response received from server:", error.request);
+              } else {
+                  console.error("Error setting up request:", error.message);
+              }
+          }
+      };
+  
+      fetchOrders();
   }, []);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-        try {
-            const response = await axios.get("https://api.abcpabnabd.com/api/v1/order-list");
+  useEffect(()=>{
+    console.log(orders);
+  }, [orders])
 
-            setOrders(response.data.data || []);
-        } catch (error) {
-            // Improved error handling
-            if (error.response) {
-                console.error(
-                    `Error fetching Orders: ${error.response.status} - ${error.response.data}`
-                );
-            } else if (error.request) {
-                console.error("No response received from server:", error.request);
-            } else {
-                console.error("Error setting up request:", error.message);
-            }
-        }
-    };
-
-    fetchOrders();
-}, []);
-
-  return (
-      <div className="main-content">
+    return (
+        <div className="main-content">
         <div className="page-content">
           {/* <!-- Cards Start --> */}
           <section id="cards">
@@ -116,8 +125,8 @@ const Dashboard = () => {
                         </svg>
                       </div>
                       <div>
-                        <h4>Products</h4>
-                        <h5>{products.length}</h5>
+                        <h4>Daily Collections</h4>
+                        <h5>৳{dailyCollections?.toLocaleString()}</h5>
                       </div>
                     </div>
                   </div>
@@ -168,8 +177,8 @@ const Dashboard = () => {
                         </svg>
                       </div>
                       <div>
-                        <h4>Confirmed Sales</h4>
-                        <h5>{confirmedSales.length}</h5>
+                        <h4>Weekly Collections</h4>
+                        <h5>৳{weeklyCollections?.toLocaleString()}</h5>
                       </div>
                     </div>
                   </div>
@@ -220,8 +229,8 @@ const Dashboard = () => {
                         </svg>
                       </div>
                       <div>
-                        <h4>Pending Sales</h4>
-                        <h5>{pendingSales.length}</h5>
+                        <h4>Monthly Collections</h4>
+                        <h5>৳{monthlyCollections?.toLocaleString()}</h5>
                       </div>
                     </div>
                   </div>
@@ -272,8 +281,8 @@ const Dashboard = () => {
                         </svg>
                       </div>
                       <div>
-                        <h4>Collections</h4>
-                        <h5>৳{collections.toLocaleString()}</h5>
+                        <h4>Total Collections</h4>
+                        <h5>৳{collections?.toLocaleString()}</h5>
                       </div>
                     </div>
                   </div>
@@ -281,169 +290,13 @@ const Dashboard = () => {
               </div>
             </div>
           </section>
-          {/* <!-- Cards End --> */}
-
-          {/* <!-- Table --> */}
-          <div className="data-table">
-            <div className="invoice-btn">
-              <h1>PRODUCT/ SERVICES</h1>
-              <div className="table-btn-item">
-                <a href={"/dashboard/products/add-product"}>
-                  <button type="submit" className="view-more-btn">
-                    <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                          d="M16 10.6667V21.3333M10.6667 16H21.3333M10.4 28H21.6C23.8402 28 24.9603 28 25.816 27.564C26.5686 27.1805 27.1805 26.5686 27.564 25.816C28 24.9603 28 23.8402 28 21.6V10.4C28 8.15979 28 7.03969 27.564 6.18404C27.1805 5.43139 26.5686 4.81947 25.816 4.43597C24.9603 4 23.8402 4 21.6 4H10.4C8.15979 4 7.03969 4 6.18404 4.43597C5.43139 4.81947 4.81947 5.43139 4.43597 6.18404C4 7.03969 4 8.15979 4 10.4V21.6C4 23.8402 4 24.9603 4.43597 25.816C4.81947 26.5686 5.43139 27.1805 6.18404 27.564C7.03969 28 8.15979 28 10.4 28Z"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                      />
-                    </svg>
-                    ADD PRODUCT/ SERVICES
-                  </button>
-                </a>
-              </div>
-            </div>
-
-            {/* <!-- Action Buttons --> */}
-            <div className="button-wrapper mb-3">
-              {/* <!-- Search and Filter --> */}
-              <div className="btn-group">
-                <div className="input-group">
-                  <input
-                      type="text"
-                      id="searchInput"
-                      className="form-control"
-                      placeholder="Search Product/ Services..."
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                {/* <!-- Table --> */}
-                <div className="table-wrapper">
-                  <table
-                      id="printTable"
-                      className="table table-hover"
-                      ref={tableRef}
-                  >
-                    <thead>
-                    <tr>
-                      <th>SL NO</th>
-                      <th>IMAGE</th>
-                      <th>CODE</th>
-                      <th>NAME</th>
-                      <th>PRICE</th>
-                      <th>DISCOUNT PRICE</th>
-                      <th>BRAND</th>
-                      <th>CATEGORY</th>
-                      <th>SUB-CATEGORY</th>
-                      <th>STOCK</th>
-                      <th>COLORS</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {products?.length > 0 ? (
-                        products?.map((product, index) => (
-                            <tr key={product._id || index}>
-                              <td>{index + 1}</td>
-                              <td>
-                                {product?.productImg ? (
-                                    <img
-                                        src={`https://api.abcpabnabd.com${product.productImg}`}
-                                        alt={product?.productName || "Product"}
-                                        style={{
-                                          width: "50px",
-                                          height: "50px",
-                                          objectFit: "cover",
-                                          borderRadius: "5px",
-                                        }}
-                                    />
-                                ) : (
-                                    "No Image"
-                                )}
-                              </td>
-                              <td>{product?.productCode}</td>
-                              <td>{product?.productName}</td>
-                              <td>{product?.price}</td>
-                              <td>{product?.discountPrice}</td>
-                              <td>{product?.brandID?.brandName}</td>
-                              <td>{product?.categoryID?.categoryName}</td>
-                              <td>{product?.subCategoryID?.subCategoryName}</td>
-                              <td>{product?.stock}</td>
-                              <td>{product?.color?.join(", ")}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                          <td colSpan="12">No products available</td>
-                        </tr>
-                    )}
-                    </tbody>
-                  </table>
-                </div>
-                {/* <!-- Pagination and Display Info --> */}
-                <div className="my-3">
-                  <span id="display-info"></span>
-                </div>
-
-                <footer className="footer">
-                  <div className="entries-page">
-                    <label htmlFor="entries" className="mr-2">
-                      Products per page:
-                    </label>
-                    <div className="select-container">
-                      <select
-                          id="entries"
-                          className="form-control"
-                          style={{ width: "auto" }}
-                      >
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                      </select>
-                      <span className="dropdown-icon">&#9662;</span>
-                      {/* <!-- Dropdown icon --> */}
-                    </div>
-                  </div>
-
-                  <div id="pagination" className="pagination">
-                    <button id="prevBtn" className="btn">
-                      Prev
-                    </button>
-                    <a href="#" className="page-link page-link--1">
-                      1
-                    </a>
-                    <a href="#" className="page-link page-link--2">
-                      2
-                    </a>
-                    <a href="#" className="page-link page-link--3">
-                      3
-                    </a>
-                    <button id="nextBtn" className="btn">
-                      Next
-                    </button>
-                  </div>
-                </footer>
-              </div>
-            </div>
-          </div>
           <div className="copyright">
             <p>&copy; 2025. All Rights Reserved.</p>
           </div>
           {/* <!-- Table End --> */}
         </div>
       </div>
-  );
+    );
 };
 
-export default Dashboard;
+export default Reports;

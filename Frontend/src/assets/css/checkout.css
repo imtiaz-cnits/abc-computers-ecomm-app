@@ -984,8 +984,15 @@ h2.heading{
   transition: 0.3s all ease;
 }
 
+.modal-content .pay-now:disabled{
+  background: var(--primary-color);
+}
+
 .modal-content .pay-now:hover{
   background: var(--secondary-color);
+}
+.modal-content .pay-now:disabled:hover{
+  background: var(--primary-color);
 }
 
 @media screen and (max-width: 576px) {

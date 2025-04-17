@@ -7,6 +7,7 @@ export const metadata = {
 
 const ProductSinglePage = async ({ params }) => {
   const { id } = await params;
+  
 
   return (
     <>

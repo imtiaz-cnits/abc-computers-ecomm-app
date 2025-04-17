@@ -126,12 +126,15 @@ const Orders = () => {
 
         if (response?.data?.status === "success") {
             setUpdatedStatus(!updatedStatus)
+            if (status === "confirmed") {
+                toast.success("Order confirmed successfully")
+            }
         }
     }
 
     return (
         <>
-            <div className="main-content">
+            <div className="main-content" id="ORDERS">
                 <div className="page-content">
                     {/* <!-- Table --> */}
                     <div className="data-table">

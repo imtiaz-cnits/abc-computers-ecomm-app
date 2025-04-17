@@ -1,5 +1,6 @@
 .page-content {
-  margin-bottom: 70px;
+  margin-bottom: 70px 70px 0 70px;
+  padding: 90px 20px 70px 20px;
 }
 
 .heading {
@@ -265,7 +266,7 @@
   border-radius: 0 0 10px 10px;
 }
 
-.fr-wrapper > div a{
+.fr-wrapper>div a {
   display: none !important;
 }
 
@@ -277,7 +278,7 @@
   flex-wrap: wrap;
 }
 
-.colors span{
+.colors span {
   background-color: var(--primary-color);
   color: #fff;
   padding: 3px 5px;

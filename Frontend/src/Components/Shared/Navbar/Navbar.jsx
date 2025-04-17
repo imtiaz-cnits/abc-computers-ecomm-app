@@ -70,16 +70,13 @@ const Navbar = () => {
       }
     };
 
-
     setSearchValue("")
     setSearch(false)
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside, true);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside, true);
     };
-
-
   }, [path]);
 
   useEffect(() => {

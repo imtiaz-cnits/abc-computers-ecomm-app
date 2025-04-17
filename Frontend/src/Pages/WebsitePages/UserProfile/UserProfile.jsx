@@ -35,6 +35,12 @@ const UserProfile = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    const maxSize = 1024 * 1024;
+
+    if (file && file.size > maxSize) {
+      alert("File is too large! Please select a file under 1MB.");
+      return
+    }
 
     if (!file) return;
 
@@ -171,6 +177,11 @@ const UserProfile = () => {
       toast.error(error?.response?.data?.message || "An error occurred.");
     }
   };
+
+
+  useEffect(()=>{
+    console.log(profile);
+  }, [profile])
 
   return (
     <>
@@ -606,17 +617,21 @@ const UserProfile = () => {
               <div className="col-md-8 mt-3">
                 <div className="sidenav_heading">
                   <div className="sidenav_profile">
-                    <img src="./assets/icon/profile-img.png" alt="" />
+                    <img
+                      src={`https://api.abcpabnabd.com${profile?.userID?.img_url}`}
+                      alt="profile"
+                    />
                   </div>
                   <div className="sidenav_text_item">
                     <div className="sidenav_text">
                       <h4>{profile?.cus_name}</h4>
-                      <p>+880 1xxx-xxxxxx</p>
+                      <p>{profile?.userID?.mobile}</p>
                     </div>
                   </div>
                 </div>
                 <div className="edit_profile_heading">Edit Profile</div>
                 <form id="edit_profile_all_item" onSubmit={handleEditProfile}>
+                  <div className="edit_profile_details">
                   <div className="edit_profile_input_box">
                     <span className="edit_profile_input_text">Name</span>
                     <input
@@ -641,7 +656,6 @@ const UserProfile = () => {
                       readOnly
                     />
                   </div>
-                  <div className="edit_profile_details">
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">
                         Mobile Number
@@ -655,7 +669,7 @@ const UserProfile = () => {
                         readOnly
                       />
                     </div>
-                    <div className="edit_profile_input_box">
+                    {/* <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Country</span>
                       <input
                         type="text"
@@ -664,8 +678,8 @@ const UserProfile = () => {
                         defaultValue={profile?.cus_country}
                         onChange={handleChange}
                       />
-                    </div>
-                    <div className="edit_profile_input_box">
+                    </div> */}
+                    {/* <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">State</span>
                       <input
                         type="text"
@@ -674,7 +688,7 @@ const UserProfile = () => {
                         defaultValue={profile?.cus_state}
                         onChange={handleChange}
                       />
-                    </div>
+                    </div> */}
                     <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">City</span>
                       <input
@@ -685,7 +699,7 @@ const UserProfile = () => {
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="edit_profile_input_box">
+                    {/* <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Zip Code</span>
                       <input
                         type="number"
@@ -694,8 +708,9 @@ const UserProfile = () => {
                         defaultValue={profile?.cus_postcode}
                         onChange={handleChange}
                       />
-                    </div>
-                    <div className="edit_profile_input_box">
+                    </div> */}
+                  </div>
+                  <div className="edit_profile_input_box">
                       <span className="edit_profile_input_text">Address</span>
                       <input
                         type="text"
@@ -705,7 +720,6 @@ const UserProfile = () => {
                         onChange={handleChange}
                       />
                     </div>
-                  </div>
                   <div className="edit_profile_input_box">
                     <span className="edit_profile_input_text">
                       Update Image

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import "./UserProfile.css";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
-import toast from "react-hot-toast";
+import { toast } from 'sonner'
+import avatar from "@/assets/img/avatar.webp"
 
 const UserProfile = () => {
   const router = useRouter();
@@ -618,7 +619,7 @@ const UserProfile = () => {
                 <div className="sidenav_heading">
                   <div className="sidenav_profile">
                     <img
-                      src={`https://api.abcpabnabd.com${profile?.userID?.img_url}`}
+                      src={profile?.userID?.img_url ? `https://api.abcpabnabd.com${profile?.userID?.img_url}` : avatar.src}
                       alt="profile"
                     />
                   </div>
@@ -740,7 +741,11 @@ const UserProfile = () => {
                               width="120"
                             />
                           ) : (
-                            <></>
+                            <img
+                              src={avatar.src}
+                              alt="profile"
+                              width="120"
+                            />
                           )}
                         </div>
 

@@ -10,10 +10,13 @@ import Link from "next/link";
 import axios from "axios";
 import MenuItem from "./MenuItem/MenuItem";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
+import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 
 const Navbar = () => {
 
   const searchRef = useRef(null)
+
+  const {existingUserID} = useContext(UserContext)
 
   const { cart, removeFromCart, increaseQuantity, decreaseQuantity, subTotal } = useContext(CartContext)
 
@@ -410,7 +413,7 @@ const Navbar = () => {
                   </svg>
                   <span>{cart?.length}</span>
                 </a>
-                <Link href={"/user-profile"} className="icon">
+                <Link href={existingUserID ? "/user-profile" : "/user-login"} className="icon">
                   <svg
                     width="32"
                     height="32"

@@ -12,7 +12,7 @@ import Navbar from "@/Components/Shared/Navbar/Navbar";
 import Preloader from "@/Components/Shared/Preloader/Preloader";
 import QuickViewContextProvider from "@/Utilities/Contexts/QuickViewContextProvider";
 import UserContextProvider from "@/Utilities/Contexts/UserContextProvider";
-import { Toaster } from "react-hot-toast"; // Import Toaster
+import { Toaster } from 'sonner'
 import "./globals.css";
 import CartContextProvider from "@/Utilities/Contexts/CartContextProvider";
 import PlaceOrderContextProvider from "@/Utilities/Contexts/PlaceOrderContextProvider";
@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
                 <FloatingCart/>
                 <BackToTop />
                 <JavascriptClient />
-                <Toaster />
+                <Toaster position="top-right" richColors />
                 <Preloader />
               </QuickViewContextProvider>
             </PlaceOrderContextProvider>

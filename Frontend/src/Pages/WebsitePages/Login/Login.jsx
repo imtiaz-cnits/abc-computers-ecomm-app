@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Breadcrumb from "@/Components/Shared/Breadcrumb/Breadcrumb";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from 'sonner'
 import passwordEye from "@/assets/icons/password-eye-icon.svg";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
 

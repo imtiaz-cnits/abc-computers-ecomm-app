@@ -24,10 +24,6 @@ const UserContextProvider = ({ children }) => {
     }
   }, [userID]);
 
-  useEffect(()=>{
-    console.log(existingUserID);
-  }, [existingUserID])
-
 
   if (isLoading) {
     return <></>;

@@ -45,7 +45,7 @@ const SignUpService = async (data) => {
     }
 
     // ✅ Set default values for optional fields
-    img_url = img_url || "default_image_url";
+    img_url = img_url || null;
     status = status || "active";
     role = role || "user";
 

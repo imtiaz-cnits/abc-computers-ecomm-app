@@ -1,7 +1,7 @@
 "use client"
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner'
 export const CartContext = createContext({})
 
 const CartContextProvider = ({ children }) => {

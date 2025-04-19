@@ -13,7 +13,7 @@ import bracBankimg from "@/assets/img/Bracbank.png"
 
 import { Modal } from "react-bootstrap";
 import { UserContext } from "@/Utilities/Contexts/UserContextProvider";
-import toast from "react-hot-toast";
+import { toast } from 'sonner'
 import axios from "axios";
 import { CartContext } from "@/Utilities/Contexts/CartContextProvider";
 import logo from "@/assets/img/abc-logo-icon.png"

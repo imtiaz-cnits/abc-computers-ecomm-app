@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const DataSchema = new mongoose.Schema(
     {
-        img_url: { type: String, default: "default_image_url" },
+        img_url: { type: String },
         name: { type: String, required: true },
         email: { type: String, unique: true, lowercase: true, required: true },
         mobile: { type: String, unique: true, required: true },

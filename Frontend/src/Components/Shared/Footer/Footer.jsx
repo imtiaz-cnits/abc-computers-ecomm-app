@@ -198,7 +198,7 @@ const Footer = () => {
                             />
                           </svg>
                         </div>
-                        <div className="num">01969666676</div>
+                        <div className="num">01969666676 (Service)</div>
                       </a>
                     </li>
                     <li>
